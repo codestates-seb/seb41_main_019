@@ -25,6 +25,8 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
+        // todo 토큰 정보 확인해서 권한 검증후 수정 해야함
+
         Member findMember = findVerifiedMember(member.getMemberId());
         Member updateMember = beanUtils.copyNonNullProperties(member, findMember);
 
@@ -37,7 +39,9 @@ public class MemberService {
     }
 
     public void deleteMember(long memberId){
+        // todo 토큰 정보 확인해서 권한 검증후 삭제 해야함
 
+        memberRepository.deleteById(memberId);
     }
 
     private void verifiedByEmail(String email) {
