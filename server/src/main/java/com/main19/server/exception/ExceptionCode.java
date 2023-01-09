@@ -15,8 +15,11 @@ public enum ExceptionCode {
 	MEDIA_NOT_FOUND(404, "Media not found"), // 찾는 첨부파일 없을 때 (s3, media테이블 공통)
 	POSTING_REQUIRES_AT_LEAST_ONE_MEDIA(404, "Posting requires at least one media"),
 	// 첨부파일 없이 포스팅 할 시, 포스팅 수정 시 사진 다 지우지 못하도록
-	POSTING_REQUIRES_LESS_THAN_TEN_MEDIA(404, "Posting requires less than ten media");
+	POSTING_REQUIRES_LESS_THAN_TEN_MEDIA(404, "Posting requires less than ten media"),
 	// 첨부파일 너무 많으면 안대
+	COMMENT_NOT_FOUND(404,"Comment Not Found"),
+	COMMENT_LIKE_NOT_FOUND(404,"Comment Not Found"),
+	COMMENT_LIKE_ERROR(405,"You already pressed like");
 
 
 	@Getter
