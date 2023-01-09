@@ -3,8 +3,9 @@ import { AiFillSetting } from "@react-icons/all-files/ai/AiFillSetting";
 import { useState } from "react";
 
 const StyledContainer = styled.div`
-  display: flex;
   width: 750px;
+  display: flex;
+  margin-top: 20px;
   justify-content: center;
   > div {
     margin: 0 10px;
