@@ -3,20 +3,20 @@ package com.main19.server.member.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 
 public class MemberDto {
 	@Getter
 	public static class Post {
-		private String username;
+		@NotBlank
+		private String userName;
+		@Email
 		private String email;
-		private int postingCount;
-
-		@Builder
-		public Post(String username, String email, int postingCount) {
-			this.username = username;
-			this.email = email;
-			this.postingCount = postingCount;
-		}
+		private String location;
+		private String profileImage;
+		private String profileText;
 	}
 
 	@Getter
@@ -46,16 +46,20 @@ public class MemberDto {
 	@Getter
 	public static class Response {
 		private Long memberId;
-		private String name;
+		private String userName;
 		private String email;
-		private int postingCount;
+		private String location;
+		private String profileImage;
+		private String profileText;
 
 		@Builder
-		public Response(Long memberId, String name, String email, int postingCount) {
+		public Response(Long memberId, String userName, String email, String location, String profileImage, String profileText) {
 			this.memberId = memberId;
-			this.name = name;
+			this.userName = userName;
 			this.email = email;
-			this.postingCount = postingCount;
+			this.location = location;
+			this.profileImage = profileImage;
+			this.profileText = profileText;
 		}
 	}
 }
