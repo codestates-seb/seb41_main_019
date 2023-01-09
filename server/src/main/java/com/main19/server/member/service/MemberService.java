@@ -28,8 +28,8 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Member findMember(Member member) {
-        return null;
+    public Member findMember(long memberId) {
+        return findVerifiedMember(memberId);
     }
 
     public void deleteMember(long memberId){
