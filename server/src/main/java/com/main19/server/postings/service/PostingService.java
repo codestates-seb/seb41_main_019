@@ -30,13 +30,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostingService {
 	private final PostingRepository postingRepository;
-	private final PostingLikeRepository postingLikeRepository;
 	private final MediaRepository mediaRepository;
-	private final PostingMapper mapper;
 	private final CustomBeanUtils<Posting> beanUtils;
 
 	public Posting createPosting(Posting posting, List<String> mediaPaths) {
-		postingBlankCheck(mediaPaths);
+
+		if (mediaPaths == null) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_AT_LEAST_ONE_MEDIA);
+		}
+		// multipartFiles 열장 이상일 경우 x
+		if (mediaPaths.size() > 10) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_LESS_THAN_TEN_MEDIA);
+		}
+
 		posting.setCreatedAt(LocalDateTime.now());
 
 		for (String mediaUrl: mediaPaths) {
@@ -44,12 +50,6 @@ public class PostingService {
 			mediaRepository.save(media);
 		}
 		return postingRepository.save(posting);
-	}
-
-	private void postingBlankCheck(List<String> mediaPaths) {
-		if(mediaPaths == null || mediaPaths.isEmpty()) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_AT_LEAST_ONE_MEDIA);
-		}
 	}
 
 	public Posting updatePosting(Posting posting) {
@@ -61,12 +61,10 @@ public class PostingService {
 
 	public Posting findPosting(Long postingId) {
 		Posting findPosting = findVerifiedPosting(postingId);
-		findPosting.setLikeCount(getLikeCount(postingId));
 
 		return findPosting;
 	}
 
-	// 좋아요 카운트 같이 나오나?
 	public Page<Posting> findPostings(int page, int size) {
 		// 최신순 이외에도 정렬 어떻게 할지 고려해야 함
 		return postingRepository.findAll(PageRequest.of(page, size, Sort.by("postingId").descending()));
@@ -91,11 +89,6 @@ public class PostingService {
 			optionalPosting.orElseThrow(() ->
 				new BusinessLogicException(ExceptionCode.POSTING_NOT_FOUND));
 		return findPosting;
-	}
-
-	public Long getLikeCount(Long postingId) {
-		Long likeCount = postingLikeRepository.countPostingLikesByPosting_PostingId(postingId);
-		return likeCount;
 	}
 
 	// 첨부파일 삭제를 위해 추가

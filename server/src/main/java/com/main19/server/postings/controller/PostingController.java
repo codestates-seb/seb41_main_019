@@ -54,15 +54,6 @@ public class PostingController {
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity postPosting(@Valid @RequestPart PostingPostDto requestBody, @RequestPart List<MultipartFile> multipartFiles) {
 
-		// multipartFiles가 없을 경우 posting media 하나이상 필요하다고 메세지 던져줌
-		if (multipartFiles == null) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_AT_LEAST_ONE_MEDIA);
-		}
-		// multipartFiles 열장 이상일 경우 x
-		if (multipartFiles.size() > 10) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_LESS_THAN_TEN_MEDIA);
-		}
-
 		List<String> mediaPaths = storageService.upload(multipartFiles);
 
 		Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody), mediaPaths);
@@ -124,7 +115,7 @@ public class PostingController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	// 수정 시 파일 수정하는 것도 올려얌
+	// // 수정 시 파일 수정하는 것도 올려얌
 	// @PostMapping(value = "/{posting-id}/media")
 	// public ResponseEntity postMedia(@PathVariable("posting-id") @Positive long postingId) {
 	//
