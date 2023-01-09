@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.main19.server.postings.dto.PostingLikeDto;
+import com.main19.server.postings.dto.PostingLikeGetResponseDto;
 import com.main19.server.postings.dto.PostingPatchDto;
 import com.main19.server.postings.dto.PostingPostDto;
 import com.main19.server.postings.dto.PostingResponseDto;
@@ -31,8 +32,12 @@ public interface PostingMapper {
 	PostingLike postingLikeDtoToPostingLike(PostingLikeDto requestBody);
 
 	@Mapping(source = "posting.postingId", target = "postingId")
+	@Mapping(source = "member.memberId", target = "memberId")
 	PostingLikeResponseDto postingLikeToPostingLikeResponseDto(PostingLike postingLike);
 
+	@Mapping(source = "member.memberId", target = "memberId")
+	@Mapping(source = "member.userName", target = "userName")
+	PostingLikeGetResponseDto postingLikeToPostingLikeGetResponseDto(PostingLike postingLike);
 
 	// 포스팅시 String리스트로 받아오면 tag로 변환해주기 위해
 	Tag tagPostDtoToTag(String tagName);

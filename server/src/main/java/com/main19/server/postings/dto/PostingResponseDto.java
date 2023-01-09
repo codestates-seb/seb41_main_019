@@ -14,14 +14,15 @@ import lombok.Setter;
 @Getter
 @Builder
 public class PostingResponseDto {
-	private Long postingId;
+	private long postingId;
 	private String postingContent;
 	private List<MediaResponseDto> postingMedias;
 	private LocalDateTime createdAt;
 	private LocalDateTime modifiedAt;
 	// private String userName;
 	// private String profileImage;
+	// private List<CommentResponseDto> comment;
 	private List<PostingTagsResponseDto> tags;
 	private long likeCount;
-	private List<PostingLikeResponseDto> postingLikes;
+	private List<PostingLikeGetResponseDto> postingLikes;
 }
