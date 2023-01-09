@@ -34,13 +34,13 @@ public class MemberController {
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive Long memberId,
+    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
                                      @Valid @RequestBody MemberDto.Patch requestBody) {
         return null;
     }
 
 	@GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Positive Long memberId) {
+    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
         Member member = memberService.findMember(memberId);
         return new ResponseEntity(
                 new SingleResponseDto(
@@ -48,7 +48,7 @@ public class MemberController {
     }
 
 	@DeleteMapping("{member-id}")
-	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive Long memberId,
+	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId,
 									  @RequestBody MemberDto.Delete requestBody) {
         return null;
     }

@@ -21,14 +21,14 @@ public class MemberDto {
 
 	@Getter
 	public static class Patch {
-		private Long memberId;
+		private long memberId;
 		private String username;
 		private String profileImage;
 		private String profileText;
 		private String belong;
 
 		@Builder
-		public Patch(Long memberId, String username, String profileImage, String profileText, String belong) {
+		public Patch(long memberId, String username, String profileImage, String profileText, String belong) {
 			this.memberId = memberId;
 			this.username = username;
 			this.profileImage = profileImage;
@@ -40,12 +40,12 @@ public class MemberDto {
 	@Getter
 	@Builder
 	public static class Delete {
-		private Long memberId;
+		private long memberId;
 	}
 
 	@Getter
 	public static class Response {
-		private Long memberId;
+		private long memberId;
 		private String userName;
 		private String email;
 		private String location;
@@ -53,7 +53,7 @@ public class MemberDto {
 		private String profileText;
 
 		@Builder
-		public Response(Long memberId, String userName, String email, String location, String profileImage, String profileText) {
+		public Response(long memberId, String userName, String email, String location, String profileImage, String profileText) {
 			this.memberId = memberId;
 			this.userName = userName;
 			this.email = email;

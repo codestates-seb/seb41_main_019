@@ -16,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final CustomBeanUtils customBeanUtils;
 
     public Member createMember(Member member) {
         verifiedByEmail(member.getEmail());
