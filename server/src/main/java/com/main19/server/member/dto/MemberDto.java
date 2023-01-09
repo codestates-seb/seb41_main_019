@@ -1,5 +1,6 @@
 package com.main19.server.member.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -22,18 +23,13 @@ public class MemberDto {
 	@Getter
 	public static class Patch {
 		private long memberId;
-		private String username;
+		private String userName;
 		private String profileImage;
 		private String profileText;
-		private String belong;
+		private String location;
 
-		@Builder
-		public Patch(long memberId, String username, String profileImage, String profileText, String belong) {
+		public void setMemberId(long memberId) {
 			this.memberId = memberId;
-			this.username = username;
-			this.profileImage = profileImage;
-			this.profileText = profileText;
-			this.belong = belong;
 		}
 	}
 

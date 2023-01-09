@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import lombok.*;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 	@Id
@@ -28,7 +28,8 @@ public class Member {
 	private String location;
 
 	@Builder
-	public Member(String userName, String email, String profileImage, String profileText, String location) {
+	public Member(Long memberId, String userName, String email, String profileImage, String profileText, String location) {
+		this.memberId = memberId;
 		this.userName = userName;
 		this.email = email;
 		this.profileImage = profileImage;

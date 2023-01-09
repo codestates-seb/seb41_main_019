@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final CustomBeanUtils customBeanUtils;
+    private final CustomBeanUtils<Member> beanUtils;
 
     public Member createMember(Member member) {
         verifiedByEmail(member.getEmail());
@@ -25,7 +25,10 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
-        return null;
+        Member findMember = findVerifiedMember(member.getMemberId());
+        Member updateMember = beanUtils.copyNonNullProperties(member, findMember);
+
+        return memberRepository.save(updateMember);
     }
 
     @Transactional(readOnly = true)
