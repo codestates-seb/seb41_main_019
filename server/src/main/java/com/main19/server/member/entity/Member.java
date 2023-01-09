@@ -5,10 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 	@Id
 	@GeneratedValue
@@ -16,6 +17,7 @@ public class Member {
 
 	private String userName;
 
+	@Column(unique = true)
 	private String email;
 
 	private String profileImage;
@@ -23,5 +25,14 @@ public class Member {
 	@Column(columnDefinition = "TEXT")
 	private String profileText;
 
-	private String belong;
+	private String location;
+
+	@Builder
+	public Member(String userName, String email, String profileImage, String profileText, String location) {
+		this.userName = userName;
+		this.email = email;
+		this.profileImage = profileImage;
+		this.profileText = profileText;
+		this.location = location;
+	}
 }
