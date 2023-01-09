@@ -3,7 +3,11 @@ package com.main19.server.member.controller;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+import com.main19.server.dto.SingleResponseDto;
+import com.main19.server.member.entity.Member;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,23 +26,24 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public RequestEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
+    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
+
         return null;
     }
 
     @PatchMapping("/{member-id}")
-    public RequestEntity patchMember(@PathVariable("member-id") @Positive Long memberId,
+    public ResponseEntity patchMember(@PathVariable("member-id") @Positive Long memberId,
                                      @Valid @RequestBody MemberDto.Patch requestBody) {
         return null;
     }
 
 	@GetMapping("/{member-id}")
-    public RequestEntity getMember(@PathVariable("member-id") @Positive Long memberId) {
+    public ResponseEntity getMember(@PathVariable("member-id") @Positive Long memberId) {
 		return null;
 	}
 
 	@DeleteMapping("{member-id}")
-	public RequestEntity deleteMember(@PathVariable("member-id") @Positive Long memberId,
+	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive Long memberId,
 									  @RequestBody MemberDto.Delete requestBody) {
         return null;
     }
