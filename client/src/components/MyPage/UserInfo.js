@@ -6,6 +6,9 @@ const StyledContainer = styled.div`
   display: flex;
   width: 750px;
   justify-content: center;
+  > div {
+    margin: 0 10px;
+  }
 `;
 const StyledUserImgWrapper = styled.div`
   width: 150px;
@@ -21,17 +24,35 @@ const StyledUserImgWrapper = styled.div`
 const StyledInfoBox = styled.div`
   display: flex;
   flex-direction: column;
+  width: 400px;
+  height: 150px;
+  > div {
+    height: 50px;
+    align-items: center;
+  }
 `;
 const StyledUserName = styled.div`
   display: flex;
+  justify-content: space-between;
+  span:first-child {
+    font-size: 20px;
+  }
+  span {
+    display: flex;
+    align-items: center;
+  }
 `;
 const StyledUserInfoList = styled.div`
   display: flex;
+  justify-content: space-between;
 `;
 const StyledInfoItem = styled.div`
   display: flex;
+  justify-content: space-between;
+  width: 80px;
 `;
 
+// 더미데이터, 추후 API 완성시 GET 요청으로 받아올 것
 const dummyData = {
   memberId: 10,
   userName: "USER",
@@ -67,21 +88,29 @@ const UserInfo = () => {
             </span>
           </StyledUserName>
           <StyledUserInfoList>
-            <StyledInfoItem>
-              <p>게시물</p>
-              {/* 게시물 숫자 데이터 API 협의하거나 게시물 GET 요청 후 데이터 length 사용 필요 */}
-              <p>10</p>
-            </StyledInfoItem>
-            <StyledInfoItem>
-              <p>팔로워</p>
-              <p>{followerCount}</p>
-            </StyledInfoItem>
-            <StyledInfoItem>
-              <p>팔로잉</p>
-              <p>{followingCount}</p>
-            </StyledInfoItem>
+            <a href="#">
+              <StyledInfoItem>
+                <p>게시물</p>
+                {/* 게시물 숫자 데이터 API 협의하거나 게시물 GET 요청 후 데이터 length 사용 필요 */}
+                <p>10</p>
+              </StyledInfoItem>
+            </a>
+            <a href="#">
+              <StyledInfoItem>
+                <p>팔로워</p>
+                <p>{followerCount}</p>
+              </StyledInfoItem>
+            </a>
+            <a href="#">
+              <StyledInfoItem>
+                <p>팔로잉</p>
+                <p>{followingCount}</p>
+              </StyledInfoItem>
+            </a>
           </StyledUserInfoList>
-          <p>{profileText}</p>
+          <div>
+            <p>{profileText}</p>
+          </div>
         </StyledInfoBox>
       </StyledContainer>
     </>
