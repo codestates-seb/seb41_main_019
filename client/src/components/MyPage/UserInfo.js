@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const StyledContainer = styled.div`
   display: flex;
+  width: 750px;
   justify-content: center;
   > div {
     margin: 0 10px;
