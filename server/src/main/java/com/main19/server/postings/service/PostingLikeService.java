@@ -21,11 +21,13 @@ public class PostingLikeService {
 	public PostingLike createPostingLike(PostingLike postingLike, long postingId) {
 		Posting posting = postingService.findVerifiedPosting(postingId);
 		postingLike.setPosting(posting);
+		posting.createLikeCount();
 		return postingLikeRepository.save(postingLike);
 	}
 
 	public void deletePostingLike(long postingLikeId) {
 		PostingLike findPostingLike = findVerifiedPostingLike(postingLikeId);
+		findPostingLike.getPosting().deleteLikeCount();
 
 		postingLikeRepository.delete(findPostingLike);
 

@@ -91,7 +91,7 @@ public class PostingController {
 			tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
 			PostingTags postingTags = mapper.postingPatchDtoToPostingTag(requestBody);
 			String tagName = requestBody.getTagName().get(i);
-			postingTagsService.createPostingTags(postingTags,postingId,tagName);
+			postingTagsService.updatePostingTags(postingTags,postingId,tagName);
 		}
 
 		return new ResponseEntity<>(new SingleResponseDto<>(mapper.postingToPostingResponseDto(updatedposting)),
