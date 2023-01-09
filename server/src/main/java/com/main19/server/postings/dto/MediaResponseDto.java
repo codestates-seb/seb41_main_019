@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Builder
 public class MediaResponseDto {
-	private Long mediaId;
+	private long mediaId;
 
 	private String mediaUrl;
 }
