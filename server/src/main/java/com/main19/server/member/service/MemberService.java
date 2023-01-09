@@ -28,7 +28,15 @@ public class MemberService {
         // todo 토큰 정보 확인해서 권한 검증후 수정 해야함
 
         Member findMember = findVerifiedMember(member.getMemberId());
-        Member updateMember = beanUtils.copyNonNullProperties(member, findMember);
+        Member updateMember = Member.builder()
+                .memberId(member.getMemberId())
+                .profileImage(member.getProfileImage())
+                .profileText(member.getProfileText())
+                .userName(member.getUserName())
+                .location(member.getLocation())
+
+                .email(findMember.getEmail())
+                .build();
 
         return memberRepository.save(updateMember);
     }

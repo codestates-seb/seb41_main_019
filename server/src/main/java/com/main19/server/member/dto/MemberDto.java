@@ -31,12 +31,14 @@ public class MemberDto {
 		public void setMemberId(long memberId) {
 			this.memberId = memberId;
 		}
-	}
 
-	@Getter
-	@Builder
-	public static class Delete {
-		private long memberId;
+		@Builder
+		public Patch(String userName, String profileImage, String profileText, String location) {
+			this.userName = userName;
+			this.profileImage = profileImage;
+			this.profileText = profileText;
+			this.location = location;
+		}
 	}
 
 	@Getter
