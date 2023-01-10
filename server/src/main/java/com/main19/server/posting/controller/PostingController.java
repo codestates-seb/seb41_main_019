@@ -113,13 +113,15 @@ public class PostingController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
-	// // 수정 시 파일 수정하는 것도 올려얌
-	// @PostMapping(value = "/{posting-id}/media")
-	// public ResponseEntity postMedia(@PathVariable("posting-id") @Positive long postingId) {
-	//
-	// }
+	 @PostMapping(value = "/{posting-id}/media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	 public ResponseEntity postMedia(@PathVariable("posting-id") @Positive long postingId, @RequestPart List<MultipartFile> multipartFiles) {
+		 List<String> mediaPaths = storageService.upload(multipartFiles);
 
-	// 첨부파일 삭제 하는거.. 리스트로 받는 거 추후에 추가하자
+		 postingService.addMedia(postingId, mediaPaths);
+		 return new ResponseEntity<>("Selected media uploaded successfully.",
+				 HttpStatus.OK);
+	 }
+
 	@DeleteMapping(value = "/media/{media-id}")
 	public ResponseEntity deleteMedia(@PathVariable("media-id") @Positive long mediaId) {
 

@@ -26,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostingService {
 	private final PostingRepository postingRepository;
-	private final MemberRepository memberRepository;
 	private final MediaRepository mediaRepository;
 	private final MemberService memberService;
 	private final CustomBeanUtils<Posting> beanUtils;
@@ -45,7 +44,7 @@ public class PostingService {
 		posting.setCreatedAt(LocalDateTime.now());
 
 		for (String mediaUrl: mediaPaths) {
-			Media media = new Media(mediaUrl,posting);
+			Media media = new Media(mediaUrl, posting);
 			mediaRepository.save(media);
 		}
 		return postingRepository.save(posting);
@@ -84,7 +83,18 @@ public class PostingService {
 		mediaRepository.delete(findMedia);
 	}
 
-	public Posting findVerifiedPosting(Long postingId) {
+	public void addMedia(long postingId, List<String> mediaPaths) {
+		Posting findPosting = findVerifiedPosting(postingId);
+		if ( findPosting.getPostingMedias().size() + 1 > 10) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_LESS_THAN_TEN_MEDIA);
+		}
+		for (String mediaUrl: mediaPaths) {
+			Media media = new Media(mediaUrl, findPosting);
+			mediaRepository.save(media);
+		}
+	}
+
+	public Posting findVerifiedPosting(long postingId) {
 		Optional<Posting> optionalPosting = postingRepository.findById(postingId);
 		Posting findPosting =
 			optionalPosting.orElseThrow(() ->
