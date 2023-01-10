@@ -1,16 +1,16 @@
 package com.main19.server.member.service;
 
+import com.main19.server.auth.utils.CustomAuthorityUtils;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.repository.MemberRepository;
-import com.main19.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,12 +19,17 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
 
 
     public Member createMember(Member member) {
         verifiedByEmail(member.getEmail());
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.encodePassword(encodedPassword);
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
+
         Member savedMember = memberRepository.save(member);
         return savedMember;
     }

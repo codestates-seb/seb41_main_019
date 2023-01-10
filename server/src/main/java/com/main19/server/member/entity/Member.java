@@ -1,11 +1,13 @@
 package com.main19.server.member.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Getter
@@ -29,8 +31,15 @@ public class Member {
 
 	private String password;
 
+	@ElementCollection(fetch = EAGER)
+	private List<String> roles = new ArrayList<>();
+
 	public void encodePassword(String password) {
 		this.password = password;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 
 	@Builder
@@ -42,5 +51,10 @@ public class Member {
 		this.profileText = profileText;
 		this.location = location;
 		this.password = password;
+	}
+
+	public enum MemberRole {
+		ROLE_USER,
+		ROLE_ADMIN
 	}
 }
