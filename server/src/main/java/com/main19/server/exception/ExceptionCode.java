@@ -19,7 +19,8 @@ public enum ExceptionCode {
 	// 첨부파일 너무 많으면 안대
 	COMMENT_NOT_FOUND(404,"Comment Not Found"),
 	COMMENT_LIKE_NOT_FOUND(404,"Comment Not Found"),
-	COMMENT_LIKE_ERROR(405,"You already pressed like");
+	COMMENT_LIKE_ERROR(405,"You already pressed like"),
+	CHATROOM_NOT_FOUND(404, "ChatRoom Not Found");
 
 
 	@Getter
