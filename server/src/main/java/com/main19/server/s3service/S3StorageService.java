@@ -1,4 +1,4 @@
-package com.main19.server.postings.service;
+package com.main19.server.s3service;
 
 import java.io.IOException;
 import java.io.InputStream;
