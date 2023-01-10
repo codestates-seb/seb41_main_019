@@ -1,4 +1,4 @@
-package com.main19.server.auth;
+package com.main19.server.auth.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
