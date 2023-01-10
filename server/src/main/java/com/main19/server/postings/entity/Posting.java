@@ -38,12 +38,6 @@ public class Posting {
 	 @JoinColumn(name = "member_id")
 	 private Member member;
 
-
-	// 유저 네임과 프로필이미지 컬럼이 디비 상에 꼭 존재해야 할까?? 리스폰스에만 담기면 되지않나
-	// private String userName;
-	// private String profileImage;
-
-	// // 연관관계 매핑 필요
 	 @OneToMany(mappedBy = "posting")
 	 private List<Comment> comments;
 

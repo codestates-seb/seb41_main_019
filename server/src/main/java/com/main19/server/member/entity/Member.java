@@ -32,9 +32,6 @@ public class Member {
 	@OneToMany(mappedBy = "member")
 	private List<Posting> postings = new ArrayList<>();
 
-//	@OneToMany(mappedBy = "comment")
-//	private List<Comment> comments = new ArrayList<>();
-
 	@Builder
 	public Member(Long memberId, String userName, String email, String profileImage, String profileText, String location) {
 		this.memberId = memberId;

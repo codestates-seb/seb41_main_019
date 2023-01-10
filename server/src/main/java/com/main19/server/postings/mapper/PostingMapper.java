@@ -2,6 +2,8 @@ package com.main19.server.postings.mapper;
 
 import java.util.List;
 
+import com.main19.server.comment.dto.CommentDto;
+import com.main19.server.comment.entity.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -50,4 +52,10 @@ public interface PostingMapper {
 
 	@Mapping(source = "tag.tagName", target = "tagName")
 	PostingTagsResponseDto postingTagsToPostingTagsResponseDto(PostingTags postingTags);
+
+	@Mapping(source = "member.userName" , target = "userName")
+	@Mapping(source = "member.memberId" , target = "memberId")
+	@Mapping(source = "member.profileImage" , target = "profileImage")
+	@Mapping(source = "posting.postingId", target = "postingId")
+	CommentDto.Response commentsToCommentsResponseDto(Comment comment);
 }
