@@ -20,7 +20,8 @@ public enum ExceptionCode {
 	COMMENT_NOT_FOUND(404,"Comment Not Found"),
 	COMMENT_LIKE_NOT_FOUND(404,"Comment Not Found"),
 	COMMENT_LIKE_ERROR(405,"You already pressed like"),
-	CHATROOM_NOT_FOUND(404, "ChatRoom Not Found");
+	CHATROOM_NOT_FOUND(404, "ChatRoom Not Found"),
+	CHATROOM_EXISTS(409, "ChatRoom Already Exists");
 
 
 	@Getter
