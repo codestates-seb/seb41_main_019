@@ -23,8 +23,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
-import com.main19.server.postings.entity.Media;
-import com.main19.server.postings.repository.MediaRepository;
+import com.main19.server.posting.entity.Media;
+import com.main19.server.posting.repository.MediaRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

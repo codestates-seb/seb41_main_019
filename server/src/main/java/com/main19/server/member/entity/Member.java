@@ -2,8 +2,7 @@ package com.main19.server.member.entity;
 
 import javax.persistence.*;
 
-import com.main19.server.comment.entity.Comment;
-import com.main19.server.postings.entity.Posting;
+import com.main19.server.posting.entity.Posting;
 import lombok.*;
 
 import java.util.ArrayList;
