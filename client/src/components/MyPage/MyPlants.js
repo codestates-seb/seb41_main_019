@@ -1,10 +1,11 @@
 import styled from "styled-components";
+import { useState } from "react";
 import axios from "axios";
 
 import { GrPrevious } from "@react-icons/all-files/gr/GrPrevious";
 import { GrNext } from "@react-icons/all-files/gr/GrNext";
+import { RiPlantLine } from "@react-icons/all-files/ri/RiPlantLine";
 import { ReactComponent as Cookie } from "../../assets/svg/plus.svg";
-import { useState } from "react";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const StyledMyPlantsDashBoard = styled.div`
 const StyledListsContainer = styled.div`
   display: flex;
   width: 700px;
+  align-items: center;
 `;
 
 const StyledMyPlantsItem = styled.div`
@@ -47,6 +49,26 @@ const StyledMyPlantsItem = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  p {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    font-size: 0.8em;
+  }
+`;
+
+const StyledNoContents = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 550px;
+  svg {
+    width: 50px;
+    height: 50px;
+    margin: 25px 0;
+    color: #374435;
   }
   p {
     display: flex;
@@ -91,15 +113,20 @@ const MyPlants = () => {
             myPlantsData.map((el) => {
               return (
                 <StyledMyPlantsItem>
-                  {/* <div className="image-wrapper" key={el.postingId}>
+                  <div className="image-wrapper" key={el.postingId}>
                     <img className="image" src={el.imgUrl} alt="each item" />
-                    <p>식물이름</p>
-                  </div> */}
+                  </div>
+                  <p>식물이름</p>
                 </StyledMyPlantsItem>
               );
             })
           ) : (
-            <div>식물을 등록하세요</div>
+            <StyledNoContents>
+              <div>
+                <RiPlantLine />
+              </div>
+              <p>등록된 반려식물이 없습니다. 반려식물을 추가하세요.</p>
+            </StyledNoContents>
           )}
         </StyledListsContainer>
         <div
