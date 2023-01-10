@@ -32,10 +32,7 @@ public class PostingTagsService {
 
 	public PostingTags updatePostingTags(PostingTags postingTags, long postingId, String tagName) {
 		List<PostingTags> getpostingTags = findPostingTagsByPostingId(postingId);
-		// 수정 시 기존에 있던거 싹 삭제하고 가져오도록 for문 돌렸는데 더 좋은 방법이 있을까요..
-		for(int i = 0; i < getpostingTags.size(); i++) {
-			postingTagsRepository.delete(getpostingTags.get(i));
-		}
+		postingTagsRepository.deletePostingTagsByPostingId(postingId);
 
 		Posting posting = postingService.findVerifiedPosting(postingId);
 		postingTags.setPosting(posting);
