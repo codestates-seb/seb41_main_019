@@ -2,6 +2,7 @@ package com.main19.server.postings.service;
 
 import java.util.Optional;
 
+import com.main19.server.comment.like.entity.CommentLike;
 import org.springframework.stereotype.Service;
 
 import com.main19.server.exception.BusinessLogicException;
@@ -22,6 +23,12 @@ public class PostingLikeService {
 	private final MemberService memberService;
 
 	public PostingLike createPostingLike(PostingLike postingLike, long postingId, long memberId) {
+		PostingLike findPostingLike = postingLikeRepository.findByMember_MemberIdAndPosting_PostingId(memberId,postingId);
+
+		if(findPostingLike != null) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_LIKE_ERROR);
+		}
+
 		Posting posting = postingService.findVerifiedPosting(postingId);
 		postingLike.setPosting(posting);
 
