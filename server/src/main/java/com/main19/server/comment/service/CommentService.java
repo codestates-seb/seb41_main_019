@@ -31,6 +31,7 @@ public class CommentService {
 
         comment.setPosting(posting);
         comment.setMember(member);
+        posting.createCommentCount();
 
         return commentRepository.save(comment);
     }
@@ -61,6 +62,9 @@ public class CommentService {
 
     public void deleteComment(long commentId) {
         Comment comment = findVerifiedComment(commentId);
+        Posting posting = postingService.findPosting(comment.getPosting().getPostingId());
+
+        posting.deleteCommentCount();
 
         commentRepository.delete(comment);
     }

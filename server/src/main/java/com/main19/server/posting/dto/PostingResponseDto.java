@@ -24,5 +24,6 @@ public class PostingResponseDto {
 	private List<PostingTagsResponseDto> tags;
 	private long likeCount;
 	private List<PostingLikeGetResponseDto> postingLikes;
+	private long commentCount;
 	private List<CommentDto.Response> comments;
 }

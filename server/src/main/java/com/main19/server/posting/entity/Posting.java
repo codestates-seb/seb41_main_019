@@ -44,6 +44,7 @@ public class Posting {
 	private List<PostingTags> tags = new ArrayList<>();
 
 	private long likeCount;
+	private long commentCount;
 
 	@OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
 	private List<PostingLike> postingLikes = new ArrayList<>();
@@ -54,6 +55,14 @@ public class Posting {
 
 	public void deleteLikeCount() {
 		likeCount--;
+	}
+
+	public void createCommentCount() {
+		commentCount++;
+	}
+
+	public void deleteCommentCount() {
+		commentCount--;
 	}
 
 	public void setMember(Member member) {

@@ -6,6 +6,7 @@ import com.main19.server.comment.dto.CommentDto;
 import com.main19.server.comment.entity.Comment;
 import com.main19.server.comment.like.dto.CommentLikeGetResponseDto;
 import com.main19.server.comment.like.entity.CommentLike;
+import com.main19.server.posting.dto.PostingAllResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -31,7 +32,7 @@ public interface PostingMapper {
 	@Mapping(source = "member.profileImage", target = "profileImage")
 	PostingResponseDto postingToPostingResponseDto(Posting posting);
 
-	List<PostingResponseDto> postingsToPostingsResponseDto(List<Posting> postings);
+	List<PostingAllResponseDto> postingsToPostingsResponseDto(List<Posting> postings);
 
 
 	// 좋아요 매퍼
