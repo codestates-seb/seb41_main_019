@@ -31,7 +31,7 @@ import com.main19.server.postings.dto.PostingPostDto;
 import com.main19.server.postings.entity.Posting;
 import com.main19.server.postings.mapper.PostingMapper;
 import com.main19.server.postings.service.PostingService;
-import com.main19.server.postings.service.S3StorageService;
+import com.main19.server.s3service.S3StorageService;
 import com.main19.server.postings.tags.entity.PostingTags;
 import com.main19.server.postings.tags.service.PostingTagsService;
 import com.main19.server.postings.tags.service.TagService;
@@ -56,7 +56,7 @@ public class PostingController {
 
 		List<String> mediaPaths = storageService.upload(multipartFiles);
 
-		Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody), mediaPaths);
+		Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody), requestBody.getMemberId(), mediaPaths);
 
 		for (int i = 0; i < requestBody.getTagName().size(); i++) {
 			tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
@@ -70,14 +70,12 @@ public class PostingController {
 			HttpStatus.CREATED);
 	}
 
-	// 태그 수정 로직 필요
 	@PatchMapping(value = "/{posting-id}")
 	public ResponseEntity updatePosting(@PathVariable("posting-id") @Positive long postingId,
 		@Valid @RequestBody PostingPatchDto requestBody) {
 		requestBody.setPostingId(postingId);
 		Posting updatedposting = postingService.updatePosting(mapper.postingPatchDtoToPosting(requestBody));
 
-		// 태그 수정 로직 !!
 		for (int i = 0; i < requestBody.getTagName().size(); i++) {
 			tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
 			PostingTags postingTags = mapper.postingPatchDtoToPostingTag(requestBody);

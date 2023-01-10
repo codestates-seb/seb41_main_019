@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.main19.server.member.entity.Member;
+import com.main19.server.member.repository.MemberRepository;
+import com.main19.server.member.service.MemberService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,11 +33,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostingService {
 	private final PostingRepository postingRepository;
+	private final MemberRepository memberRepository;
 	private final MediaRepository mediaRepository;
+	private final MemberService memberService;
 	private final CustomBeanUtils<Posting> beanUtils;
 
-	public Posting createPosting(Posting posting, List<String> mediaPaths) {
-
+	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths) {
 		if (mediaPaths == null) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_AT_LEAST_ONE_MEDIA);
 		}
@@ -42,6 +46,8 @@ public class PostingService {
 		if (mediaPaths.size() > 10) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_LESS_THAN_TEN_MEDIA);
 		}
+		Member findMember = memberService.findMember(memberId);
+		posting.setMember(findMember);
 
 		posting.setCreatedAt(LocalDateTime.now());
 
@@ -55,6 +61,8 @@ public class PostingService {
 	public Posting updatePosting(Posting posting) {
 		Posting findPosting = findVerifiedPosting(posting.getPostingId());
 		Posting updatePosting = beanUtils.copyNonNullProperties(posting, findPosting);
+
+		updatePosting.setModifiedAt(LocalDateTime.now());
 
 		return postingRepository.save(updatePosting);
 	}

@@ -15,6 +15,9 @@ import lombok.Setter;
 @Builder
 public class PostingResponseDto {
 	private long postingId;
+	private long memberId;
+	private String userName;
+	private String profileImage;
 	private String postingContent;
 	private List<MediaResponseDto> postingMedias;
 	private LocalDateTime createdAt;

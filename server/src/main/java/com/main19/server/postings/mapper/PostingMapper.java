@@ -23,6 +23,9 @@ public interface PostingMapper {
 	Posting postingPostDtoToPosting(PostingPostDto requestBody);
 	Posting postingPatchDtoToPosting(PostingPatchDto requestBody);
 
+	@Mapping(source = "member.memberId", target = "memberId")
+	@Mapping(source = "member.userName", target = "userName")
+	@Mapping(source = "member.profileImage", target = "profileImage")
 	PostingResponseDto postingToPostingResponseDto(Posting posting);
 
 	List<PostingResponseDto> postingsToPostingsResponseDto(List<Posting> postings);

@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class PostingPostDto {
+	private long memberId;
 	private String postingContent;
 	private List<String> tagName;
 }

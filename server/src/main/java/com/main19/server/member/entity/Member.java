@@ -1,11 +1,13 @@
 package com.main19.server.member.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+import com.main19.server.comment.entity.Comment;
+import com.main19.server.postings.entity.Posting;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +28,12 @@ public class Member {
 	private String profileText;
 
 	private String location;
+
+	@OneToMany(mappedBy = "member")
+	private List<Posting> postings = new ArrayList<>();
+
+//	@OneToMany(mappedBy = "comment")
+//	private List<Comment> comments = new ArrayList<>();
 
 	@Builder
 	public Member(Long memberId, String userName, String email, String profileImage, String profileText, String location) {
