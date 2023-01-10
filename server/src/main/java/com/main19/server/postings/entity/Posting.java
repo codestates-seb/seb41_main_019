@@ -58,8 +58,14 @@ public class Posting {
 
 	private long likeCount;
 
-
 	@OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE) //외래키의 역할을 하는 필드
 	private List<PostingLike> postingLikes = new ArrayList<>();
 
+	public void createLikeCount() {
+		likeCount++;
+	}
+
+	public void deleteLikeCount() {
+		likeCount--;
+	}
 }
