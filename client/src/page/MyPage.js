@@ -44,8 +44,8 @@ const StyledChangeViewButton = styled.div`
   span {
     margin: 0 5px;
   }
-  .selected {
-    border-top: solid black 1px;
+  &.selected {
+    border-bottom: solid black 1px;
     color: black;
   }
 `;
@@ -53,6 +53,7 @@ const StyledChangeViewButton = styled.div`
 const MyPage = () => {
   const [isFolderOpened, setIsFolderOpened] = useState(false);
   const [galleryData, setGalleryData] = useState([]);
+  const [currentView, setCurrentView] = useState("");
 
   const handleFolderClick = () => {
     setIsFolderOpened(!isFolderOpened);
@@ -62,6 +63,7 @@ const MyPage = () => {
     try {
       const response = await axios.get(url);
       setGalleryData(response.data);
+      setCurrentView("postings");
       return response;
     } catch (err) {
       console.error(err);
@@ -98,7 +100,10 @@ const MyPage = () => {
         </>
       )}
       <StyledChangeViewContainer>
-        <StyledChangeViewButton onClick={handlePostingsClick}>
+        <StyledChangeViewButton
+          onClick={handlePostingsClick}
+          className={currentView === "postings" ? "selected" : ""}
+        >
           <BsGrid3X3 />
           <span>게시물</span>
         </StyledChangeViewButton>
