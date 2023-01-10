@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.main19.server.comment.dto.CommentDto;
 import com.main19.server.posting.like.dto.PostingLikeGetResponseDto;
+import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
 
 import lombok.Builder;
@@ -26,4 +27,6 @@ public class PostingResponseDto {
 	private List<PostingLikeGetResponseDto> postingLikes;
 	private long commentCount;
 	private List<CommentDto.Response> comments;
+
+	private List<ScrapResponseDto> scrapMemberList;
 }

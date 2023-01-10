@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 import com.main19.server.comment.entity.Comment;
 import com.main19.server.member.entity.Member;
+import com.main19.server.posting.scrap.entity.Scrap;
 import com.main19.server.posting.tags.entity.PostingTags;
 
 import lombok.Getter;
@@ -43,6 +44,8 @@ public class Posting {
 	@OneToMany(mappedBy = "posting")
 	private List<PostingTags> tags = new ArrayList<>();
 
+	@OneToMany(mappedBy = "posting")
+	private List<Scrap> scrapMemberList = new ArrayList<>();
 	private long likeCount;
 	private long commentCount;
 

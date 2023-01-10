@@ -7,6 +7,9 @@ import java.util.Optional;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.repository.MemberRepository;
 import com.main19.server.member.service.MemberService;
+import com.main19.server.posting.scrap.entity.Scrap;
+import com.main19.server.posting.scrap.repository.ScrapRepository;
+import com.main19.server.posting.tags.repository.TagRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -59,7 +62,7 @@ public class PostingService {
 		return postingRepository.save(updatePosting);
 	}
 
-	public Posting findPosting(Long postingId) {
+	public Posting findPosting(long postingId) {
 		Posting findPosting = findVerifiedPosting(postingId);
 
 		return findPosting;
