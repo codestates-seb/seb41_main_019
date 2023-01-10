@@ -24,7 +24,7 @@ public class CommentLikeService {
         CommentLike findCommentLike = commentLikeRepository.findByMember_MemberIdAndComment_CommentId(memberId,commentId);
 
         if(findCommentLike != null) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_LIKE_ERROR);
+            throw new BusinessLogicException(ExceptionCode.COMMENT_LIKE_EXISTS);
         }
 
         commentLike.setMember(memberService.findMember(memberId));
