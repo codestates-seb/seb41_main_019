@@ -59,11 +59,11 @@ const MyPage = () => {
     setIsFolderOpened(!isFolderOpened);
   };
 
-  const getGalleryData = async (url) => {
+  const getGalleryData = async (url, view) => {
     try {
       const response = await axios.get(url);
       setGalleryData(response.data);
-      setCurrentView("postings");
+      setCurrentView(view);
       return response;
     } catch (err) {
       console.error(err);
@@ -72,11 +72,16 @@ const MyPage = () => {
 
   const handlePostingsClick = () => {
     // 게시물 리스트 조회
-    getGalleryData("http://localhost:4000/data"); // 임시 제이슨 서버
+    getGalleryData("http://localhost:4000/data", "postings"); // 임시 제이슨 서버
+  };
+
+  const handleScrapsClick = () => {
+    // 스크랩 조회
+    getGalleryData("http://localhost:4000/data", "scraps");
   };
 
   // MyPage 접속시 기본값으로 Postings 표시
-  handlePostingsClick();
+  // defaultProps로 해결해야하나?
 
   return (
     <StyledContainer>
@@ -107,7 +112,10 @@ const MyPage = () => {
           <BsGrid3X3 />
           <span>게시물</span>
         </StyledChangeViewButton>
-        <StyledChangeViewButton>
+        <StyledChangeViewButton
+          onClick={handleScrapsClick}
+          className={currentView === "scraps" ? "selected" : ""}
+        >
           <BsBookmark />
           <span>스크랩</span>
         </StyledChangeViewButton>

@@ -2,6 +2,11 @@ import styled from "styled-components";
 
 import { FcAnswers } from "@react-icons/all-files/fc/FcAnswers";
 
+const StyledContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const StyledMyPageGallery = styled.div`
   width: 100%;
   display: grid;
@@ -49,10 +54,10 @@ const StyledNoContents = styled.div`
 
 const Gallery = ({ galleryData }) => {
   return (
-    <>
-      <StyledMyPageGallery>
-        {galleryData.length ? (
-          galleryData.map((el) => {
+    <StyledContainer>
+      {galleryData.length ? (
+        <StyledMyPageGallery>
+          {galleryData.map((el) => {
             return (
               <div className="image-wrapper" key={el.postingId}>
                 <a href="#">
@@ -60,15 +65,15 @@ const Gallery = ({ galleryData }) => {
                 </a>
               </div>
             );
-          })
-        ) : (
-          <StyledNoContents>
-            <FcAnswers />
-            <p>게시물이 없습니다</p>
-          </StyledNoContents>
-        )}
-      </StyledMyPageGallery>
-    </>
+          })}
+        </StyledMyPageGallery>
+      ) : (
+        <StyledNoContents>
+          <FcAnswers />
+          <p>게시물이 없습니다</p>
+        </StyledNoContents>
+      )}
+    </StyledContainer>
   );
 };
 
