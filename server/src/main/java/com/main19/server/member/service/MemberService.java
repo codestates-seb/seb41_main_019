@@ -6,6 +6,8 @@ import com.main19.server.member.entity.Member;
 import com.main19.server.member.repository.MemberRepository;
 import com.main19.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +18,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final CustomBeanUtils<Member> beanUtils;
+    private final PasswordEncoder passwordEncoder;
+
 
     public Member createMember(Member member) {
         verifiedByEmail(member.getEmail());
+        String encodedPassword = passwordEncoder.encode(member.getPassword());
+        member.encodePassword(encodedPassword);
         Member savedMember = memberRepository.save(member);
         return savedMember;
     }
