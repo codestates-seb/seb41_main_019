@@ -15,33 +15,52 @@ const StyledSidebar = styled.aside`
     justify-content: space-between;
     position: fixed;
     height: 100%;
-    width: 350px;
+    width: 270px;
     border-right: 1px solid #DBDBDB;
+    color: #222426;
+    background-color: white;
 
     h2 {
+        display: flex;
+        align-items: flex-end;
         font-weight: 400;
+        letter-spacing: 2px;
     }
 
     nav h2 svg {
-        color: #0FA958;
-        font-size: 33px;
+        color: #5E8B7E;
+        font-size: 25px;
+        margin: 0px 0px 2px -2px;
     }
 
     ul {
         list-style: none;
         padding: 0px;
         margin: 0px;
-        display: flex;
+        display: inline-flex;
         flex-direction: column;
         height: 200px;
         justify-content: space-between;
-    }
-        
-        li svg {
-            font-size: 22px;
+
+        li {
+            display: flex;
+            align-items: flex-end;
+            cursor: pointer;
         }
 
-    p {
+        li svg {
+            font-size: 22px;
+            margin-right: 10px;
+        }
+    }
+        
+    div {
+        display: inline-block;
+        display: flex;
+        align-items: flex-end;
+        margin-bottom: 10px;
+        cursor: pointer;
+
         span {
             margin-left: 10px;
         }
@@ -62,11 +81,10 @@ const StyledSidebar = styled.aside`
             display: none;
         }
 
-        p span {
+        div span {
             display: none;
         }
     }
-
 
     @media screen and (max-width: 770px) {
         align-items: center;
@@ -80,7 +98,7 @@ const StyledSidebar = styled.aside`
         border: 1px solid #DBDBDB;
         box-shadow: 0px;
         
-        h2, p {
+        h2, div {
             display: none;
         }
 
@@ -89,8 +107,9 @@ const StyledSidebar = styled.aside`
         }
 
         nav ul {
-            display: flex;
+            flex-direction: row;
             justify-content: space-around;
+            height: 100%;
             width: 100%;
         }
 
@@ -100,27 +119,37 @@ const StyledSidebar = styled.aside`
     }
 `;
 
-const Modal = styled.div`
+const StyledModal = styled.div`
     display: inline-block;
     z-index: 400;
     background-color: white;
     margin-left: 10px;
-    position: relative;
-    top: 67vh;
-    width: 200px;
-    height: 180px;
-    border-radius: 20px;
-    border: 1px solid gray;
+    position: absolute;
+    left: 5px;
+    bottom: 45px;
+    width: 210px;
+    border-radius: 3px;
+    border: 1px solid #DBDBDB;
+    color: #222426;
+    border-bottom: 0px;
 
     ul {
-        padding: 9px;
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
         list-style: none;
 
         li {
             display: block;
             display: flex;
+            border-bottom: 1px solid #DBDBDB; 
             justify-content: space-between;
-            padding: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+
+            svg {
+                color: #222426;
+            }
         }
     }
 
@@ -129,7 +158,8 @@ const Modal = styled.div`
     }
 `;
 
-const SearchBar = styled.div`
+/* 770px일 때 상단 부분입니다. */
+const StyledHeader = styled.header`
     width: 100%;
     height: 60px;
     position: fixed;
@@ -139,10 +169,19 @@ const SearchBar = styled.div`
     justify-content: space-between;
     border-bottom: 1px solid #DBDBDB;
     padding: 0px 20px;
+    min-width: 355px;
 
-    h4 svg {
-        color: #0FA958;
+    h3 {
+        display: flex;
+        align-items: flex-end;
+        font-weight: 400;
+        letter-spacing: 2px;
+    }
+
+    h3 svg {
+        color: #5E8B7E;
         font-size: 25px;
+        margin: 0px 0px 2px -2px;
     }
 
     div {
@@ -161,7 +200,7 @@ const SearchBar = styled.div`
         height: 35px;
         border-radius: 10px;
         border: 1px solid #DBDBDB;
-        padding: 10px 12px;
+        padding: 10px 12px 10px 30px;
     }
 
     @media screen and (min-width: 755px) { 
@@ -178,13 +217,13 @@ const Sidebar = () => {
 
     return (
         <>
-            <SearchBar>
-                <h4><span>IncleaF</span><RiLeafLine /></h4>
+            <StyledHeader>
+                <h3><span>IncleaF</span><RiLeafLine /></h3>
                 <div>
                     <BsSearch />
-                    <input></input>
+                    <input type="text" placeholder="Search..."></input>
                 </div>
-            </SearchBar>
+            </StyledHeader>
             <StyledSidebar>
                 <nav>
                     <h2><span>IncleaF</span><RiLeafLine /></h2>
@@ -196,11 +235,11 @@ const Sidebar = () => {
                         <li><BsPerson /> <span>프로필</span></li>
                     </ul>
                 </nav>
-                <p onClick={openModal}><AiOutlineMenu /><span>더 보기</span></p>    
+                <div onClick={openModal}><AiOutlineMenu /><span>더 보기</span></div>    
             </StyledSidebar>
             {
                 modalView 
-                ? <Modal>
+                ? <StyledModal>
                     <ul>
                         <li><span>설정</span><AiFillSetting /></li>
                         <li><span>스크랩</span><BsFillJournalBookmarkFill /></li>
@@ -208,7 +247,7 @@ const Sidebar = () => {
                         <li><span>계정 전환</span><FaExchangeAlt /></li>
                         <li><span>로그아웃</span><AiOutlinePoweroff /></li>
                     </ul>
-                </Modal>
+                </StyledModal>
                 : null
             }
         </>
