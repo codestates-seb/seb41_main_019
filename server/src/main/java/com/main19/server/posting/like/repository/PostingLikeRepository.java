@@ -1,4 +1,4 @@
-package com.main19.server.posting.repository;
+package com.main19.server.posting.like.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

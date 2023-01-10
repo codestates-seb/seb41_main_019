@@ -9,13 +9,13 @@ import com.main19.server.comment.like.entity.CommentLike;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.main19.server.posting.dto.PostingLikeDto;
-import com.main19.server.posting.dto.PostingLikeGetResponseDto;
+import com.main19.server.posting.like.dto.PostingLikeDto;
+import com.main19.server.posting.like.dto.PostingLikeGetResponseDto;
 import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
 import com.main19.server.posting.dto.PostingResponseDto;
 import com.main19.server.posting.entity.Posting;
-import com.main19.server.posting.dto.PostingLikeResponseDto;
+import com.main19.server.posting.like.dto.PostingLikeResponseDto;
 import com.main19.server.posting.entity.PostingLike;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
 import com.main19.server.posting.tags.entity.PostingTags;

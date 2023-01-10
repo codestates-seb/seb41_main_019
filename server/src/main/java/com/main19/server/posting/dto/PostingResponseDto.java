@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.main19.server.comment.dto.CommentDto;
+import com.main19.server.posting.like.dto.PostingLikeGetResponseDto;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
 
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.main19.server.posting.dto;
+package com.main19.server.posting.like.dto;
 
 import lombok.Builder;
 import lombok.Getter;
