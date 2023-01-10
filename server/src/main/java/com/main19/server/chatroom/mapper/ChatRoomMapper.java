@@ -14,8 +14,5 @@ public interface ChatRoomMapper {
     @Mapping(source = "receiver.memberId" , target = "receiverId")
     @Mapping(source = "sender.memberId" , target = "senderId")
     ChatRoomDto.Response chatRoomToChatRoomResponseDto(ChatRoom chatRoom);
-
-    @Mapping(source = "receiver.memberId" , target = "receiverId")
-    @Mapping(source = "sender.memberId" , target = "senderId")
     List<ChatRoomDto.Response> chatRoomToChatRoomDtoResponse(List<ChatRoom> chatroom);
 }
