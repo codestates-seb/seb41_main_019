@@ -1,17 +1,10 @@
 import styled from "styled-components";
 import { RiLeafLine } from "react-icons/ri";
-import { AiOutlineHome } from "react-icons/ai";
-import { BsSearch } from "react-icons/bs";
-import { AiOutlineMessage } from "react-icons/ai";
+import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu, AiFillSetting, AiOutlineClockCircle, AiOutlinePoweroff } from "react-icons/ai";
+import { BsSearch, BsPerson, BsFillJournalBookmarkFill } from "react-icons/bs";
 import { IoAlertCircleOutline } from "react-icons/io5";
-import { BsPerson } from "react-icons/bs";
-import { AiOutlineMenu } from "react-icons/ai";
-import { AiFillSetting } from "react-icons/ai";
-import { useState } from "react";
-import { BsFillJournalBookmarkFill } from "react-icons/bs";
-import { AiOutlineClockCircle } from "react-icons/ai";
 import { FaExchangeAlt } from "react-icons/fa";
-import { AiOutlinePoweroff } from "react-icons/ai";
+import { useState } from "react";
 
 const StyledSidebar = styled.aside`
     z-index: 100;
@@ -24,7 +17,6 @@ const StyledSidebar = styled.aside`
     height: 100%;
     width: 350px;
     border-right: 1px solid #DBDBDB;
-    box-shadow: 1px 1px 1px 1px #DBDBDB;
 
     h2 {
         font-weight: 400;
@@ -37,20 +29,26 @@ const StyledSidebar = styled.aside`
 
     ul {
         list-style: none;
-        margin: 0px;
         padding: 0px;
-        
-        li {
-            margin-bottom: 20px;
-
-            svg {
-                margin-right: 8px;
-            }
-        }
+        margin: 0px;
+        display: flex;
+        flex-direction: column;
+        height: 200px;
+        justify-content: space-between;
     }
+        
+        li svg {
+            font-size: 22px;
+        }
 
-    p span {
-        margin-left: 10px;
+    p {
+        span {
+            margin-left: 10px;
+        }
+
+        svg {
+            font-size: 22px;
+        }
     }
 
     @media screen and (max-width: 1255px) {
@@ -72,12 +70,11 @@ const StyledSidebar = styled.aside`
 
     @media screen and (max-width: 770px) {
         align-items: center;
-        argin: 0 auto;
         flex-direction: row;
         justify-content: space-evenly;
         position: fixed;
         padding: 0px;
-        top: 92%;
+        bottom: 0px;
         width: 100%;
         height: 60px;
         border: 1px solid #DBDBDB;
@@ -87,17 +84,18 @@ const StyledSidebar = styled.aside`
             display: none;
         }
 
+        nav {
+            width : 100%;
+        }
+
         nav ul {
             display: flex;
-            flex: 1 0 auto;
+            justify-content: space-around;
+            width: 100%;
+        }
 
-            li {
-                margin-right: 50px;
-            }
-
-            ul>li:nth-child(2) {
-                display: none;
-            }
+        .none {
+            display: none;
         }
     }
 `;
@@ -138,8 +136,9 @@ const SearchBar = styled.div`
     top: 0;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     border-bottom: 1px solid #DBDBDB;
+    padding: 0px 20px;
 
     h4 svg {
         color: #0FA958;
@@ -148,14 +147,12 @@ const SearchBar = styled.div`
 
     div {
         display: flex;
-        position: relative;
 
         svg {
-            position: absolute;
+            position: relative;
             width: 17px;
             top: 10px;
-            right: 137px;
-            margin: 0;
+            right: -25px;
         }
     }
 
@@ -193,7 +190,7 @@ const Sidebar = () => {
                     <h2><span>IncleaF</span><RiLeafLine /></h2>
                     <ul>
                         <li><AiOutlineHome /> <span>홈</span></li>
-                        <li><BsSearch /><span> 검색</span></li>
+                        <li className="none"><BsSearch /><span> 검색</span></li>
                         <li><AiOutlineMessage /> <span>채팅</span></li>
                         <li><IoAlertCircleOutline /> <span>알림</span></li>
                         <li><BsPerson /> <span>프로필</span></li>
