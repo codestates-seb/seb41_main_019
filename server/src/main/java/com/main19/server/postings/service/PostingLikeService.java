@@ -1,5 +1,6 @@
 package com.main19.server.postings.service;
 
+import com.main19.server.postings.repository.PostingLikeRepository;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -8,7 +9,6 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.postings.entity.Posting;
 import com.main19.server.postings.entity.PostingLike;
-import com.main19.server.postings.repository.PostingLikeRepository;
 
 import lombok.RequiredArgsConstructor;
 

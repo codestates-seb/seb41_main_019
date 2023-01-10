@@ -1,7 +1,12 @@
 package com.main19.server.postings.service;
 
+import com.main19.server.postings.entity.Media;
+import com.main19.server.postings.entity.Posting;
+import com.main19.server.postings.mapper.PostingMapper;
+import com.main19.server.postings.repository.MediaRepository;
+import com.main19.server.postings.repository.PostingLikeRepository;
+import com.main19.server.postings.repository.PostingRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,19 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
-import com.main19.server.postings.entity.Media;
-import com.main19.server.postings.entity.Posting;
-import com.main19.server.postings.mapper.PostingMapper;
-import com.main19.server.postings.repository.MediaRepository;
-import com.main19.server.postings.repository.PostingLikeRepository;
-import com.main19.server.postings.repository.PostingRepository;
-import com.main19.server.postings.tags.entity.PostingTags;
-import com.main19.server.postings.tags.repository.PostingTagsRepository;
-import com.main19.server.postings.tags.repository.TagRepository;
 import com.main19.server.utils.CustomBeanUtils;
 
 import lombok.RequiredArgsConstructor;

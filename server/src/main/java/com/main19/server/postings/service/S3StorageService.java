@@ -1,5 +1,7 @@
 package com.main19.server.postings.service;
 
+import com.main19.server.postings.entity.Media;
+import com.main19.server.postings.repository.MediaRepository;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,8 +25,6 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
-import com.main19.server.postings.entity.Media;
-import com.main19.server.postings.repository.MediaRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

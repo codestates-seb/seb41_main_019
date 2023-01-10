@@ -1,14 +1,13 @@
 package com.main19.server.postings.tags.service;
 
-import java.util.List;
+import com.main19.server.postings.tags.entity.PostingTags;
+import com.main19.server.postings.tags.repository.PostingTagsRepository;
 
 import org.springframework.stereotype.Service;
 
 import com.main19.server.postings.entity.Posting;
 import com.main19.server.postings.service.PostingService;
-import com.main19.server.postings.tags.entity.PostingTags;
 import com.main19.server.postings.tags.entity.Tag;
-import com.main19.server.postings.tags.repository.PostingTagsRepository;
 
 import lombok.RequiredArgsConstructor;
 

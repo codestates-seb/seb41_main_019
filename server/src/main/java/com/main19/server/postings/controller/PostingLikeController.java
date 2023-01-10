@@ -1,5 +1,9 @@
 package com.main19.server.postings.controller;
 
+import com.main19.server.postings.dto.PostingLikeDto;
+import com.main19.server.postings.entity.PostingLike;
+import com.main19.server.postings.mapper.PostingMapper;
+import com.main19.server.postings.service.PostingLikeService;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -14,10 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.main19.server.dto.SingleResponseDto;
-import com.main19.server.postings.dto.PostingLikeDto;
-import com.main19.server.postings.entity.PostingLike;
-import com.main19.server.postings.mapper.PostingMapper;
-import com.main19.server.postings.service.PostingLikeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

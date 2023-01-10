@@ -1,5 +1,12 @@
 package com.main19.server.postings.controller;
 
+import com.main19.server.postings.dto.PostingPatchDto;
+import com.main19.server.postings.dto.PostingPostDto;
+import com.main19.server.postings.entity.Posting;
+import com.main19.server.postings.mapper.PostingMapper;
+import com.main19.server.postings.tags.entity.PostingTags;
+import com.main19.server.postings.tags.service.PostingTagsService;
+import com.main19.server.postings.tags.service.TagService;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -26,15 +33,8 @@ import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
-import com.main19.server.postings.dto.PostingPatchDto;
-import com.main19.server.postings.dto.PostingPostDto;
-import com.main19.server.postings.entity.Posting;
-import com.main19.server.postings.mapper.PostingMapper;
 import com.main19.server.postings.service.PostingService;
 import com.main19.server.postings.service.S3StorageService;
-import com.main19.server.postings.tags.entity.PostingTags;
-import com.main19.server.postings.tags.service.PostingTagsService;
-import com.main19.server.postings.tags.service.TagService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

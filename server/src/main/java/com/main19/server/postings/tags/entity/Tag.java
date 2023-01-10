@@ -9,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.main19.server.postings.entity.Posting;
-
 import lombok.Getter;
 import lombok.Setter;
 

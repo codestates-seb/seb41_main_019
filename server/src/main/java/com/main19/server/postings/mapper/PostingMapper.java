@@ -1,21 +1,20 @@
 package com.main19.server.postings.mapper;
 
+import com.main19.server.postings.dto.PostingLikeDto;
+import com.main19.server.postings.dto.PostingLikeResponseDto;
+import com.main19.server.postings.dto.PostingPatchDto;
+import com.main19.server.postings.dto.PostingPostDto;
+import com.main19.server.postings.dto.PostingResponseDto;
+import com.main19.server.postings.tags.dto.PostingTagsResponseDto;
+import com.main19.server.postings.tags.entity.PostingTags;
+import com.main19.server.postings.tags.entity.Tag;
 import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.main19.server.postings.dto.PostingLikeDto;
-import com.main19.server.postings.dto.PostingPatchDto;
-import com.main19.server.postings.dto.PostingPostDto;
-import com.main19.server.postings.dto.PostingResponseDto;
 import com.main19.server.postings.entity.Posting;
-import com.main19.server.postings.dto.PostingLikeResponseDto;
 import com.main19.server.postings.entity.PostingLike;
-import com.main19.server.postings.tags.dto.PostingTagsDto;
-import com.main19.server.postings.tags.dto.PostingTagsResponseDto;
-import com.main19.server.postings.tags.entity.PostingTags;
-import com.main19.server.postings.tags.entity.Tag;
 
 @Mapper(componentModel = "spring")
 public interface PostingMapper {

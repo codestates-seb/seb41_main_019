@@ -1,5 +1,6 @@
 package com.main19.server.postings.entity;
 
+import com.main19.server.postings.tags.entity.PostingTags;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-
-import com.main19.server.postings.tags.entity.PostingTags;
-import com.main19.server.postings.tags.entity.Tag;
 
 import lombok.Getter;
 import lombok.Setter;
