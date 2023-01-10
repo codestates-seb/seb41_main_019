@@ -4,9 +4,11 @@ package com.main19.server.auth.utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CustomAuthorityUtils {
@@ -31,6 +33,15 @@ public class CustomAuthorityUtils {
             return ADMIN_ROLES;
         }
         return USER_ROLES;
+    }
+
+    // yml에 정의된 관리자용 이메일을 사용하지 않아도 됨
+    // 베이터베이스에서 가지고 온 Role 목록을 이용해서 권한 목록을 만들면된다.
+    public List<GrantedAuthority> createAuthorities(List<String> roles) {
+        List<GrantedAuthority> authorities = roles.stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) // SimpleGrantedAuthority 로 넘겨줄떼 ROLE_xxx 형식으로 넘겨주어야 한다 / ADMIN, USER (X)
+                .collect(Collectors.toList());
+        return authorities;
     }
 
     public List<String> createRoles(String email) {

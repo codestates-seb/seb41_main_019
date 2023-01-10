@@ -42,11 +42,12 @@ public class MemberDetailsService implements UserDetailsService { // Custom User
                     .profileText(member.getProfileText())
                     .location(member.getLocation())
                     .build();
+            setRoles(member.getRoles()); // todo 빌더패턴으로 리팩토링
             }
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            return authorityUtils.createAuthorities(this.getEmail());
+            return authorityUtils.createAuthorities(this.getRoles());
         }
 
         @Override
