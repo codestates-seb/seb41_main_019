@@ -99,18 +99,22 @@ const MyPage = () => {
 
   const galleryItems = [
     {
+      postingId: 0,
       imgUrl:
         "https://plus.unsplash.com/premium_photo-1666299355271-b005dac85b6a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
     },
     {
+      postingId: 1,
       imgUrl:
         "https://images.unsplash.com/photo-1487798452839-c748a707a6b2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80",
     },
     {
+      postingId: 2,
       imgUrl:
         "https://plus.unsplash.com/premium_photo-1666299355271-b005dac85b6a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
     },
     {
+      postingId: 3,
       imgUrl:
         "https://images.unsplash.com/photo-1487798452839-c748a707a6b2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80",
     },
@@ -155,7 +159,7 @@ const MyPage = () => {
         {galleryItems.length ? (
           galleryItems.map((el) => {
             return (
-              <div className="image-wrapper">
+              <div className="image-wrapper" key={el.postingId}>
                 <a href="#">
                   <img className="image" src={el.imgUrl} alt="each item" />
                 </a>
