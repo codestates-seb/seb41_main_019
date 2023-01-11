@@ -203,7 +203,7 @@ const StyledHeader = styled.header`
         border: 1px solid #DBDBDB;
         padding: 10px 12px 10px 30px;
     }
-
+    
     @media screen and (min-width: 755px) { 
         display: none; 
     }
@@ -251,39 +251,8 @@ const Sidebar = () => {
                 </StyledModal>
                 : null
             }
-                <Main>
-                    byedfdsfsd
-                </Main>
         </>
     )
 }
 
 export default Sidebar;
-
-/*
-    사이드바를 사용시 레이아웃을 정렬해주는 css입니다
-*/
-
-// 컨텐츠가 들어올 영역입니다
-export const Main = styled.main`
-    display: flex;
-    justify-content: center;
-    max-width: 1711px; // 최대 너비를 지정
-    position: absolute;
-    left: 269px;
-    width: calc(100% - 60px); // css 함수 너비 100%에서 sidebar만큼 크기를 줄임
-    padding: 24px;
-
-    @media screen and (max-width: 1255px) {
-        width: calc(100% - 60px);
-        left: 60px;
-        max-width: 986px; 
-    }
-
-    @media screen and (max-width: 770px) {
-        width: 100%;
-        top: 30px;
-        left: 0px;
-        padding-top: 40px;
-    }
-`;
