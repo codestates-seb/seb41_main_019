@@ -1,6 +1,8 @@
 package com.main19.server.config;
 
 import com.main19.server.auth.filter.JwtAuthenticationFilter;
+import com.main19.server.auth.handler.MemberAuthenticationFailureHandler;
+import com.main19.server.auth.handler.MemberAuthenticationSuccessHandler;
 import com.main19.server.auth.jwt.JwtTokenizer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -70,7 +72,8 @@ public class SecurityConfiguration {
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer); // JwtAuthenticationFilter에 사용되는 객체 DI
             jwtAuthenticationFilter.setFilterProcessesUrl("/member");
-
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
             builder.addFilter(jwtAuthenticationFilter); // addFilter() 메서드를 통해 JwtAuthenticationFilter를 Spring Security Filter Chain에 추가
         }
     }
