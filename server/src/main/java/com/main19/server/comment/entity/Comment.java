@@ -3,7 +3,7 @@ package com.main19.server.comment.entity;
 
 import com.main19.server.comment.like.entity.CommentLike;
 import com.main19.server.member.entity.Member;
-import com.main19.server.postings.entity.Posting;
+import com.main19.server.posting.entity.Posting;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 

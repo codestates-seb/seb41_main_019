@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/likes")
+@RequestMapping("/comment")
 @RequiredArgsConstructor
 public class CommentLikeController {
 
@@ -33,7 +33,7 @@ public class CommentLikeController {
     private final CommentLikeMapper commentLikeMapper;
     private final CommentLikeRepository commentLikeRepository;
 
-    @PostMapping("/{comment-id}")
+    @PostMapping("/{comment-id}/likes")
     public ResponseEntity postLike(@PathVariable("comment-id") @Positive long commentId,
         @Valid @RequestBody CommentLikeDto.Post commentLikePostDto) {
 
@@ -47,7 +47,7 @@ public class CommentLikeController {
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{comment-like-id}")
+    @DeleteMapping("/likes/{comment-like-id}")
     public ResponseEntity deleteLike(@PathVariable("comment-like-id") @Positive long commentLikeId) {
 
         commentLikeService.deleteLike(commentLikeId);

@@ -6,8 +6,8 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.service.MemberService;
-import com.main19.server.postings.entity.Posting;
-import com.main19.server.postings.service.PostingService;
+import com.main19.server.posting.entity.Posting;
+import com.main19.server.posting.service.PostingService;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,7 @@ public class CommentService {
 
         comment.setPosting(posting);
         comment.setMember(member);
+        posting.createCommentCount();
 
         return commentRepository.save(comment);
     }
@@ -61,6 +62,9 @@ public class CommentService {
 
     public void deleteComment(long commentId) {
         Comment comment = findVerifiedComment(commentId);
+        Posting posting = postingService.findPosting(comment.getPosting().getPostingId());
+
+        posting.deleteCommentCount();
 
         commentRepository.delete(comment);
     }
