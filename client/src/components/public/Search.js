@@ -15,26 +15,27 @@ const StyledSearch = styled.div`
 
   div {
     background-color: #d9d9d9;
-    border-radius: 5px;
-    padding: 10px 0px 10px 10px;
+    border-radius: 10px;
+    height: 30px;
     display: flex;
     align-items: center;
 
     svg {
-      margin: 0px 10px 4px 0px;
+      margin: 0px 10px 0px 11px;
     }
 
     input {
-      border: 0px;
+      width: 100%;
       background-color: #d9d9d9;
-      height: 80%;
-      font-size: 16px;
+      font-size: 12px;
+      padding: 2px 0px 0px 0px;
+      border: 0px;
       outline: none;
     }
   }
 
   .isFocused {
-    box-shadow: 0 0 0 1px #2f4858 inset;
+    box-shadow: 0 0 6px #5e8b7e;
   }
 `;
 

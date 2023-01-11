@@ -13,12 +13,12 @@ const StyledFriend = styled.div`
     img {
       width: 100%;
       height: 100%;
-      border-radius: 60px;
+      border-radius: 30px;
     }
   }
 
   div:nth-of-type(2) {
-    width: 70%;
+    width: 76%;
     display: flex;
     flex-direction: column;
 
