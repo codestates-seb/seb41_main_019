@@ -1,9 +1,10 @@
 import styled from "styled-components";
-import A from "../../assets/img/plant/11.jpg";
-import B from "../../assets/img/plant/14.png";
+import A from "../../assets/img/plants/11.jpg";
+import B from "../../assets/img/plants/알보1.png";
 import { AiOutlineHeart, AiOutlineShareAlt, AiOutlineMessage } from "react-icons/ai";
 import { BsBookmarkPlus } from "react-icons/bs";
 import { FiUserPlus } from "react-icons/fi";
+import Slider from "./Slider";
 
 const Wrapper = styled.div`
     width: 470px;
@@ -108,6 +109,9 @@ const StyledInteraction = styled.section`
 `;
 
 const Feed = () => {
+
+    const img = [ A,B ];
+
     return (
         <Wrapper>
             <StyledHeader>
@@ -121,7 +125,10 @@ const Feed = () => {
                     <AiOutlineMessage />
                 </div>
             </StyledHeader>
-            <img src={B} alt="img" />
+            {  img.length > 1
+                ? <Slider img={img} /> 
+                : <img src={B} alt="img" />
+            }
             <StyledInteraction>
                 <div className="interact">
                     <AiOutlineHeart />
