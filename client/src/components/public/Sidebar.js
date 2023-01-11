@@ -7,7 +7,7 @@ import { FaExchangeAlt } from "react-icons/fa";
 import { useState } from "react";
 
 const StyledSidebar = styled.aside`
-    z-index: 100;
+    z-index: 600;
     display: flex;
     box-sizing: border-box;
     padding: 0px 0px 0px 15px;
@@ -121,7 +121,7 @@ const StyledSidebar = styled.aside`
 
 const StyledModal = styled.div`
     display: inline-block;
-    z-index: 400;
+    z-index: 999;
     background-color: white;
     margin-left: 10px;
     position: absolute;
@@ -160,6 +160,7 @@ const StyledModal = styled.div`
 
 /* 770px일 때 상단 부분입니다. */
 const StyledHeader = styled.header`
+    z-index: 500;
     width: 100%;
     height: 60px;
     position: fixed;
@@ -250,6 +251,9 @@ const Sidebar = () => {
                 </StyledModal>
                 : null
             }
+                <Main>
+                    byedfdsfsd
+                </Main>
         </>
     )
 }
@@ -260,29 +264,26 @@ export default Sidebar;
     사이드바를 사용시 레이아웃을 정렬해주는 css입니다
 */
 
-export const Container = styled.div`
-    position: relative;
-    max-width: 1264px; // 최대 너비를 지정  -> 이 값 이상으로는 안커짐
-    width: 100%; // 크기 100% 설정 ->위의 max-width와 조합하여 1264픽셀 이하에서 자동으로 크기가 줄었다 늘었다 함
-    flex: 1 0 auto;
-    display: flex;
-    justify-content: space-between;
-    margin: 0 auto; // 증앙정렬
-`;
-
 // 컨텐츠가 들어올 영역입니다
 export const Main = styled.main`
-    max-width: 1100px; // 최대 너비를 지정  -> 이 값 이상으로는 안커짐
-    width: calc(100% - 200px); // css 함수 너비 100%에서 164px만큼 크기를 줄임(여백을 위해) https://developer.mozilla.org/ko/docs/Web/CSS/calc
+    display: flex;
+    justify-content: center;
+    max-width: 1711px; // 최대 너비를 지정
+    position: absolute;
+    left: 269px;
+    width: calc(100% - 60px); // css 함수 너비 100%에서 sidebar만큼 크기를 줄임
     padding: 24px;
-    z-index: 100;
-    @media screen and (max-width: 980px) {
-        padding-left: 16px;
-        padding-right: 16px;
+
+    @media screen and (max-width: 1255px) {
+        width: calc(100% - 60px);
+        left: 60px;
+        max-width: 986px; 
     }
-    @media screen and (max-width: 640px) {
+
+    @media screen and (max-width: 770px) {
         width: 100%;
-        border-left: 0;
-        border-right: 0;
+        top: 30px;
+        left: 0px;
+        padding-top: 40px;
     }
 `;
