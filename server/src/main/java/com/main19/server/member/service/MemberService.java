@@ -5,6 +5,7 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.repository.MemberRepository;
+import com.main19.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+    private final CustomBeanUtils<Member> beanUtils;
 
 
     public Member createMember(Member member) {
@@ -39,15 +41,7 @@ public class MemberService {
         // todo password 수정할지?
 
         Member findMember = findVerifiedMember(member.getMemberId());
-        Member updateMember = Member.builder()
-                .memberId(member.getMemberId())
-                .profileImage(member.getProfileImage())
-                .profileText(member.getProfileText())
-                .userName(member.getUserName())
-                .location(member.getLocation())
-
-                .email(findMember.getEmail())
-                .build();
+        Member updateMember = beanUtils.copyNonNullProperties(member, findMember);
 
         return memberRepository.save(updateMember);
     }
