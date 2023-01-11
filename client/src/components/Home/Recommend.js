@@ -23,13 +23,14 @@ const StyledUl = styled.ul`
     li img {
         width: 100%;
         max-height: 100px;
-        padding: 10px;
+        padding: 18px;
         border-radius: 50px;
         cursor: pointer;
     }
 
     li span {
-        padding: 10px;
+        font-size: 12px;
+        letter-spacing: 1px;
     }
 `;
 

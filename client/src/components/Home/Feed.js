@@ -30,8 +30,8 @@ const StyledHeader = styled.div`
     margin-bottom: 10px;
 
     img {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
         border-radius: 45px;
         margin-right: 10px;
         cursor: pointer;
@@ -44,14 +44,16 @@ const StyledHeader = styled.div`
 
     div > span:first-child{
         color: #222426;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 500;
         margin-bottom: 3px;
+        letter-spacing: 1px;
     }
 
     div > span:nth-child(2) {
-        font-size: 14px;
+        font-size: 12px;
         color: gray;
+        letter-spacing: 1px;
     }
 
     .icons {
@@ -81,8 +83,10 @@ const StyledInteraction = styled.section`
 
     p:nth-child(2) {
         font-weight: 600;
+        font-size: 16px;
         margin-bottom: 10px;
         color: #222426;
+        
     }
 
     .tags {
@@ -98,6 +102,8 @@ const StyledInteraction = styled.section`
     > span:last-child {
         color: gray;
         cursor: pointer;
+        font-size: 14px;
+        letter-spacing: 1px;
     }
 `;
 

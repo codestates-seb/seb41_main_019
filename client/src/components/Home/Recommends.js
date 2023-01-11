@@ -24,6 +24,7 @@ const StyledHeader = styled.header`
         button {
             font-size: 1rem;
             background: white;
+            letter-spacing: 1px;
             border: 0px;
             cursor: pointer;
         }
