@@ -1,5 +1,5 @@
-import Recommends from "../components/Home/Feeds";
-import Feeds from "../components/Home/Recommends";
+import Recommends from "../components/Home/Recommends";
+import Feeds from "../components/Home/Feeds";
 import styled from "styled-components";
 
 const StyledMain = styled.main`

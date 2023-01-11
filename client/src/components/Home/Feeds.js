@@ -2,22 +2,14 @@ import styled from "styled-components";
 import Feed from "./Feed";
 
 const Wrapper = styled.div`
+    display: flex;
+    justify-content: center;
 `
-
-const StyledHeader = styled.header`
-    
-`;
-
 
 const Feeds = () => {
     return (
         <Wrapper>
-            <StyledHeader>
-
-            </StyledHeader>
-            <Feed>
-                
-            </Feed>
+            <Feed />
         </Wrapper>
     )
 }
