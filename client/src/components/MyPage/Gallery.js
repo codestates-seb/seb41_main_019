@@ -52,19 +52,29 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ galleryData }) => {
+const Gallery = ({ galleryData, currentView }) => {
+  // 반려식물들의 각 사진들의 imgId는 고유한 값이어야 함.
+  // 그렇지 않을 경우 key prop 에러 발생
   return (
     <StyledContainer>
       {galleryData.length ? (
         <StyledMyPageGallery>
           {galleryData.map((el) => {
-            return (
-              <div className="image-wrapper" key={el.postingId}>
-                <a href="#">
+            if (currentView === "plant") {
+              return (
+                <div className="image-wrapper" key={el.imgId}>
                   <img className="image" src={el.imgUrl} alt="each item" />
-                </a>
-              </div>
-            );
+                </div>
+              );
+            } else {
+              return (
+                <div className="image-wrapper" key={el.postingId}>
+                  <a href="#">
+                    <img className="image" src={el.imgUrl} alt="each item" />
+                  </a>
+                </div>
+              );
+            }
           })}
         </StyledMyPageGallery>
       ) : (

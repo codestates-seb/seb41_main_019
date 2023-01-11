@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 import { TiArrowSortedDown } from "react-icons/ti";
@@ -57,12 +57,6 @@ const MyPage = () => {
   const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
   const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
 
-  useEffect(() => {
-    if (isFolderOpened) {
-      handleMyPlantsActivate();
-    }
-  }, [isFolderOpened]);
-
   const getGalleryData = async (url, view) => {
     try {
       setCurrentView(view);
@@ -98,12 +92,17 @@ const MyPage = () => {
     getMyPlantsData();
   };
 
-  const handlePlantClick = () => {
+  const handlePlantClick = (plantId) => {
     // 반려식물 클릭시 해당건 조회
+    setCurrentView("Plant");
+    setGalleryData(myPlantsData[plantId].plantImgs);
   };
 
   const handleFolderClick = () => {
     setIsFolderOpened(!isFolderOpened);
+    if (!isFolderOpened) {
+      handleMyPlantsActivate();
+    }
   };
 
   // MyPage 접속시 기본값으로 Postings 표시
@@ -114,7 +113,10 @@ const MyPage = () => {
       <UserInfo />
       {isFolderOpened ? (
         <>
-          <MyPlants myPlantsData={myPlantsData} />
+          <MyPlants
+            myPlantsData={myPlantsData}
+            handlePlantClick={handlePlantClick}
+          />
           <StyledMyPlantFolder onClick={handleFolderClick}>
             <p>
               My Plants 접기 <TiArrowSortedUp />
@@ -146,7 +148,11 @@ const MyPage = () => {
           <span>스크랩</span>
         </StyledChangeViewButton>
       </StyledChangeViewContainer>
-      <Gallery galleryData={galleryData} />
+      <Gallery
+        galleryData={galleryData}
+        currentView={currentView}
+        plantId={myPlantsData.plantId}
+      />
     </StyledContainer>
   );
 };

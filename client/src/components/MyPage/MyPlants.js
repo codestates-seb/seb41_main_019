@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
@@ -82,7 +81,7 @@ const StyledNoContents = styled.div`
 
 const StyledMyPlantInfo = styled.div``;
 
-const MyPlants = ({ myPlantsData }) => {
+const MyPlants = ({ myPlantsData, handlePlantClick }) => {
   const handleAddPlantClick = () => {
     // 식물 추가 로직
   };
@@ -112,7 +111,12 @@ const MyPlants = ({ myPlantsData }) => {
           {myPlantsData.length ? (
             myPlantsData.map((el) => {
               return (
-                <StyledMyPlantsItem key={el.plantId}>
+                <StyledMyPlantsItem
+                  key={el.plantId}
+                  onClick={() => {
+                    handlePlantClick(el.plantId);
+                  }}
+                >
                   <div className="image-wrapper">
                     <img
                       className="image"
