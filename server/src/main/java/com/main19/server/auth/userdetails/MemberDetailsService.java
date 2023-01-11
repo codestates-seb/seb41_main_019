@@ -41,8 +41,8 @@ public class MemberDetailsService implements UserDetailsService { // Custom User
                     .profileImage(member.getProfileImage())
                     .profileText(member.getProfileText())
                     .location(member.getLocation())
+                    .roles(member.getRoles())
                     .build();
-            setRoles(member.getRoles()); // todo 빌더패턴으로 리팩토링
             }
 
         @Override

@@ -17,6 +17,7 @@ public class Member {
 	@GeneratedValue
 	private Long memberId;
 
+	@Column(nullable = false)
 	private String userName;
 
 	@Column(unique = true)
@@ -29,6 +30,7 @@ public class Member {
 
 	private String location;
 
+	@Column(nullable = false)
 	private String password;
 
 	@ElementCollection(fetch = EAGER)
@@ -42,8 +44,14 @@ public class Member {
 		this.roles = roles;
 	}
 
+	public enum MemberRole {
+		ROLE_USER,
+		ROLE_ADMIN
+	}
+
 	@Builder
-	public Member(Long memberId, String userName, String email, String profileImage, String profileText, String location, String password) {
+
+	public Member(Long memberId, String userName, String email, String profileImage, String profileText, String location, String password, List<String> roles) {
 		this.memberId = memberId;
 		this.userName = userName;
 		this.email = email;
@@ -51,10 +59,6 @@ public class Member {
 		this.profileText = profileText;
 		this.location = location;
 		this.password = password;
-	}
-
-	public enum MemberRole {
-		ROLE_USER,
-		ROLE_ADMIN
+		this.roles = roles;
 	}
 }
