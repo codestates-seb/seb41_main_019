@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PostingLikeResponseDto {
-	private Long postingLikeId;
+	private long postingLikeId;
 	private long postingId;
-	// private Member member;
+	private long memberId;
 }

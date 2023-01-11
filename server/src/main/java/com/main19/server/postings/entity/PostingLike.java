@@ -8,7 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.main19.server.postings.entity.Posting;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -22,6 +26,11 @@ public class PostingLike {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "POSTING_ID")
 	private Posting posting;
+
+	@ManyToOne
+	@JoinColumn(name = "member_id")
+	private Member member;
+
 
 	public void setPosting(Posting posting) {
 		this.posting = posting;

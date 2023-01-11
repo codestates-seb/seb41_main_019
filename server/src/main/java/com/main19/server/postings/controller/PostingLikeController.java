@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/posting-likes")
+@RequestMapping("/likes")
 @Validated
 @Slf4j
 @RequiredArgsConstructor
@@ -33,10 +33,12 @@ public class PostingLikeController {
 
 	@PostMapping("/{posting-id}")
 	public ResponseEntity postPosingLike(@PathVariable("posting-id") @Positive long postingId, @Valid @RequestBody PostingLikeDto requestBody) {
-		PostingLike postingLike = postingLikeService.createPostingLike(mapper.postingLikeDtoToPostingLike(requestBody), postingId);
+		PostingLike postingLike = postingLikeService.createPostingLike(mapper.postingLikeDtoToPostingLike(requestBody),
+			postingId, requestBody.getMemberId());
 		return new ResponseEntity<>(new SingleResponseDto<>(mapper.postingLikeToPostingLikeResponseDto(postingLike)), HttpStatus.CREATED);
 	}
 
+	// 민훈님한테 물어보자 엔드포인트
 	@DeleteMapping(value = "/{posting-like-id}")
 	public ResponseEntity deletePostingLike(@PathVariable("posting-like-id") @Positive long postingLikeId) {
 		postingLikeService.deletePostingLike(postingLikeId);

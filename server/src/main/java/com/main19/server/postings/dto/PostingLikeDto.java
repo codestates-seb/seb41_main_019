@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class PostingLikeDto {
 	private long postingId;
-	// private Long memberId;
+	private long memberId;
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class PostingPatchDto {
-	private Long postingId;
+	private long postingId;
 	private String postingContent;
 	private List<String> tagName;
 	public void setPostingId(long postingId) {
