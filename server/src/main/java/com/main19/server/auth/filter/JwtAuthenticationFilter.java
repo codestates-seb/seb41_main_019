@@ -12,10 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,9 +32,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         ObjectMapper objectMapper = new ObjectMapper(); // username과 password를 DTO 클래스로 역직렬화에 필요
         LoginDto loginDto = objectMapper.readValue(request.getInputStream(), LoginDto.class); // 여기서 ServletInputStream을 LoginDto로 변환
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getUserName(), loginDto.getPassword()); // username과 password를 포함한 AuthenticationToken 생성
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()); // username과 password를 포함한 AuthenticationToken 생성
 
-        return authenticationToken; // Token을 AuthenticationManager에게 전달
+        return authenticationManager.authenticate(authenticationToken); // Token을 AuthenticationManager에게 전달
     }
 
     // 클라이언트의 인증정보를 이용해서 인증에 성공할 경우 호출된다

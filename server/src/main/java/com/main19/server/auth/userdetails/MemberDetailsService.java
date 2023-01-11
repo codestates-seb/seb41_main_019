@@ -33,17 +33,12 @@ public class MemberDetailsService implements UserDetailsService { // Custom User
     }
 
     private final class MemberDetails extends Member implements UserDetails {
-        private MemberDetails(Member member) {
-            Member.builder()
-                    .memberId(member.getMemberId())
-                    .userName(member.getUserName())
-                    .email(member.getEmail())
-                    .profileImage(member.getProfileImage())
-                    .profileText(member.getProfileText())
-                    .location(member.getLocation())
-                    .roles(member.getRoles())
-                    .build();
-            }
+        MemberDetails(Member member) {
+            setMemberId(member.getMemberId());
+            setEmail(member.getEmail());
+            setPassword(member.getPassword());
+            setRoles(member.getRoles());
+        }
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {

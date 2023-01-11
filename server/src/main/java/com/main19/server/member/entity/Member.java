@@ -10,7 +10,7 @@ import java.util.List;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 	@Id
@@ -59,29 +59,5 @@ public class Member {
 		this.location = location;
 		this.password = password;
 		this.roles = roles;
-	}
-
-	public void setMemberId(Long memberId) {
-		this.memberId = memberId;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public void setProfileImage(String profileImage) {
-		this.profileImage = profileImage;
-	}
-
-	public void setProfileText(String profileText) {
-		this.profileText = profileText;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 }
