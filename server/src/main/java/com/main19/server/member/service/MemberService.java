@@ -36,6 +36,7 @@ public class MemberService {
 
     public Member updateMember(Member member) {
         // todo 토큰 정보 확인해서 권한 검증후 수정 해야함
+        // todo password 수정할지?
 
         Member findMember = findVerifiedMember(member.getMemberId());
         Member updateMember = Member.builder()
