@@ -7,6 +7,7 @@ import com.main19.server.comment.service.CommentService;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.service.MemberService;
+
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class CommentLikeService {
         CommentLike findCommentLike = commentLikeRepository.findByMember_MemberIdAndComment_CommentId(memberId,commentId);
 
         if(findCommentLike != null) {
-            throw new BusinessLogicException(ExceptionCode.COMMENT_LIKE_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.COMMENT_LIKE_ERROR);
         }
 
         commentLike.setMember(memberService.findMember(memberId));

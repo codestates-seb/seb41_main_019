@@ -8,14 +8,17 @@ public enum ExceptionCode {
 	MEMBER_EXISTS(409, "Member exists"),
 	POSTING_NOT_FOUND(404, "Posting not found"),
 	POSTING_LIKE_NOT_FOUND(404, "Posting like not found"),
+	POSTING_LIKE_ERROR(409,"You already pressed like"),
 	TAG_NOT_FOUND(404, "Tag not found"),
-	WRONG_POSTING_MEDIA(404, "Wrong posting media"), // 첨부파일 없이 포스팅 할 시
-	WRONG_MEDIA_FORMAT(404, "Wrong media format"), // 지원하는 포맷이 아닐 때
+	SCRAP_NOT_FOUND(404, "Scrap not found"),
+	SCRAP_ALREADY_EXIST(409, "Scrap already exist"),
+	WRONG_POSTING_MEDIA(405, "Wrong posting media"), // 첨부파일 없이 포스팅 할 시
+	WRONG_MEDIA_FORMAT(405, "Wrong media format"), // 지원하는 포맷이 아닐 때
 	MEDIA_UPLOAD_ERROR(404, "Media upload error"), // s3에 업로드하다가 뭐 안됐을 때
 	MEDIA_NOT_FOUND(404, "Media not found"), // 찾는 첨부파일 없을 때 (s3, media테이블 공통)
-	POSTING_REQUIRES_AT_LEAST_ONE_MEDIA(404, "Posting requires at least one media"),
+	POSTING_REQUIRES_AT_LEAST_ONE_MEDIA(405, "Posting requires at least one media"),
 	// 첨부파일 없이 포스팅 할 시, 포스팅 수정 시 사진 다 지우지 못하도록
-	POSTING_REQUIRES_LESS_THAN_TEN_MEDIA(404, "Posting requires less than ten media"),
+	POSTING_REQUIRES_LESS_THAN_TEN_MEDIA(405, "Posting requires less than ten media"),
 	// 첨부파일 너무 많으면 안대
 	COMMENT_NOT_FOUND(404,"Comment Not Found"),
 	COMMENT_LIKE_NOT_FOUND(404,"Comment Not Found"),
