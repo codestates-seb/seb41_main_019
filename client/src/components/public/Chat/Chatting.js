@@ -2,6 +2,11 @@ import styled from "styled-components";
 import { chatLog } from "../../../assets/dummyData/chat";
 import Massage from "./Massage";
 
+const StyledButton = styled.button`
+  width: 6%;
+  margin: 0px 0px 0px auto;
+`;
+
 const StyledChatting = styled.ul`
   width: 100%;
   height: 400px;
@@ -36,10 +41,10 @@ const StyledChatting = styled.ul`
     }
   }
 `;
-const Chatting = () => {
+const Chatting = ({ setIsOpend }) => {
   return (
     <>
-      <p>최근 채팅</p>
+      <StyledButton onClick={() => setIsOpend(false)}>x</StyledButton>
       <StyledChatting>
         {chatLog.map((data, idx) => {
           return <Massage data={data} key={idx} />;

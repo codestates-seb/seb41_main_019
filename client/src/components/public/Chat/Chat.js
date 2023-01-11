@@ -1,6 +1,8 @@
+import { useState } from "react";
 import styled from "styled-components";
 import Search from "../Search";
 import Chatting from "./Chatting";
+import Friends from "./Friends";
 
 const StyledChat = styled.div`
   position: fixed;
@@ -29,10 +31,12 @@ const StyledChat = styled.div`
 `;
 
 const Chat = () => {
+  const [isOpend, setIsOpend] = useState(true);
   return (
     <StyledChat>
       <Search label={"채팅"} />
-      <Chatting />
+      {isOpend ? <Chatting setIsOpend={setIsOpend} /> : null}
+      <Friends setIsOpend={setIsOpend} />
     </StyledChat>
   );
 };
