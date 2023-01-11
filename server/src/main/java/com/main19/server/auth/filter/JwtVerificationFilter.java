@@ -2,7 +2,8 @@ package com.main19.server.auth.filter;
 
 import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.auth.utils.CustomAuthorityUtils;
-import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,8 +28,17 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        Map<String, Object> claims = verifyJws(request); // jwt를 검증하는 메서드
-        setAuthenticationToContext(claims); // Authentication 객체를 SecurityContext에 저장하기 위한 private 메서드
+        try {
+            Map<String, Object> claims = verifyJws(request);
+            setAuthenticationToContext(claims);
+        } catch (SignatureException se) {
+            request.setAttribute("exception", se);
+        } catch (ExpiredJwtException ee) {
+            request.setAttribute("exception", ee);
+        } catch (Exception e) {
+            request.setAttribute("exception", e);
+        }
+
         filterChain.doFilter(request, response);
     }
 
