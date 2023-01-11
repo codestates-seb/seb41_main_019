@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { TiArrowSortedDown } from "react-icons/ti";
@@ -14,6 +14,7 @@ import Gallery from "../components/MyPage/Gallery";
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
   width: 750px;
 `;
 
@@ -51,19 +52,32 @@ const StyledChangeViewButton = styled.div`
 `;
 
 const MyPage = () => {
-  const [isFolderOpened, setIsFolderOpened] = useState(false);
-  const [galleryData, setGalleryData] = useState([]);
-  const [currentView, setCurrentView] = useState("");
+  const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
+  const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
+  const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
+  const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
 
-  const handleFolderClick = () => {
-    setIsFolderOpened(!isFolderOpened);
-  };
+  useEffect(() => {
+    if (isFolderOpened) {
+      handleMyPlantsActivate();
+    }
+  }, [isFolderOpened]);
 
   const getGalleryData = async (url, view) => {
     try {
       setCurrentView(view);
       const response = await axios.get(url);
       setGalleryData(response.data);
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const getMyPlantsData = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/data");
+      setMyPlantsData(response.data);
       return response;
     } catch (err) {
       console.error(err);
@@ -80,6 +94,18 @@ const MyPage = () => {
     getGalleryData("http://localhost:4000/data", "scraps");
   };
 
+  const handleMyPlantsActivate = () => {
+    getMyPlantsData();
+  };
+
+  const handlePlantClick = () => {
+    // 반려식물 클릭시 해당건 조회
+  };
+
+  const handleFolderClick = () => {
+    setIsFolderOpened(!isFolderOpened);
+  };
+
   // MyPage 접속시 기본값으로 Postings 표시
   // defaultProps로 해결해야하나?
 
@@ -88,7 +114,7 @@ const MyPage = () => {
       <UserInfo />
       {isFolderOpened ? (
         <>
-          <MyPlants />
+          <MyPlants myPlantsData={myPlantsData} />
           <StyledMyPlantFolder onClick={handleFolderClick}>
             <p>
               My Plants 접기 <TiArrowSortedUp />

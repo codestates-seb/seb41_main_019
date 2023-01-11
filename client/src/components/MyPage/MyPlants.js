@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useState } from "react";
-import axios from "axios";
 
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
@@ -32,6 +31,7 @@ const StyledListsContainer = styled.div`
   display: flex;
   width: 700px;
   align-items: center;
+  overflow: hidden;
 `;
 
 const StyledMyPlantsItem = styled.div`
@@ -39,11 +39,13 @@ const StyledMyPlantsItem = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 0 25px;
+  margin: 0 20px;
   .image-wrapper {
     width: 100px;
     height: 100px;
     border-radius: 70%;
+    overflow: hidden;
+    cursor: pointer;
   }
   .image {
     width: 100%;
@@ -80,9 +82,7 @@ const StyledNoContents = styled.div`
 
 const StyledMyPlantInfo = styled.div``;
 
-const MyPlants = () => {
-  const [myPlantsData, setMyPlantsData] = useState([]);
-
+const MyPlants = ({ myPlantsData }) => {
   const handleAddPlantClick = () => {
     // 식물 추가 로직
   };
@@ -112,11 +112,15 @@ const MyPlants = () => {
           {myPlantsData.length ? (
             myPlantsData.map((el) => {
               return (
-                <StyledMyPlantsItem>
-                  <div className="image-wrapper" key={el.postingId}>
-                    <img className="image" src={el.imgUrl} alt="each item" />
+                <StyledMyPlantsItem key={el.plantId}>
+                  <div className="image-wrapper">
+                    <img
+                      className="image"
+                      src={el.plantImgs[el.plantImgs.length - 1].imgUrl}
+                      alt="each item"
+                    />
                   </div>
-                  <p>식물이름</p>
+                  <p>{el.plantName}</p>
                 </StyledMyPlantsItem>
               );
             })
