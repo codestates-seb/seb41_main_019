@@ -18,6 +18,7 @@ const StyledHeader = styled.header`
 
         .active {
             border-bottom: 4px solid #A7C4BC;
+            font-weight: 600;
         }
 
         button {

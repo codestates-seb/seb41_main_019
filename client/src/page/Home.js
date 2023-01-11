@@ -11,7 +11,6 @@ const StyledMain = styled.main`
 
     @media screen and (max-width: 770px) {
         margin: 60px 0px 0px 0px;
-        max-height: 938px;
     }
 `;
 
