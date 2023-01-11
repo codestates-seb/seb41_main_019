@@ -61,9 +61,9 @@ const MyPage = () => {
 
   const getGalleryData = async (url, view) => {
     try {
+      setCurrentView(view);
       const response = await axios.get(url);
       setGalleryData(response.data);
-      setCurrentView(view);
       return response;
     } catch (err) {
       console.error(err);
