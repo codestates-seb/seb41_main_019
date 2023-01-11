@@ -171,6 +171,7 @@ const StyledHeader = styled.header`
     border-bottom: 1px solid #DBDBDB;
     padding: 0px 20px;
     min-width: 355px;
+    background-color: white;
 
     h3 {
         display: flex;
