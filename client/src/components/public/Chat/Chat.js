@@ -1,9 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Search from "../Search";
+import ChatRooms from "./ChatRooms";
 import Chatting from "./Chatting";
-import Friend from "./Friend";
 import Friends from "./Friends";
+import { chatLogData } from "../../../assets/dummyData/chatLogData";
+import { friendsData } from "../../../assets/dummyData/friendsData";
 
 const StyledChat = styled.div`
   position: fixed;
@@ -41,6 +43,8 @@ const StyledChat = styled.div`
 
 const Chat = () => {
   const [curChat, setCurChat] = useState(null);
+  const [chatLog, setChatLog] = useState(chatLogData);
+  const [freinds, setFreinds] = useState(friendsData);
 
   const handleCurChat = (value) => {
     setCurChat(value);
@@ -51,9 +55,28 @@ const Chat = () => {
       <StyledChat>
         <Search label={"채팅"} />
         {curChat ? (
-          <Chatting handleCurChat={handleCurChat} curChat={curChat} />
-        ) : null}
-        <Friends handleCurChat={handleCurChat} />
+          <>
+            <Chatting
+              handleCurChat={handleCurChat}
+              curChat={curChat}
+              chatLog={chatLog}
+            />
+            <ChatRooms
+              handleCurChat={handleCurChat}
+              chatLog={chatLog}
+              freinds={freinds}
+            />
+          </>
+        ) : (
+          <>
+            <ChatRooms
+              handleCurChat={handleCurChat}
+              chatLog={chatLog}
+              freinds={freinds}
+            />
+            <Friends handleCurChat={handleCurChat} freinds={freinds} />
+          </>
+        )}
       </StyledChat>
     </>
   );

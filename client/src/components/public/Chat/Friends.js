@@ -1,8 +1,21 @@
 import styled from "styled-components";
-import { friends } from "../../../assets/dummyData/friends";
 import Friend from "./Friend";
 
 const StyledFriends = styled.div`
+  max-height: 40%;
+
+  ul {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 85%;
+    margin: 0px;
+    padding: 0px;
+    overflow: scroll;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
   > p::before {
     content: "";
     display: block;
@@ -19,15 +32,17 @@ const StyledFriends = styled.div`
   }
 `;
 
-const Friends = ({ handleCurChat }) => {
+const Friends = ({ handleCurChat, freinds }) => {
   return (
     <StyledFriends>
       <p>Follow List</p>
-      {friends
-        ? friends.map((friend, idx) => (
-            <Friend friend={friend} key={idx} handleCurChat={handleCurChat} />
-          ))
-        : "친구가 없슴다."}
+      <ul>
+        {freinds
+          ? freinds.map((friend, idx) => (
+              <Friend friend={friend} key={idx} handleCurChat={handleCurChat} />
+            ))
+          : "친구가 없슴다."}
+      </ul>
     </StyledFriends>
   );
 };

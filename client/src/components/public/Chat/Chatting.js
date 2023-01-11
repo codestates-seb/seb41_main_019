@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { chatLog } from "../../../assets/dummyData/chat";
 import Massage from "./Massage";
 import Friend from "./Friend";
 import { useState } from "react";
@@ -77,14 +76,14 @@ const StyledInput = styled.div`
   }
 `;
 
-const Chatting = ({ curChat, handleCurChat }) => {
+const Chatting = ({ curChat, handleCurChat, chatLog }) => {
   const [curLog, setCurLog] = useState(15);
 
   const handleCurLog = () => setCurLog(curLog + 15);
 
   const soltChat = () => {
     const solted = [];
-    chatLog
+    chatLog[0]
       .filter((data, idx) => idx >= chatLog.length - curLog)
       .reduce((acc, cur) => {
         if (!solted[0]) solted.push([acc]);

@@ -36,9 +36,10 @@ const StyledFriend = styled.li`
 
 const StyledButton = styled.button``;
 
-const Friend = ({ friend, handleCurChat, top }) => {
+const ChatRoom = ({ handleCurChat, freind }) => {
+  console.log(freind);
   return (
-    <StyledFriend top={top}>
+    <StyledFriend>
       <div>
         <img
           src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg"
@@ -46,16 +47,12 @@ const Friend = ({ friend, handleCurChat, top }) => {
         ></img>
       </div>
       <div>
-        <span>{friend.username}</span>
+        <span>{freind.username}</span>
         <span>profile</span>
       </div>
-      {top ? (
-        <StyledButton onClick={() => handleCurChat(null)}>x</StyledButton>
-      ) : (
-        <StyledButton onClick={() => handleCurChat(friend)}>chat</StyledButton>
-      )}
+      <StyledButton onClick={() => handleCurChat(freind)}>chat</StyledButton>
     </StyledFriend>
   );
 };
 
-export default Friend;
+export default ChatRoom;
