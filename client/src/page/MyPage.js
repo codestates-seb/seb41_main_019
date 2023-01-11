@@ -148,11 +148,7 @@ const MyPage = () => {
           <span>스크랩</span>
         </StyledChangeViewButton>
       </StyledChangeViewContainer>
-      <Gallery
-        galleryData={galleryData}
-        currentView={currentView}
-        plantId={myPlantsData.plantId}
-      />
+      <Gallery galleryData={galleryData} currentView={currentView} />
     </StyledContainer>
   );
 };

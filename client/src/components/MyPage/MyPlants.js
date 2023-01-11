@@ -1,9 +1,12 @@
 import styled from "styled-components";
 
+import MyPlantInfo from "./MyPlantInfo";
+
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { RiPlantLine } from "react-icons/ri";
 import { ReactComponent as Cookie } from "../../assets/svg/plus.svg";
+import { useState } from "react";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -79,16 +82,16 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const StyledMyPlantInfo = styled.div``;
-
 const MyPlants = ({ myPlantsData, handlePlantClick }) => {
+  const [isPanelOpened, setIsPanelOpened] = useState(false);
+
   const handleAddPlantClick = () => {
     // 식물 추가 로직
   };
 
   const handleMoveButtonClick = (go) => {
     // 이동 버튼 클릭
-    alert(go);
+    alert("구현 예정");
   };
   return (
     <StyledContainer>
@@ -115,6 +118,7 @@ const MyPlants = ({ myPlantsData, handlePlantClick }) => {
                   key={el.plantId}
                   onClick={() => {
                     handlePlantClick(el.plantId);
+                    setIsPanelOpened(true);
                   }}
                 >
                   <div className="image-wrapper">
@@ -146,7 +150,7 @@ const MyPlants = ({ myPlantsData, handlePlantClick }) => {
           <GrNext className="icon" />
         </div>
       </StyledMyPlantsDashBoard>
-      <StyledMyPlantInfo></StyledMyPlantInfo>
+      {isPanelOpened && <MyPlantInfo />}
     </StyledContainer>
   );
 };
