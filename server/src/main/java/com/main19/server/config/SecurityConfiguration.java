@@ -2,6 +2,8 @@ package com.main19.server.config;
 
 import com.main19.server.auth.filter.JwtAuthenticationFilter;
 import com.main19.server.auth.filter.JwtVerificationFilter;
+import com.main19.server.auth.handler.MemberAccessDeniedHandler;
+import com.main19.server.auth.handler.MemberAuthenticationEntryPoint;
 import com.main19.server.auth.handler.MemberAuthenticationFailureHandler;
 import com.main19.server.auth.handler.MemberAuthenticationSuccessHandler;
 import com.main19.server.auth.jwt.JwtTokenizer;
@@ -42,6 +44,10 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
