@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { FcAnswers } from "@react-icons/all-files/fc/FcAnswers";
+import { FcAnswers } from "react-icons/fc";
 
 const StyledContainer = styled.div`
   display: flex;

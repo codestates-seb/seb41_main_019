@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
 
-import { GrPrevious } from "@react-icons/all-files/gr/GrPrevious";
-import { GrNext } from "@react-icons/all-files/gr/GrNext";
-import { RiPlantLine } from "@react-icons/all-files/ri/RiPlantLine";
+import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
+import { RiPlantLine } from "react-icons/ri";
 import { ReactComponent as Cookie } from "../../assets/svg/plus.svg";
 
 const StyledContainer = styled.div`

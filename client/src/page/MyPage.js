@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
 
-import { TiArrowSortedDown } from "@react-icons/all-files/ti/TiArrowSortedDown";
-import { TiArrowSortedUp } from "@react-icons/all-files/ti/TiArrowSortedUp";
-import { BsGrid3X3 } from "@react-icons/all-files/bs/BsGrid3X3";
-import { BsBookmark } from "@react-icons/all-files/bs/BsBookmark";
+import { TiArrowSortedDown } from "react-icons/ti";
+import { TiArrowSortedUp } from "react-icons/ti";
+import { BsGrid3X3 } from "react-icons/bs";
+import { BsBookmark } from "react-icons/bs";
 
 import MyPlants from "../components/MyPage/MyPlants";
 import UserInfo from "../components/MyPage/UserInfo";
