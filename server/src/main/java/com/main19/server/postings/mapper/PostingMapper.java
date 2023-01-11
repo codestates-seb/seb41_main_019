@@ -1,5 +1,6 @@
 package com.main19.server.postings.mapper;
 
+import com.main19.server.postings.dto.PostingLikeGetResponseDto;
 import java.util.List;
 
 import org.mapstruct.Mapper;
