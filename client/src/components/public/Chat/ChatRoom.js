@@ -47,7 +47,7 @@ const ChatRoom = ({ handleCurChat, freind }) => {
         ></img>
       </div>
       <div>
-        <span>{freind.username}</span>
+        <span>임의</span>
         <span>profile</span>
       </div>
       <StyledButton onClick={() => handleCurChat(freind)}>chat</StyledButton>

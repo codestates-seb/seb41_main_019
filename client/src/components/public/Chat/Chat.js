@@ -12,7 +12,7 @@ const StyledChat = styled.div`
   right: 0px;
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 350px;
   height: 100%;
   border-left: 1px solid #dbdbdb;
   padding: 20px 20px 0px 20px;
