@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const StyledFriend = styled.div`
   display: flex;
-  border-bottom: 1px solid #dbdbdb;
+  ${({ top }) => (top ? null : "border-bottom: 1px solid #dbdbdb;")}
   margin: 0px 0px 10px 0px;
   padding: 0px 0px 5px 0px;
 
@@ -18,7 +18,7 @@ const StyledFriend = styled.div`
   }
 
   div:nth-of-type(2) {
-    width: 76%;
+    width: 81%;
     display: flex;
     flex-direction: column;
 
@@ -35,9 +35,9 @@ const StyledFriend = styled.div`
 `;
 const StyledButton = styled.button``;
 
-const Friend = ({ friend, setIsOpend }) => {
+const Friend = ({ friend, handleCurChat, top }) => {
   return (
-    <StyledFriend>
+    <StyledFriend top={top}>
       <div>
         <img
           src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg"
@@ -48,7 +48,11 @@ const Friend = ({ friend, setIsOpend }) => {
         <span>{friend.username}</span>
         <span>profile</span>
       </div>
-      <StyledButton onClick={() => setIsOpend(true)}>chat</StyledButton>
+      {top ? (
+        <StyledButton onClick={() => handleCurChat(null)}>x</StyledButton>
+      ) : (
+        <StyledButton onClick={() => handleCurChat(friend)}>chat</StyledButton>
+      )}
     </StyledFriend>
   );
 };

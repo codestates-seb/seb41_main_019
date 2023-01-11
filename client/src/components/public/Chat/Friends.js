@@ -19,15 +19,15 @@ const StyledFriends = styled.div`
   }
 `;
 
-const Friends = ({ setIsOpend }) => {
+const Friends = ({ handleCurChat }) => {
   return (
     <StyledFriends>
       <p>Follow List</p>
       {friends
         ? friends.map((friend, idx) => (
-            <Friend friend={friend} key={idx} setIsOpend={setIsOpend} />
+            <Friend friend={friend} key={idx} handleCurChat={handleCurChat} />
           ))
-        : null}
+        : "친구가 없슴다."}
     </StyledFriends>
   );
 };

@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Search from "../Search";
 import Chatting from "./Chatting";
+import Friend from "./Friend";
 import Friends from "./Friends";
 
 const StyledChat = styled.div`
@@ -39,13 +40,22 @@ const StyledChat = styled.div`
 `;
 
 const Chat = () => {
-  const [isOpend, setIsOpend] = useState(true);
+  const [curChat, setCurChat] = useState(null);
+
+  const handleCurChat = (value) => {
+    setCurChat(value);
+  };
+
   return (
-    <StyledChat>
-      <Search label={"채팅"} />
-      {isOpend ? <Chatting setIsOpend={setIsOpend} /> : null}
-      <Friends setIsOpend={setIsOpend} />
-    </StyledChat>
+    <>
+      <StyledChat>
+        <Search label={"채팅"} />
+        {curChat ? (
+          <Chatting handleCurChat={handleCurChat} curChat={curChat} />
+        ) : null}
+        <Friends handleCurChat={handleCurChat} />
+      </StyledChat>
+    </>
   );
 };
 

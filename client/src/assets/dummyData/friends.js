@@ -15,4 +15,16 @@ export const friends = [
     id: 3,
     username: "김뽕빵",
   },
+  {
+    id: 3,
+    username: "김뽕빵",
+  },
+  {
+    id: 3,
+    username: "김뽕빵",
+  },
+  {
+    id: 3,
+    username: "김뽕빵",
+  },
 ];

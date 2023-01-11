@@ -29,7 +29,7 @@ const Massage = ({ data }) => {
   return (
     <StyledMassage className={user === data.send ? "send" : "to"}>
       <span>{data.massage}</span>
-      <p>{data.time}</p>
+      <p>{data.time.split("-")[3]}</p>
     </StyledMassage>
   );
 };
