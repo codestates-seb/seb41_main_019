@@ -1,0 +1,98 @@
+export const chatLog = [
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-11-16:55",
+  },
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-11-16:55",
+  },
+  {
+    send: 1,
+    to: 0,
+    massage: "massage 입니다.",
+    time: "2022-1-11-16:55",
+  },
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-11-16:55",
+  },
+  {
+    send: 1,
+    to: 0,
+    massage: "massage 입니다.",
+    time: "2022-1-11-16:55",
+  },
+  {
+    send: 1,
+    to: 0,
+    massage: "massage 입니다. massage 입니다. massage 입니다. massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 1,
+    to: 0,
+    massage: "massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 1,
+    to: 0,
+    massage: "massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 1,
+    to: 0,
+    massage: "massage 입니다. massage 입니다. massage 입니다. massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+  {
+    send: 0,
+    to: 1,
+    massage: "massage 입니다.",
+    time: "2022-1-12-16:55",
+  },
+];
