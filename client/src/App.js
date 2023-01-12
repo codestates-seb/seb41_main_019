@@ -7,7 +7,7 @@ import Background from "./components/public/Background";
 import { useState } from "react";
 
 function App() {
-  const [ isCovered, setIsCovered ] = useState(true);
+  const [ isCovered, setIsCovered ] = useState(false);
 
   return (
     <BrowserRouter>

@@ -8,7 +8,7 @@ const StyledBackground = styled.div`
     left:0;
     background: rgba(0,0,0,0.6);
     z-index: 999;
-    display: ${({isCovered}) => isCovered ? "none" : null};
+    display: ${({isCovered}) => isCovered ? null : "none"};
 `
 
 const Background = ({ isCovered }) => {
