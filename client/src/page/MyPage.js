@@ -2,10 +2,10 @@ import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
 
-import { TiArrowSortedDown } from "@react-icons/all-files/ti/TiArrowSortedDown";
-import { TiArrowSortedUp } from "@react-icons/all-files/ti/TiArrowSortedUp";
-import { BsGrid3X3 } from "@react-icons/all-files/bs/BsGrid3X3";
-import { BsBookmark } from "@react-icons/all-files/bs/BsBookmark";
+import { TiArrowSortedDown } from "react-icons/ti";
+import { TiArrowSortedUp } from "react-icons/ti";
+import { BsGrid3X3 } from "react-icons/bs";
+import { BsBookmark } from "react-icons/bs";
 
 import MyPlants from "../components/MyPage/MyPlants";
 import UserInfo from "../components/MyPage/UserInfo";
@@ -14,6 +14,7 @@ import Gallery from "../components/MyPage/Gallery";
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
   width: 750px;
 `;
 
@@ -51,19 +52,27 @@ const StyledChangeViewButton = styled.div`
 `;
 
 const MyPage = () => {
-  const [isFolderOpened, setIsFolderOpened] = useState(false);
-  const [galleryData, setGalleryData] = useState([]);
-  const [currentView, setCurrentView] = useState("");
-
-  const handleFolderClick = () => {
-    setIsFolderOpened(!isFolderOpened);
-  };
+  const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
+  const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
+  const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
+  const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
+  const [currentPlant, setCurrentPlant] = useState();
 
   const getGalleryData = async (url, view) => {
     try {
+      setCurrentView(view);
       const response = await axios.get(url);
       setGalleryData(response.data);
-      setCurrentView(view);
+      return response;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const getMyPlantsData = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/data");
+      setMyPlantsData(response.data);
       return response;
     } catch (err) {
       console.error(err);
@@ -80,6 +89,23 @@ const MyPage = () => {
     getGalleryData("http://localhost:4000/data", "scraps");
   };
 
+  const handleMyPlantsActivate = () => {
+    getMyPlantsData();
+  };
+
+  const handlePlantClick = (plantId) => {
+    // 반려식물 클릭시 해당건 조회
+    setCurrentView("Plant");
+    setGalleryData(myPlantsData[plantId].plantImgs);
+  };
+
+  const handleFolderClick = () => {
+    setIsFolderOpened(!isFolderOpened);
+    if (!isFolderOpened) {
+      handleMyPlantsActivate();
+    }
+  };
+
   // MyPage 접속시 기본값으로 Postings 표시
   // defaultProps로 해결해야하나?
 
@@ -88,7 +114,10 @@ const MyPage = () => {
       <UserInfo />
       {isFolderOpened ? (
         <>
-          <MyPlants />
+          <MyPlants
+            myPlantsData={myPlantsData}
+            handlePlantClick={handlePlantClick}
+          />
           <StyledMyPlantFolder onClick={handleFolderClick}>
             <p>
               My Plants 접기 <TiArrowSortedUp />
@@ -120,7 +149,7 @@ const MyPage = () => {
           <span>스크랩</span>
         </StyledChangeViewButton>
       </StyledChangeViewContainer>
-      <Gallery galleryData={galleryData} />
+      <Gallery galleryData={galleryData} currentView={currentView} />
     </StyledContainer>
   );
 };
