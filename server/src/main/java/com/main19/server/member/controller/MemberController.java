@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Validated
 @RequestMapping("/members")
 public class MemberController {
+
     private final MemberMapper mapper;
     private final MemberService memberService;
 
@@ -29,33 +30,36 @@ public class MemberController {
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
         Member member = mapper.memberPostToMember(requestBody);
         return new ResponseEntity(
-                new SingleResponseDto(
-                        mapper.memberToMemberResponse(memberService.createMember(member))), HttpStatus.CREATED);
+            new SingleResponseDto(
+                mapper.memberToMemberResponse(memberService.createMember(member))),
+            HttpStatus.CREATED);
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-                                     @Valid @RequestBody MemberDto.Patch requestBody) {
+    public ResponseEntity patchMember(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("member-id") @Positive long memberId,
+        @Valid @RequestBody MemberDto.Patch requestBody) {
         requestBody.setMemberId(memberId);
 
-        Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody));
+        Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody),token);
 
         return new ResponseEntity(
-                new SingleResponseDto(mapper.memberToMemberResponse(member)),HttpStatus.OK
+            new SingleResponseDto(mapper.memberToMemberResponse(member)), HttpStatus.OK
         );
     }
 
-	@GetMapping("/{member-id}")
+    @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
         Member member = memberService.findMember(memberId);
         return new ResponseEntity(
-                new SingleResponseDto(
-                        mapper.memberToMemberResponse(member)),HttpStatus.OK);
+            new SingleResponseDto(
+                mapper.memberToMemberResponse(member)), HttpStatus.OK);
     }
 
-	@DeleteMapping("{member-id}")
-	public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
-        memberService.deleteMember(memberId);
+    @DeleteMapping("{member-id}")
+    public ResponseEntity deleteMember(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("member-id") @Positive long memberId) {
+        memberService.deleteMember(memberId,token);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

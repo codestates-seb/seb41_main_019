@@ -1,5 +1,6 @@
 package com.main19.server.comment.service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.comment.entity.Comment;
 import com.main19.server.comment.repository.CommentRepository;
 import com.main19.server.exception.BusinessLogicException;
@@ -8,7 +9,6 @@ import com.main19.server.member.entity.Member;
 import com.main19.server.member.service.MemberService;
 import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.service.PostingService;
-import com.main19.server.sse.entity.Sse;
 import com.main19.server.sse.entity.Sse.SseType;
 import com.main19.server.sse.service.SseService;
 import java.time.LocalDateTime;
@@ -27,8 +27,15 @@ public class CommentService {
     private final PostingService postingService;
     private final MemberService memberService;
     private final SseService sseService;
+    private final JwtTokenizer jwtTokenizer;
 
-    public Comment createComment(Comment comment, long postingId, long memberId) {
+    public Comment createComment(Comment comment, long postingId, long memberId, String token) {
+
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if (memberId != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
 
         Posting posting = postingService.findPosting(postingId);
         Member member =  memberService.findMember(memberId);
@@ -37,12 +44,20 @@ public class CommentService {
         comment.setMember(member);
         posting.createCommentCount();
 
-        sseService.send(posting.getMember(), SseType.comment, "new comment");
+        if(posting.getMember().getMemberId() != tokenId) {
+            sseService.send(posting.getMember(), SseType.comment, "new comment");
+        }
 
         return commentRepository.save(comment);
     }
 
-    public Comment updateComment(Comment comments) {
+    public Comment updateComment(Comment comments, String token) {
+
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if (comments.getMember().getMemberId() != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
 
         Comment comment = findVerifiedComment(comments.getCommentId());
 
@@ -64,7 +79,14 @@ public class CommentService {
             Sort.by("commentId").descending()));
     }
 
-    public void deleteComment(long commentId) {
+    public void deleteComment(long commentId, String token) {
+
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if (findComment(commentId).getMember().getMemberId() != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         Comment comment = findVerifiedComment(commentId);
         Posting posting = postingService.findPosting(comment.getPosting().getPostingId());
 

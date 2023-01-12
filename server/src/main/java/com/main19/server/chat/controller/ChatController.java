@@ -19,6 +19,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,20 +35,22 @@ public class ChatController {
 
     @MessageMapping("/chat/{roomId}")
     public void chat(@DestinationVariable long roomId, ChatDto.Post chatDto) throws Exception {
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + roomId , chatDto);
 
-        if(chatRoomService.findChatRoom(roomId) == null) {
+        if (chatRoomService.findChatRoom(roomId) == null) {
             throw new BusinessLogicException(ExceptionCode.CHATROOM_NOT_FOUND);
         }
 
         Chat chat = chatMapper.chatPostDtoToChat(chatDto);
         chatService.createChat(chat, chatDto.getReceiverId(), chatDto.getSenderId(), roomId);
+
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + roomId, chatDto);
     }
 
     @GetMapping("/message/{room-id}")
-    public ResponseEntity getAllChat(@PathVariable("room-id") @Positive long roomId) {
+    public ResponseEntity getAllChat(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("room-id") @Positive long roomId) {
 
-        List<Chat> chat = chatService.findAllChat(roomId);
+        List<Chat> chat = chatService.findAllChat(roomId,token);
         List<ChatDto.Response> response = chatMapper.chatToChatDtoResponse(chat);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

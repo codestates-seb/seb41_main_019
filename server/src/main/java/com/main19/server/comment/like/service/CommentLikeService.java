@@ -1,5 +1,6 @@
 package com.main19.server.comment.like.service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.comment.entity.Comment;
 import com.main19.server.comment.like.entity.CommentLike;
 import com.main19.server.comment.like.repository.CommentLikeRepository;
@@ -22,8 +23,15 @@ public class CommentLikeService {
     private final MemberService memberService;
     private final CommentService commentService;
     private final SseService sseService;
+    private final JwtTokenizer jwtTokenizer;
 
-    public CommentLike createLike(CommentLike commentLike, long commentId, long memberId) {
+    public CommentLike createLike(CommentLike commentLike, long commentId, long memberId, String token) {
+
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if (memberId != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
 
         CommentLike findCommentLike = commentLikeRepository.findByMember_MemberIdAndComment_CommentId(memberId,commentId);
 
@@ -39,12 +47,20 @@ public class CommentLikeService {
 
         commentLike.setComment(comment);
 
-        sseService.send(comment.getMember(), SseType.like, "new like");
+        if(comment.getMember().getMemberId() != tokenId) {
+            sseService.send(comment.getMember(), SseType.like, "new like");
+        }
 
         return commentLikeRepository.save(commentLike);
     }
 
-    public void deleteLike(long commentLikeId) {
+    public void deleteLike(long commentLikeId, String token) {
+
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if (findVerifiedCommentLike(commentLikeId).getMember().getMemberId() != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
 
         CommentLike commentLike = findVerifiedCommentLike(commentLikeId);
 

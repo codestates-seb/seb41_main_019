@@ -1,5 +1,6 @@
 package com.main19.server.posting.service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +33,16 @@ public class PostingService {
 	private final MediaRepository mediaRepository;
 	private final MemberService memberService;
 	private final CustomBeanUtils<Posting> beanUtils;
+	private final JwtTokenizer jwtTokenizer;
 
-	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths) {
+	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths, String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (memberId != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		if (mediaPaths == null) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_AT_LEAST_ONE_MEDIA);
 		}
@@ -50,10 +59,18 @@ public class PostingService {
 			Media media = new Media(mediaUrl, posting);
 			mediaRepository.save(media);
 		}
+
 		return postingRepository.save(posting);
 	}
 
-	public Posting updatePosting(Posting posting) {
+	public Posting updatePosting(Posting posting, String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (posting.getMember().getMemberId() != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		Posting findPosting = findVerifiedPosting(posting.getPostingId());
 		Posting updatePosting = beanUtils.copyNonNullProperties(posting, findPosting);
 
@@ -72,18 +89,39 @@ public class PostingService {
 		return postingRepository.findAll(PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
 
-	public void deletePosting(long postingId) {
+	public void deletePosting(long postingId, String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (findPosting(postingId).getMember().getMemberId() != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		Posting findPosting = findVerifiedPosting(postingId);
 		postingRepository.delete(findPosting);
 	}
 
 	// 첨부파일 삭제
-	public void deleteMedia(long mediaId) {
+	public void deleteMedia(long mediaId, String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (findVerfiedMedia(mediaId).getPosting().getMember().getMemberId() != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		Media findMedia = findVerfiedMedia(mediaId);
 		mediaRepository.delete(findMedia);
 	}
 
-	public void addMedia(long postingId, List<String> mediaPaths) {
+	public void addMedia(long postingId, List<String> mediaPaths, String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (findPosting(postingId).getMember().getMemberId() != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		Posting findPosting = findVerifiedPosting(postingId);
 		if ( findPosting.getPostingMedias().size() + 1 > 10) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_LESS_THAN_TEN_MEDIA);

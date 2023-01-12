@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,20 +29,27 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class PostingLikeController {
-	private final PostingLikeService postingLikeService;
-	private final PostingMapper mapper;
 
-	@PostMapping("/{posting-id}/likes")
-	public ResponseEntity postPosingLike(@PathVariable("posting-id") @Positive long postingId, @Valid @RequestBody PostingLikeDto requestBody) {
-		PostingLike postingLike = postingLikeService.createPostingLike(mapper.postingLikeDtoToPostingLike(requestBody),
-			postingId, requestBody.getMemberId());
-		return new ResponseEntity<>(new SingleResponseDto<>(mapper.postingLikeToPostingLikeResponseDto(postingLike)), HttpStatus.CREATED);
-	}
+    private final PostingLikeService postingLikeService;
+    private final PostingMapper mapper;
 
-	@DeleteMapping(value = "/likes/{posting-like-id}")
-	public ResponseEntity deletePostingLike(@PathVariable("posting-like-id") @Positive long postingLikeId) {
-		postingLikeService.deletePostingLike(postingLikeId);
+    @PostMapping("/{posting-id}/likes")
+    public ResponseEntity postPosingLike(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("posting-id") @Positive long postingId,
+        @Valid @RequestBody PostingLikeDto requestBody) {
+        PostingLike postingLike = postingLikeService.createPostingLike(
+            mapper.postingLikeDtoToPostingLike(requestBody),
+            postingId, requestBody.getMemberId(),token);
+        return new ResponseEntity<>(
+            new SingleResponseDto<>(mapper.postingLikeToPostingLikeResponseDto(postingLike)),
+            HttpStatus.CREATED);
+    }
 
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
+    @DeleteMapping(value = "/likes/{posting-like-id}")
+    public ResponseEntity deletePostingLike(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("posting-like-id") @Positive long postingLikeId) {
+        postingLikeService.deletePostingLike(postingLikeId,token);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
