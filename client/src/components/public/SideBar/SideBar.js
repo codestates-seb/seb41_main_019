@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { RiLeafLine } from "react-icons/ri";
-import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu, AiFillSetting, AiOutlineClockCircle, AiOutlinePoweroff, } from "react-icons/ai";
-import { BsSearch, BsPerson, BsFillJournalBookmarkFill } from "react-icons/bs";
+import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu } from "react-icons/ai";
+import { BsSearch, BsPerson } from "react-icons/bs";
 import { IoAlertCircleOutline } from "react-icons/io5";
-import { FaExchangeAlt } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SideModal from "./SideModal";
 
 const StyledSidebar = styled.aside`
   z-index: 600;
@@ -26,6 +26,7 @@ const StyledSidebar = styled.aside`
     align-items: flex-end;
     font-weight: 400;
     letter-spacing: 2px;
+    cursor : pointer;
   }
 
   nav h2 svg {
@@ -34,7 +35,7 @@ const StyledSidebar = styled.aside`
     margin: 0px 0px 2px -2px;
   }
 
-  ul {
+  nav ul {
     list-style: none;
     padding: 0px;
     margin: 0px;
@@ -55,7 +56,7 @@ const StyledSidebar = styled.aside`
     }
   }
 
-  div {
+  > div {
     display: inline-block;
     display: flex;
     align-items: flex-end;
@@ -74,7 +75,7 @@ const StyledSidebar = styled.aside`
   @media screen and (max-width: 1255px) {
     width: 60px;
 
-    ul li span {
+    nav ul li span {
       display: none;
     }
 
@@ -82,7 +83,7 @@ const StyledSidebar = styled.aside`
       display: none;
     }
 
-    div span {
+    > div > span {
       display: none;
     }
   }
@@ -99,8 +100,7 @@ const StyledSidebar = styled.aside`
     border: 1px solid #dbdbdb;
     box-shadow: 0px;
 
-    h2,
-    div {
+    h2, div {
       display: none;
     }
 
@@ -118,45 +118,6 @@ const StyledSidebar = styled.aside`
     .none {
       display: none;
     }
-  }
-`;
-
-const StyledModal = styled.div`
-  display: inline-block;
-  z-index: 999;
-  background-color: white;
-  margin-left: 10px;
-  position: absolute;
-  left: 5px;
-  bottom: 45px;
-  width: 210px;
-  border-radius: 3px;
-  border: 1px solid #dbdbdb;
-  color: #222426;
-  border-bottom: 0px;
-
-  ul {
-    margin: 0px;
-    padding: 0px;
-    width: 100%;
-    list-style: none;
-
-    li {
-      display: block;
-      display: flex;
-      border-bottom: 1px solid #dbdbdb;
-      justify-content: space-between;
-      padding: 8px 15px;
-      cursor: pointer;
-
-      svg {
-        color: #222426;
-      }
-    }
-  }
-
-  @media screen and (max-width: 770px) {
-    display: none;
   }
 `;
 
@@ -213,11 +174,14 @@ const StyledHeader = styled.header`
 `;
 
 const Sidebar = () => {
-  const [modalView, setModalView] = useState(false);
+  const [opendModal, setOpendModal] = useState(false);
+  const [isOpend, setIsOpend] = useState(null);
   const navigate = useNavigate();
 
-  const openModal = () => {
-    setModalView(!modalView);
+  const handleIsOpend = () => setIsOpend(!isOpend);
+
+  const handleOpendModal = () => {
+    setOpendModal(!opendModal);
   };
 
   return (
@@ -257,37 +221,14 @@ const Sidebar = () => {
             </li>
           </ul>
         </nav>
-        <div onClick={openModal}>
+        {
+          opendModal ? <SideModal /> : null
+        }
+        <div onClick={handleOpendModal}>
           <AiOutlineMenu />
           <span>더 보기</span>
         </div>
       </StyledSidebar>
-      {modalView ? (
-        <StyledModal>
-          <ul>
-            <li>
-              <span>설정</span>
-              <AiFillSetting />
-            </li>
-            <li>
-              <span>스크랩</span>
-              <BsFillJournalBookmarkFill />
-            </li>
-            <li>
-              <span>내 활동</span>
-              <AiOutlineClockCircle />
-            </li>
-            <li>
-              <span>계정 전환</span>
-              <FaExchangeAlt />
-            </li>
-            <li>
-              <span>로그아웃</span>
-              <AiOutlinePoweroff />
-            </li>
-          </ul>
-        </StyledModal>
-      ) : null}
     </>
   );
 };

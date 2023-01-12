@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Search from "../Search";
+import Input from "../Input";
 import ChatRooms from "./ChatRooms";
 import Chatting from "./Chatting";
 import Friends from "./Friends";
@@ -51,10 +51,10 @@ const Chat = () => {
     setCurChat(value);
   };
 
-  return (
+  return (  
     <>
       <StyledChat>
-        <Search label={"채팅"} />
+        <Input label={"채팅"} />
         {curChat ? (
           <>
             <Chatting

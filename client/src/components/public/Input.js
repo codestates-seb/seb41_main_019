@@ -39,7 +39,7 @@ const StyledSearch = styled.div`
   }
 `;
 
-const Search = ({ label }) => {
+const Input = ({ label }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -59,4 +59,4 @@ const Search = ({ label }) => {
   );
 };
 
-export default Search;
+export default Input;
