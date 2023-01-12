@@ -1,26 +1,30 @@
 package com.main19.server.auth.jwt;
 
+import com.main19.server.auth.filter.JwtAuthenticationFilter;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
+import com.main19.server.member.entity.Member;
+import com.main19.server.redis.RedisDao;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.net.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import java.time.Duration;
+import java.util.*;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenizer {
+    private final RedisDao redisDao;
+
     @Getter
     @Value("${jwt.key}")
     private String secretKey;
@@ -62,46 +66,58 @@ public class JwtTokenizer {
                 .compact();
     }
 
-        public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
-            Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+    public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
-            Jws<Claims> claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(jws);
-
-            return claims;
-        }
-
-        private Claims parseToken(String token) {
-            Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
-            String jws = token.replace("Bearer ", "");
-            Claims claims;
-
-            try {
-                claims = Jwts.parserBuilder()
-                        .setSigningKey(key)
-                        .build()
-                        .parseClaimsJws(jws)
-                        .getBody();
-            } catch (ExpiredJwtException e) {
-                throw new BusinessLogicException(ExceptionCode.MEMBER_UNAUTHORIZED);
-            }
-            return claims;
-        }
-
-        public Long getMemberId(String token) {
-            Long memberId = parseToken(token).get("memberId", Long.class);
-            return memberId;
-        }
-
-        public void verifySignature(String jws, String base64EncodedSecretKey) {
-            Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-
-        Jwts.parserBuilder()
+        Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(jws);
+
+        return claims;
+    }
+
+    private Claims parseToken(String token) {
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
+        String jws = token.replace("Bearer ", "");
+        Claims claims;
+
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jws)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_UNAUTHORIZED);
+        }
+        return claims;
+    }
+
+    public Long getMemberId(String token) {
+        Long memberId = parseToken(token).get("memberId", Long.class);
+        return memberId;
+    }
+
+    public void deleteRtk(Member member) throws JwtException {
+        redisDao.deleteValue(member.getEmail());
+    }
+
+    public String findRefreshToken(Member member) {
+        if (redisDao.getValues(member.getEmail()) == null) {
+            throw new JwtException("bad accessToken");
+        }
+        return redisDao.getValues(member.getEmail());
+    }
+
+
+    public void verifySignature(String jws, String base64EncodedSecretKey) {
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+
+    Jwts.parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(jws);
     }
 
     public Date getTokenExpiration(int expirationMinutes) {
@@ -117,5 +133,42 @@ public class JwtTokenizer {
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return key;
+    }
+
+
+    public String delegateAccessToken(Member member) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("memberId", member.getMemberId());
+        claims.put("username", member.getEmail());
+        claims.put("roles", member.getRoles());
+
+        String subject = member.getEmail();
+        Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+        String accessToken = generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+
+        return accessToken;
+    }
+
+    // RefreshToken 생성로직
+    public String delegateRefreshToken(Member member) {
+        String subject = member.getEmail();
+        Date expiration = getTokenExpiration(getRefreshTokenExpirationMinutes());
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+        String refreshToken = generateRefreshToken(subject, expiration, base64EncodedSecretKey);
+
+        return refreshToken;
+    }
+
+
+    public String reissueAtk(Member member) throws JwtException {
+        String accessToken = delegateAccessToken(member);
+        return accessToken;
+    }
+
+    public String reissueRfk(Member member) throws JwtException {
+        String refreshToken = delegateRefreshToken(member);
+        redisDao.setValues(member.getEmail(), refreshToken, Duration.ofMinutes(getRefreshTokenExpirationMinutes()));
+        return refreshToken;
     }
 }

@@ -1,4 +1,4 @@
-package com.main19.server.config;
+package com.main19.server.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
