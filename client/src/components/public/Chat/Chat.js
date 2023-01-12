@@ -8,14 +8,10 @@ import { chatLogData } from "../../../assets/dummyData/chatLogData";
 import { friendsData } from "../../../assets/dummyData/friendsData";
 
 const StyledChat = styled.div`
-  position: fixed;
-  top: 0px;
-  right: 0px;
   display: flex;
   flex-direction: column;
   width: 350px;
   height: 100%;
-  border-left: 1px solid #dbdbdb;
   padding: 20px 20px 0px 20px;
   gap: 20px;
 
@@ -39,6 +35,10 @@ const StyledChat = styled.div`
     width: 400px;
     margin: 0px 0px 20px -20px;
     border-top: 1px solid #dbdbdb;
+  }
+
+  @media screen and (max-width: 1255px) {
+    display : none;
   }
 `;
 

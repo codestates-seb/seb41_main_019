@@ -6,6 +6,8 @@ import { IoAlertCircleOutline } from "react-icons/io5";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideModal from "./SideModal";
+import Search from "./Search";
+import Chat from "../Chat/Chat";
 
 const StyledSidebar = styled.aside`
   z-index: 600;
@@ -20,6 +22,7 @@ const StyledSidebar = styled.aside`
   border-right: 1px solid #dbdbdb;
   color: #222426;
   background-color: white;
+  transition: width 0.2s ease;
 
   h2 {
     display: flex;
@@ -71,6 +74,25 @@ const StyledSidebar = styled.aside`
       font-size: 22px;
     }
   }
+
+  ${({ isOpend }) => isOpend ? 
+  `{
+    width: 60px; 
+
+    nav ul li span {
+      display: none;
+    }
+
+    nav h2 span {
+      display: none;
+    }
+
+    > div > span {
+      display: none;
+    }
+
+    transition: width 0.2s ease;
+  }` : null}
 
   @media screen and (max-width: 1255px) {
     width: 60px;
@@ -173,17 +195,32 @@ const StyledHeader = styled.header`
   }
 `;
 
+const StyledExtend = styled.div`
+  position: fixed;
+  top: 0px;
+  left: 60px; 
+  width: ${({isOpend}) => isOpend ? "350px" : "0px"};
+  height: 100%;
+  border-right: 1px solid #DBDBDB;
+  transition: width 0.2s linear;
+  overflow: hidden;
+`
+
 const Sidebar = () => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState(null);
   const navigate = useNavigate();
 
-  const handleIsOpend = () => setIsOpend(!isOpend);
+  const handleIsOpend = (value) => {
+    if(isOpend) setIsOpend(null);
+    else setIsOpend(value);
+  }
 
   const handleOpendModal = () => {
     setOpendModal(!opendModal);
   };
 
+  console.log(isOpend);
   return (
     <>
       <StyledHeader>
@@ -196,7 +233,7 @@ const Sidebar = () => {
           <input type="text" placeholder="Search..."></input>
         </div>
       </StyledHeader>
-      <StyledSidebar>
+      <StyledSidebar isOpend={isOpend} className="isOpend">
         <nav>
           <h2 onClick={() => navigate("/")}>
             <span>IncleaF</span>
@@ -206,11 +243,11 @@ const Sidebar = () => {
             <li onClick={() => navigate("/")}>
               <AiOutlineHome /> <span>홈</span>
             </li>
-            <li className="none">
+            <li className="none" onClick={() => handleIsOpend("Search")}>
               <BsSearch />
               <span> 검색</span>
             </li>
-            <li>
+            <li onClick={() => handleIsOpend("Chat")}>
               <AiOutlineMessage /> <span>채팅</span>
             </li>
             <li>
@@ -229,6 +266,11 @@ const Sidebar = () => {
           <span>더 보기</span>
         </div>
       </StyledSidebar>
+      <StyledExtend isOpend={isOpend}>
+        {
+          isOpend ? isOpend === "Search" ? <Search /> : <Chat /> : null
+        }
+      </StyledExtend>
     </>
   );
 };

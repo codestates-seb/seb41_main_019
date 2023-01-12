@@ -12,7 +12,6 @@ function App() {
         <Route path={"/"} element={<Home />} />
         <Route path={"/mypage"} element={<MyPage />} />
       </Routes>
-      <Chat />
     </BrowserRouter>
   );
 }
