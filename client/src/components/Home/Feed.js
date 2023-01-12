@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import A from "../../assets/img/plants/1.jpg";
 import B from "../../assets/img/plants/알보1.png";
-import { AiOutlineHeart, AiOutlineShareAlt, AiOutlineMessage } from "react-icons/ai";
-import { BsBookmarkPlus } from "react-icons/bs";
+import { AiOutlineMessage } from "react-icons/ai";
 import { FiUserPlus } from "react-icons/fi";
 import Slider from "./Slider";
+import FeedInteraction from "./FeedInteraction";
 
 const Wrapper = styled.div`
     width: 470px;
@@ -67,46 +67,6 @@ const StyledHeader = styled.div`
     }
 `;
 
-const StyledInteraction = styled.section`
-
-    p {
-        margin: 0;
-    }
-
-    .interact {
-        width: 100%;
-        margin: 10px 0px;
-    }
-
-    div svg {
-        margin-right: 15px;
-    }
-
-    p:nth-child(2) {
-        font-weight: 600;
-        font-size: 16px;
-        margin-bottom: 10px;
-        color: #222426;
-        
-    }
-
-    .tags {
-        margin: 10px 0px 10px 0px;
-        color: #007AC9;
-        cursor: pointer;
-
-        span {
-            margin-right: 5px;
-        }
-    }
-
-    > span:last-child {
-        color: gray;
-        cursor: pointer;
-        font-size: 14px;
-        letter-spacing: 1px;
-    }
-`;
 
 const Feed = () => {
 
@@ -129,20 +89,7 @@ const Feed = () => {
                 ? <Slider img={img} /> 
                 : <img src={B} alt="img" />
             }
-            <StyledInteraction>
-                <div className="interact">
-                    <AiOutlineHeart />
-                    <AiOutlineShareAlt />
-                    <BsBookmarkPlus />
-                </div>
-                <p>좋아요 700개</p>
-                <p>제가 키우는 몬스테라 알보에요!</p>
-                <div className="tags">
-                    <span>#식테크</span> 
-                    <span>#몬스테라알보</span>
-                </div>
-                <span>댓글 보기 및 댓글쓰기</span>
-            </StyledInteraction>
+            <FeedInteraction />
         </Wrapper>
     );
 }
