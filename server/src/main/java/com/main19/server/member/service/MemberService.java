@@ -1,5 +1,6 @@
 package com.main19.server.member.service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.auth.utils.CustomAuthorityUtils;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
@@ -22,6 +23,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final CustomBeanUtils<Member> beanUtils;
+    private final JwtTokenizer jwtTokenizer;
 
 
     public Member createMember(Member member) {
@@ -36,9 +38,14 @@ public class MemberService {
         return savedMember;
     }
 
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, String token) {
         // todo 토큰 정보 확인해서 권한 검증후 수정 해야함
         // todo password 수정할지?
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if (member.getMemberId() != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
 
         Member findMember = findVerifiedMember(member.getMemberId());
         Member updateMember = beanUtils.copyNonNullProperties(member, findMember);
@@ -51,8 +58,14 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
-    public void deleteMember(long memberId){
+    public void deleteMember(long memberId, String token){
         // todo 토큰 정보 확인해서 권한 검증후 삭제 해야함
+
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if (memberId != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
 
         memberRepository.deleteById(memberId);
     }
