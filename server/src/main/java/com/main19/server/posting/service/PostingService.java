@@ -90,8 +90,8 @@ public class PostingService {
 		return postingRepository.findAll(PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
 
-	public List<Posting> findPostingsByMemberId(long memberId) {
-		return postingRepository.findAllByMember_MemberIdOrderByPostingId(memberId);
+	public Page<Posting> findPostingsByMemberId(long memberId, int page, int size) {
+		return postingRepository.findByMember_MemberId(memberId, PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
 
 	public void deletePosting(long postingId, String token) {

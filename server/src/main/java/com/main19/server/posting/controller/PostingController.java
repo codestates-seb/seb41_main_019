@@ -117,10 +117,13 @@ public class PostingController {
 
     //특정 회원의 포스팅 목록 조회 추가해야함
     @GetMapping("/member/{member-id}")
-    public ResponseEntity getPostingsByMember(@PathVariable("member-id") @Positive long memberId) {
-        List<Posting> postings = postingService.findPostingsByMemberId(memberId);
+    public ResponseEntity getPostingsByMember(@PathVariable("member-id") @Positive long memberId,
+                                              @Positive @RequestParam int page,
+                                              @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.findPostingsByMemberId(memberId, page - 1, size);
+        List<Posting> content = postings.getContent();
         return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.postingsToPostingsResponseDto(postings)),
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
                 HttpStatus.OK);
     }
 

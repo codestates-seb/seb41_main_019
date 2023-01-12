@@ -9,5 +9,5 @@ import com.main19.server.posting.entity.Posting;
 import java.util.List;
 
 public interface PostingRepository extends JpaRepository<Posting, Long> {
-    List<Posting> findAllByMember_MemberIdOrderByPostingId(long memberId);
+    Page<Posting> findByMember_MemberId(long memberId, Pageable pageable);
 }
