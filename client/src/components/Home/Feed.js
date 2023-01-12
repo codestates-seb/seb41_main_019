@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import A from "../../assets/img/plants/11.jpg";
+import A from "../../assets/img/plants/1.jpg";
 import B from "../../assets/img/plants/알보1.png";
 import { AiOutlineHeart, AiOutlineShareAlt, AiOutlineMessage } from "react-icons/ai";
 import { BsBookmarkPlus } from "react-icons/bs";
