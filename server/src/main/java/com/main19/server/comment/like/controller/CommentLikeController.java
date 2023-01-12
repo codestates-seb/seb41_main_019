@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,13 +35,14 @@ public class CommentLikeController {
     private final CommentLikeRepository commentLikeRepository;
 
     @PostMapping("/{comment-id}/likes")
-    public ResponseEntity postLike(@PathVariable("comment-id") @Positive long commentId,
+    public ResponseEntity postLike(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("comment-id") @Positive long commentId,
         @Valid @RequestBody CommentLikeDto.Post commentLikePostDto) {
 
         CommentLike commentLikes = commentLikeMapper.commentLikePostDtoToCommentLike(
             commentLikePostDto);
         CommentLike createdComment = commentLikeService.createLike(commentLikes, commentId,
-            commentLikePostDto.getMemberId());
+            commentLikePostDto.getMemberId(), token);
         CommentLikeDto.Response response = commentLikeMapper.commentLikeToCommentLikeResponse(
             createdComment);
 
@@ -48,9 +50,10 @@ public class CommentLikeController {
     }
 
     @DeleteMapping("/likes/{comment-like-id}")
-    public ResponseEntity deleteLike(@PathVariable("comment-like-id") @Positive long commentLikeId) {
+    public ResponseEntity deleteLike(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("comment-like-id") @Positive long commentLikeId) {
 
-        commentLikeService.deleteLike(commentLikeId);
+        commentLikeService.deleteLike(commentLikeId, token);
 
         return ResponseEntity.noContent().build();
     }
