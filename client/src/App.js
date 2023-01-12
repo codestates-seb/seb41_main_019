@@ -7,7 +7,7 @@ function App() {
     <BrowserRouter>
       <SideBar />
       <Routes>
-        <Route path={"/"} element={<MyPage />} />
+        <Route path={"/mypage"} element={<MyPage />} />
       </Routes>
     </BrowserRouter>
   );
