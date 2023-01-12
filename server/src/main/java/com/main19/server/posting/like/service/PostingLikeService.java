@@ -1,5 +1,8 @@
 package com.main19.server.posting.like.service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
+import com.main19.server.sse.entity.Sse.SseType;
+import com.main19.server.sse.service.SseService;
 import java.util.Optional;
 
 import com.main19.server.posting.service.PostingService;
@@ -21,8 +24,17 @@ public class PostingLikeService {
 	private final PostingLikeRepository postingLikeRepository;
 	private final PostingService postingService;
 	private final MemberService memberService;
+	private final JwtTokenizer jwtTokenizer;
+	private final SseService sseService;
 
-	public PostingLike createPostingLike(PostingLike postingLike, long postingId, long memberId) {
+	public PostingLike createPostingLike(PostingLike postingLike, long postingId, long memberId, String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (memberId != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		PostingLike findPostingLike = postingLikeRepository.findByMember_MemberIdAndPosting_PostingId(memberId,postingId);
 
 		if(findPostingLike != null) {
@@ -36,10 +48,22 @@ public class PostingLikeService {
 		postingLike.setMember(member);
 
 		posting.createLikeCount();
+
+		if(posting.getMember().getMemberId() != tokenId) {
+			sseService.send(posting.getMember(), SseType.like, "new like");
+		}
+
 		return postingLikeRepository.save(postingLike);
 	}
 
-	public void deletePostingLike(long postingLikeId) {
+	public void deletePostingLike(long postingLikeId, String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (findVerifiedPostingLike(postingLikeId).getMember().getMemberId() != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		PostingLike findPostingLike = findVerifiedPostingLike(postingLikeId);
 		findPostingLike.getPosting().deleteLikeCount();
 
