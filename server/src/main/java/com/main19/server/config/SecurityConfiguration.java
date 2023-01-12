@@ -52,14 +52,13 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         // TODO Admin 계정 생성시 권한 추가가 필요합니다.
-                        .antMatchers(HttpMethod.POST, "/members").permitAll() // 회원가입
                         .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER")
-                        .antMatchers(HttpMethod.GET, "/members/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.GET, "/members/**").hasRole("ADMIN")
                         .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("USER")
-                        .antMatchers(HttpMethod.POST, "/postings/**").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH, "/postings/**").hasRole("USER")
-                        .antMatchers(HttpMethod.GET, "/postings/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE, "/postings/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/posts/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/posts/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/posts/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/posts/**").hasRole("USER")
                         .antMatchers(HttpMethod.POST, "/comments/**").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/comments/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/comments/**").hasRole("USER")
@@ -68,6 +67,7 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.DELETE, "/scrap/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/follow/**").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/follow/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/members").permitAll() // 회원가입
                         .anyRequest().permitAll()
                 );
         return http.build();
