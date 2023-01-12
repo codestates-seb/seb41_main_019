@@ -44,7 +44,7 @@ const StyledInteraction = styled.div`
 `;
 
 
-const FeedInteraction = () => {
+const FeedInteraction = ({ setModal }) => {
     return (
         <StyledInteraction>
             <div className="interact">
@@ -58,7 +58,7 @@ const FeedInteraction = () => {
                 <span>#식테크</span> 
                 <span>#몬스테라알보</span>
             </div>
-            <span>댓글 보기 및 댓글쓰기</span>
+            <span onClick={setModal ? () => setModal(true) : null} >댓글 보기 및 댓글쓰기</span>
         </StyledInteraction>
     )
 }

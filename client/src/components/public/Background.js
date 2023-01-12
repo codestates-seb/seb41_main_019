@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const StyledBackground = styled.div`
@@ -12,6 +13,10 @@ const StyledBackground = styled.div`
 `
 
 const Background = ({ isCovered }) => {
+    useEffect(() => {
+        document.body.style.overflow = isCovered ? "hidden" : "auto";
+    }, [isCovered])
+
     return (
         <StyledBackground isCovered={isCovered}></StyledBackground>
     );

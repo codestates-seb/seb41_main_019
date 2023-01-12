@@ -68,9 +68,9 @@ const StyledHeader = styled.div`
 `;
 
 
-const Feed = () => {
+const Feed = ({ handleModal }) => {
 
-    const img = [ A,B ];
+    const img = [ A, B ];
 
     return (
         <Wrapper>
@@ -89,7 +89,7 @@ const Feed = () => {
                 ? <Slider img={img} /> 
                 : <img src={B} alt="img" />
             }
-            <FeedInteraction />
+            <FeedInteraction setModal={handleModal} />
         </Wrapper>
     );
 }
