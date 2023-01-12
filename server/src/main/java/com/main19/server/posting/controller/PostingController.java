@@ -116,6 +116,13 @@ public class PostingController {
     }
 
     //특정 회원의 포스팅 목록 조회 추가해야함
+    @GetMapping("/member/{member-id}")
+    public ResponseEntity getPostingsByMember(@PathVariable("member-id") @Positive long memberId) {
+        List<Posting> postings = postingService.findPostingsByMemberId(memberId);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.postingsToPostingsResponseDto(postings)),
+                HttpStatus.OK);
+    }
 
 
     @DeleteMapping(value = "/{posting-id}")
