@@ -67,21 +67,15 @@ public class MemberController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    // todo logout 엔드포인트 협의
+
+
     @PostMapping("/reissue")
     public ResponseEntity logout(@RequestHeader("Authorization") String token) {
-        // token에서 memberId를 가져온다
-        // token의 memberId로 member를 찾는다.
         long memberId = jwtTokenizer.getMemberId(token);
         Member findMember = memberService.findMember(memberId);
-
-        // redis에서 member email로 Refresh 토큰을 찾는다
-        // Access토큰이 없으면 권한없음 예외 던지기
         String refreshToken = jwtTokenizer.findRefreshToken(findMember);
-
-        // accesstoken 재발행
         String reissuedAtk = jwtTokenizer.reissueAtk(findMember);
-        // header에 재발행 access 토큰과 refresh 토큰 태워서 보내기
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + reissuedAtk);
         headers.add("Refresh", refreshToken);
