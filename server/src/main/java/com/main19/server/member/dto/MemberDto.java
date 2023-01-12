@@ -19,6 +19,15 @@ public class MemberDto {
 		private String location;
 		private String profileImage;
 		private String profileText;
+		private String password; // todo password를 어떻게 받아올지 프론트와 논의
+
+		public void updateMember(String userName, String email, String location, String profileImage, String profileText) {
+			this.userName = userName;
+			this.email = email;
+			this.location = location;
+			this.profileImage = profileImage;
+			this.profileText = profileText;
+		}
 	}
 
 	@Getter
