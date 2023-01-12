@@ -3,10 +3,15 @@ import SideBar from "../src/components/public/Sidebar";
 import Chat from "./components/public/Chat/Chat";
 import Home from "./page/Home";
 import MyPage from "./page/MyPage";
+import Background from "./components/public/Background";
+import { useState } from "react";
 
 function App() {
+  const [ isCovered, setIsCovered ] = useState(true);
+
   return (
     <BrowserRouter>
+      <Background isCovered={isCovered} />
       <SideBar />
       <Routes>
         <Route path={"/"} element={<Home />} />
