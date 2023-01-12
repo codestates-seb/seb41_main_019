@@ -2,10 +2,7 @@ package com.main19.server.s3service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import javax.annotation.PostConstruct;
 
@@ -57,7 +54,7 @@ public class S3StorageService {
 			.build();
 	}
 
-	public List<String> upload(List<MultipartFile> multipartFiles) {
+	public List<String> uploadMedia(List<MultipartFile> multipartFiles) {
 		List<String> mediaUrlList = new ArrayList<>();
 
 		// forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
@@ -79,10 +76,6 @@ public class S3StorageService {
 		return mediaUrlList;
 	}
 
-
-
-
-	// 파일 삭제
 	public void remove(long mediaId) {
 		Media findmedia = findVerfiedMedia(mediaId);
 		String fileName = (findmedia.getMediaUrl()).substring(68);
@@ -91,23 +84,17 @@ public class S3StorageService {
 		if (!s3Client.doesObjectExist(bucket + "/posting/media", fileName)) {
 			throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
 		}
+			s3Client.deleteObject(bucket + "/posting/media", fileName);
+		}
 
-		s3Client.deleteObject(bucket + "/posting/media", fileName);
-	}
+		private Media findVerfiedMedia(long mediaId) {
+			Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
+			Media findMedia =
+				optionalMedia.orElseThrow(() ->
+					new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND));
 
-	private Media findVerfiedMedia(long mediaId) {
-		Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
-		Media findMedia =
-			optionalMedia.orElseThrow(() ->
-				new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND));
-
-		return findMedia;
-	}
-
-
-
-
-
+			return findMedia;
+		}
 		// 이미지파일명 중복 방지, 파일명에 UUID를 붙여서 저장
 		private String createFileName(String fileName) {
 			return UUID.randomUUID().toString().concat(getFileExtension(fileName));
@@ -133,5 +120,47 @@ public class S3StorageService {
 				throw new BusinessLogicException(ExceptionCode.WRONG_MEDIA_FORMAT);
 			}
 			return fileName.substring(fileName.lastIndexOf("."));
-		}
 	}
+
+	// 프로필 이미지 업로드
+	// todo Exception나는거 마다 잡아다가 처리해줬는데 괜찮을지 모르겠음
+	public String uploadProfileImage(MultipartFile profileImage) {
+		String profileImageUrl;
+
+		String fileName = createProfileImageName(profileImage.getOriginalFilename());
+		ObjectMetadata objectMetadata = new ObjectMetadata();
+		objectMetadata.setContentLength(profileImage.getSize());
+		objectMetadata.setContentType(profileImage.getContentType());
+
+		try(InputStream inputStream = profileImage.getInputStream()) {
+			s3Client.putObject(new PutObjectRequest(bucket + "/member/profileImage", fileName, inputStream, objectMetadata)
+				.withCannedAcl(CannedAccessControlList.PublicRead));
+			profileImageUrl = (s3Client.getUrl(bucket + "/member/profileImage", fileName).toString());
+			} catch(IOException | IllegalArgumentException e) {
+				profileImageUrl = null;
+			}
+		return  profileImageUrl;
+	}
+
+	private String createProfileImageName(String fileName) {
+		if (fileName.length() == 0) {
+			return null;
+		}
+		return UUID.randomUUID().toString().concat(getProfileImageExtension(fileName));
+	}
+
+	private String getProfileImageExtension(String fileName) {
+		ArrayList<String> fileValidate = new ArrayList<>();
+		fileValidate.add(".jpg");
+		fileValidate.add(".jpeg");
+		fileValidate.add(".png");
+		fileValidate.add(".JPG");
+		fileValidate.add(".JPEG");
+		fileValidate.add(".PNG");
+		String idxFileName = fileName.substring(fileName.lastIndexOf("."));
+		if (!fileValidate.contains(idxFileName)) {
+			throw new BusinessLogicException(ExceptionCode.WRONG_MEDIA_FORMAT);
+		}
+		return fileName.substring(fileName.lastIndexOf("."));
+	}
+}

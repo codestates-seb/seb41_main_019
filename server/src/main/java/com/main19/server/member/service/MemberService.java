@@ -38,7 +38,7 @@ public class MemberService {
         return savedMember;
     }
 
-    public Member updateMember(Member member, String token) {
+    public Member updateMember(Member member, String imagePath ,String token) {
         // todo 토큰 정보 확인해서 권한 검증후 수정 해야함
         // todo password 수정할지?
         long tokenId = jwtTokenizer.getMemberId(token);
@@ -49,6 +49,7 @@ public class MemberService {
 
         Member findMember = findVerifiedMember(member.getMemberId());
         Member updateMember = beanUtils.copyNonNullProperties(member, findMember);
+        findMember.setProfileImage(imagePath);
 
         return memberRepository.save(updateMember);
     }
