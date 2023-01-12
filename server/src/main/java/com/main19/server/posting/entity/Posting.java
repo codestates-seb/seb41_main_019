@@ -12,12 +12,16 @@ import com.main19.server.posting.like.entity.PostingLike;
 import com.main19.server.posting.scrap.entity.Scrap;
 import com.main19.server.posting.tags.entity.PostingTags;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Posting {
 
 	@Id
