@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.posting.like.dto.PostingLikeDto;
-import com.main19.server.posting.entity.PostingLike;
+import com.main19.server.posting.like.entity.PostingLike;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.like.service.PostingLikeService;
 
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/posting")
+@RequestMapping("/posts")
 @Validated
 @Slf4j
 @RequiredArgsConstructor

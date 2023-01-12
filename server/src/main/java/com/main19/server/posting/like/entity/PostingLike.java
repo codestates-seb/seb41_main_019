@@ -1,4 +1,4 @@
-package com.main19.server.posting.entity;
+package com.main19.server.posting.like.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 
 import com.main19.server.member.entity.Member;
 
+import com.main19.server.posting.entity.Posting;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,8 +37,4 @@ public class PostingLike {
 			this.posting.getPostingLikes().add(this);
 		}
 	}
-
-	// @ManyToOne(fetch = FetchType.LAZY)
-	// @JoinColumn(name = "MEMBER_ID")
-	// private Member member;
 }

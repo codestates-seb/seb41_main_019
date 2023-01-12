@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 import com.main19.server.comment.entity.Comment;
 import com.main19.server.member.entity.Member;
+import com.main19.server.posting.like.entity.PostingLike;
 import com.main19.server.posting.scrap.entity.Scrap;
 import com.main19.server.posting.tags.entity.PostingTags;
 
@@ -25,7 +26,6 @@ public class Posting {
 
 	@Column(columnDefinition = "Text")
 	private String postingContent;
-	// cloumnDefinition 을 이용하면 원하는 컬럼 타입으로 데이터 추출이 가능
 
 	@OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
 	private List<Media> postingMedias = new ArrayList<>();

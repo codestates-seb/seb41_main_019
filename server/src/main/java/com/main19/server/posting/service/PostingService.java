@@ -64,7 +64,6 @@ public class PostingService {
 
 	public Posting findPosting(long postingId) {
 		Posting findPosting = findVerifiedPosting(postingId);
-
 		return findPosting;
 	}
 
@@ -75,14 +74,12 @@ public class PostingService {
 
 	public void deletePosting(long postingId) {
 		Posting findPosting = findVerifiedPosting(postingId);
-
 		postingRepository.delete(findPosting);
 	}
 
 	// 첨부파일 삭제
 	public void deleteMedia(long mediaId) {
 		Media findMedia = findVerfiedMedia(mediaId);
-
 		mediaRepository.delete(findMedia);
 	}
 
@@ -111,7 +108,6 @@ public class PostingService {
 		Media findMedia =
 			optionalMedia.orElseThrow(() ->
 				new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND));
-
 		return findMedia;
 	}
 }
