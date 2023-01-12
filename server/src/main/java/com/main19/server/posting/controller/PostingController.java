@@ -40,7 +40,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/postings")
+@RequestMapping("/posts")
 @Validated
 @Slf4j
 @RequiredArgsConstructor
@@ -132,7 +132,7 @@ public class PostingController {
 
 		storageService.remove(mediaId);
 		postingService.deleteMedia(mediaId);
-		//삭제 누른 거 리스트로 넘겨야함
+
 		return new ResponseEntity<>("Selected media deleted successfully.",HttpStatus.OK);
 	}
 }

@@ -32,8 +32,6 @@ public class ScrapService {
         Posting posting = postingService.findPosting(postingId);
         Member member = memberService.findMember(memberId);
 
-
-
         scrap.setPosting(posting);
         scrap.setMember(member);
 

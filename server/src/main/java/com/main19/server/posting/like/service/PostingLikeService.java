@@ -10,7 +10,7 @@ import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.service.MemberService;
 import com.main19.server.posting.entity.Posting;
-import com.main19.server.posting.entity.PostingLike;
+import com.main19.server.posting.like.entity.PostingLike;
 import com.main19.server.posting.like.repository.PostingLikeRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -30,9 +30,9 @@ public class PostingLikeService {
 		}
 
 		Posting posting = postingService.findVerifiedPosting(postingId);
-		postingLike.setPosting(posting);
-
 		Member member = memberService.findMember(memberId);
+
+		postingLike.setPosting(posting);
 		postingLike.setMember(member);
 
 		posting.createLikeCount();

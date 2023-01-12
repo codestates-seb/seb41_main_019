@@ -19,7 +19,7 @@ import com.main19.server.posting.dto.PostingPostDto;
 import com.main19.server.posting.dto.PostingResponseDto;
 import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.like.dto.PostingLikeResponseDto;
-import com.main19.server.posting.entity.PostingLike;
+import com.main19.server.posting.like.entity.PostingLike;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
 import com.main19.server.posting.tags.entity.PostingTags;
 import com.main19.server.posting.tags.entity.Tag;
