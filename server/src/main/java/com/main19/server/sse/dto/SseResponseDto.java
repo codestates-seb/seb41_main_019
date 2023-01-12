@@ -9,7 +9,8 @@ public class SseResponseDto {
 
     private long sseId;
     private long memberId;
-    private String content;
+    private String profileImage;
+    private String userName;
     private boolean isRead;
     private String sseType;
 

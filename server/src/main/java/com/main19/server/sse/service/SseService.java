@@ -64,8 +64,8 @@ public class SseService {
         }
     }
 
-    public void send(Member receiver, SseType sseType, String content) {
-        Sse sse = createSse(receiver, sseType, content);
+    public void send(Member receiver, SseType sseType, Member sender) {
+        Sse sse = createSse(receiver, sseType, sender);
         sseRepository.save(sse);
         String id = String.valueOf(receiver.getMemberId());
 
@@ -73,16 +73,16 @@ public class SseService {
         sseEmitters.forEach(
             (key, emitter) -> {
                 emitterRepository.saveEventCache(key, sse);
-                sendToClient(emitter, key, content);
+                sendToClient(emitter, key, sseType);
             }
         );
     }
 
-    private Sse createSse(Member receiver, SseType sseType, String content) {
+    private Sse createSse(Member receiver, SseType sseType, Member sender) {
         return Sse.builder()
             .receiver(receiver)
-            .content(content)
             .sseType(sseType)
+            .sender(sender)
             .isRead(false)
             .build();
     }

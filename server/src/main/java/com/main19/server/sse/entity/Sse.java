@@ -31,9 +31,6 @@ public class Sse {
     private Long sseId;
 
     @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
     private boolean isRead;
 
     @Enumerated(EnumType.STRING)
@@ -44,6 +41,10 @@ public class Sse {
     @JoinColumn(name = "member_id")
     private Member receiver;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sender_id")
+    private Member sender;
+
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -52,10 +53,10 @@ public class Sse {
     }
 
     @Builder
-    public Sse(Member receiver, SseType sseType, String content, Boolean isRead) {
+    public Sse(Member receiver, SseType sseType, Member sender, Boolean isRead) {
         this.receiver = receiver;
         this.sseType = sseType;
-        this.content = content;
+        this.sender = sender;
         this.isRead = isRead;
     }
 }

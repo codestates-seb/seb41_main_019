@@ -9,7 +9,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface SseMapper {
 
-    @Mapping(source = "receiver.memberId" , target = "memberId")
+    @Mapping(source = "sender.memberId" , target = "memberId")
+    @Mapping(source = "sender.profileImage" , target = "profileImage")
+    @Mapping(source = "sender.userName" , target = "userName")
     SseResponseDto sseToSseResponseDto(Sse sse);
 
     List<SseResponseDto> sseToSseResponseDtos(List<Sse> sse);
