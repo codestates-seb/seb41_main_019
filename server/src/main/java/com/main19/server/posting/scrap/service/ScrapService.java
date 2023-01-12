@@ -1,5 +1,6 @@
 package com.main19.server.posting.scrap.service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
@@ -21,8 +22,15 @@ public class ScrapService {
     private final ScrapRepository scrapRepository;
     private final PostingService postingService;
     private final MemberService memberService;
+    private final JwtTokenizer jwtTokenizer;
 
-    public Scrap createScrap(Scrap scrap, long postingId, long memberId) {
+    public Scrap createScrap(Scrap scrap, long postingId, long memberId, String token) {
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if(memberId != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         Scrap findScrap = scrapRepository.findByMember_MemberIdAndPosting_PostingId(memberId, postingId);
 
         if(findScrap != null) {
@@ -38,8 +46,15 @@ public class ScrapService {
        return scrapRepository.save(scrap);
     }
 
-    public void deleteScrap(long scrapId) {
+    public void deleteScrap(long scrapId, String token) {
+        long tokenId = jwtTokenizer.getMemberId(token);
+
         Scrap findScrap = findVerifiedScrap(scrapId);
+
+        if (findScrap.getMember().getMemberId() != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         scrapRepository.delete(findScrap);
     }
 
