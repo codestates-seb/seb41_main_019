@@ -14,7 +14,7 @@ import Gallery from "../components/MyPage/Gallery";
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
+  margin: 0px 300px 0px 270px;
   width: 750px;
 `;
 

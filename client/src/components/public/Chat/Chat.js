@@ -9,6 +9,7 @@ import { friendsData } from "../../../assets/dummyData/friendsData";
 
 const StyledChat = styled.div`
   position: fixed;
+  top: 0px;
   right: 0px;
   display: flex;
   flex-direction: column;

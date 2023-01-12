@@ -1,17 +1,11 @@
 import styled from "styled-components";
 import { RiLeafLine } from "react-icons/ri";
-import {
-  AiOutlineHome,
-  AiOutlineMessage,
-  AiOutlineMenu,
-  AiFillSetting,
-  AiOutlineClockCircle,
-  AiOutlinePoweroff,
-} from "react-icons/ai";
+import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu, AiFillSetting, AiOutlineClockCircle, AiOutlinePoweroff, } from "react-icons/ai";
 import { BsSearch, BsPerson, BsFillJournalBookmarkFill } from "react-icons/bs";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { FaExchangeAlt } from "react-icons/fa";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const StyledSidebar = styled.aside`
   z-index: 600;
@@ -220,6 +214,7 @@ const StyledHeader = styled.header`
 
 const Sidebar = () => {
   const [modalView, setModalView] = useState(false);
+  const navigate = useNavigate();
 
   const openModal = () => {
     setModalView(!modalView);
@@ -228,7 +223,7 @@ const Sidebar = () => {
   return (
     <>
       <StyledHeader>
-        <h3>
+        <h3 onClick={() => navigate("/")}>
           <span>IncleaF</span>
           <RiLeafLine />
         </h3>
@@ -239,12 +234,12 @@ const Sidebar = () => {
       </StyledHeader>
       <StyledSidebar>
         <nav>
-          <h2>
+          <h2 onClick={() => navigate("/")}>
             <span>IncleaF</span>
             <RiLeafLine />
           </h2>
           <ul>
-            <li>
+            <li onClick={() => navigate("/")}>
               <AiOutlineHome /> <span>홈</span>
             </li>
             <li className="none">
@@ -257,11 +252,9 @@ const Sidebar = () => {
             <li>
               <IoAlertCircleOutline /> <span>알림</span>
             </li>
-            <a href="/mypage">
-              <li>
-                <BsPerson /> <span>프로필</span>
-              </li>
-            </a>
+            <li onClick={() => navigate("/mypage")}>
+              <BsPerson /> <span>프로필</span>
+            </li>
           </ul>
         </nav>
         <div onClick={openModal}>
