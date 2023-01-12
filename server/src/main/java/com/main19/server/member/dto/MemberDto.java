@@ -1,11 +1,12 @@
 package com.main19.server.member.dto;
 
-import lombok.AllArgsConstructor;
+import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 
 public class MemberDto {
@@ -58,15 +59,17 @@ public class MemberDto {
 		private String location;
 		private String profileImage;
 		private String profileText;
+		private List<ScrapResponseDto> scrapPostingList;
 
 		@Builder
-		public Response(long memberId, String userName, String email, String location, String profileImage, String profileText) {
+		public Response(long memberId, String userName, String email, String location, String profileImage, String profileText, List<ScrapResponseDto> scrapPostingList) {
 			this.memberId = memberId;
 			this.userName = userName;
 			this.email = email;
 			this.location = location;
 			this.profileImage = profileImage;
 			this.profileText = profileText;
+			this.scrapPostingList = scrapPostingList;
 		}
 	}
 }

@@ -40,6 +40,8 @@ dependencies {
     // 이미지 업로드 관련 라이브러리
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
 
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
     // mysql, security
 }
 
