@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { AiFillSetting } from "@react-icons/all-files/ai/AiFillSetting";
+import { AiFillSetting } from "react-icons/ai";
 import { useState } from "react";
 
 const StyledContainer = styled.div`
