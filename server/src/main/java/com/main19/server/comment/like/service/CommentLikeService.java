@@ -8,6 +8,8 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.service.MemberService;
 
+import com.main19.server.sse.entity.Sse.SseType;
+import com.main19.server.sse.service.SseService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class CommentLikeService {
     private final CommentLikeRepository commentLikeRepository;
     private final MemberService memberService;
     private final CommentService commentService;
+    private final SseService sseService;
 
     public CommentLike createLike(CommentLike commentLike, long commentId, long memberId) {
 
@@ -36,6 +39,7 @@ public class CommentLikeService {
 
         commentLike.setComment(comment);
 
+        sseService.send(comment.getMember(), SseType.like, "new like");
 
         return commentLikeRepository.save(commentLike);
     }
