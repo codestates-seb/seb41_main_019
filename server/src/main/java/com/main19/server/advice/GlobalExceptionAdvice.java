@@ -78,11 +78,11 @@ public class GlobalExceptionAdvice {
 	}
 
 	@ExceptionHandler
-	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public ErrorResponse MissingRequestHeaderException(
 		MissingRequestHeaderException e) {
 
-		final ErrorResponse response = ErrorResponse.of(HttpStatus.FORBIDDEN,e.getMessage());
+		final ErrorResponse response = ErrorResponse.of(HttpStatus.UNAUTHORIZED,e.getMessage());
 
 		return response;
 	}
