@@ -4,7 +4,7 @@ import Slider from "./Slider";
 import A from "../../assets/img/plants/1.jpg";
 import B from "../../assets/img/plants/알보1.png";
 import FeedInteraction from "./FeedInteraction";
-import { useState } from "react";
+import Comments from "./Comments";
 
 const Wrapper = styled.div`
     display: flex;
@@ -16,15 +16,12 @@ const Wrapper = styled.div`
     height: 900px;
     background-color: white;
     z-index: 1000;
-    border: 2px solid blue;
 
     .none {
         display: none;
     }
 
     svg {
-        position: absolute;
-        right: 0;
     }
 `;
 
@@ -33,21 +30,31 @@ const StyledSlider = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    
+    background-color: black;
+
     img {
         width: 100%;
     }
 `
 
-const StyledComments = styled.div`
+const StyledInteraction = styled.div`
     width: 45%;
+    display: flex;
+    flex-direction: column;
 
-    div {
-        position: absolute;
-        bottom: 10%;
+    > div:first-child {
+        margin: 0px 0px 0px auto;
+    }
+
+    .profile {
+        
+        img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50px;
+        }
     }
 `;
-
 
 
 const View= ({ modal, handleModal }) => {
@@ -65,10 +72,18 @@ const View= ({ modal, handleModal }) => {
                         : <img src={B} alt="img" />
                     }
                 </StyledSlider>
-                <StyledComments>
-                    <FeedInteraction modal={modal} />
-                </StyledComments>
-                <AiOutlineClose onClick={() => handleModal()} />
+                <StyledInteraction>
+                    <div>
+                        <AiOutlineClose onClick={() => handleModal()} />
+                    </div>
+                    <div className="profile">
+                        <img src={A} alt="profileImg" />
+                        <span>홍길동</span>
+                        <span>7시간 전</span>
+                    </div>
+                    <FeedInteraction type={1} />
+                    <Comments />
+                </StyledInteraction>
             </Wrapper>
             :
             null
