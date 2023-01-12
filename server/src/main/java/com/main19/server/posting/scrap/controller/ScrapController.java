@@ -24,16 +24,18 @@ public class ScrapController {
     private final PostingMapper mapper;
 
     @PostMapping("/{posting-id}")
-    public ResponseEntity scrapPosting(@PathVariable("posting-id") @Positive long postingId,
+    public ResponseEntity scrapPosting(@RequestHeader(name = "Authorization") String token,
+                                       @PathVariable("posting-id") @Positive long postingId,
                                        @RequestBody ScrapDto requestBody) {
-        Scrap scrap = scrapService.createScrap(mapper.scrapDtoToScrap(requestBody), postingId, requestBody.getMemberId());
+        Scrap scrap = scrapService.createScrap(mapper.scrapDtoToScrap(requestBody), postingId, requestBody.getMemberId(), token);
 
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.scrapToScrapResponseDto(scrap)) , HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{scrap-id}")
-    public ResponseEntity scrapDelete(@PathVariable("scrap-id") @Positive long scrapId) {
-        scrapService.deleteScrap(scrapId);
+    public ResponseEntity scrapDelete(@RequestHeader(name = "Authorization") String token,
+                                      @PathVariable("scrap-id") @Positive long scrapId) {
+        scrapService.deleteScrap(scrapId, token);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
