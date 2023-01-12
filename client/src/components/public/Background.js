@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import styled from "styled-components";
 
 const StyledBackground = styled.div`
-    width: 1980px;
-    height: 1024px;
+    width: 100%;
+    height: 100%;;
     position: fixed;
     top:0;
     left:0;

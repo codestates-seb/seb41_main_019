@@ -3,6 +3,7 @@ import { BsBookmarkPlus } from "react-icons/bs";
 import styled from "styled-components";
 
 const StyledInteraction = styled.div`
+    background-color: white;
 
     p {
         margin: 0;
@@ -43,8 +44,7 @@ const StyledInteraction = styled.div`
     }
 `;
 
-
-const FeedInteraction = ({ setModal }) => {
+const FeedInteraction = ({ setModal, type=null }) => {
     return (
         <StyledInteraction>
             <div className="interact">
@@ -58,7 +58,9 @@ const FeedInteraction = ({ setModal }) => {
                 <span>#식테크</span> 
                 <span>#몬스테라알보</span>
             </div>
-            <span onClick={setModal ? () => setModal(true) : null} >댓글 보기 및 댓글쓰기</span>
+            { type ? null
+            : <span onClick={setModal ? () => setModal(true) : null} >댓글 보기 및 댓글쓰기</span>
+            }
         </StyledInteraction>
     )
 }

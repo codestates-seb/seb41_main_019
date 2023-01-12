@@ -10,8 +10,7 @@ const Wrapper = styled.div`
     display: flex;
     position: fixed;
     top: 3%;
-    left: 15%;
-    /* transform: translate(-50%, -50%); */
+    left: 20%;
     width: 1240px;
     height: 900px;
     background-color: white;
@@ -21,7 +20,33 @@ const Wrapper = styled.div`
         display: none;
     }
 
-    svg {
+    p, span, svg {
+        margin-left: 10px;
+    }
+
+    @media screen and (max-width: 1450px) {
+        width: 900px;
+        height: 900px;
+    }
+
+    @media screen and (max-width: 1060px) {
+        width: 500px;
+        height: 600px;
+        flex-direction: column;
+        left: 50;
+
+        p {
+            margin-left: 10px;
+        }
+
+        svg {
+            font-size: 20px;
+        }
+    }
+
+    @media screen and (max-width: 770px) {
+        left: 5%;
+        
     }
 `;
 
@@ -35,6 +60,10 @@ const StyledSlider = styled.div`
     img {
         width: 100%;
     }
+
+    @media screen and (max-width: 1060px) {
+        width: 100%;
+    }
 `
 
 const StyledInteraction = styled.div`
@@ -44,15 +73,34 @@ const StyledInteraction = styled.div`
 
     > div:first-child {
         margin: 0px 0px 0px auto;
+
+        @media screen and (max-width: 1060px){
+        }
     }
 
     .profile {
-        
+        padding: 5px;
+        display: flex;
+        align-items: center;
+
         img {
             width: 40px;
             height: 40px;
             border-radius: 50px;
         }
+
+        > span {
+            margin: 0px 10px;
+        }
+
+        > span:nth-child(2){
+            font-size: 20px;
+        }
+    }
+
+    @media screen and (max-width: 1060px) {
+        width: 100%;
+        height: 80%;
     }
 `;
 
