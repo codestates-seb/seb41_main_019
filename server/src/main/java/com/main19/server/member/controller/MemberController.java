@@ -67,10 +67,16 @@ public class MemberController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-
+    @GetMapping("/logouts")
+    public ResponseEntity logout(@RequestHeader("Authorization") String token) {
+        long memberId = jwtTokenizer.getMemberId(token);
+        String email = memberService.findMember(memberId).getEmail();
+        jwtTokenizer.deleteToken(email);
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping("/reissue")
-    public ResponseEntity logout(@RequestHeader("Authorization") String token) {
+    public ResponseEntity reissueRefreshToken(@RequestHeader("Authorization") String token) {
         long memberId = jwtTokenizer.getMemberId(token);
         Member findMember = memberService.findMember(memberId);
         String refreshToken = jwtTokenizer.findRefreshToken(findMember);

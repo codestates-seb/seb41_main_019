@@ -171,4 +171,8 @@ public class JwtTokenizer {
         redisDao.setValues(member.getEmail(), refreshToken, Duration.ofMinutes(getRefreshTokenExpirationMinutes()));
         return refreshToken;
     }
+
+    public void deleteToken(String email) throws JwtException {
+        redisDao.deleteValue(email);
+    }
 }
