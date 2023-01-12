@@ -119,6 +119,7 @@ const MyPage = () => {
             handlePlantClick={handlePlantClick}
           />
           <StyledMyPlantFolder onClick={handleFolderClick}>
+            <Gallery galleryData={galleryData} currentView={currentView} />
             <p>
               My Plants 접기 <TiArrowSortedUp />
             </p>
@@ -126,30 +127,30 @@ const MyPage = () => {
         </>
       ) : (
         <>
-          <StyledMyPlantFolder onClick={handleFolderClick}>
-            <p>
+          <StyledMyPlantFolder>
+            <p onClick={handleFolderClick}>
               My Plants 펼치기 <TiArrowSortedDown />
             </p>
+            <StyledChangeViewContainer>
+              <StyledChangeViewButton
+                onClick={handlePostingsClick}
+                className={currentView === "postings" ? "selected" : ""}
+              >
+                <BsGrid3X3 />
+                <span>게시물</span>
+              </StyledChangeViewButton>
+              <StyledChangeViewButton
+                onClick={handleScrapsClick}
+                className={currentView === "scraps" ? "selected" : ""}
+              >
+                <BsBookmark />
+                <span>스크랩</span>
+              </StyledChangeViewButton>
+            </StyledChangeViewContainer>
+            <Gallery galleryData={galleryData} currentView={currentView} />
           </StyledMyPlantFolder>
         </>
       )}
-      <StyledChangeViewContainer>
-        <StyledChangeViewButton
-          onClick={handlePostingsClick}
-          className={currentView === "postings" ? "selected" : ""}
-        >
-          <BsGrid3X3 />
-          <span>게시물</span>
-        </StyledChangeViewButton>
-        <StyledChangeViewButton
-          onClick={handleScrapsClick}
-          className={currentView === "scraps" ? "selected" : ""}
-        >
-          <BsBookmark />
-          <span>스크랩</span>
-        </StyledChangeViewButton>
-      </StyledChangeViewContainer>
-      <Gallery galleryData={galleryData} currentView={currentView} />
     </StyledContainer>
   );
 };
