@@ -48,6 +48,11 @@ const AddPlant = ({ handleIsCovered }) => {
     setTextInput({ ...textInput, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(JSON.stringify(textInput));
+  };
+
   return (
     <>
       <StyledContainer>
@@ -57,29 +62,26 @@ const AddPlant = ({ handleIsCovered }) => {
             <AiOutlineClose />
           </button>
         </StyledModalHeader>
-        <form>
+        <form onSubmit={handleSubmit}>
           <input
+            type="text"
             name="plantName"
             placeholder="식물이름"
-            onChange={(e) => {
-              handleInputChange(e);
-            }}
+            onChange={handleInputChange}
           />
           <input
+            type="text"
             name="plantType"
             placeholder="종류"
-            onChange={(e) => {
-              handleInputChange(e);
-            }}
+            onChange={handleInputChange}
           />
           <input
+            type="text"
             name="plantBirthday"
             placeholder="처음 만난 날"
-            onChange={(e) => {
-              handleInputChange(e);
-            }}
+            onChange={handleInputChange}
           />
-          <button>완료</button>
+          <button type="submit">완료</button>
         </form>
       </StyledContainer>
     </>
