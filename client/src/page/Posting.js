@@ -17,14 +17,7 @@ const Wrapper= styled.div`
     padding: 50px;
     color: gray;
 
-    input {
-        width: 100px;
-        height: 40px;
-        border: 1px solid #dbdbdb;
-        border-radius: 5px;
-        cursor: pointer;
-        padding: 20px;
-    }
+    
 
     button {
         width: 100px;
@@ -53,13 +46,22 @@ const StyledTextarea = styled.textarea`
     border-radius: 5px;
 `;
 
+const StyledTag = styled.input`
+    width: 100px;
+    height: 40px;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 20px;
+`;
+
 const Posting = () => {
     return (
         <>
             <Wrapper>
                 <Upload />
-                <StyledTextarea placeholder="당신의 식물을 설명해주세요."/>
-                <input placeholder="# 키워드" />
+                <StyledTextarea placeholder="당신의 식물을 소개해주세요."/>
+                <StyledTag placeholder="# 키워드" />
                 <div>
                     <button className="enroll">등록</button>
                     <button className="cancel">취소</button>
