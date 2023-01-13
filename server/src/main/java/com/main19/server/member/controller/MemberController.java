@@ -90,12 +90,10 @@ public class MemberController {
     public ResponseEntity reissueRefreshToken(@RequestHeader("Refresh") String token) {
         long memberId = jwtTokenizer.getMemberId(token);
         Member findMember = memberService.findMember(memberId);
-        String refreshToken = jwtTokenizer.findRefreshToken(findMember);
         String reissuedAtk = jwtTokenizer.reissueAtk(findMember);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + reissuedAtk);
-        headers.add("Refresh", refreshToken);
 
         return ResponseEntity.ok().headers(headers).build();
     }

@@ -13,7 +13,7 @@ import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Member {
 	@Id
 	@GeneratedValue
