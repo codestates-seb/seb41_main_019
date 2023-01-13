@@ -196,15 +196,21 @@ const StyledHeader = styled.header`
 `;
 
 const StyledExtend = styled.div`
-  position: fixed;
-  top: 0px;
-  left: 60px; 
-  width: ${({isOpend}) => isOpend ? "350px" : "0px"};
-  height: 100%;
-  border-right: 1px solid #DBDBDB;
-  transition: width 0.2s linear;
-  overflow: hidden;
-  background-color: white;
+  >div {
+    position: fixed;
+    top: 0px;
+    left: 60px; 
+    width: 0px;
+    height: 100%;
+    border-right: 1px solid #DBDBDB;
+    transition: width 0.2s linear;
+    overflow: hidden;
+    background-color: white;
+  }
+
+  .active {
+    width: 350px;
+  }
 `
 
 const Sidebar = () => {
@@ -213,8 +219,8 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const handleIsOpend = (value) => {
-    if(isOpend) setIsOpend(null);
-    else setIsOpend(value);
+    if(value) setIsOpend(value);
+    else if(isOpend) setIsOpend(null);
   }
 
   const handleOpendModal = () => {
@@ -235,12 +241,18 @@ const Sidebar = () => {
       </StyledHeader>
       <StyledSidebar isOpend={isOpend} className="isOpend">
         <nav>
-          <h2 onClick={() => navigate("/")}>
+          <h2 onClick={() =>{
+            handleIsOpend();
+            navigate("/")
+          }}>
             <span>IncleaF</span>
             <RiLeafLine />
           </h2>
           <ul>
-            <li onClick={() => navigate("/")}>
+            <li onClick={() =>{
+            handleIsOpend();
+            navigate("/")
+          }}>
               <AiOutlineHome /> <span>홈</span>
             </li>
             <li className="none" onClick={() => handleIsOpend("Search")}>
@@ -266,10 +278,13 @@ const Sidebar = () => {
           <span>더 보기</span>
         </div>
       </StyledSidebar>
-      <StyledExtend isOpend={isOpend}>
-        {
-          isOpend ? isOpend === "Search" ? <Search /> : <Chat /> : null
-        }
+      <StyledExtend>
+        <div className={isOpend === "Search" ? "active" : null}>
+          <Search />
+        </div>
+        <div className={isOpend === "Chat" ? "active" : null}>
+          <Chat />
+        </div>
       </StyledExtend>
     </>
   );
