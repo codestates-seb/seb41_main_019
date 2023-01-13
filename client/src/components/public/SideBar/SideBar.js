@@ -214,12 +214,12 @@ const StyledExtend = styled.div`
 
 const Sidebar = () => {
   const [opendModal, setOpendModal] = useState(false);
-  const [isOpend, setIsOpend] = useState(null);
+  const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
 
   const handleIsOpend = (value) => {
-    if(value) setIsOpend(value);
-    else if(isOpend) setIsOpend(null);
+    if(value === isOpend) setIsOpend(null);   
+    else setIsOpend(value);
   }
 
   const handleOpendModal = () => {
