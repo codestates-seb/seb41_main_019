@@ -6,11 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.main19.server.member.entity.Member;
-import com.main19.server.member.repository.MemberRepository;
 import com.main19.server.member.service.MemberService;
-import com.main19.server.posting.scrap.entity.Scrap;
-import com.main19.server.posting.scrap.repository.ScrapRepository;
-import com.main19.server.posting.tags.repository.TagRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -140,7 +136,6 @@ public class PostingService {
 		return findPosting;
 	}
 
-	// 첨부파일 삭제를 위해 추가
 	public Media findVerfiedMedia(long mediaId) {
 		Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
 		Media findMedia =
