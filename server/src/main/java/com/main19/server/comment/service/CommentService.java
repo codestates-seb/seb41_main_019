@@ -45,7 +45,7 @@ public class CommentService {
         posting.createCommentCount();
 
         if(posting.getMember().getMemberId() != tokenId) {
-            sseService.send(posting.getMember(), SseType.comment, "new comment");
+            sseService.send(posting.getMember(), SseType.comment, member);
         }
 
         return commentRepository.save(comment);

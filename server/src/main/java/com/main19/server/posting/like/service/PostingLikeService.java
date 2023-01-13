@@ -50,7 +50,7 @@ public class PostingLikeService {
 		posting.createLikeCount();
 
 		if(posting.getMember().getMemberId() != tokenId) {
-			sseService.send(posting.getMember(), SseType.like, "new like");
+			sseService.send(posting.getMember(), SseType.like, member);
 		}
 
 		return postingLikeRepository.save(postingLike);

@@ -48,7 +48,7 @@ public class CommentLikeService {
         commentLike.setComment(comment);
 
         if(comment.getMember().getMemberId() != tokenId) {
-            sseService.send(comment.getMember(), SseType.like, "new like");
+            sseService.send(comment.getMember(), SseType.like, memberService.findMember(memberId));
         }
 
         return commentLikeRepository.save(commentLike);
