@@ -34,6 +34,7 @@ public class PostingService {
 	private final MemberService memberService;
 	private final CustomBeanUtils<Posting> beanUtils;
 	private final JwtTokenizer jwtTokenizer;
+	private final MemberRepository memberRepository;
 
 	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths, String token) {
 
@@ -87,6 +88,10 @@ public class PostingService {
 	public Page<Posting> findPostings(int page, int size) {
 		// 최신순 이외에도 정렬 어떻게 할지 고려해야 함
 		return postingRepository.findAll(PageRequest.of(page, size, Sort.by("postingId").descending()));
+	}
+
+	public Page<Posting> findPostingsByMemberId(long memberId, int page, int size) {
+		return postingRepository.findByMember_MemberId(memberId, PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
 
 	public void deletePosting(long postingId, String token) {
