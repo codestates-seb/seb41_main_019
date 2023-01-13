@@ -38,7 +38,7 @@ public class MemberService {
         return savedMember;
     }
 
-    public Member updateMember(Member member, String imagePath ,String token) {
+    public Member updateMember(Member member ,String token) {
         // todo 토큰 정보 확인해서 권한 검증후 수정 해야함
         // todo password 수정할지?
         long tokenId = jwtTokenizer.getMemberId(token);
@@ -49,7 +49,6 @@ public class MemberService {
 
         Member findMember = findVerifiedMember(member.getMemberId());
         Member updateMember = beanUtils.copyNonNullProperties(member, findMember);
-        findMember.setProfileImage(imagePath);
 
         return memberRepository.save(updateMember);
     }
@@ -70,6 +69,31 @@ public class MemberService {
 
         memberRepository.deleteById(memberId);
     }
+
+    public Member createProfileImage(long memberId, String imagePath, String token) {
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if (memberId != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        Member member = findMember(memberId);
+        member.setProfileImage(imagePath);
+        return memberRepository.save(member);
+    }
+
+    public void deleteProfileImage(long memberId, String token) {
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if (memberId != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        Member member = findMember(memberId);
+        member.setProfileImage(null);
+        memberRepository.save(member);
+    }
+
 
     private void verifiedByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);

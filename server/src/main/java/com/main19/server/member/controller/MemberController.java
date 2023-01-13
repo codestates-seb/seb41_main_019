@@ -44,20 +44,13 @@ public class MemberController {
             HttpStatus.CREATED);
     }
 
-    @PatchMapping(value = "/{member-id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping(value = "/{member-id}")
     public ResponseEntity patchMember(@RequestHeader(name = "Authorization") String token,
                                       @PathVariable("member-id") @Positive long memberId,
-                                      @Valid @RequestPart MemberDto.Patch requestBody, @RequestPart MultipartFile profileImage)
-            throws MultipartException, MissingServletRequestPartException {
-
-        String imagePath = null;
-        if (profileImage != null) {
-            imagePath = storageService.uploadProfileImage(profileImage);
-        }
-
+                                      @Valid @RequestBody MemberDto.Patch requestBody) {
         requestBody.setMemberId(memberId);
 
-        Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody), imagePath ,token);
+        Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody), token);
 
         return new ResponseEntity(
             new SingleResponseDto(mapper.memberToMemberResponse(member)), HttpStatus.OK);
@@ -96,5 +89,21 @@ public class MemberController {
         headers.add("Authorization", "Bearer " + reissuedAtk);
 
         return ResponseEntity.ok().headers(headers).build();
+    }
+
+    @PostMapping(value = "/{member-id}/profileimage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity postProfileImage(@PathVariable("member-id") @Positive long memberId,
+                                           @RequestHeader(name = "Authorization") String token,
+                                           @RequestPart MultipartFile profileImage) {
+        String imagePath = storageService.uploadProfileImage(profileImage);
+        return new ResponseEntity(mapper.memberToMemberResponse(memberService.createProfileImage(memberId, imagePath, token)), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "/{member-id}/profileimage")
+    public ResponseEntity deleteProfileImage(@PathVariable("member-id") @Positive long memberId,
+                                             @RequestHeader(name = "Authorization") String token) {
+        storageService.removeProfileImage(memberId);
+        memberService.deleteProfileImage(memberId, token);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
