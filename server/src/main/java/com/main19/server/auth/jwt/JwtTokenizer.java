@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.net.http.HttpHeaders;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Duration;
@@ -55,10 +54,11 @@ public class JwtTokenizer {
                 .compact();
     }
 
-    public String generateRefreshToken(String subject, Date expiration, String base64EncodedSecretKey) {
+    public String generateRefreshToken(Map<String, Object> claims, String subject, Date expiration, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
@@ -152,10 +152,14 @@ public class JwtTokenizer {
 
     // RefreshToken 생성로직
     public String delegateRefreshToken(Member member) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("memberId", member.getMemberId());
+        claims.put("username", member.getEmail());
+        claims.put("roles", member.getRoles());
         String subject = member.getEmail();
         Date expiration = getTokenExpiration(getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
-        String refreshToken = generateRefreshToken(subject, expiration, base64EncodedSecretKey);
+        String refreshToken = generateRefreshToken(claims, subject, expiration, base64EncodedSecretKey);
 
         return refreshToken;
     }

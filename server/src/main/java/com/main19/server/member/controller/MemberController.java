@@ -75,8 +75,8 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/reissue")
-    public ResponseEntity reissueRefreshToken(@RequestHeader("Authorization") String token) {
+    @PostMapping("/reissues")
+    public ResponseEntity reissueRefreshToken(@RequestHeader("Refresh") String token) {
         long memberId = jwtTokenizer.getMemberId(token);
         Member findMember = memberService.findMember(memberId);
         String refreshToken = jwtTokenizer.findRefreshToken(findMember);
