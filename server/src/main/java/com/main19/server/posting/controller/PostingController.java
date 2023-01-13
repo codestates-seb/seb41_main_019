@@ -58,7 +58,7 @@ public class PostingController {
         @Valid @RequestPart PostingPostDto requestBody,
         @RequestPart List<MultipartFile> multipartFiles) {
 
-        List<String> mediaPaths = storageService.upload(multipartFiles);
+        List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
         Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody),
             requestBody.getMemberId(), mediaPaths, token);
@@ -116,6 +116,16 @@ public class PostingController {
     }
 
     //특정 회원의 포스팅 목록 조회 추가해야함
+    @GetMapping("/member/{member-id}")
+    public ResponseEntity getPostingsByMember(@PathVariable("member-id") @Positive long memberId,
+                                              @Positive @RequestParam int page,
+                                              @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.findPostingsByMemberId(memberId, page - 1, size);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
+                HttpStatus.OK);
+    }
 
 
     @DeleteMapping(value = "/{posting-id}")
@@ -130,7 +140,7 @@ public class PostingController {
     public ResponseEntity postMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId,
         @RequestPart List<MultipartFile> multipartFiles) {
-        List<String> mediaPaths = storageService.upload(multipartFiles);
+        List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
         postingService.addMedia(postingId, mediaPaths, token);
         return new ResponseEntity<>("Selected media uploaded successfully.",

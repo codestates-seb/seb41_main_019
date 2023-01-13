@@ -17,15 +17,13 @@ public class MemberDto {
 		@Email
 		private String email;
 		private String location;
-		private String profileImage;
 		private String profileText;
 		private String password; // todo password를 어떻게 받아올지 프론트와 논의
 
-		public void updateMember(String userName, String email, String location, String profileImage, String profileText) {
+		public void updateMember(String userName, String email, String location, String profileText) {
 			this.userName = userName;
 			this.email = email;
 			this.location = location;
-			this.profileImage = profileImage;
 			this.profileText = profileText;
 		}
 	}
@@ -34,7 +32,6 @@ public class MemberDto {
 	public static class Patch {
 		private long memberId;
 		private String userName;
-		private String profileImage;
 		private String profileText;
 		private String location;
 
@@ -45,7 +42,6 @@ public class MemberDto {
 		@Builder
 		public Patch(String userName, String profileImage, String profileText, String location) {
 			this.userName = userName;
-			this.profileImage = profileImage;
 			this.profileText = profileText;
 			this.location = location;
 		}

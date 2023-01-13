@@ -22,6 +22,9 @@ public class CommentDto {
         @NotBlank
         private String comment;
 
+        public Post(String comment) {
+            this.comment = comment;
+        }
     }
 
     @Getter

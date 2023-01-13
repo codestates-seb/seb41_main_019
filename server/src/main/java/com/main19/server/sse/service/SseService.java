@@ -1,12 +1,22 @@
 package com.main19.server.sse.service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
+import com.main19.server.comment.entity.Comment;
+import com.main19.server.exception.BusinessLogicException;
+import com.main19.server.exception.ExceptionCode;
 import com.main19.server.sse.entity.Sse;
 import com.main19.server.sse.entity.Sse.SseType;
 import com.main19.server.sse.repository.EmitterRepositoryImpl;
 import com.main19.server.sse.repository.SseRepository;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.main19.server.member.entity.Member;
@@ -19,6 +29,7 @@ public class SseService {
 
     private final EmitterRepositoryImpl emitterRepository;
     private final SseRepository sseRepository;
+    private final JwtTokenizer jwtTokenizer;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
 
@@ -53,8 +64,8 @@ public class SseService {
         }
     }
 
-    public void send(Member receiver, SseType sseType, String content) {
-        Sse sse = createSse(receiver, sseType, content);
+    public void send(Member receiver, SseType sseType, Member sender) {
+        Sse sse = createSse(receiver, sseType, sender);
         sseRepository.save(sse);
         String id = String.valueOf(receiver.getMemberId());
 
@@ -62,18 +73,44 @@ public class SseService {
         sseEmitters.forEach(
             (key, emitter) -> {
                 emitterRepository.saveEventCache(key, sse);
-                sendToClient(emitter, key, content);
+                sendToClient(emitter, key, sseType);
             }
         );
     }
 
-    private Sse createSse(Member receiver, SseType sseType, String content) {
+    private Sse createSse(Member receiver, SseType sseType, Member sender) {
         return Sse.builder()
             .receiver(receiver)
-            .content(content)
             .sseType(sseType)
+            .sender(sender)
             .isRead(false)
             .build();
+    }
+
+    public Sse updateSse(long sseId,String token) {
+
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if(findVerifiedSse(sseId).getReceiver().getMemberId() != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        Sse sse = findVerifiedSse(sseId);
+
+        sse.setRead(true);
+
+        return sse;
+    }
+
+    public Page<Sse> findSse(long memberId, Pageable pageable) {
+        return sseRepository.findSse(memberId, pageable);
+    }
+
+    private Sse findVerifiedSse(long sseId){
+        Optional<Sse> optionalSse = sseRepository.findById(sseId);
+        Sse findSse = optionalSse.orElseThrow(()->new BusinessLogicException(
+            ExceptionCode.NOTIFICATION_NOT_FOUND));
+        return findSse;
     }
 }
 
