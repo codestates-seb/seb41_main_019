@@ -95,7 +95,7 @@ const MyPage = () => {
 
   const handlePlantClick = (plantId) => {
     // 반려식물 클릭시 해당건 조회
-    setCurrentView("Plant");
+    setCurrentView("plant");
     setGalleryData(myPlantsData[plantId].plantImgs);
   };
 
@@ -112,7 +112,7 @@ const MyPage = () => {
   return (
     <StyledContainer>
       <UserInfo />
-      {isFolderOpened ? (
+      {isFolderOpened && isFolderOpened ? (
         <>
           <MyPlants
             myPlantsData={myPlantsData}
