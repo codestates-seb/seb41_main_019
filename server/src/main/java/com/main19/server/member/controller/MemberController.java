@@ -5,8 +5,9 @@ import javax.validation.constraints.Positive;
 
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.member.entity.Member;
+import com.main19.server.s3service.S3StorageService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ import com.main19.server.member.mapper.MemberMapper;
 import com.main19.server.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class MemberController {
 
     private final MemberMapper mapper;
     private final MemberService memberService;
+    private final S3StorageService storageService;
 
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
@@ -35,17 +40,23 @@ public class MemberController {
             HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{member-id}")
+    @PatchMapping(value = "/{member-id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity patchMember(@RequestHeader(name = "Authorization") String token,
-        @PathVariable("member-id") @Positive long memberId,
-        @Valid @RequestBody MemberDto.Patch requestBody) {
+                                      @PathVariable("member-id") @Positive long memberId,
+                                      @Valid @RequestPart MemberDto.Patch requestBody, @RequestPart MultipartFile profileImage)
+            throws MultipartException, MissingServletRequestPartException {
+
+        String imagePath = null;
+        if (profileImage != null) {
+            imagePath = storageService.uploadProfileImage(profileImage);
+        }
+
         requestBody.setMemberId(memberId);
 
-        Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody),token);
+        Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody), imagePath ,token);
 
         return new ResponseEntity(
-            new SingleResponseDto(mapper.memberToMemberResponse(member)), HttpStatus.OK
-        );
+            new SingleResponseDto(mapper.memberToMemberResponse(member)), HttpStatus.OK);
     }
 
     @GetMapping("/{member-id}")

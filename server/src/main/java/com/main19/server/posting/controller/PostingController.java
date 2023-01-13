@@ -58,7 +58,7 @@ public class PostingController {
         @Valid @RequestPart PostingPostDto requestBody,
         @RequestPart List<MultipartFile> multipartFiles) {
 
-        List<String> mediaPaths = storageService.upload(multipartFiles);
+        List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
         Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody),
             requestBody.getMemberId(), mediaPaths, token);
@@ -130,7 +130,7 @@ public class PostingController {
     public ResponseEntity postMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId,
         @RequestPart List<MultipartFile> multipartFiles) {
-        List<String> mediaPaths = storageService.upload(multipartFiles);
+        List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
         postingService.addMedia(postingId, mediaPaths, token);
         return new ResponseEntity<>("Selected media uploaded successfully.",
