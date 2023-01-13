@@ -5,10 +5,11 @@ import A from "../../assets/img/plants/1.jpg";
 import B from "../../assets/img/plants/알보1.png";
 import FeedInteraction from "./FeedInteraction";
 import Comments from "./Comments";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
     display: flex;
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
@@ -33,8 +34,7 @@ const Wrapper = styled.div`
     @media screen and (max-width: 1024px) {
         width: 500px;
         height: 600px;
-        top: 33%;
-
+        top: 40%;
         flex-direction: column;
 
         p {
@@ -56,10 +56,20 @@ const StyledSlider = styled.div`
 
     img {
         width: 100%;
+
+        @media screen and (max-width: 1024px) {
+            width: 70%;
+            height: 100%;
+            
+        }
     }
 
     @media screen and (max-width: 1255px) {
         width: 100%;
+    }
+
+    @media screen and (max-width: 1024px) { 
+        align-items: center;
     }
 `
 
@@ -107,14 +117,16 @@ const StyledInteraction = styled.div`
 `;
 
 
-const View= ({ modal, handleModal }) => {
+const View= ({ handleModal }) => {
     const img = [ A ] ;
 
+    useEffect(() => {
+        document.getElementById("bg").addEventListener("click", () => {
+            handleModal();
+        })
+    },[handleModal])
+
     return (
-        <>
-        { 
-            modal
-            ?
             <Wrapper>
                 <StyledSlider>
                     {  img.length > 1
@@ -135,10 +147,6 @@ const View= ({ modal, handleModal }) => {
                     <Comments />
                 </StyledInteraction>
             </Wrapper>
-            :
-            null
-        }
-        </>
     )
 }
 

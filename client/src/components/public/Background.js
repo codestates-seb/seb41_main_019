@@ -20,7 +20,7 @@ const Background = ({ isCovered, handleIsCovered }) => {
   return (
     <StyledBackground
       isCovered={isCovered}
-      onClick={handleIsCovered}
+      id="bg"
     ></StyledBackground>
   );
 };

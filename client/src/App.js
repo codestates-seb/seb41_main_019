@@ -9,7 +9,6 @@ import { useState } from "react";
 
 function App() {
   const [isCovered, setIsCovered] = useState(false);
-
   const handleIsCovered = () => setIsCovered(!isCovered);
 
   return (
