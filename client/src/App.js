@@ -3,6 +3,7 @@ import SideBar from "../src/components/public/Sidebar";
 import Chat from "./components/public/Chat/Chat";
 import Home from "./page/Home";
 import MyPage from "./page/MyPage";
+import Posting from "./page/Posting";
 import Background from "./components/public/Background";
 import { useState } from "react";
 
@@ -24,6 +25,7 @@ function App() {
           path={"/mypage"}
           element={<MyPage handleIsCovered={handleIsCovered} />}
         />
+        <Route path={"/posting"} element={<Posting />} />
       </Routes>
       <Chat />
     </BrowserRouter>
