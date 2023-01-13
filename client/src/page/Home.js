@@ -25,11 +25,13 @@ const Home = ({ handleIsCovered }) => {
     }
 
     return (
+        <>
+        <View modal={modal} handleModal={handleModal} />
         <StyledMain>
             <Recommends />
             <Feeds handleModal={handleModal}/>
-            <View modal={modal} handleModal={handleModal} />
         </StyledMain>
+        </>
     )
 }
 

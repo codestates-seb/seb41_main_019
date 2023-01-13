@@ -8,9 +8,10 @@ import Comments from "./Comments";
 
 const Wrapper = styled.div`
     display: flex;
-    position: fixed;
-    top: 3%;
-    left: 20%;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
     width: 1240px;
     height: 900px;
     background-color: white;
@@ -24,16 +25,17 @@ const Wrapper = styled.div`
         margin-left: 10px;
     }
 
-    @media screen and (max-width: 1450px) {
+    @media screen and (max-width: 1255px) {
         width: 900px;
         height: 900px;
     }
 
-    @media screen and (max-width: 1060px) {
+    @media screen and (max-width: 1024px) {
         width: 500px;
         height: 600px;
+        top: 33%;
+
         flex-direction: column;
-        left: 50;
 
         p {
             margin-left: 10px;
@@ -42,11 +44,6 @@ const Wrapper = styled.div`
         svg {
             font-size: 20px;
         }
-    }
-
-    @media screen and (max-width: 770px) {
-        left: 5%;
-        
     }
 `;
 
@@ -61,7 +58,7 @@ const StyledSlider = styled.div`
         width: 100%;
     }
 
-    @media screen and (max-width: 1060px) {
+    @media screen and (max-width: 1255px) {
         width: 100%;
     }
 `
@@ -74,7 +71,8 @@ const StyledInteraction = styled.div`
     > div:first-child {
         margin: 0px 0px 0px auto;
 
-        @media screen and (max-width: 1060px){
+        @media screen and (max-width: 1024px){
+            padding: 5px;
         }
     }
 
@@ -98,9 +96,13 @@ const StyledInteraction = styled.div`
         }
     }
 
-    @media screen and (max-width: 1060px) {
+    @media screen and (max-width: 1024px) {
         width: 100%;
         height: 80%;
+    }
+
+    @media screen and (max-width: 1255px) {
+        width: 100%;
     }
 `;
 

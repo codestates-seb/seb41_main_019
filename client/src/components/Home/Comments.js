@@ -27,17 +27,19 @@ const StyledComments = styled.div`
         margin: 0px 5px;
     }  
 
-    @media screen and (max-width: 1060px) {
+    @media screen and (max-width: 1024px) {
         overflow: auto;
         height: 100%;
+        display: flex;
+        flex-direction: column-reverse;
     }
 `;
 
 const StyledMyComments = styled.div`
     height: 10%;
 
-    @media screen and (max-width: 1060px) {
-        height: 30%;
+    @media screen and (max-width: 1024px) {
+        height: 10%;
     }
 `;
 
