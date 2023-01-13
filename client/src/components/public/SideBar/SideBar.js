@@ -202,7 +202,6 @@ const StyledExtend = styled.div`
     left: 60px; 
     width: 0px;
     height: 100%;
-    border-right: 1px solid #DBDBDB;
     transition: width 0.2s linear;
     overflow: hidden;
     background-color: white;
