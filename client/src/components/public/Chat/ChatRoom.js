@@ -37,7 +37,6 @@ const StyledFriend = styled.li`
 const StyledButton = styled.button``;
 
 const ChatRoom = ({ handleCurChat, freind }) => {
-  console.log(freind);
   return (
     <StyledFriend>
       <div>

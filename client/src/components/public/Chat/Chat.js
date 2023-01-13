@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import Search from "../Search";
+import Input from "../Input";
 import ChatRooms from "./ChatRooms";
 import Chatting from "./Chatting";
 import Friends from "./Friends";
@@ -8,15 +8,11 @@ import { chatLogData } from "../../../assets/dummyData/chatLogData";
 import { friendsData } from "../../../assets/dummyData/friendsData";
 
 const StyledChat = styled.div`
-  position: fixed;
-  top: 0px;
-  right: 0px;
   display: flex;
   flex-direction: column;
   width: 350px;
   height: 100%;
-  border-left: 1px solid #dbdbdb;
-  padding: 20px 20px 0px 20px;
+  padding: 21px 20px 0px 20px;
   gap: 20px;
 
   > p {
@@ -51,10 +47,10 @@ const Chat = () => {
     setCurChat(value);
   };
 
-  return (
+  return (  
     <>
       <StyledChat>
-        <Search label={"채팅"} />
+        <Input label={"채팅"} />
         {curChat ? (
           <>
             <Chatting
