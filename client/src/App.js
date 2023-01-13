@@ -8,17 +8,23 @@ import Background from "./components/public/Background";
 import { useState } from "react";
 
 function App() {
-  const [ isCovered, setIsCovered ] = useState(false);
+  const [isCovered, setIsCovered] = useState(false);
 
   const handleIsCovered = () => setIsCovered(!isCovered);
 
   return (
     <BrowserRouter>
-      <Background isCovered={isCovered} />
+      <Background isCovered={isCovered} handleIsCovered={handleIsCovered} />
       <SideBar />
       <Routes>
-        <Route path={"/"} element={<Home handleIsCovered={handleIsCovered} />} />
-        <Route path={"/mypage"} element={<MyPage />} />
+        <Route
+          path={"/"}
+          element={<Home handleIsCovered={handleIsCovered} />}
+        />
+        <Route
+          path={"/mypage"}
+          element={<MyPage handleIsCovered={handleIsCovered} />}
+        />
         <Route path={"/posting"} element={<Posting />} />
       </Routes>
       <Chat />

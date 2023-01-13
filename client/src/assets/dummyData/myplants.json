@@ -3,6 +3,7 @@
     {
       "plantId": 0,
       "plantName": "히히",
+      "plantType": "몬스테라",
       "adopted_at": "2021-03-01",
       "plantImgs": [
         {
@@ -26,6 +27,7 @@
     {
       "plantId": 1,
       "plantName": "하하",
+      "plantType": "고무나무",
       "adopted_at": "2022-03-01",
       "plantImgs": [
         {
@@ -45,6 +47,7 @@
     {
       "plantId": 2,
       "plantName": "호호",
+      "plantType": "몬스테라",
       "adopted_at": "2021-01-01",
       "plantImgs": [
         {
@@ -68,6 +71,7 @@
     {
       "plantId": 3,
       "plantName": "크크",
+      "plantType": "고무나무",
       "adopted_at": "2020-03-01",
       "plantImgs": [
         {
@@ -87,6 +91,7 @@
     {
       "plantId": 4,
       "plantName": "메롱",
+      "plantType": "몬스테라",
       "adopted_at": "2011-03-01",
       "plantImgs": [
         {
