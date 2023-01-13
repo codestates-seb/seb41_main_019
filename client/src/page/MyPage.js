@@ -51,12 +51,11 @@ const StyledChangeViewButton = styled.div`
   }
 `;
 
-const MyPage = () => {
+const MyPage = ({ setIsCovered }) => {
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
   const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
   const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
-  const [currentPlant, setCurrentPlant] = useState();
 
   const getGalleryData = async (url, view) => {
     try {
