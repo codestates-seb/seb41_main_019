@@ -8,19 +8,14 @@ const Wrapper = styled.div`
     justify-content: center;
 `
 
-const Feeds = () => { 
+const Feeds = ({ handleModal }) => { 
+    const datas = new Array(10).fill(0);
+
     return (
         <Wrapper>
-            <Feed />
-            <Feed />
-            <Feed />
-            <Feed />
-            <Feed />
-            <Feed />
-            <Feed />
-            <Feed />
-            <Feed />
-            <Feed />
+            {
+                datas.map(data => <Feed handleModal={handleModal} />)
+            }
         </Wrapper>
     )
 }
