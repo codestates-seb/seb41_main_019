@@ -6,7 +6,7 @@ import { IoAlertCircleOutline } from "react-icons/io5";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideModal from "./SideModal";
-import Search from "./Search";
+import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
 
 const StyledSidebar = styled.aside`
@@ -204,6 +204,7 @@ const StyledExtend = styled.div`
   border-right: 1px solid #DBDBDB;
   transition: width 0.2s linear;
   overflow: hidden;
+  background-color: white;
 `
 
 const Sidebar = () => {
@@ -220,7 +221,6 @@ const Sidebar = () => {
     setOpendModal(!opendModal);
   };
 
-  console.log(isOpend);
   return (
     <>
       <StyledHeader>

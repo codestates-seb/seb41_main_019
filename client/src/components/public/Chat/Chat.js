@@ -12,7 +12,7 @@ const StyledChat = styled.div`
   flex-direction: column;
   width: 350px;
   height: 100%;
-  padding: 20px 20px 0px 20px;
+  padding: 21px 20px 0px 20px;
   gap: 20px;
 
   > p {
@@ -35,10 +35,6 @@ const StyledChat = styled.div`
     width: 400px;
     margin: 0px 0px 20px -20px;
     border-top: 1px solid #dbdbdb;
-  }
-
-  @media screen and (max-width: 1255px) {
-    display : none;
   }
 `;
 

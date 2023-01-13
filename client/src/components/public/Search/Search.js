@@ -6,7 +6,7 @@ const StyledSearch = styled.div`
   flex-direction: column;
   width: 350px;
   height: 100%;
-  padding: 20px 20px 0px 20px;
+  padding: 21px 20px 0px 20px;
   gap: 20px;
 
   > p {
