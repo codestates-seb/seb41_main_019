@@ -9,12 +9,14 @@ import { useState } from "react";
 function App() {
   const [ isCovered, setIsCovered ] = useState(false);
 
+  const handleIsCovered = () => setIsCovered(!isCovered);
+
   return (
     <BrowserRouter>
       <Background isCovered={isCovered} />
       <SideBar />
       <Routes>
-        <Route path={"/"} element={<Home />} />
+        <Route path={"/"} element={<Home handleIsCovered={handleIsCovered} />} />
         <Route path={"/mypage"} element={<MyPage />} />
       </Routes>
       <Chat />
