@@ -1,6 +1,7 @@
 package com.main19.server.member;
 
 import com.google.gson.Gson;
+import com.main19.server.ServerApplication;
 import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.comment.controller.CommentController;
 import com.main19.server.comment.mapper.CommentMapper;
@@ -32,12 +33,10 @@ import java.util.List;
 
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
 import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(value = MemberController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
@@ -119,6 +118,33 @@ public class MemberControllerRestDocs {
                                 )
                         )
                 ));
-//                .andExpect(header().string("Location", is(startsWith("/members"))));
     }
+
+//    @Test
+//    public void getMemberTest() throws Exception {
+//        // given
+//        long memberId = 1L;
+//        MemberDto.Response response =
+//                new MemberDto.Response(
+//                        1L,
+//                        "taebong98",
+//                        "aaa@naver.com",
+//                        "코드스테이츠",
+//                        null,
+//                        "자기소개",
+//                        new ArrayList<>());
+//
+//        // when
+//        given(memberService.findMember(memberId)).willReturn(new Member());
+//        given(mapper.memberToMemberResponse(Mockito.any(Member.class))).willReturn(response);
+//
+//        ResultActions actions = mockMvc.perform(
+//                get("/members/{member-id}", memberId)
+//                        .accept(MediaType.APPLICATION_JSON)
+//        );
+//
+//        // then
+//        actions
+//                .andExpect("$.data.")
+//    }
 }
