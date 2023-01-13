@@ -42,6 +42,9 @@ const StyledMyPlantsItem = styled.div`
   justify-content: center;
   align-items: center;
   margin: 0 20px;
+  .selected {
+    border: 4px solid #ffb100;
+  }
   .image-wrapper {
     width: 100px;
     height: 100px;
@@ -84,6 +87,7 @@ const StyledNoContents = styled.div`
 
 const MyPlants = ({ myPlantsData, handlePlantClick }) => {
   const [isPanelOpened, setIsPanelOpened] = useState(false);
+  const [currentPlantData, setCurrentPlantData] = useState();
 
   const handleAddPlantClick = () => {
     // 식물 추가 로직
@@ -118,10 +122,18 @@ const MyPlants = ({ myPlantsData, handlePlantClick }) => {
                   key={el.plantId}
                   onClick={() => {
                     handlePlantClick(el.plantId);
+                    setCurrentPlantData(el);
                     setIsPanelOpened(true);
                   }}
                 >
-                  <div className="image-wrapper">
+                  <div
+                    className={
+                      currentPlantData &&
+                      currentPlantData.plantId === el.plantId
+                        ? "selected image-wrapper"
+                        : "image-wrapper"
+                    }
+                  >
                     <img
                       className="image"
                       src={el.plantImgs[el.plantImgs.length - 1].imgUrl}
@@ -150,7 +162,7 @@ const MyPlants = ({ myPlantsData, handlePlantClick }) => {
           <GrNext className="icon" />
         </div>
       </StyledMyPlantsDashBoard>
-      {isPanelOpened && <MyPlantInfo />}
+      {isPanelOpened && <MyPlantInfo currentPlantData={currentPlantData} />}
     </StyledContainer>
   );
 };
