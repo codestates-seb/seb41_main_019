@@ -8,6 +8,7 @@ import com.main19.server.auth.handler.MemberAuthenticationFailureHandler;
 import com.main19.server.auth.handler.MemberAuthenticationSuccessHandler;
 import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.auth.utils.CustomAuthorityUtils;
+import com.main19.server.redis.RedisDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +33,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final RedisDao redisDao;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -52,8 +54,9 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         // TODO Admin 계정 생성시 권한 추가가 필요합니다.
+                        .antMatchers(HttpMethod.POST, "/members/reissues/**").permitAll()
                         .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER")
-                        .antMatchers(HttpMethod.GET, "/members/**").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/members/**").hasRole("USER") // 로그아웃, refresh토큰 재발행
                         .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("USER")
                         .antMatchers(HttpMethod.POST, "/posts/**").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/posts/**").hasRole("USER")
@@ -97,7 +100,8 @@ public class SecurityConfiguration {
         public void configure(HttpSecurity builder) throws Exception { // configure() 메서드를 오버라이드 해서 Cunfiguration 을 커스터마이징 할 수 있다.
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class); // getSharedObject(AuthenticationManager.class) 를 통해 AuthenticationManager의 객체를 얻을 수 있다.
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer); // JwtAuthenticationFilter에 사용되는 객체 DI
+            JwtAuthenticationFilter jwtAuthenticationFilter =
+                    new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, redisDao); // JwtAuthenticationFilter에 사용되는 객체 DI
             jwtAuthenticationFilter.setFilterProcessesUrl("/member");
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());

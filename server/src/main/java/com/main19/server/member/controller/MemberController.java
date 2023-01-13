@@ -3,8 +3,11 @@ package com.main19.server.member.controller;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.member.entity.Member;
+import com.main19.server.redis.RedisDao;
+import org.springframework.http.HttpHeaders;
 import com.main19.server.s3service.S3StorageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,6 +32,7 @@ public class MemberController {
 
     private final MemberMapper mapper;
     private final MemberService memberService;
+    private final JwtTokenizer jwtTokenizer;
     private final S3StorageService storageService;
 
     @PostMapping
@@ -72,5 +76,27 @@ public class MemberController {
         @PathVariable("member-id") @Positive long memberId) {
         memberService.deleteMember(memberId,token);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/logouts")
+    public ResponseEntity logout(@RequestHeader("Authorization") String token) {
+        long memberId = jwtTokenizer.getMemberId(token);
+        String email = memberService.findMember(memberId).getEmail();
+        jwtTokenizer.deleteToken(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/reissues")
+    public ResponseEntity reissueRefreshToken(@RequestHeader("Refresh") String token) {
+        long memberId = jwtTokenizer.getMemberId(token);
+        Member findMember = memberService.findMember(memberId);
+        String refreshToken = jwtTokenizer.findRefreshToken(findMember);
+        String reissuedAtk = jwtTokenizer.reissueAtk(findMember);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + reissuedAtk);
+        headers.add("Refresh", refreshToken);
+
+        return ResponseEntity.ok().headers(headers).build();
     }
 }
