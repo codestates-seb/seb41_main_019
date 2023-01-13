@@ -10,6 +10,7 @@ import { BsBookmark } from "react-icons/bs";
 import MyPlants from "../components/MyPage/MyPlants";
 import UserInfo from "../components/MyPage/UserInfo";
 import Gallery from "../components/MyPage/Gallery";
+import AddPlant from "../components/MyPage/AddPlant";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -51,7 +52,7 @@ const StyledChangeViewButton = styled.div`
   }
 `;
 
-const MyPage = ({ setIsCovered }) => {
+const MyPage = ({ isCovered, handleIsCovered }) => {
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
   const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
@@ -109,48 +110,52 @@ const MyPage = ({ setIsCovered }) => {
   // defaultProps로 해결해야하나?
 
   return (
-    <StyledContainer>
-      <UserInfo />
-      {isFolderOpened && isFolderOpened ? (
-        <>
-          <MyPlants
-            myPlantsData={myPlantsData}
-            handlePlantClick={handlePlantClick}
-          />
-          <StyledMyPlantFolder onClick={handleFolderClick}>
-            <Gallery galleryData={galleryData} currentView={currentView} />
-            <p>
-              My Plants 접기 <TiArrowSortedUp />
-            </p>
-          </StyledMyPlantFolder>
-        </>
-      ) : (
-        <>
-          <StyledMyPlantFolder>
-            <p onClick={handleFolderClick}>
-              My Plants 펼치기 <TiArrowSortedDown />
-            </p>
-            <StyledChangeViewContainer>
-              <StyledChangeViewButton
-                onClick={handlePostingsClick}
-                className={currentView === "postings" ? "selected" : ""}
-              >
-                <BsGrid3X3 />
-                <span>게시물</span>
-              </StyledChangeViewButton>
-              <StyledChangeViewButton
-                onClick={handleScrapsClick}
-                className={currentView === "scraps" ? "selected" : ""}
-              >
-                <BsBookmark />
-                <span>스크랩</span>
-              </StyledChangeViewButton>
-            </StyledChangeViewContainer>
-            <Gallery galleryData={galleryData} currentView={currentView} />
-          </StyledMyPlantFolder>
-        </>
-      )}
-    </StyledContainer>
+    <>
+      {isCovered && <AddPlant handleIsCovered={handleIsCovered} />}
+      <StyledContainer>
+        <UserInfo />
+        {isFolderOpened ? (
+          <>
+            <MyPlants
+              myPlantsData={myPlantsData}
+              handlePlantClick={handlePlantClick}
+              handleIsCovered={handleIsCovered}
+            />
+            <StyledMyPlantFolder onClick={handleFolderClick}>
+              <Gallery galleryData={galleryData} currentView={currentView} />
+              <p>
+                My Plants 접기 <TiArrowSortedUp />
+              </p>
+            </StyledMyPlantFolder>
+          </>
+        ) : (
+          <>
+            <StyledMyPlantFolder>
+              <p onClick={handleFolderClick}>
+                My Plants 펼치기 <TiArrowSortedDown />
+              </p>
+              <StyledChangeViewContainer>
+                <StyledChangeViewButton
+                  onClick={handlePostingsClick}
+                  className={currentView === "postings" ? "selected" : ""}
+                >
+                  <BsGrid3X3 />
+                  <span>게시물</span>
+                </StyledChangeViewButton>
+                <StyledChangeViewButton
+                  onClick={handleScrapsClick}
+                  className={currentView === "scraps" ? "selected" : ""}
+                >
+                  <BsBookmark />
+                  <span>스크랩</span>
+                </StyledChangeViewButton>
+              </StyledChangeViewContainer>
+              <Gallery galleryData={galleryData} currentView={currentView} />
+            </StyledMyPlantFolder>
+          </>
+        )}
+      </StyledContainer>
+    </>
   );
 };
 

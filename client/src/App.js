@@ -23,7 +23,9 @@ function App() {
         />
         <Route
           path={"/mypage"}
-          element={<MyPage handleIsCovered={handleIsCovered} />}
+          element={
+            <MyPage handleIsCovered={handleIsCovered} isCovered={isCovered} />
+          }
         />
         <Route path={"/posting"} element={<Posting />} />
       </Routes>

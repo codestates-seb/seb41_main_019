@@ -85,11 +85,12 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({ myPlantsData, handlePlantClick }) => {
+const MyPlants = ({ myPlantsData, handlePlantClick, handleIsCovered }) => {
   const [isPanelOpened, setIsPanelOpened] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState();
 
   const handleAddPlantClick = () => {
+    handleIsCovered();
     // 식물 추가 로직
   };
 
