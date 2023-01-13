@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { RiLeafLine } from "react-icons/ri";
 import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu, AiFillSetting, AiOutlineClockCircle, AiOutlinePoweroff, } from "react-icons/ai";
-import { BsSearch, BsPerson, BsFillJournalBookmarkFill } from "react-icons/bs";
+import { BsSearch, BsPerson, BsFillJournalBookmarkFill, BsPlusSquareDotted } from "react-icons/bs";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { FaExchangeAlt } from "react-icons/fa";
 import { useState } from "react";
@@ -40,7 +40,7 @@ const StyledSidebar = styled.aside`
     margin: 0px;
     display: inline-flex;
     flex-direction: column;
-    height: 200px;
+    height: 250px;
     justify-content: space-between;
 
     li {
@@ -99,8 +99,7 @@ const StyledSidebar = styled.aside`
     border: 1px solid #dbdbdb;
     box-shadow: 0px;
 
-    h2,
-    div {
+    h2, div {
       display: none;
     }
 
@@ -254,6 +253,9 @@ const Sidebar = () => {
             </li>
             <li onClick={() => navigate("/mypage")}>
               <BsPerson /> <span>프로필</span>
+            </li>
+            <li onClick={() => navigate("/posting")}>
+              <BsPlusSquareDotted /> <span>작성하기</span>
             </li>
           </ul>
         </nav>
