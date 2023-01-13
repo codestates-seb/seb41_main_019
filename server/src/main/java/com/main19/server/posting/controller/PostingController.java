@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+import com.main19.server.posting.ffmpeg.service.FFmpegService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -149,6 +150,6 @@ public class PostingController {
         storageService.remove(mediaId);
         postingService.deleteMedia(mediaId,token);
 
-        return new ResponseEntity<>("Selected media deleted successfully.", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
