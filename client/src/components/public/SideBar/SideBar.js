@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { RiLeafLine } from "react-icons/ri";
 import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu } from "react-icons/ai";
-import { BsSearch, BsPerson } from "react-icons/bs";
+import { BsSearch, BsPerson, BsPlusSquareDotted } from "react-icons/bs";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ const StyledSidebar = styled.aside`
     margin: 0px;
     display: inline-flex;
     flex-direction: column;
-    height: 200px;
+    height: 250px;
     justify-content: space-between;
 
     li {
@@ -266,6 +266,9 @@ const Sidebar = () => {
             </li>
             <li onClick={() => navigate("/mypage")}>
               <BsPerson /> <span>프로필</span>
+            </li>
+            <li onClick={() => navigate("/posting")}>
+              <BsPlusSquareDotted /> <span>작성하기</span>
             </li>
           </ul>
         </nav>

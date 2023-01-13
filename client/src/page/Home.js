@@ -1,6 +1,8 @@
 import Recommends from "../components/Home/Recommends";
 import Feeds from "../components/Home/Feeds";
 import styled from "styled-components";
+import View from "../components/Home/View";
+import { useState } from "react";
 
 const StyledMain = styled.main`
     margin: 0px 300px 0px 270px;
@@ -14,12 +16,22 @@ const StyledMain = styled.main`
     }
 `;
 
-const Home = () => {
+const Home = ({ handleIsCovered }) => {
+    const [modal, setModal] = useState(false);
+
+    const handleModal = () => {
+        handleIsCovered();
+        setModal(!modal);
+    }
+
     return (
+        <>
+        <View modal={modal} handleModal={handleModal} />
         <StyledMain>
             <Recommends />
-            <Feeds />
+            <Feeds handleModal={handleModal}/>
         </StyledMain>
+        </>
     )
 }
 
