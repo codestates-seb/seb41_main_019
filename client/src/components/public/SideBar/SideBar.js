@@ -196,7 +196,7 @@ const StyledHeader = styled.header`
 `;
 
 const StyledExtend = styled.div`
-  >div {
+  > div {
     position: fixed;
     top: 0px;
     left: 60px; 
@@ -209,6 +209,7 @@ const StyledExtend = styled.div`
 
   .active {
     width: 350px;
+    border-right : 1px solid #DBDBDB; 
   }
 `
 
