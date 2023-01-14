@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import { RiLeafLine } from "react-icons/ri";
-import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu, AiFillSetting, AiOutlineClockCircle, AiOutlinePoweroff, } from "react-icons/ai";
-import { BsSearch, BsPerson, BsFillJournalBookmarkFill, BsPlusSquareDotted } from "react-icons/bs";
+import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu } from "react-icons/ai";
+import { BsSearch, BsPerson, BsPlusSquareDotted } from "react-icons/bs";
 import { IoAlertCircleOutline } from "react-icons/io5";
-import { FaExchangeAlt } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import SideModal from "./SideModal";
+import Search from "../Search/Search";
+import Chat from "../Chat/Chat";
 
 const StyledSidebar = styled.aside`
   z-index: 600;
@@ -20,12 +22,14 @@ const StyledSidebar = styled.aside`
   border-right: 1px solid #dbdbdb;
   color: #222426;
   background-color: white;
+  transition: width 0.2s ease;
 
   h2 {
     display: flex;
     align-items: flex-end;
     font-weight: 400;
     letter-spacing: 2px;
+    cursor : pointer;
   }
 
   nav h2 svg {
@@ -34,7 +38,7 @@ const StyledSidebar = styled.aside`
     margin: 0px 0px 2px -2px;
   }
 
-  ul {
+  nav ul {
     list-style: none;
     padding: 0px;
     margin: 0px;
@@ -55,7 +59,7 @@ const StyledSidebar = styled.aside`
     }
   }
 
-  div {
+  > div {
     display: inline-block;
     display: flex;
     align-items: flex-end;
@@ -71,10 +75,11 @@ const StyledSidebar = styled.aside`
     }
   }
 
-  @media screen and (max-width: 1255px) {
-    width: 60px;
+  ${({ isOpend }) => isOpend ? 
+  `{
+    width: 60px; 
 
-    ul li span {
+    nav ul li span {
       display: none;
     }
 
@@ -82,7 +87,25 @@ const StyledSidebar = styled.aside`
       display: none;
     }
 
-    div span {
+    > div > span {
+      display: none;
+    }
+
+    transition: width 0.2s ease;
+  }` : null}
+
+  @media screen and (max-width: 1255px) {
+    width: 60px;
+
+    nav ul li span {
+      display: none;
+    }
+
+    nav h2 span {
+      display: none;
+    }
+
+    > div > span {
       display: none;
     }
   }
@@ -117,45 +140,6 @@ const StyledSidebar = styled.aside`
     .none {
       display: none;
     }
-  }
-`;
-
-const StyledModal = styled.div`
-  display: inline-block;
-  z-index: 999;
-  background-color: white;
-  margin-left: 10px;
-  position: absolute;
-  left: 5px;
-  bottom: 45px;
-  width: 210px;
-  border-radius: 3px;
-  border: 1px solid #dbdbdb;
-  color: #222426;
-  border-bottom: 0px;
-
-  ul {
-    margin: 0px;
-    padding: 0px;
-    width: 100%;
-    list-style: none;
-
-    li {
-      display: block;
-      display: flex;
-      border-bottom: 1px solid #dbdbdb;
-      justify-content: space-between;
-      padding: 8px 15px;
-      cursor: pointer;
-
-      svg {
-        color: #222426;
-      }
-    }
-  }
-
-  @media screen and (max-width: 770px) {
-    display: none;
   }
 `;
 
@@ -211,12 +195,35 @@ const StyledHeader = styled.header`
   }
 `;
 
+const StyledExtend = styled.div`
+  >div {
+    position: fixed;
+    top: 0px;
+    left: 60px; 
+    width: 0px;
+    height: 100%;
+    transition: width 0.2s linear;
+    overflow: hidden;
+    background-color: white;
+  }
+
+  .active {
+    width: 350px;
+  }
+`
+
 const Sidebar = () => {
-  const [modalView, setModalView] = useState(false);
+  const [opendModal, setOpendModal] = useState(false);
+  const [isOpend, setIsOpend] = useState(null);
   const navigate = useNavigate();
 
-  const openModal = () => {
-    setModalView(!modalView);
+  const handleIsOpend = (value) => {
+    if(value) setIsOpend(value);
+    else if(isOpend) setIsOpend(null);
+  }
+
+  const handleOpendModal = () => {
+    setOpendModal(!opendModal);
   };
 
   return (
@@ -231,21 +238,27 @@ const Sidebar = () => {
           <input type="text" placeholder="Search..."></input>
         </div>
       </StyledHeader>
-      <StyledSidebar>
+      <StyledSidebar isOpend={isOpend} className="isOpend">
         <nav>
-          <h2 onClick={() => navigate("/")}>
+          <h2 onClick={() =>{
+            handleIsOpend();
+            navigate("/")
+          }}>
             <span>IncleaF</span>
             <RiLeafLine />
           </h2>
           <ul>
-            <li onClick={() => navigate("/")}>
+            <li onClick={() =>{
+            handleIsOpend();
+            navigate("/")
+          }}>
               <AiOutlineHome /> <span>홈</span>
             </li>
-            <li className="none">
+            <li className="none" onClick={() => handleIsOpend("Search")}>
               <BsSearch />
               <span> 검색</span>
             </li>
-            <li>
+            <li onClick={() => handleIsOpend("Chat")}>
               <AiOutlineMessage /> <span>채팅</span>
             </li>
             <li>
@@ -259,37 +272,22 @@ const Sidebar = () => {
             </li>
           </ul>
         </nav>
-        <div onClick={openModal}>
+        {
+          opendModal ? <SideModal /> : null
+        }
+        <div onClick={handleOpendModal}>
           <AiOutlineMenu />
           <span>더 보기</span>
         </div>
       </StyledSidebar>
-      {modalView ? (
-        <StyledModal>
-          <ul>
-            <li>
-              <span>설정</span>
-              <AiFillSetting />
-            </li>
-            <li>
-              <span>스크랩</span>
-              <BsFillJournalBookmarkFill />
-            </li>
-            <li>
-              <span>내 활동</span>
-              <AiOutlineClockCircle />
-            </li>
-            <li>
-              <span>계정 전환</span>
-              <FaExchangeAlt />
-            </li>
-            <li>
-              <span>로그아웃</span>
-              <AiOutlinePoweroff />
-            </li>
-          </ul>
-        </StyledModal>
-      ) : null}
+      <StyledExtend>
+        <div className={isOpend === "Search" ? "active" : null}>
+          <Search />
+        </div>
+        <div className={isOpend === "Chat" ? "active" : null}>
+          <Chat />
+        </div>
+      </StyledExtend>
     </>
   );
 };

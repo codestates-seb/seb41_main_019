@@ -9,9 +9,13 @@ const Wrapper = styled.div`
         flex-direction: row;
     }
 
-    >div > svg {
+    > div > svg {
         position: relative;
         left : -15px;
+    }
+
+    input {
+        display: none;
     }
 `
 
@@ -29,6 +33,7 @@ const StyledDiv = styled.div`
         width: 100%;
         height: 100%;
     }
+
     svg {
         width: 50px;
         height: 50px;
@@ -36,8 +41,6 @@ const StyledDiv = styled.div`
 `;
 
 const StyledCancel = styled.div`
-    width : 0px;
-    height : 0px;
 
     svg {
         position: relative;
@@ -52,7 +55,10 @@ const Upload = () => {
 
     const onFileInputClick = (e) => {
         fileInputRef.current.click();
-        // console.log(fileInputRef)
+    };
+
+    const handleDelete = (index) => {
+        setImages([...images.slice(0, index), ...images.slice(index+1)]);
     };
 
     return (
@@ -65,14 +71,15 @@ const Upload = () => {
                     {
                         images.map((image, idx) => {
                             return (
-                            <>
-                                <StyledDiv key={idx}>
-                                    <img src={image} alt="img" />
-                                </StyledDiv>
-                                <StyledCancel>
-                                    <AiOutlineClose />
-                                </StyledCancel>
-                            </>)
+                                <>
+                                    <StyledDiv key={idx}>
+                                        <img src={image} alt="img" />
+                                    </StyledDiv>
+                                    <StyledCancel>
+                                        <AiOutlineClose onClick={handleDelete} />
+                                    </StyledCancel>
+                                </>
+                            )
                         })
                     }
                 </div>

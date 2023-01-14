@@ -1,5 +1,7 @@
-import Upload from "../components/Posting/Upload";
 import styled from "styled-components";
+import Upload from "../components/Posting/Upload";
+import Tag from "../components/Posting/Tag";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper= styled.div`
     position: absolute;
@@ -17,8 +19,6 @@ const Wrapper= styled.div`
     padding: 50px;
     color: gray;
 
-    
-
     button {
         width: 100px;
         height: 40px;
@@ -26,6 +26,7 @@ const Wrapper= styled.div`
         border-radius: 5px;
         cursor: pointer;
         margin-right: 10px;
+        box-shadow: 1px 3px 8px -2px rgb(90, 90, 90);
     }
 
     .enroll {
@@ -46,25 +47,23 @@ const StyledTextarea = styled.textarea`
     border-radius: 5px;
 `;
 
-const StyledTag = styled.input`
-    width: 100px;
-    height: 40px;
-    border: 1px solid #dbdbdb;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 20px;
-`;
-
 const Posting = () => {
+    const navigate = useNavigate();
+
+    const handleCancel = () => {
+        alert("취소되었습니다.")
+        navigate("/");
+    };
+
     return (
         <>
             <Wrapper>
                 <Upload />
                 <StyledTextarea placeholder="당신의 식물을 소개해주세요."/>
-                <StyledTag placeholder="# 키워드" />
+                <Tag />
                 <div>
                     <button className="enroll">등록</button>
-                    <button className="cancel">취소</button>
+                    <button className="cancel" onClick={handleCancel}>취소</button>
                 </div>
             </Wrapper>
         </>
