@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import SideModal from "./SideModal";
 import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
+import Alert from "../Alert/Alert";
 
 const StyledSidebar = styled.aside`
   z-index: 600;
@@ -262,7 +263,7 @@ const Sidebar = () => {
             <li onClick={() => handleIsOpend("Chat")}>
               <AiOutlineMessage /> <span>채팅</span>
             </li>
-            <li>
+            <li onClick={() => handleIsOpend("Alert")}>
               <IoAlertCircleOutline /> <span>알림</span>
             </li>
             <li onClick={() => navigate("/mypage")}>
@@ -287,6 +288,9 @@ const Sidebar = () => {
         </div>
         <div className={isOpend === "Chat" ? "active" : null}>
           <Chat />
+        </div>
+        <div className={isOpend === "Alert" ? "active" : null}>
+          <Alert />
         </div>
       </StyledExtend>
     </>
