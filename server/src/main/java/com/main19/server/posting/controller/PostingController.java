@@ -159,6 +159,6 @@ public class PostingController {
         storageService.remove(mediaId);
         postingService.deleteMedia(mediaId,token);
 
-        return new ResponseEntity<>("Selected media deleted successfully.", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
