@@ -3,11 +3,12 @@ import { RiLeafLine } from "react-icons/ri";
 import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu } from "react-icons/ai";
 import { BsSearch, BsPerson, BsPlusSquareDotted } from "react-icons/bs";
 import { IoAlertCircleOutline } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideModal from "./SideModal";
 import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
+import { useLocation } from "react-router-dom";
 
 const StyledSidebar = styled.aside`
   z-index: 600;
@@ -213,10 +214,17 @@ const StyledExtend = styled.div`
   }
 `
 
-const Sidebar = () => {
+const Sidebar = ({ setIsLanded }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
+  const location = useLocation().pathname;
+
+  useEffect(() => {
+    if(location === "/landing") {
+      setIsLanded(true);
+    }
+  }, [location, setIsLanded])
 
   const handleIsOpend = (value) => {
     if(value === isOpend) setIsOpend(null);   

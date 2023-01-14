@@ -2,19 +2,21 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SideBar from "../src/components/public/SideBar/SideBar";
 import Home from "./page/Home";
 import MyPage from "./page/MyPage";
-import Posting from "./page/Posting";
+import Landing from "./page/Landing";
 import Background from "./components/public/Background";
 import { useState } from "react";
 
 function App() {
   const [isCovered, setIsCovered] = useState(false);
-
-  const handleIsCovered = () => setIsCovered(!isCovered);
+  const [isLanded, setIsLanded] = useState(false);
+  const handleIsCovered = () => setIsCovered(!isCovered); 
 
   return (
     <BrowserRouter>
       <Background isCovered={isCovered} handleIsCovered={handleIsCovered} />
-      <SideBar />
+      {
+        isLanded ? null : <SideBar setIsLanded={setIsLanded} />
+      }
       <Routes>
         <Route
           path={"/"}
@@ -24,7 +26,7 @@ function App() {
           path={"/mypage"}
           element={<MyPage handleIsCovered={handleIsCovered} />}
         />
-        <Route path={"/posting"} element={<Posting />} />
+        <Route path={"/landing"} element={<Landing />} />
       </Routes>
     </BrowserRouter>
   );
