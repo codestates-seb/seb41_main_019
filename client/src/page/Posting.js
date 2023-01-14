@@ -41,10 +41,11 @@ const Wrapper= styled.div`
 `;
 
 const StyledTextarea = styled.textarea`
-    width: 80%;
+    width: 100%;
     height: 200px;
     border: 1px solid #dbdbdb;
     border-radius: 5px;
+    padding-left: 10px;
 `;
 
 const Posting = () => {

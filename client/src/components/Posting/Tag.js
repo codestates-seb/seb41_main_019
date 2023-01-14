@@ -1,7 +1,21 @@
 import styled from "styled-components";
+import { useState } from "react";
 
 const Wrapper = styled.div`
     display: flex;
+    border: 1px solid #dbdbdb;
+    padding: 10px 10px;
+    width: 100%;
+
+    input {
+        width: 80px;
+        height: 40px;
+        border: 1px solid #dbdbdb;
+        border-radius: 5px;
+        cursor: pointer;
+        padding: 10px;
+    }
+
     ul {
         display: flex;
         margin: 0;
@@ -19,37 +33,33 @@ const Wrapper = styled.div`
     }
 `;
 
-const StyledTag = styled.input`
-    width: 100px;
-    height: 40px;
-    border: 1px solid #dbdbdb;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 20px;
-`;
-
 const Tag = () => {
+    const [tags, setTags] = useState([]);
 
-    const handleEnter = (e) => {
-        if(e.key === 'Enter'){
-            return <StyledTag>{e.target.value}</StyledTag>
+    const tagList = tags.map((tag,idx) => {
+        return (
+            <li key={idx}>{tag}</li>
+        )
+    });
+
+    const addTags = (e) => {
+        if(e.key === "Enter" && e.target.value.length > 0) {
+            setTags([...tags, e.target.value]);
+            e.target.value = "";
         }
-    } 
+        deleteTags(e);
+    };
 
-    const tags = ["몬스테라 알보", "식테크"];
+    const deleteTags = (e) => {
+        if(e.key === "Backspace") {
+            setTags(tags.slice(0, tags.length - 1));
+        }
+    };
 
     return (
-        <Wrapper>
-            <StyledTag placeholder="# 키워드" onKeyUp={handleEnter}/>
-            <ul>
-            {
-                tags.map((el,idx) => {
-                    return (
-                            <li key={idx}>{el}</li>
-                    )
-                })
-            }
-            </ul>
+        <Wrapper className="tags">
+            <ul>{tagList}</ul>
+            <input onKeyUp={addTags} placeholder="# 키워드"></input>
         </Wrapper>
     )
 };
