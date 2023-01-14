@@ -60,7 +60,6 @@ const StyledSlider = styled.div`
         @media screen and (max-width: 1024px) {
             width: 70%;
             height: 100%;
-            
         }
     }
 
@@ -79,8 +78,6 @@ const StyledInteraction = styled.div`
     flex-direction: column;
 
     > div:first-child {
-        margin: 0px 0px 0px auto;
-
         @media screen and (max-width: 1024px){
             padding: 5px;
         }
@@ -103,6 +100,10 @@ const StyledInteraction = styled.div`
 
         > span:nth-child(2){
             font-size: 20px;
+        }
+
+        > div {
+            margin : -5px 0px 0px auto;
         }
     }
 
@@ -135,11 +136,11 @@ const View = ({ handleModal }) => {
                     }
                 </StyledSlider>
                 <StyledInteraction>
-                    <CloseBtn handleModal={handleModal} />
                     <div className="profile">
                         <img src={A} alt="profileImg" />
                         <span>홍길동</span>
                         <span>7시간 전</span>
+                        <CloseBtn handleModal={handleModal} />
                     </div>
                     <FeedInteraction type={1} />
                     <Comments />

@@ -8,7 +8,7 @@ const StyledSection = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px auto 40px auto;
+    margin: 0px auto 40px auto;
 `;
 
 const StyledHeader = styled.header`
@@ -16,6 +16,7 @@ const StyledHeader = styled.header`
     display: flex;
     align-items: center;
     gap: 40px;
+    margin-top: 8px;
 
     .active {
         border-bottom: 4px solid #A7C4BC;

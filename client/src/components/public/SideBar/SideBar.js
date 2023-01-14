@@ -196,7 +196,7 @@ const StyledHeader = styled.header`
 `;
 
 const StyledExtend = styled.div`
-  >div {
+  > div {
     position: fixed;
     top: 0px;
     left: 60px; 
@@ -209,10 +209,11 @@ const StyledExtend = styled.div`
 
   .active {
     width: 350px;
+    border-right : 1px solid #DBDBDB; 
   }
 `
 
-const Sidebar = () => {
+const Sidebar = ({ handleIsPosted }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
@@ -267,7 +268,7 @@ const Sidebar = () => {
             <li onClick={() => navigate("/mypage")}>
               <BsPerson /> <span>프로필</span>
             </li>
-            <li onClick={() => navigate("/posting")}>
+            <li onClick={handleIsPosted}>
               <BsPlusSquareDotted /> <span>작성하기</span>
             </li>
           </ul>

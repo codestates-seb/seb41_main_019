@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Feed from "./Feed";
 
-const Wrapper = styled.div`
+const Wrapper = styled.section`
     display: flex;
     flex-direction: column;
     align-items: center;

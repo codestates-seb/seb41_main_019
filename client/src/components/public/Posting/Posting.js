@@ -22,6 +22,10 @@ const Wrapper= styled.div`
     color: gray;
     z-index: 1000;
 
+    > div:first-child {
+        margin: 0 0 0 auto;
+    }
+
     button {
         width: 100px;
         height: 40px;
@@ -40,6 +44,14 @@ const Wrapper= styled.div`
     .cancel {
         background-color: #D96848;
         color: white;
+    }
+
+    @media screen and (max-width: 1255px) {
+        width: 700px;
+    }
+
+    @media screen and (max-width: 770px) {
+        width: 500px;
     }
 `;
 
@@ -67,18 +79,16 @@ const Posting = ({ handleIsPosted }) => {
     };
 
     return (
-        <>
-            <Wrapper>
-                <CloseBtn handleModal={handleIsPosted}/>
-                <Upload />
-                <StyledTextarea placeholder="당신의 식물을 소개해주세요."/>
-                <Tag />
-                <div>
-                    <button className="enroll">등록</button>
-                    <button className="cancel" onClick={handleCancel}>취소</button>
-                </div>
-            </Wrapper>
-        </>
+        <Wrapper>
+            <CloseBtn handleModal={handleIsPosted}/>
+            <Upload />
+            <StyledTextarea placeholder="당신의 식물을 소개해주세요."/>
+            <Tag />
+            <div>
+                <button className="enroll">등록</button>
+                <button className="cancel" onClick={handleCancel}>취소</button>
+            </div>
+        </Wrapper>
     )
 }
 
