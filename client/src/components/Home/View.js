@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { AiOutlineClose } from "react-icons/ai";
 import Slider from "./Slider";
 import A from "../../assets/img/plants/1.jpg";
 import B from "../../assets/img/plants/알보1.png";
 import FeedInteraction from "./FeedInteraction";
 import Comments from "./Comments";
 import { useEffect } from "react";
+import CloseBtn from "../public/CloseBtn";
 
 const Wrapper = styled.div`
     display: flex;
@@ -117,7 +117,7 @@ const StyledInteraction = styled.div`
 `;
 
 
-const View= ({ handleModal }) => {
+const View = ({ handleModal }) => {
     const img = [ A ] ;
 
     useEffect(() => {
@@ -135,9 +135,7 @@ const View= ({ handleModal }) => {
                     }
                 </StyledSlider>
                 <StyledInteraction>
-                    <div>
-                        <AiOutlineClose onClick={() => handleModal()} />
-                    </div>
+                    <CloseBtn handleModal={handleModal} />
                     <div className="profile">
                         <img src={A} alt="profileImg" />
                         <span>홍길동</span>
