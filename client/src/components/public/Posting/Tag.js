@@ -8,12 +8,18 @@ const Wrapper = styled.div`
     width: 100%;
 
     input {
-        width: 80px;
+        display: inline-block;
+        width: 100%;
         height: 40px;
         border: 1px solid #dbdbdb;
         border-radius: 5px;
         cursor: pointer;
         padding: 10px;
+        outline: none;
+
+        :focus {
+            box-shadow: 0 0 6px #5e8b7e;
+        }
     }
 
     ul {
@@ -24,12 +30,14 @@ const Wrapper = styled.div`
     }
 
     ul li {
-        width: 200px;
-        height: 40px;
+        display: flex;
+        align-items: center;
         border: 1px solid #dbdbdb;
         border-radius: 5px;
+        padding: 0px 10px 0px 10px;
         cursor: pointer;
-        padding: 20px;
+        margin: 0px 5px 0px 0px;
+        white-space: nowrap;
     }
 `;
 

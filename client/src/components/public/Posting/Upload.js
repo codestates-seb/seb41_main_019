@@ -4,14 +4,13 @@ import { AiOutlineClose } from "react-icons/ai";
 import React, { useRef, useState } from "react";
 
 const Wrapper = styled.div`
+    > p {
+        margin: 0px 0px 10px 0px;
+    }
+
     > div:nth-of-type(1) {
         display: flex;
         flex-direction: row;
-    }
-
-    > div > svg {
-        position: relative;
-        left : -15px;
     }
 
     input {
@@ -37,11 +36,11 @@ const StyledDiv = styled.div`
     svg {
         width: 50px;
         height: 50px;
+        color: gray;
     }
 `;
 
 const StyledCancel = styled.div`
-
     svg {
         position: relative;
         left: -15px;
