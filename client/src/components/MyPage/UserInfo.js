@@ -3,7 +3,6 @@ import { AiFillSetting } from "react-icons/ai";
 import { useState } from "react";
 
 const StyledContainer = styled.div`
-  width: 750px;
   display: flex;
   margin-top: 20px;
   justify-content: center;
@@ -25,7 +24,7 @@ const StyledUserImgWrapper = styled.div`
 const StyledInfoBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 320px;
   height: 150px;
   > div {
     height: 50px;

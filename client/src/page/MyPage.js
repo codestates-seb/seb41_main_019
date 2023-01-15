@@ -15,11 +15,21 @@ import AddPlant from "../components/MyPage/AddPlant";
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0px 300px 0px 270px;
-  width: 750px;
+  margin: 0 300px 0 270px;
+
+  > .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const StyledMyPlantFolder = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 500px;
   border-bottom: solid 1px #dbdbdb;
   p {
     display: flex;
@@ -115,7 +125,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
       <StyledContainer>
         <UserInfo />
         {isFolderOpened ? (
-          <>
+          <div className="container">
             <MyPlants
               myPlantsData={myPlantsData}
               handlePlantClick={handlePlantClick}
@@ -127,9 +137,9 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
                 My Plants 접기 <TiArrowSortedUp />
               </p>
             </StyledMyPlantFolder>
-          </>
+          </div>
         ) : (
-          <>
+          <div className="container">
             <StyledMyPlantFolder>
               <p onClick={handleFolderClick}>
                 My Plants 펼치기 <TiArrowSortedDown />
@@ -152,7 +162,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
               </StyledChangeViewContainer>
               <Gallery galleryData={galleryData} currentView={currentView} />
             </StyledMyPlantFolder>
-          </>
+          </div>
         )}
       </StyledContainer>
     </>

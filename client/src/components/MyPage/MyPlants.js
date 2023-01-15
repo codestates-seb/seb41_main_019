@@ -11,6 +11,7 @@ import { useState } from "react";
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 500px;
   margin: 20px 0;
 `;
 
