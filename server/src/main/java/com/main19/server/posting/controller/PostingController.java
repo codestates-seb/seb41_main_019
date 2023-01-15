@@ -62,13 +62,11 @@ public class PostingController {
 
         Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody),
             requestBody.getMemberId(), mediaPaths, token);
-
-        for (int i = 0; i < requestBody.getTagName().size(); i++) {
+        for(int i = 0; i < requestBody.getTagName().size(); i++) {
             tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
             PostingTags postingTags = mapper.postingPostDtoToPostingTag(requestBody);
-            Long postingId = posting.getPostingId();
             String tagName = requestBody.getTagName().get(i);
-            postingTagsService.createPostingTags(postingTags, postingId, tagName);
+            postingTagsService.createPostingTags(postingTags, posting, tagName);
         }
 
         return new ResponseEntity<>(
