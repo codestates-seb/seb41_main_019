@@ -1,5 +1,6 @@
 package com.main19.server.posting;
 
+import com.amazonaws.Request;
 import com.google.gson.Gson;
 import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.comment.dto.CommentDto;
@@ -20,6 +21,7 @@ import com.main19.server.posting.tags.entity.Tag;
 import com.main19.server.posting.tags.service.PostingTagsService;
 import com.main19.server.posting.tags.service.TagService;
 import com.main19.server.s3service.S3StorageService;
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -54,8 +57,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -86,9 +88,14 @@ public class PostingControllerRestDocs {
         String postingContent = "게시글 test";
         List<String> tagName = new ArrayList<>();
         tagName.add("스투키");
-        tagName.add("몬스테라");
 
         PostingPostDto post = new PostingPostDto(memberId, postingContent, tagName);
+
+        PostingTagsResponseDto tag = new PostingTagsResponseDto("스투키");
+
+        List<PostingTagsResponseDto> tags = new ArrayList<>();
+        tags.add(tag);
+
         String content = gson.toJson(post);
 
         LocalDateTime createdAt = LocalDateTime.now();
@@ -108,7 +115,7 @@ public class PostingControllerRestDocs {
                         new ArrayList<>(),
                         createdAt,
                         modifiedAt,
-                        new ArrayList<>(),
+                        tags,
                         0L,
                         new ArrayList<>(),
                         0L,
@@ -136,41 +143,45 @@ public class PostingControllerRestDocs {
                 .andExpect(status().isCreated());
 
         // then
-//        actions
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.data.memberId").value(post.getMemberId()))
-//                .andExpect(jsonPath("$.data.postingContent").value(post.getPostingContent()))
-//                .andExpect(jsonPath("$.data.tags").value(post.getTagName()))
-//                .andDo(document(
-//                        "posting",
-//                        getRequestPreProcessor(),
-//                        getResponsePreProcessor(),
-//                        requestHeaders(
-//                                headerWithName("Authorization").description("Bearer AccessToken")
-//                        ),
-//                        requestFields(
-//                                List.of(
-//                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
-//                                        fieldWithPath("postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-//                                        fieldWithPath("tagName").type(JsonFieldType.ARRAY).description("태그 이름")
-//                                )
-//                        ),
-//                        responseFields(
-//                                fieldWithPath("data.postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
-//                                fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
-//                                fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
-//                                fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
-//                                fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-//                                fieldWithPath("data.postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
-//                                fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
-//                                fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
-//                                fieldWithPath("data.tags").type(JsonFieldType.ARRAY).description("태그 이름"),
-//                                fieldWithPath("data.likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
-//                                fieldWithPath("data.postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
-//                                fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
-//                                fieldWithPath("data.comments").type(JsonFieldType.ARRAY).description("댓글 작성한 회원 리스르"),
-//                                fieldWithPath("data.scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트")
-//                        )
-//                ));
+        actions
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data.memberId").value(post.getMemberId()))
+                .andExpect(jsonPath("$.data.postingContent").value(post.getPostingContent()))
+                .andExpect(jsonPath("$.data.tags").value(tags))
+                .andDo(document(
+                        "posting",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        ),
+                        requestParts(
+                                RequestDocumentation.partWithName("multipartFiles").description("첨부파일"),
+                                RequestDocumentation.partWithName("requestBody").description("포스팅 내용")
+                        ),
+                        requestPartFields(
+                                "requestBody",
+                                List.of(fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                        fieldWithPath("postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                        fieldWithPath("tagName").type(JsonFieldType.ARRAY).description("태그 이름")
+                                )
+                        ),
+                        relaxedResponseFields(
+                                fieldWithPath("data.postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
+                                fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
+                                fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                fieldWithPath("data.postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
+                                fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
+                                fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
+                                fieldWithPath("data.tags").type(JsonFieldType.ARRAY).description("태그 이름"),
+                                fieldWithPath("data.likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
+                                fieldWithPath("data.postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
+                                fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
+                                fieldWithPath("data.comments").type(JsonFieldType.ARRAY).description("댓글 작성한 회원 리스르"),
+                                fieldWithPath("data.scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트")
+                        )
+                ));
     }
 }
