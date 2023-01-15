@@ -23,7 +23,7 @@ public class ChatRoomService {
 
         long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (receiverId != tokenId) {
+        if (senderId != tokenId) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
