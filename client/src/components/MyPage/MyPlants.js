@@ -47,8 +47,8 @@ const StyledMyPlantsItem = styled.div`
     border: 4px solid #ffb100;
   }
   .image-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 70%;
     overflow: hidden;
     cursor: pointer;
@@ -113,7 +113,7 @@ const MyPlants = ({ myPlantsData, handlePlantClick, handleIsCovered }) => {
         <StyledListsContainer>
           <StyledMyPlantsItem onClick={handleAddPlantClick}>
             <div className="image-wrapper">
-              <Cookie />
+              <Cookie className="image" />
             </div>
             <p>반려식물 추가</p>
           </StyledMyPlantsItem>
