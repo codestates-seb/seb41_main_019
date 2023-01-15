@@ -1,5 +1,4 @@
 import * as StompJs from '@stomp/stompjs';
-import { json } from 'react-router-dom';
 
 //sub/chat/
 
@@ -15,17 +14,16 @@ export const connect = () => {
 }
 
 
-export const subscribe = (idt) => {
-    client.subscribe(`/sub/chat/${idt}`, (frame) => {
-        console.log(frame);
-    })
+export const subscribe = (idt, func) => {
+    client.subscribe(`/pub/chat/${idt}`, func);
 }
 
-export const send = (idt, message, id) => {
+export const send = (idt, receiverId, senderId, message) => {
     client.publish({
-        destination: `/sub/chat${idt}`,
+        destination: `/pub/chat/${idt}`,
         body: JSON.stringify({
-            id : id,
+            receiverId,
+            senderId,
             chat : message
         })
     })

@@ -101,11 +101,19 @@ const Chatting = ({ curChat, handleCurChat, chatLog }) => {
 
   soltChat();
 
+  const handleSend = () => {
+    send(1, 1, 2, message);
+
+  }
+
   return (
     <div className="chat-area">
       <button onClick={() => connect()}>ac</button>
       <button onClick={() => disConnect()}>de</button>
-      <button onClick={() => subscribe(1)}>sub</button>
+      <button onClick={() => subscribe(1, (body) => {
+        const json = JSON.parse(body.body);
+        console.log(json, 1);
+      })}>sub</button>
       <div>
         <Friend friend={curChat} handleCurChat={handleCurChat} top />
       </div>
@@ -125,7 +133,7 @@ const Chatting = ({ curChat, handleCurChat, chatLog }) => {
       </StyledChatLog>
       <StyledInput>
         <input type="text" placeholder="text.." value={message} onChange={(e) => setMessage(e.target.value)}></input>
-        <button onClick={() => send(1, message, 1)}>Send</button>
+        <button onClick={handleSend}>Send</button>
       </StyledInput>
     </div>
   );
