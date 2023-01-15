@@ -114,21 +114,54 @@ const StyledMenu = styled.div`
     }
 `
 
-const StyledContent = styled.section`
+const StyledContents = styled.section`
     width: 100%;
     height: 100%;
-    background-color: blue;
-    overflow: scroll;
+    overflow: hidden;
 
     div {
-        width: 100%;
+        height: 0%;
+        transition: height 0.8s ease;
+    }
+
+    .located {
         height: 100%;
+    }
+
+    #one {
+        background-color: red;
+    }
+
+    #two {
+        background-color: blue;
+    }
+
+    #three {
+        background-color: orange;
     }
 `
 
 const Landing = () => {
     const [ selected, setSelected ] = useState(0);
     const [ located, setLocated ] = useState(0);
+    let timer;
+
+    const handleScroll = (e) => {
+        if(!timer) {
+            timer = setTimeout(() => {
+                timer = null;
+
+                if(e.deltaY > 0 && located < 2) {
+                    setLocated(located + 1);
+                }
+        
+                if(e.deltaY < 0 && located > 0) {
+                    setLocated(located - 1);
+                }
+            }, 500)
+        }
+    }
+
     return (
         <Wrapper>
             <StyledHeader>
@@ -151,36 +184,50 @@ const Landing = () => {
                     </ul>
                 </nav>
             </StyledHeader>
-            <StyledMain>
-                <StyledMenu located={located}>
-                    <ul>
-                        <li
-                            className={located === 0 ? "located" : null}
-                            onClick={() => setLocated(0)}>
-                            <TfiMinus />
-                            자랑하기!
-                        </li>
-                        <li className={located === 1 ? "located" : null}
-                            onClick={() => setLocated(1)}>
-                            <TfiMinus />
-                            꾸며보기!
-                        </li>
-                        <li className={located === 2 ? "located" : null}
-                            onClick={() => setLocated(2)}>
-                            <TfiMinus />
-                            소통하기!
-                        </li>
-                    </ul>
-                </StyledMenu>
-                <StyledContent>
-                    <div>
+            {
+                selected === 0 ?
+                (
+                    <StyledMain>
+                        <StyledMenu located={located}>
+                            <ul>
+                                <li
+                                    className={located === 0 ? "located" : null}
+                                    onClick={() => setLocated(0)}>
+                                    <TfiMinus />
+                                    자랑하기!
+                                </li>
+                                <li className={located === 1 ? "located" : null}
+                                    onClick={() => setLocated(1)}>
+                                    <TfiMinus />
+                                    꾸며보기!
+                                </li>
+                                <li className={located === 2 ? "located" : null}
+                                    onClick={() => setLocated(2)}>
+                                    <TfiMinus />
+                                    소통하기!
+                                </li>
+                            </ul>
+                        </StyledMenu>
+                        <StyledContents onWheel={handleScroll}>
+                            <div 
+                                id="one"
+                                className={located === 0 ? "located" : null}>
 
-                    </div>
-                    <div>
+                            </div>
+                            <div 
+                                id="two"
+                                className={located === 1 ? "located" : null}>
 
-                    </div>
-                </StyledContent>
-            </StyledMain>
+                            </div>
+                            <div 
+                                id="three"
+                                className={located === 2 ? "located" : null}>
+
+                            </div>
+                        </StyledContents>
+                    </StyledMain>
+                ) : null
+            }
         </Wrapper>
     )
 }
