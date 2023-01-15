@@ -18,7 +18,6 @@ const Wrapper = styled.div`
 
     input, textarea {
         width :300px;
-        height: 30px;
         outline: none;
         border: 1px solid #dbdbdb;
         border-radius: 5px;
@@ -27,6 +26,10 @@ const Wrapper = styled.div`
             outline: none;
             box-shadow: 0 0 6px #5e8b7e;
         }
+    }
+
+    input {
+        height: 30px;
     }
 `;
 
@@ -44,7 +47,7 @@ const StyledMenu = styled.div`
     }
 
     .active {
-        border-left: 3px solid #2F3020;
+        border-left: 3px solid #374435;
     }
 `
 

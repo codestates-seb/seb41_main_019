@@ -9,16 +9,22 @@ const Wrapper = styled.div`
     margin-top: 50px;
     gap: 30px;
 
+    input {
+        width: 150px;
+    }
+
     div {
         display: flex;
-        flex-direction: column;
-        gap: 20px;
+        flex-direction: row;
+
+        label {
+            width: 120px;
+        }
     }
 
     .profile {
         display: flex;
         flex-direction: row;
-        margin-bottom: 20px;
         align-items: center;
     }
 
@@ -33,10 +39,6 @@ const Wrapper = styled.div`
 const EditPw = () => {
     return (
         <Wrapper>
-            <div className="profile">
-                <div className="profileImg"></div>
-                <span>user1</span>
-            </div>
             <div>
                 <label htmlFor="currentPw">이전 비밀번호</label>
                 <input id="currentPw" />

@@ -6,23 +6,34 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
+    gap: 30px;
     margin-top: 50px;
 
     div {
         display: flex;
         justify-content: space-around;
         gap: 20px;
+
+        label {
+            width: 80px;
+        }
     }
 
     .profile {
         display: flex;
         flex-direction: row;
+        width: 400px;
         
         div:nth-of-type(2) {
             width: 300px;
             display: flex;
             flex-direction: column;
+
+            label {
+                color: blue;
+                cursor: pointer;
+                width: 50%;
+            }
         }
     }
     
