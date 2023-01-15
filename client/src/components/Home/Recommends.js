@@ -4,7 +4,7 @@ import Recommend from "./Recommend";
 import { allPlants, followPlants } from "../../assets/dummyData/plantImage";
 
 const StyledSection = styled.section`
-    width: 500px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -7,8 +7,8 @@ import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
 
 const Wrapper = styled.div`
-    width: 600px;
-    height: 850px;
+    width: 500px;
+    height: 730px;
     margin-bottom: 20px;
     border-bottom: 1px solid #DBDBDB;
 
@@ -23,16 +23,15 @@ const Wrapper = styled.div`
         color: #222426;
         cursor: pointer;
     }
-    @media screen and (max-width: 1255px) {
 
-    }
     @media screen and (max-width: 770px) {
-        width: 500px;
-        height: 750px;
+        width: 460px;
+        height: 700px;
     }
 `;
 
 const StyledHeader = styled.div`
+    width: 100%;
     display: flex;
     align-items: flex-end;
     margin-bottom: 10px;

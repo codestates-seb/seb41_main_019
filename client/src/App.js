@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SideBar from "../src/components/public/SideBar/SideBar";
 import Home from "./page/Home";
 import MyPage from "./page/MyPage";
+import Setting from "./page/Setting";
 import Posting from "./components/public/Posting/Posting";
 import Background from "./components/public/Background";
 import { useState } from "react";
@@ -28,6 +29,10 @@ function App() {
         <Route
           path={"/mypage"}
           element={<MyPage handleIsCovered={handleIsCovered} />}
+        />
+        <Route
+          path={"/setting"}
+          element={<Setting />}
         />
       </Routes>
     </BrowserRouter>
