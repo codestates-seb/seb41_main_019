@@ -39,13 +39,10 @@ public class PostingService {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		if (mediaPaths == null) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_AT_LEAST_ONE_MEDIA);
+		if (mediaPaths == null || mediaPaths.size() > 10) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}
-		// multipartFiles 열장 이상일 경우 x
-		if (mediaPaths.size() > 10) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_LESS_THAN_TEN_MEDIA);
-		}
+
 		Member findMember = memberService.findMember(memberId);
 		posting.setMember(findMember);
 
@@ -123,8 +120,8 @@ public class PostingService {
 		}
 
 		Posting findPosting = findVerifiedPosting(postingId);
-		if ( findPosting.getPostingMedias().size() + 1 > 10) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_LESS_THAN_TEN_MEDIA);
+		if (findPosting.getPostingMedias().size() + 1 > 10) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}
 		for (String mediaUrl: mediaPaths) {
 			Media media = new Media(mediaUrl, findPosting);

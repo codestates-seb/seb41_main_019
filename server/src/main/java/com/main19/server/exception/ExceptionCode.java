@@ -17,10 +17,7 @@ public enum ExceptionCode {
 	WRONG_MEDIA_FORMAT(405, "Wrong media format"), // 지원하는 포맷이 아닐 때
 	MEDIA_UPLOAD_ERROR(404, "Media upload error"), // s3에 업로드하다가 뭐 안됐을 때
 	MEDIA_NOT_FOUND(404, "Media not found"), // 찾는 첨부파일 없을 때 (s3, media테이블 공통)
-	POSTING_REQUIRES_AT_LEAST_ONE_MEDIA(405, "Posting requires at least one media"),
-	// 첨부파일 없이 포스팅 할 시, 포스팅 수정 시 사진 다 지우지 못하도록
-	POSTING_REQUIRES_LESS_THAN_TEN_MEDIA(405, "Posting requires less than ten media"),
-	// 첨부파일 너무 많으면 안대
+	POSTING_MEDIA_ERROR(405, "Posting requires at least one media or less than ten media"),
 	COMMENT_NOT_FOUND(404,"Comment Not Found"),
 	COMMENT_LIKE_NOT_FOUND(404,"Comment Not Found"),
 	COMMENT_LIKE_EXISTS(409,"You Already Pressed Like"),

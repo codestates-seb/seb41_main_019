@@ -62,6 +62,7 @@ public class PostingController {
 
         Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody),
             requestBody.getMemberId(), mediaPaths, token);
+
         for(int i = 0; i < requestBody.getTagName().size(); i++) {
             tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
             PostingTags postingTags = mapper.postingPostDtoToPostingTag(requestBody);
@@ -151,7 +152,7 @@ public class PostingController {
 
         Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
         if (posting.getPostingMedias().stream().count() == 1) {
-            throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_AT_LEAST_ONE_MEDIA);
+            throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
         }
 
         storageService.remove(mediaId);
