@@ -1,11 +1,14 @@
 package com.main19.server.sse.service;
 
 import com.main19.server.auth.jwt.JwtTokenizer;
+import com.main19.server.chatroom.entity.ChatRoom;
 import com.main19.server.comment.entity.Comment;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
+import com.main19.server.posting.entity.Posting;
 import com.main19.server.sse.entity.Sse;
 import com.main19.server.sse.entity.Sse.SseType;
+import com.main19.server.sse.mapper.SseMapper;
 import com.main19.server.sse.repository.EmitterRepositoryImpl;
 import com.main19.server.sse.repository.SseRepository;
 import java.io.IOException;
@@ -29,6 +32,7 @@ public class SseService {
 
     private final EmitterRepositoryImpl emitterRepository;
     private final SseRepository sseRepository;
+    private final SseMapper sseMapper;
     private final JwtTokenizer jwtTokenizer;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
@@ -78,11 +82,50 @@ public class SseService {
         );
     }
 
+    public void sendPosting(Member receiver, SseType sseType, Member sender, Posting posting) {
+        Sse sse = createSsePosting(receiver, sseType, sender, posting);
+        sseRepository.save(sse);
+        String id = String.valueOf(receiver.getMemberId());
+
+        Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmitterStartWithByMemberId(id);
+        sseEmitters.forEach(
+            (key, emitter) -> {
+                emitterRepository.saveEventCache(key, sse);
+                sendToClient(emitter, key, sseMapper.sseToSseResponseDto(sse));
+            }
+        );
+    }
+
+    public void sendChatRoom(Member receiver, SseType sseType, Member sender) {
+        Sse sse = createSse(receiver, sseType, sender);
+        sse.setPosting(null);
+        sseRepository.save(sse);
+        String id = String.valueOf(receiver.getMemberId());
+
+        Map<String, SseEmitter> sseEmitters = emitterRepository.findAllEmitterStartWithByMemberId(id);
+        sseEmitters.forEach(
+            (key, emitter) -> {
+                emitterRepository.saveEventCache(key, sse);
+                sendToClient(emitter, key, sseMapper.sseToSseResponseDto(sse));
+            }
+        );
+    }
+
     private Sse createSse(Member receiver, SseType sseType, Member sender) {
         return Sse.builder()
             .receiver(receiver)
             .sseType(sseType)
             .sender(sender)
+            .isRead(false)
+            .build();
+    }
+
+    private Sse createSsePosting(Member receiver, SseType sseType, Member sender, Posting posting) {
+        return Sse.builder()
+            .receiver(receiver)
+            .sseType(sseType)
+            .sender(sender)
+            .posting(posting)
             .isRead(false)
             .build();
     }
@@ -104,6 +147,18 @@ public class SseService {
 
     public Page<Sse> findSse(long memberId, Pageable pageable) {
         return sseRepository.findSse(memberId, pageable);
+    }
+
+    public void deleteSee(long sseId, String token) {
+
+        long tokenId = jwtTokenizer.getMemberId(token);
+
+        if(findVerifiedSse(sseId).getReceiver().getMemberId() != tokenId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        Sse sse = findVerifiedSse(sseId);
+        sseRepository.delete(sse);
     }
 
     private Sse findVerifiedSse(long sseId){
