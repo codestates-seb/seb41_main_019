@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Massage from "./Massage";
 import Friend from "./Friend";
 import { useState } from "react";
-import Client from "../../../util/chat";
+import { connect, subscribe, disConnect, send } from "../../../util/chat";
 
 const StyledChatLog = styled.div`
   display: flex;
@@ -78,10 +78,9 @@ const StyledInput = styled.div`
 `;
 
 const Chatting = ({ curChat, handleCurChat, chatLog }) => {
-  const [curLog, setCurLog] = useState(15);
+  const [ message, setMessage ] = useState("");
+  const [ curLog, setCurLog ] = useState(15);
   const handleCurLog = () => setCurLog(curLog + 15);
-  const client = new Client();
-  client.connect();
 
   const soltChat = () => {
     const solted = [];
@@ -104,6 +103,9 @@ const Chatting = ({ curChat, handleCurChat, chatLog }) => {
 
   return (
     <div className="chat-area">
+      <button onClick={() => connect()}>ac</button>
+      <button onClick={() => disConnect()}>de</button>
+      <button onClick={() => subscribe(1)}>sub</button>
       <div>
         <Friend friend={curChat} handleCurChat={handleCurChat} top />
       </div>
@@ -122,8 +124,8 @@ const Chatting = ({ curChat, handleCurChat, chatLog }) => {
         })}
       </StyledChatLog>
       <StyledInput>
-        <input type="text" placeholder="text.."></input>
-        <button>Send</button>
+        <input type="text" placeholder="text.." value={message} onChange={(e) => setMessage(e.target.value)}></input>
+        <button onClick={() => send(1, message, 1)}>Send</button>
       </StyledInput>
     </div>
   );

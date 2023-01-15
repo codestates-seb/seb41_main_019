@@ -1,40 +1,36 @@
-import SockJS from 'sockjs-client';
-import StompJS, { Stomp } from '@stomp/stompjs';
+import * as StompJs from '@stomp/stompjs';
+import { json } from 'react-router-dom';
 
-class Client {
-    constructor() {
-        this.socket = new SockJS("http://13.124.33.113:8080/chat");
-        this.stomp = Stomp.over(this.socket);
-        // this.stomp.configure({
-        //     reconnectDelay: 5000
-        // })
-    }
+//sub/chat/
 
-    connect() {
-        this.stomp.connect({}, (frame) => {
-            console.log(frame);
-        });
+const client = new StompJs.Client({
+    brokerURL : "ws://13.124.33.113:8080/chat",
+    debug : (e) => {
+        console.log(e);
     }
+})
 
-    subscribe(idt) {
-        this.stomp.subscribe(`/sub/chat/${idt}`, (frame) => {
-            console.log(frame);
-        })
-    }
-
-    unsub(idt) {
-        this.stomp.subscribe(`/sub/chat/${idt}`, (frame) => {
-            console.log(frame);
-        }).unsubscribe();
-    }
-
-    send(idt, message) {
-        this.stomp.send(`/sub/chat/${idt}`, {}, JSON.stringify(message));
-    }
-
-    disconnect() {
-        this.stomp.disconnect();
-    }
+export const connect = () => {
+    client.activate();
 }
 
-export default Client;
+
+export const subscribe = (idt) => {
+    client.subscribe(`/sub/chat/${idt}`, (frame) => {
+        console.log(frame);
+    })
+}
+
+export const send = (idt, message, id) => {
+    client.publish({
+        destination: `/sub/chat${idt}`,
+        body: JSON.stringify({
+            id : id,
+            chat : message
+        })
+    })
+}
+
+export const disConnect = () => {
+    client.deactivate();
+}
