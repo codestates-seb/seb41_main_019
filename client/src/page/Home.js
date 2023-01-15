@@ -2,6 +2,7 @@ import Recommends from "../components/Home/Recommends";
 import Feeds from "../components/Home/Feeds";
 import styled from "styled-components";
 import View from "../components/Home/View";
+import FeedModal from "../components/Home/FeedModal";
 import { useState } from "react";
 
 const StyledMain = styled.main`
@@ -16,18 +17,25 @@ const StyledMain = styled.main`
 
 const Home = ({ handleIsCovered }) => {
     const [modal, setModal] = useState(false);
+    const [menu, setMenu] = useState(false);
 
     const handleModal = () => {
         handleIsCovered();
         setModal(!modal);
     }
 
+    const handleMenu = () => {
+        handleIsCovered();
+        setMenu(!menu);
+    }
+
     return (
         <>
             {modal ? <View handleModal={handleModal} /> : null}
+            {menu ? <FeedModal handleMenu={handleMenu}/> : null}
             <StyledMain>
                 <Recommends />
-                <Feeds handleModal={handleModal}/>
+                <Feeds handleModal={handleModal} handleMenu={handleMenu}/>
             </StyledMain>
         </>
     )

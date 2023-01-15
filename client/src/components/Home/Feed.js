@@ -1,20 +1,20 @@
 import styled from "styled-components";
 import A from "../../assets/img/plants/1.jpg";
 import B from "../../assets/img/plants/알보1.png";
-import { AiOutlineMessage } from "react-icons/ai";
 import { FiUserPlus } from "react-icons/fi";
+import { BiDotsVerticalRounded } from "react-icons/bi";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
 
 const Wrapper = styled.div`
-    width: 470px;
-    height: 750px;
+    width: 600px;
+    height: 850px;
     margin-bottom: 20px;
     border-bottom: 1px solid #DBDBDB;
 
     img {
         width: 100%;
-        height: 500px;
+        height: 100%;
         border-radius: 3px;
     }
 
@@ -22,6 +22,13 @@ const Wrapper = styled.div`
         font-size: 25px;
         color: #222426;
         cursor: pointer;
+    }
+    @media screen and (max-width: 1255px) {
+
+    }
+    @media screen and (max-width: 770px) {
+        width: 500px;
+        height: 750px;
     }
 `;
 
@@ -31,8 +38,8 @@ const StyledHeader = styled.div`
     margin-bottom: 10px;
 
     img {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         border-radius: 45px;
         margin-right: 10px;
         cursor: pointer;
@@ -52,7 +59,7 @@ const StyledHeader = styled.div`
     }
 
     div > span:nth-child(2) {
-        font-size: 12px;
+        font-size: 14px;
         color: gray;
         letter-spacing: 1px;
     }
@@ -68,8 +75,7 @@ const StyledHeader = styled.div`
 `;
 
 
-const Feed = ({ handleModal }) => {
-
+const Feed = ({ handleModal, handleMenu }) => {
     const img = [ A, B ];
 
     return (
@@ -82,7 +88,7 @@ const Feed = ({ handleModal }) => {
                 </div>
                 <div className="icons">
                     <FiUserPlus />
-                    <AiOutlineMessage />
+                    <BiDotsVerticalRounded onClick={handleMenu ? () => handleMenu(true) : null}/>
                 </div>
             </StyledHeader>
             {  img.length > 1
