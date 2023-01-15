@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Upload from "./Upload";
-import Tag from "./Tag";
-import { useNavigate } from "react-router-dom";
+import Tags from "./Tags";
 import CloseBtn from "../CloseBtn";
+import { useEffect } from "react";
 
 const Wrapper= styled.div`
     background-color: white;
@@ -34,15 +34,7 @@ const Wrapper= styled.div`
         cursor: pointer;
         margin-right: 10px;
         box-shadow: 1px 3px 8px -2px rgb(90, 90, 90);
-    }
-
-    .enroll {
         background-color: #2F4858;
-        color: white;
-    }
-    
-    .cancel {
-        background-color: #D96848;
         color: white;
     }
 
@@ -69,25 +61,22 @@ const StyledTextarea = styled.textarea`
         box-shadow: 0 0 6px #5e8b7e;
     }
 `;
-
+// 기능 추가: 사진 x클릭시 사진 삭제, 태그 줄 자동바꿈,
 const Posting = ({ handleIsPosted }) => {
-    const navigate = useNavigate();
 
-    const handleCancel = () => {
-        alert("취소되었습니다.")
-        navigate("/");
-    };
+    useEffect(() => {
+        document.getElementById("bg").addEventListener("click", () => {
+            handleIsPosted();
+        })
+    },[handleIsPosted])
 
     return (
         <Wrapper>
             <CloseBtn handleModal={handleIsPosted}/>
             <Upload />
-            <StyledTextarea placeholder="당신의 식물을 소개해주세요."/>
-            <Tag />
-            <div>
-                <button className="enroll">등록</button>
-                <button className="cancel" onClick={handleCancel}>취소</button>
-            </div>
+            <StyledTextarea placeholder="당신의 식물을 소개해주세요." />
+            <Tags />
+            <button>올리기</button>
         </Wrapper>
     )
 }

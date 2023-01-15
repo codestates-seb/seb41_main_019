@@ -27,6 +27,7 @@ const StyledDiv = styled.div`
     width: 150px;
     height: 150px;
     cursor: pointer;
+    margin-right: 10px;
 
     img {
         width: 100%;
@@ -41,9 +42,12 @@ const StyledDiv = styled.div`
 `;
 
 const StyledCancel = styled.div`
+    width: 0;
+
     svg {
+        cursor: pointer;
         position: relative;
-        left: -15px;
+        left: -27px;
         background-color: white;
     }
 `
@@ -57,18 +61,17 @@ const Upload = () => {
     };
 
     const handleDelete = (index) => {
-        setImages([...images.slice(0, index), ...images.slice(index+1)]);
+       setImages(images.slice())
     };
 
     return (
         <Wrapper>
-                <p>사진이나 동영상을 등록해 주세요.</p>
+                <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
                 <div>
                     <StyledDiv onClick={onFileInputClick}>
                         <BsFillCameraFill />
                     </StyledDiv>
-                    {
-                        images.map((image, idx) => {
+                    { images.map((image, idx) => {
                             return (
                                 <>
                                     <StyledDiv key={idx}>
