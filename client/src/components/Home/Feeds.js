@@ -14,7 +14,7 @@ const Feeds = ({ handleModal }) => {
     return (
         <Wrapper>
             {
-                datas.map(data => <Feed handleModal={handleModal} />)
+                datas.map((data,idx) => <Feed key={idx} handleModal={handleModal} />)
             }
         </Wrapper>
     )
