@@ -15,16 +15,38 @@ const Wrapper = styled.div`
     transform: translate(-50%, -50%);
     border-left: 1px solid #dbdbdb;
     border-right: 1px solid #dbdbdb; 
+
+    input, textarea {
+        width :300px;
+        height: 30px;
+        outline: none;
+        border: 1px solid #dbdbdb;
+        border-radius: 5px;
+
+        :focus {
+            outline: none;
+            box-shadow: 0 0 6px #5e8b7e;
+        }
+    }
 `;
 
 const StyledMenu = styled.div`
     display: flex;
+    width: 30%;
     gap: 20px;
     flex-direction: column;
     border-right: 1px solid #dbdbdb;
-    padding: 10px;
-`
 
+
+    p {
+        margin: 0;
+        padding: 20px;
+    }
+
+    .active {
+        border-left: 3px solid #2F3020;
+    }
+`
 
 const Setting = () => {
     const [isClicked, setIsClicked] = useState(0);
@@ -32,9 +54,9 @@ const Setting = () => {
     return (
         <Wrapper>
             <StyledMenu>
-                <span onClick={() => setIsClicked(0)}>프로필 편집</span>
-                <span onClick={() => setIsClicked(1)}>비밀번호 변경</span>
-                <span onClick={() => setIsClicked(2)}>계정 탈퇴</span>
+                <p className={isClicked === 0 ? "active" : null} onClick={() => setIsClicked(0)}>프로필 편집</p>
+                <p className={isClicked === 1 ? "active" : null} onClick={() => setIsClicked(1)}>비밀번호 변경</p>
+                <p className={isClicked === 2 ? "active" : null} onClick={() => setIsClicked(2)}>계정 탈퇴</p>
             </StyledMenu>
             { isClicked === 0 
                 ? <EditProfile /> 

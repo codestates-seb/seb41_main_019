@@ -2,8 +2,24 @@ import styled from "styled-components"
 import { BlueBtn } from "../public/BlueBtn";
 
 const Wrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    gap: 30px;
+
+    div {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
     .profile {
         display: flex;
+        flex-direction: row;
+        margin-bottom: 20px;
+        align-items: center;
     }
 
     .profileImg {

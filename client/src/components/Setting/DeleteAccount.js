@@ -1,16 +1,31 @@
 import styled from "styled-components"
 
 const Wrapper = styled.div`
+    width: 100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-top: 50px;
 
     div {
         display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
-    .profileImg {
-        width: 50px;
-        height: 50px;
-        background-color: gray;
-        border-radius: 50px;
+    div:first-of-type{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 30px;
+
+        .profileImg {
+            width: 50px;
+            height: 50px;
+            background-color: gray;
+            border-radius: 50px;
+        }
     }
 
     button {
@@ -33,7 +48,6 @@ const DeleteAccount = () => {
                 <div className="profileImg"></div>
                 <span>user1</span>
             </div>
-            <p>정말 계정을 삭제하시겠습니까? </p>
             <div>
                 <label htmlFor="confirmPw">계속하려면 비밀번호를 입력해주세요</label>
                 <input id="confirmPw" />

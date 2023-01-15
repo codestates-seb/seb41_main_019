@@ -2,14 +2,25 @@ import styled from "styled-components";
 import { BlueBtn } from "../public/BlueBtn";
 
 const Wrapper = styled.div`
+    width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-top: 50px;
+
+    div {
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+    }
 
     .profile {
         display: flex;
         flex-direction: row;
-
+        
         div:nth-of-type(2) {
+            width: 300px;
             display: flex;
             flex-direction: column;
         }
@@ -20,6 +31,11 @@ const Wrapper = styled.div`
         height: 50px;
         background-color: gray;
         border-radius: 50px;
+    }
+
+    textarea {
+        height: 100px;
+        resize: none;
     }
 `;
 
