@@ -2,19 +2,24 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SideBar from "../src/components/public/SideBar/SideBar";
 import Home from "./page/Home";
 import MyPage from "./page/MyPage";
-import Posting from "./page/Posting";
+import Posting from "./components/public/Posting/Posting";
 import Background from "./components/public/Background";
 import { useState } from "react";
 
 function App() {
   const [isCovered, setIsCovered] = useState(false);
-
+  const [isPosted, setIsPosted] = useState(false);
   const handleIsCovered = () => setIsCovered(!isCovered);
+  const handleIsPosted = () => {
+    setIsPosted(!isPosted);
+    setIsCovered(!isCovered);
+  }
 
   return (
     <BrowserRouter>
       <Background isCovered={isCovered} handleIsCovered={handleIsCovered} />
-      <SideBar />
+      { isPosted ? <Posting handleIsPosted={handleIsPosted} />: null }
+      <SideBar handleIsPosted={handleIsPosted} />
       <Routes>
         <Route
           path={"/"}
@@ -26,7 +31,6 @@ function App() {
             <MyPage handleIsCovered={handleIsCovered} isCovered={isCovered} />
           }
         />
-        <Route path={"/posting"} element={<Posting />} />
       </Routes>
     </BrowserRouter>
   );

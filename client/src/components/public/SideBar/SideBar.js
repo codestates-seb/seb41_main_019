@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import SideModal from "./SideModal";
 import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
+import Alert from "../Alert/Alert";
 
 const StyledSidebar = styled.aside`
   z-index: 600;
@@ -196,7 +197,7 @@ const StyledHeader = styled.header`
 `;
 
 const StyledExtend = styled.div`
-  >div {
+  > div {
     position: fixed;
     top: 0px;
     left: 60px; 
@@ -205,14 +206,16 @@ const StyledExtend = styled.div`
     transition: width 0.2s linear;
     overflow: hidden;
     background-color: white;
+    box-shadow: 1px 0px 10px gray;
   }
 
   .active {
     width: 350px;
+    border-right: 1px solid #DBDBDB; 
   }
 `
 
-const Sidebar = () => {
+const Sidebar = ({ handleIsPosted }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
@@ -261,13 +264,13 @@ const Sidebar = () => {
             <li onClick={() => handleIsOpend("Chat")}>
               <AiOutlineMessage /> <span>채팅</span>
             </li>
-            <li>
+            <li onClick={() => handleIsOpend("Alert")}>
               <IoAlertCircleOutline /> <span>알림</span>
             </li>
             <li onClick={() => navigate("/mypage")}>
               <BsPerson /> <span>프로필</span>
             </li>
-            <li onClick={() => navigate("/posting")}>
+            <li onClick={handleIsPosted}>
               <BsPlusSquareDotted /> <span>작성하기</span>
             </li>
           </ul>
@@ -286,6 +289,9 @@ const Sidebar = () => {
         </div>
         <div className={isOpend === "Chat" ? "active" : null}>
           <Chat />
+        </div>
+        <div className={isOpend === "Alert" ? "active" : null}>
+          <Alert />
         </div>
       </StyledExtend>
     </>

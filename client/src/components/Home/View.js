@@ -1,14 +1,15 @@
 import styled from "styled-components";
-import { AiOutlineClose } from "react-icons/ai";
 import Slider from "./Slider";
 import A from "../../assets/img/plants/1.jpg";
 import B from "../../assets/img/plants/알보1.png";
 import FeedInteraction from "./FeedInteraction";
 import Comments from "./Comments";
+import { useEffect } from "react";
+import CloseBtn from "../public/CloseBtn";
 
 const Wrapper = styled.div`
     display: flex;
-    position: absolute;
+    position: fixed;
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
@@ -33,8 +34,7 @@ const Wrapper = styled.div`
     @media screen and (max-width: 1024px) {
         width: 500px;
         height: 600px;
-        top: 33%;
-
+        top: 40%;
         flex-direction: column;
 
         p {
@@ -56,10 +56,19 @@ const StyledSlider = styled.div`
 
     img {
         width: 100%;
+
+        @media screen and (max-width: 1024px) {
+            width: 70%;
+            height: 100%;
+        }
     }
 
     @media screen and (max-width: 1255px) {
         width: 100%;
+    }
+
+    @media screen and (max-width: 1024px) { 
+        align-items: center;
     }
 `
 
@@ -69,8 +78,6 @@ const StyledInteraction = styled.div`
     flex-direction: column;
 
     > div:first-child {
-        margin: 0px 0px 0px auto;
-
         @media screen and (max-width: 1024px){
             padding: 5px;
         }
@@ -94,6 +101,10 @@ const StyledInteraction = styled.div`
         > span:nth-child(2){
             font-size: 20px;
         }
+
+        > div {
+            margin : -5px 0px 0px auto;
+        }
     }
 
     @media screen and (max-width: 1024px) {
@@ -107,14 +118,16 @@ const StyledInteraction = styled.div`
 `;
 
 
-const View= ({ modal, handleModal }) => {
+const View = ({ handleModal }) => {
     const img = [ A ] ;
 
+    useEffect(() => {
+        document.getElementById("bg").addEventListener("click", () => {
+            handleModal();
+        })
+    },[handleModal])
+
     return (
-        <>
-        { 
-            modal
-            ?
             <Wrapper>
                 <StyledSlider>
                     {  img.length > 1
@@ -123,22 +136,16 @@ const View= ({ modal, handleModal }) => {
                     }
                 </StyledSlider>
                 <StyledInteraction>
-                    <div>
-                        <AiOutlineClose onClick={() => handleModal()} />
-                    </div>
                     <div className="profile">
                         <img src={A} alt="profileImg" />
                         <span>홍길동</span>
                         <span>7시간 전</span>
+                        <CloseBtn handleModal={handleModal} />
                     </div>
                     <FeedInteraction type={1} />
                     <Comments />
                 </StyledInteraction>
             </Wrapper>
-            :
-            null
-        }
-        </>
     )
 }
 
