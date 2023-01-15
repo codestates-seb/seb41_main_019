@@ -6,11 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.main19.server.member.entity.Member;
-import com.main19.server.member.repository.MemberRepository;
 import com.main19.server.member.service.MemberService;
-import com.main19.server.posting.scrap.entity.Scrap;
-import com.main19.server.posting.scrap.repository.ScrapRepository;
-import com.main19.server.posting.tags.repository.TagRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,7 +30,6 @@ public class PostingService {
 	private final MemberService memberService;
 	private final CustomBeanUtils<Posting> beanUtils;
 	private final JwtTokenizer jwtTokenizer;
-	private final MemberRepository memberRepository;
 
 	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths, String token) {
 
