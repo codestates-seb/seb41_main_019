@@ -75,8 +75,7 @@ const StyledHeader = styled.div`
 `;
 
 
-const Feed = ({ handleModal }) => {
-
+const Feed = ({ handleModal, handleMenu }) => {
     const img = [ A, B ];
 
     return (
@@ -89,7 +88,7 @@ const Feed = ({ handleModal }) => {
                 </div>
                 <div className="icons">
                     <FiUserPlus />
-                    <BiDotsVerticalRounded />
+                    <BiDotsVerticalRounded onClick={handleMenu ? () => handleMenu(true) : null}/>
                 </div>
             </StyledHeader>
             {  img.length > 1
