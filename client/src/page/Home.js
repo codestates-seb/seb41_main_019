@@ -6,9 +6,6 @@ import FeedModal from "../components/Home/FeedModal";
 import { useState } from "react";
 
 const StyledMain = styled.main`
-    @media screen and (max-width: 1255px) {
-        margin: 0px 0px 0px 60px;
-    }
 
     @media screen and (max-width: 770px) {
         margin: 60px 0px 0px 0px;
