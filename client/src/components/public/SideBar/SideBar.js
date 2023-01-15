@@ -213,7 +213,7 @@ const StyledExtend = styled.div`
   }
 `
 
-const Sidebar = () => {
+const Sidebar = ({ handleIsPosted }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
@@ -268,7 +268,7 @@ const Sidebar = () => {
             <li onClick={() => navigate("/mypage")}>
               <BsPerson /> <span>프로필</span>
             </li>
-            <li onClick={() => navigate("/posting")}>
+            <li onClick={handleIsPosted}>
               <BsPlusSquareDotted /> <span>작성하기</span>
             </li>
           </ul>
