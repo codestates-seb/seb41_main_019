@@ -53,10 +53,10 @@ const Recommends = () => {
             { clickedBtn === 0 
                 ? 
                     allPlants.map((el,idx) => {
-                        return <Recommend el={el} idx={idx} />;
+                        return <Recommend key={idx} el={el} />;
                     })
                 : followPlants.map((el,idx) => {
-                    return <Recommend el={el} idx={idx} />;
+                    return <Recommend key={idx} el={el} />;
                 })
             }
             </StyledUl>

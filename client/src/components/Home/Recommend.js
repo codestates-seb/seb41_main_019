@@ -19,9 +19,9 @@ const StyledLi = styled.li`
     }
 `;
 
-const Recommend = ({ el, idx }) => {
+const Recommend = ({ el }) => {
     return (
-        <StyledLi key={idx}>
+        <StyledLi>
             <img src={el.img} alt="img" />
             <span>{el.user_name}</span>
         </StyledLi>
