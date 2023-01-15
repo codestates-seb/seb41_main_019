@@ -24,7 +24,6 @@ function App() {
         isLanded ? null : <SideBar setIsLanded={setIsLanded} />
       }
       { isPosted ? <Posting handleIsPosted={handleIsPosted} />: null }
-      <SideBar handleIsPosted={handleIsPosted} />
       <Routes>
         <Route
           path={"/"}
