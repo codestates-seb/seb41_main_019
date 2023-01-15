@@ -206,11 +206,12 @@ const StyledExtend = styled.div`
     transition: width 0.2s linear;
     overflow: hidden;
     background-color: white;
+    box-shadow: 1px 0px 10px gray;
   }
 
   .active {
     width: 350px;
-    border-right : 1px solid #DBDBDB; 
+    border-right: 1px solid #DBDBDB; 
   }
 `
 
