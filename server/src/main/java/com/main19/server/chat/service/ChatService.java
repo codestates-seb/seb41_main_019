@@ -29,7 +29,7 @@ public class ChatService {
         chat.setSender(memberService.findMember(senderId));
         chat.setChatRoom(chatRoomService.findChatRoom(roomId));
 
-        sseService.send(memberService.findMember(receiverId), SseType.message, memberService.findMember(senderId));
+        sseService.sendChatRoom(memberService.findMember(receiverId), SseType.message, memberService.findMember(senderId));
 
         return chatRepository.save(chat);
     }

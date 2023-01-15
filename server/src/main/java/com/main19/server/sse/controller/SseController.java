@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,8 +44,7 @@ public class SseController {
     }
 
     @GetMapping("/notification/{member-id}")
-    public ResponseEntity getSse(@RequestHeader(name = "Authorization") String token,
-        @PathVariable("member-id") @Positive long memberId,
+    public ResponseEntity getSse(@PathVariable("member-id") @Positive long memberId,
         @PageableDefault(size = 10, sort = "sse_id", direction = Direction.ASC) Pageable pageable) {
 
         Page<Sse> pageSse = sseService.findSse(memberId,pageable);
@@ -53,5 +53,14 @@ public class SseController {
         return new ResponseEntity<>(
             new MultiResponseDto<>(sseMapper.sseToSseResponseDtos(response),
                 pageSse), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/notification/{member-id}")
+    public ResponseEntity deleteSee(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("sse-id") @Positive long sseId) {
+
+        sseService.deleteSee(sseId,token);
+
+        return ResponseEntity.noContent().build();
     }
 }
