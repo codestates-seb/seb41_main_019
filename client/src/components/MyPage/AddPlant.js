@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 
-import { AiOutlineClose } from "react-icons/ai";
+import CloseBtn from "../public/CloseBtn";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -13,21 +13,56 @@ const StyledContainer = styled.div`
   flex-direction: column;
   width: 470px;
   height: auto;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
   background-color: white;
   z-index: 1000;
+
+  > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    > input {
+      width: 400px;
+      height: 30px;
+      margin: 30px;
+      border-radius: 5px;
+      border: 1px solid #dbdbdb;
+      outline: none;
+      padding: 10px 10px;
+      :focus {
+        box-shadow: 0 0 6px #5e8b7e;
+      }
+    }
+    > button {
+      width: 100px;
+      height: 40px;
+      margin: 30px 0;
+      border: 0px;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 1px 3px 8px -2px rgb(90, 90, 90);
+      background-color: #2f4858;
+      color: white;
+    }
+  }
 `;
 
 const StyledModalHeader = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
+  > div {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 20px 20px 0 0;
+  }
   > p {
     width: 100%;
     display: flex;
     justify-content: center;
-  }
-  > button {
-    border: none;
-    background-color: white;
+    align-items: center;
   }
 `;
 
@@ -57,10 +92,8 @@ const AddPlant = ({ handleIsCovered }) => {
     <>
       <StyledContainer>
         <StyledModalHeader>
+          <CloseBtn className="close-button" />
           <p>반려식물 등록하기</p>
-          <button onClick={handleIsCovered}>
-            <AiOutlineClose />
-          </button>
         </StyledModalHeader>
         <form onSubmit={handleSubmit}>
           <input
