@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Massage from "./Massage";
 import Friend from "./Friend";
 import { useState } from "react";
+import Client from "../../../util/chat";
 
 const StyledChatLog = styled.div`
   display: flex;
@@ -78,8 +79,9 @@ const StyledInput = styled.div`
 
 const Chatting = ({ curChat, handleCurChat, chatLog }) => {
   const [curLog, setCurLog] = useState(15);
-
   const handleCurLog = () => setCurLog(curLog + 15);
+  const client = new Client();
+  client.connect();
 
   const soltChat = () => {
     const solted = [];
