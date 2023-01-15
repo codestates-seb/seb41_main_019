@@ -1,6 +1,8 @@
 package com.main19.server.sse.controller;
 
 import com.main19.server.dto.MultiResponseDto;
+import com.main19.server.dto.SingleResponseDto;
+import com.main19.server.sse.dto.SseResponseDto;
 import com.main19.server.sse.entity.Sse;
 import com.main19.server.sse.mapper.SseMapper;
 import com.main19.server.sse.service.SseService;
@@ -39,8 +41,9 @@ public class SseController {
         @PathVariable("sse-id") @Positive long sseId) {
 
         sseService.updateSse(sseId, token);
+        SseResponseDto response = sseMapper.sseToSseResponseDto(sseService.findSseId(sseId));
 
-        return ResponseEntity.ok().build();
+        return new ResponseEntity(new SingleResponseDto<>(response),HttpStatus.OK);
     }
 
     @GetMapping("/notification/{member-id}")

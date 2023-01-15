@@ -149,6 +149,10 @@ public class SseService {
         return sseRepository.findSse(memberId, pageable);
     }
 
+    public Sse findSseId(long sseId) {
+        return findVerifiedSse(sseId);
+    }
+
     public void deleteSee(long sseId, String token) {
 
         long tokenId = jwtTokenizer.getMemberId(token);
