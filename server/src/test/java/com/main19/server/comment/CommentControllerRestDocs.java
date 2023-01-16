@@ -222,19 +222,14 @@ public class CommentControllerRestDocs {
     @Test
     public void deleteCommentTest() throws Exception {
 
-        long postingId = 1L;
-        long memberId = 1L;
         long commentId = 1L;
 
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime modifiedAt = LocalDateTime.now();
 
-        Member member = new Member(memberId, "oheadnah", "oheadnah@gmail.com", "profileImage",
-            "profileText", "codestates", "12345678a", new ArrayList<>());
+        Member member = new Member();
 
-        Posting posting = new Posting(postingId, "게시글 test", new ArrayList<>(), createdAt,
-            modifiedAt, member, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), 0L, 0L,
-            new ArrayList<>());
+        Posting posting = new Posting();
 
         Comment comment = new Comment(commentId, "댓글 삭제 test", createdAt, modifiedAt, 0L, posting, member, new ArrayList<>());
 

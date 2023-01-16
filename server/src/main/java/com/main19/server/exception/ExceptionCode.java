@@ -6,6 +6,7 @@ public enum ExceptionCode {
 	FORBIDDEN(403, "Forbidden"),
 	MEMBER_NOT_FOUND(404, "Member not found"),
 	MEMBER_EXISTS(409, "Member exists"),
+	SAME_MEMBER(400, "can not follow same Member"),
 	MEMBER_UNAUTHORIZED(401, "Member has not authorize"),
 	POSTING_NOT_FOUND(404, "Posting not found"),
 	POSTING_LIKE_NOT_FOUND(404, "Posting like not found"),

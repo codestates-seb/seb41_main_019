@@ -73,6 +73,8 @@ public class MemberControllerRestDocs {
                         "코드스테이츠",
                         null,
                         "자기소개",
+                        new ArrayList<>(),
+                        new ArrayList<>(),
                         new ArrayList<>());
 
         given(mapper.memberPostToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
@@ -116,7 +118,10 @@ public class MemberControllerRestDocs {
                                         fieldWithPath("data.location").type(JsonFieldType.STRING).description("소속"),
                                         fieldWithPath("data.profileImage").type(JsonFieldType.NULL).description("프로필사진"),
                                         fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기소개"),
-                                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅")
+                                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅"),
+                                        fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
+                                        fieldWithPath("data.followedList").type(JsonFieldType.ARRAY).description("팔로워 목록")
+
                                 )
                         )
                 ));
@@ -138,6 +143,8 @@ public class MemberControllerRestDocs {
                         "코드스테이츠",
                         "profileImage.jpeg",
                         "자기소개",
+                        new ArrayList<>(),
+                        new ArrayList<>(),
                         new ArrayList<>());
 
 
@@ -177,7 +184,9 @@ public class MemberControllerRestDocs {
                                                 fieldWithPath("location").type(JsonFieldType.STRING).description("회원 소속"),
                                                 fieldWithPath("profileImage").type(JsonFieldType.STRING).description("회원 프로필 이미지"),
                                                 fieldWithPath("profileText").type(JsonFieldType.STRING).description("자기 소개"),
-                                                fieldWithPath("scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩 포스팅")
+                                                fieldWithPath("scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩 포스팅"),
+                                                fieldWithPath("followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
+                                                fieldWithPath("followedList").type(JsonFieldType.ARRAY).description("팔로워 목록")
                                         )
                                 )
 
@@ -197,6 +206,8 @@ public class MemberControllerRestDocs {
                         "코드스테이츠",
                         null,
                         "자기소개",
+                        new ArrayList<>(),
+                        new ArrayList<>(),
                         new ArrayList<>());
 
         // when
@@ -234,7 +245,9 @@ public class MemberControllerRestDocs {
                                         fieldWithPath("data.location").type(JsonFieldType.STRING).description("소속"),
                                         fieldWithPath("data.profileImage").type(JsonFieldType.NULL).description("프로필사진"),
                                         fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기소개"),
-                                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅")
+                                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅"),
+                                        fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
+                                        fieldWithPath("data.followedList").type(JsonFieldType.ARRAY).description("팔로워 목록")
                                 )
                         )
                 ));
