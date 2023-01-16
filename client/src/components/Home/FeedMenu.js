@@ -2,17 +2,15 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
     position: absolute;
-    top: 60px;
+    top: 83px;
     right: 0;
     display: flex;
     flex-direction: column;
     width: 100px;
     height: 100px;
-    z-index: 1000;
     border: 1px solid #dbdbdb;
     border-radius: 5px;
     box-shadow: 5px 5px 10px 1px rgba(0,0,0,.3);
-
 
     button {
         height: 100%;

@@ -2,7 +2,6 @@ import Recommends from "../components/Home/Recommends";
 import Feeds from "../components/Home/Feeds";
 import styled from "styled-components";
 import View from "../components/Home/View";
-import FeedMenu from "../components/Home/FeedMenu";
 import { useState } from "react";
 import DeleteModal from "../components/Home/DeleteModal";
 

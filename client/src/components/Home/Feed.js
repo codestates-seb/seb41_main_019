@@ -12,8 +12,9 @@ const Wrapper = styled.div`
     position: relative;
     width: 500px;
     height: 730px;
+    padding-top: 25px;
     margin-bottom: 20px;
-    border-bottom: 1px solid #DBDBDB;
+    border-top: 1px solid #DBDBDB;
 
     img {
         width: 100%;
