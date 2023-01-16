@@ -272,3 +272,17 @@ include::{snippets}/get-single-posting/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-single-posting/response-fields.adoc[]
+
+=== 게시글 전체 조회
+
+.http-request
+include::{snippets}/get-single-posting/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-single-posting/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-single-posting/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-single-posting/response-fields.adoc[]
