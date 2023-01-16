@@ -6,11 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.main19.server.member.entity.Member;
-import com.main19.server.member.repository.MemberRepository;
 import com.main19.server.member.service.MemberService;
-import com.main19.server.posting.scrap.entity.Scrap;
-import com.main19.server.posting.scrap.repository.ScrapRepository;
-import com.main19.server.posting.tags.repository.TagRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -34,7 +30,6 @@ public class PostingService {
 	private final MemberService memberService;
 	private final CustomBeanUtils<Posting> beanUtils;
 	private final JwtTokenizer jwtTokenizer;
-	private final MemberRepository memberRepository;
 
 	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths, String token) {
 
@@ -44,13 +39,10 @@ public class PostingService {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		if (mediaPaths == null) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_AT_LEAST_ONE_MEDIA);
+		if (mediaPaths == null || mediaPaths.size() > 10) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}
-		// multipartFiles 열장 이상일 경우 x
-		if (mediaPaths.size() > 10) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_LESS_THAN_TEN_MEDIA);
-		}
+
 		Member findMember = memberService.findMember(memberId);
 		posting.setMember(findMember);
 
@@ -128,8 +120,8 @@ public class PostingService {
 		}
 
 		Posting findPosting = findVerifiedPosting(postingId);
-		if ( findPosting.getPostingMedias().size() + 1 > 10) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_LESS_THAN_TEN_MEDIA);
+		if (findPosting.getPostingMedias().size() + 1 > 10) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}
 		for (String mediaUrl: mediaPaths) {
 			Media media = new Media(mediaUrl, findPosting);
