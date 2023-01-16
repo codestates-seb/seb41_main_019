@@ -1,7 +1,8 @@
 import styled from "styled-components"
-import { RiLeafLine } from "react-icons/ri";
 import { TfiMinus } from "react-icons/tfi";
 import { useState } from "react";
+import Logo from "../components/public/Logo";
+import Login from "../components/Landing/Login";
 
 const Wrapper = styled.div`
 `
@@ -19,21 +20,6 @@ const StyledHeader = styled.header`
         justify-content: flex-start;
         align-items: center;
         gap : 50px;
-    }
-
-    h2 {
-        display: flex;
-        align-items: flex-end;
-        font-weight: 400;
-        letter-spacing: 2px;
-        cursor: pointer;
-        margin: 0px 0px 0px 15%;
-
-        svg {
-            color: #5e8b7e;
-            font-size: 25px;
-            margin: 0px 0px 3px -2px;
-        }
     }
 
     nav ul {
@@ -166,10 +152,7 @@ const Landing = () => {
         <Wrapper>
             <StyledHeader>
                 <nav>
-                    <h2>
-                        <span>IncleaF</span>
-                        <RiLeafLine />
-                    </h2>
+                    <Logo />
                     <ul>
                         <li
                             className={selected === 0 ? "selected" : null}
@@ -226,7 +209,9 @@ const Landing = () => {
                             </div>
                         </StyledContents>
                     </StyledMain>
-                ) : null
+                ) : (
+                    <Login />
+                )
             }
         </Wrapper>
     )
