@@ -13,7 +13,6 @@ function App() {
   const [isLanded, setIsLanded] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
   const handleIsCovered = () => setIsCovered(!isCovered); 
-  const handleIsCovered = () => setIsCovered(!isCovered);
   const handleIsPosted = () => {
     setIsPosted(!isPosted);
     setIsCovered(!isCovered);
@@ -26,7 +25,6 @@ function App() {
         isLanded ? null : <SideBar setIsLanded={setIsLanded} />
       }
       { isPosted ? <Posting handleIsPosted={handleIsPosted} />: null }
-      <SideBar handleIsPosted={handleIsPosted} />
       <Routes>
         <Route
           path={"/"}
