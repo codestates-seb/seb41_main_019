@@ -8,7 +8,7 @@ public class FollowDto {
     @AllArgsConstructor
     public static class Response {
         private long followId;
-        private long followingId;
         private long followedId;
+        private long followingId;
     }
 }

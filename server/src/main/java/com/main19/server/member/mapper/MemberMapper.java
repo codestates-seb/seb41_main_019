@@ -1,5 +1,7 @@
 package com.main19.server.member.mapper;
 
+import com.main19.server.follow.dto.FollowDto;
+import com.main19.server.follow.entity.Follow;
 import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import com.main19.server.posting.scrap.entity.Scrap;
 import org.mapstruct.Mapper;
@@ -17,4 +19,8 @@ public interface MemberMapper {
 	@Mapping(source = "posting.postingId", target = "postingId")
 	@Mapping(source = "member.memberId", target = "memberId")
 	ScrapResponseDto scrapToScrapResponseDto(Scrap scrap);
+
+	@Mapping(source = "follow.followedId.memberId", target = "followedId")
+	@Mapping(source = "follow.followingId.memberId", target = "followingId")
+	FollowDto.Response followToFollowResponseDto(Follow follow);
 }

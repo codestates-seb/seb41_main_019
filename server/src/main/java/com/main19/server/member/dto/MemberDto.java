@@ -1,5 +1,7 @@
 package com.main19.server.member.dto;
 
+import com.main19.server.follow.dto.FollowDto;
+import com.main19.server.follow.entity.Follow;
 import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,6 +62,7 @@ public class MemberDto {
 		private String profileImage;
 		private String profileText;
 		private List<ScrapResponseDto> scrapPostingList;
+		private List<FollowDto.Response> followList;
 
 		@Builder
 		public Response(long memberId, String userName, String email, String location, String profileImage, String profileText, List<ScrapResponseDto> scrapPostingList) {

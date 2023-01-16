@@ -2,6 +2,7 @@ package com.main19.server.member.entity;
 
 import javax.persistence.*;
 
+import com.main19.server.follow.entity.Follow;
 import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.scrap.entity.Scrap;
 import lombok.*;
@@ -56,6 +57,9 @@ public class Member {
 
 	@OneToMany(mappedBy = "member")
 	private List<Scrap> scrapPostingList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member")
+	private List<Follow> follows = new ArrayList<>();
 
 	@Builder
 	public Member(Long memberId, String userName, String email, String profileImage, String profileText, String location, String password, List<String> roles) {
