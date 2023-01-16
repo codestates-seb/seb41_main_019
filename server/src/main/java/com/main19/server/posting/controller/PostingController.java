@@ -114,7 +114,6 @@ public class PostingController {
             HttpStatus.OK);
     }
 
-    //특정 회원의 포스팅 목록 조회 추가해야함
     @GetMapping("/member/{member-id}")
     public ResponseEntity getPostingsByMember(@PathVariable("member-id") @Positive long memberId,
                                               @Positive @RequestParam int page,
@@ -125,7 +124,6 @@ public class PostingController {
                 new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
                 HttpStatus.OK);
     }
-
 
     @DeleteMapping(value = "/{posting-id}")
     public ResponseEntity deletePosting(@RequestHeader(name = "Authorization") String token,
