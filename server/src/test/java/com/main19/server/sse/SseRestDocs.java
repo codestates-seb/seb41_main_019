@@ -17,9 +17,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.chat.dto.ChatDto;
-import com.main19.server.chat.entitiy.Chat;
-import com.main19.server.chatroom.entity.ChatRoom;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.entity.Posting;
 import com.main19.server.sse.controller.SseController;
@@ -28,7 +25,6 @@ import com.main19.server.sse.entity.Sse;
 import com.main19.server.sse.entity.Sse.SseType;
 import com.main19.server.sse.mapper.SseMapper;
 import com.main19.server.sse.service.SseService;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
