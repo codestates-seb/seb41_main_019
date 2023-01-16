@@ -4,6 +4,10 @@ import B from "../../assets/img/plants/알보1.png";
 const StyledComments = styled.div`
     height: 80%;
     background-color: white;
+    overflow: scroll;
+    ::-webkit-scrollbar {
+        display: none;
+    }
 
     .comment {
         display: flex;

@@ -19,24 +19,23 @@ const Wrapper = styled.div`
             display: none;
         }
 
-        div {
+        li div:first-of-type {
             display: flex;
             justify-content: space-between;
             position: relative;
-            top: -270px;
+            top: -260px;
             height: 1px;
-        }
 
-        li div svg {
-            color: rgba(999, 999, 999, 0.9);
-            margin: 0px 10px 0px 10px;
-            
-            box-shadow: 0px 0px 5px #DBDBDB;
-            border-radius: 30px;
-        }
+            .hidden {
+                visibility: hidden;
+            }
 
-        .hidden {
-            visibility: hidden;
+            svg {
+                color: rgba(999, 999, 999, 0.9);
+                margin: 0px 10px 0px 10px;
+                box-shadow: 0px 0px 5px #DBDBDB;
+                border-radius: 30px;
+            }
         }
     }
 `;
@@ -44,12 +43,12 @@ const Wrapper = styled.div`
 const Slider = () => {
     const [cur, setCur] = useState(0);
     const img = [ a, b, c, d ];
+    
 
     return (
         <Wrapper>
             <ul>
-                {
-                    img.map((el,idx) => {
+                { img.map((el,idx) => {
                         return (
                             <li key={idx} className={cur === idx ? null : "none"}>
                                 <img src={el} alt="img" />
