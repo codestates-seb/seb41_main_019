@@ -32,40 +32,6 @@ include::{snippets}/post-member/http-response.adoc[]
 .response-fields
 include::{snippets}/post-member/response-fields.adoc[]
 
-=== 회원조회
-.curl-request
-include::{snippets}/get-member/curl-request.adoc[]
-
-.http-request
-include::{snippets}/get-member/http-request.adoc[]
-
-.request-fields
-include::{snippets}/get-member/request-fields.adoc[]
-
-.http-response
-include::{snippets}/get-member/http-response.adoc[]
-
-.response-fields
-include::{snippets}/get-member/response-fields.adoc[]
-
-=== 회원삭제
-.curl-request
-include::{snippets}/delete-member/curl-request.adoc[]
-
-.http-request
-include::{snippets}/delete-member/http-request.adoc[]
-
-.request-fields
-include::{snippets}/delete-member/request-fields.adoc[]
-
-.http-response
-include::{snippets}/delete-member/http-response.adoc[]
-
-.response-fields
-include::{snippets}/delete-member/response-fields.adoc[]
-
-== Member
-
 === 회원 프로필 등록
 .curl-request
 include::{snippets}/post-member-image/curl-request.adoc[]
@@ -81,6 +47,42 @@ include::{snippets}/post-member-image/http-response.adoc[]
 
 .response-fields
 include::{snippets}/post-member-image/response-fields.adoc[]
+
+=== 회원조회
+
+.curl-request
+include::{snippets}/get-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-member/http-request.adoc[]
+
+.request-fields
+include::{snippets}/get-member/request-fields.adoc[]
+
+.path-parameters
+include::{snippets}/post-comment/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-member/response-fields.adoc[]
+
+=== 회원삭제
+.curl-request
+include::{snippets}/delete-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-member/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-comment/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-member/http-response.adoc[]
+
+
+
 
 == comment
 
