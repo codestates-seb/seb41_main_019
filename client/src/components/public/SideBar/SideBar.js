@@ -199,6 +199,7 @@ const StyledHeader = styled.header`
 
 const StyledExtend = styled.div`
   > div {
+    z-index: 500;
     position: fixed;
     top: 0px;
     left: 60px; 
