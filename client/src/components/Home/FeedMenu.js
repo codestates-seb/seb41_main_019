@@ -1,48 +1,46 @@
 import styled from "styled-components";
-import { useEffect } from "react";
 
 const Wrapper = styled.div`
+    position: absolute;
+    right: 350px;
     display: flex;
     flex-direction: column;
-    position: fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    width: 400px;
+    width: 150px;
     height: 200px;
-    background-color: white;
     z-index: 1000;
     border: 1px solid #dbdbdb;
     border-radius: 5px;
+    box-shadow: 5px 5px 10px 1px rgba(0,0,0,.3);
 
     button {
         height: 100%;
         background-color: white;
+        opacity: 0.5;
         border: 0;
         border-bottom: 1px solid #dbdbdb;
         font-size: 17px;
         cursor: pointer;
+
+        :hover {
+            opacity: 1;
+        }
     }
 `;
 
-const FeedModal = ({ handleMenu }) => {
-    useEffect(() => {
-        document.getElementById("bg").addEventListener("click", () => {
-            handleMenu();
-        })
-    },[handleMenu])
-
-    const handleDelete = () => {
-        alert('게시글이 삭제되었습니다!')
-    }
-
+const FeedMenu = ({ handleDelete, handleMenu }) => {
     return (
         <Wrapper>
             <button>Edit</button>
-            <button onClick={handleDelete}>Delete</button>
+            <button 
+                onClick={() => {
+                        handleDelete(); 
+                        handleMenu();
+                        }}>
+                    Delete
+            </button>
             <button onClick={handleMenu}>Cancel</button>
         </Wrapper>
     )
 };
 
-export default FeedModal;
+export default FeedMenu;

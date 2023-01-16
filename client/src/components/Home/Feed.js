@@ -5,6 +5,8 @@ import { FiUserPlus } from "react-icons/fi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
+import FeedMenu from "./FeedMenu";
+import { useState } from "react";
 
 const Wrapper = styled.div`
     width: 500px;
@@ -74,11 +76,18 @@ const StyledHeader = styled.div`
 `;
 
 
-const Feed = ({ handleModal, handleMenu }) => {
+const Feed = ({ handleModal, handleDelete }) => {
+    const [menu, setMenu] = useState(false);
+
+    const handleMenu = () => {
+        setMenu(!menu);
+    }
+    
     const img = [ A, B ];
 
     return (
         <Wrapper>
+            { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} /> : null }
             <StyledHeader>
                 <img src={A} alt="img" />
                 <div>
@@ -87,7 +96,7 @@ const Feed = ({ handleModal, handleMenu }) => {
                 </div>
                 <div className="icons">
                     <FiUserPlus />
-                    <BiDotsVerticalRounded onClick={handleMenu ? () => handleMenu(true) : null}/>
+                    <BiDotsVerticalRounded onClick={handleMenu} />
                 </div>
             </StyledHeader>
             {  img.length > 1

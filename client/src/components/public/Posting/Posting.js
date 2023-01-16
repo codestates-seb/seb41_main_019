@@ -22,6 +22,7 @@ const Wrapper= styled.div`
     padding: 50px;
     color: gray;
     z-index: 1000;
+    box-shadow: 4px 4px 4px 1px rgba(0,0,0,0.3); 
 
     > div:first-child {
         margin: 0 0 0 auto;

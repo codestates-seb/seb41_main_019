@@ -9,13 +9,13 @@ const Wrapper = styled.section`
     justify-content: center;
 `
 
-const Feeds = ({ handleModal, handleMenu }) => { 
+const Feeds = ({ handleModal, handleDelete }) => { 
     const datas = new Array(10).fill(0);
 
     return (
         <Wrapper>
             {
-                datas.map((data,idx) => <Feed key={idx} handleModal={handleModal} handleMenu={handleMenu} />)
+                datas.map((data,idx) => <Feed key={idx} handleModal={handleModal} handleDelete={handleDelete} />)
             }
         </Wrapper>
     )
