@@ -151,6 +151,18 @@ include::{snippets}/get-postings-by-member/http-response.adoc[]
 .response-fields
 include::{snippets}/get-postings-by-member/response-fields.adoc[]
 
+=== 게시글 삭제
+.curl-request
+include::{snippets}/delete-posting/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-posting/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-posting/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-posting/http-response.adoc[]
 
 === 게시글 좋아요
 .curl-request
