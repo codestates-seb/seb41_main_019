@@ -22,6 +22,10 @@ const StyledHeader = styled.header`
         gap : 50px;
     }
 
+    nav h2 {
+        margin: 0px 0px 0px 15%;
+    }
+
     nav ul {
         display: flex;
         flex-direction: row;

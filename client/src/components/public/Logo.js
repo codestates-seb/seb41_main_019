@@ -7,7 +7,6 @@ const StyledLogo = styled.h2`
     font-weight: 400;
     letter-spacing: 2px;
     cursor: pointer;
-    margin: 0px 0px 0px 15%;
 
     svg {
         color: #5e8b7e;
