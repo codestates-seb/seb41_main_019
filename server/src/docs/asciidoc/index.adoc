@@ -56,11 +56,8 @@ include::{snippets}/get-member/curl-request.adoc[]
 .http-request
 include::{snippets}/get-member/http-request.adoc[]
 
-.request-fields
-include::{snippets}/get-member/request-fields.adoc[]
-
 .path-parameters
-include::{snippets}/post-comment/path-parameters.adoc[]
+include::{snippets}/get-member/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/get-member/http-response.adoc[]
@@ -76,7 +73,7 @@ include::{snippets}/delete-member/curl-request.adoc[]
 include::{snippets}/delete-member/http-request.adoc[]
 
 .path-parameters
-include::{snippets}/post-comment/path-parameters.adoc[]
+include::{snippets}/delete-member/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/delete-member/http-response.adoc[]
@@ -231,18 +228,33 @@ include::{snippets}/delete-sse/http-response.adoc[]
 
 
 
-=======
 == Posting
 
 === 포스팅 등록
 .curl-request
-include::{snippets}/posting/curl-request.adoc[]
+include::{snippets}/post-posting/curl-request.adoc[]
 
 .http-request
-include::{snippets}/posting/http-request.adoc[]
+include::{snippets}/post-posting/http-request.adoc[]
 
 .http-response
-include::{snippets}/posting/http-response.adoc[]
+include::{snippets}/post-posting/http-response.adoc[]
 
 .response-fields
-include::{snippets}/posting/response-fields.adoc[]
+include::{snippets}/post-posting/response-fields.adoc[]
+
+=== 포스팅 수정
+.curl-request
+include::{snippets}/patch-posting/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-posting/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-posting/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/patch-posting/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-posting/response-fields.adoc[]
