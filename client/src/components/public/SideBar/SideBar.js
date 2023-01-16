@@ -284,7 +284,7 @@ const Sidebar = ({ handleIsPosted, setIsLanded }) => {
           </ul>
         </nav>
         {
-          opendModal ? <SideModal /> : null
+          opendModal ? <SideModal handleOpendModal={handleOpendModal} /> : null
         }
         <div onClick={handleOpendModal}>
           <AiOutlineMenu />
