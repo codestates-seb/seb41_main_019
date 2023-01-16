@@ -64,6 +64,7 @@ const StyledBtn = styled.button`
     font-weight: 100;
     font-size: 14px;
     margin: 40px 0px 0px 0px;
+    cursor: pointer;
 `
 
 const StyledBtn2 = styled(StyledBtn)`
@@ -72,7 +73,7 @@ const StyledBtn2 = styled(StyledBtn)`
     background-color : #D96846;
 `
 
-const Login = () => {
+const Login = ({ setSelected }) => {
     const [ id, setId ] = useState("");
     const [ pw, setPw ] = useState("");
 
@@ -88,7 +89,7 @@ const Login = () => {
                     <label htmlFor="saveId">ID 저장하기</label>
                 </StyledCheck>
                 <StyledBtn>로그인</StyledBtn>
-                <StyledBtn2>회원가입</StyledBtn2>
+                <StyledBtn2 onClick={() => setSelected(2)}>회원가입</StyledBtn2>
             </StyledLogin>
         </Wrapper>
     )
