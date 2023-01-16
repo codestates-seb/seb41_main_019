@@ -67,6 +67,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
   const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
   const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
+  const [isModalOpened, setIsModalOpened] = useState(false);
 
   const getGalleryData = async (url, view) => {
     try {
@@ -87,6 +88,11 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleModal = () => {
+    handleIsCovered();
+    setIsModalOpened(!isModalOpened);
   };
 
   const handlePostingsClick = () => {
@@ -116,12 +122,9 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     }
   };
 
-  // MyPage 접속시 기본값으로 Postings 표시
-  // defaultProps로 해결해야하나?
-
   return (
     <>
-      {isCovered && <AddPlant handleIsCovered={handleIsCovered} />}
+      {isCovered && isModalOpened && <AddPlant handleModal={handleModal} />}
       <StyledContainer>
         <UserInfo />
         {isFolderOpened ? (
@@ -129,7 +132,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
             <MyPlants
               myPlantsData={myPlantsData}
               handlePlantClick={handlePlantClick}
-              handleIsCovered={handleIsCovered}
+              handleModal={handleModal}
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
               <Gallery galleryData={galleryData} currentView={currentView} />

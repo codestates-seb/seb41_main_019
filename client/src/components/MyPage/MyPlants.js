@@ -6,7 +6,7 @@ import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { RiPlantLine } from "react-icons/ri";
 import { ReactComponent as Cookie } from "../../assets/svg/plus.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -86,14 +86,9 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({ myPlantsData, handlePlantClick, handleIsCovered }) => {
+const MyPlants = ({ myPlantsData, handlePlantClick, handleModal }) => {
   const [isPanelOpened, setIsPanelOpened] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState();
-
-  const handleAddPlantClick = () => {
-    handleIsCovered();
-    // 식물 추가 로직
-  };
 
   const handleMoveButtonClick = (go) => {
     // 이동 버튼 클릭
@@ -111,7 +106,7 @@ const MyPlants = ({ myPlantsData, handlePlantClick, handleIsCovered }) => {
           <GrPrevious className="icon" />
         </div>
         <StyledListsContainer>
-          <StyledMyPlantsItem onClick={handleAddPlantClick}>
+          <StyledMyPlantsItem onClick={handleModal}>
             <div className="image-wrapper">
               <Cookie className="image" />
             </div>

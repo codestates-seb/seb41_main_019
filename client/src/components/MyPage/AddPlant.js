@@ -66,12 +66,17 @@ const StyledModalHeader = styled.div`
   }
 `;
 
-const AddPlant = ({ handleIsCovered }) => {
+const AddPlant = ({ handleModal }) => {
   const [textInput, setTextInput] = useState({
     plantName: "",
     plantType: "",
     plantBirthday: "",
   });
+  useEffect(() => {
+    document.getElementById("bg").addEventListener("click", () => {
+      handleModal();
+    });
+  }, [handleModal]);
 
   const { plantName, plantType, plantBirthday } = textInput;
 
@@ -92,7 +97,7 @@ const AddPlant = ({ handleIsCovered }) => {
     <>
       <StyledContainer>
         <StyledModalHeader>
-          <CloseBtn className="close-button" />
+          <CloseBtn className="close-button" handleModal={handleModal} />
           <p>반려식물 등록하기</p>
         </StyledModalHeader>
         <form onSubmit={handleSubmit}>
