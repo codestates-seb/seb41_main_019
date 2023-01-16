@@ -16,7 +16,6 @@ import java.util.Optional;
 public class FollowService {
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
-//    private final Follow follow;
 
     public Follow createFollow(long followingMemberId, long followedMemberId) {
         Follow follow = new Follow();

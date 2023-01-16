@@ -54,6 +54,8 @@ public class MemberDto {
 	}
 
 	@Getter
+	@Setter
+	@AllArgsConstructor
 	public static class Response {
 		private long memberId;
 		private String userName;
@@ -62,17 +64,7 @@ public class MemberDto {
 		private String profileImage;
 		private String profileText;
 		private List<ScrapResponseDto> scrapPostingList;
-		private List<FollowDto.Response> followList;
-
-		@Builder
-		public Response(long memberId, String userName, String email, String location, String profileImage, String profileText, List<ScrapResponseDto> scrapPostingList) {
-			this.memberId = memberId;
-			this.userName = userName;
-			this.email = email;
-			this.location = location;
-			this.profileImage = profileImage;
-			this.profileText = profileText;
-			this.scrapPostingList = scrapPostingList;
-		}
+		private List<FollowDto.FollowingResponse> followingList;
+		private List<FollowDto.FollowedResponse> followedList;
 	}
 }

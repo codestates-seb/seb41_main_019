@@ -11,4 +11,18 @@ public class FollowDto {
         private long followedId;
         private long followingId;
     }
+
+    @Getter
+    @AllArgsConstructor
+    public static class FollowedResponse {
+        private long followId;
+        private long followedId;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class FollowingResponse {
+        private long followId;
+        private long followingId;
+    }
 }

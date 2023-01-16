@@ -3,6 +3,7 @@ package com.main19.server.follow.entity;
 import com.main19.server.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;

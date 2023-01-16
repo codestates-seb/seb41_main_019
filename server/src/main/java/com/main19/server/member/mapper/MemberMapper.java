@@ -20,7 +20,9 @@ public interface MemberMapper {
 	@Mapping(source = "member.memberId", target = "memberId")
 	ScrapResponseDto scrapToScrapResponseDto(Scrap scrap);
 
-	@Mapping(source = "follow.followedId.memberId", target = "followedId")
-	@Mapping(source = "follow.followingId.memberId", target = "followingId")
-	FollowDto.Response followToFollowResponseDto(Follow follow);
+	@Mapping(source = "followingId.memberId", target = "followingId")
+	FollowDto.FollowingResponse followToFollowingResponseDto(Follow follow);
+
+	@Mapping(source = "followedId.memberId", target = "followedId")
+	FollowDto.FollowedResponse followToFollowedResponseDto(Follow follow);
 }
