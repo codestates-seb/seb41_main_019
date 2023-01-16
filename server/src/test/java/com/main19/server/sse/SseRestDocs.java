@@ -240,7 +240,6 @@ public class SseRestDocs {
         ResultActions resultActions = mockMvc.perform(
             RestDocumentationRequestBuilders.delete("/notification/{sse-id}" , sseId)
                 .header("Authorization", "Bearer (accessToken)")
-                .accept(MediaType.APPLICATION_JSON)
         );
 
         resultActions.andExpect(status().isNoContent())
