@@ -13,6 +13,7 @@ import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
 import com.main19.server.posting.dto.PostingResponseDto;
 import com.main19.server.posting.entity.Posting;
+import com.main19.server.posting.like.repository.PostingLikeRepository;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.service.PostingService;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
@@ -30,6 +31,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -60,8 +62,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(value = PostingController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
@@ -82,6 +83,8 @@ public class PostingControllerRestDocs {
     private PostingTagsService postingTagsService;
     @MockBean
     private PostingMapper mapper;
+    @Autowired
+    private PostingLikeRepository postingLikeRepository;
 
     @Test
     public void postPostingTest() throws Exception {
@@ -244,7 +247,7 @@ public class PostingControllerRestDocs {
         // when
         ResultActions actions =
                 mockMvc.perform(
-                        patch("/posts/{posting-id}", postingId)
+                        RestDocumentationRequestBuilders.patch("/posts/{posting-id}", postingId)
                                 .header("Authorization", "Bearer AccessToken")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -293,17 +296,106 @@ public class PostingControllerRestDocs {
                 ));
     }
 
+    @Test
+    public void getPostingTest() throws Exception {
+        // given
+        long postingId = 1L;
+        PostingResponseDto response =
+                new PostingResponseDto(
+                        postingId,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test",
+                        new ArrayList<>(),
+                        LocalDateTime.now(),
+                        LocalDateTime.now(),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>()
+                );
+
+        given(postingService.findPosting(Mockito.anyLong())).willReturn(new Posting());
+        given(mapper.postingToPostingResponseDto(Mockito.any(Posting.class))).willReturn(response);
+
+        // when
+        ResultActions actions =
+                mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/posts/{posting-id}", postingId)
+                                .header("Authorization", "Bearer AccessToken")
+                                .accept(MediaType.APPLICATION_JSON)
+                );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.postingId").value(response.getPostingId()))
+                .andExpect(jsonPath("$.data.memberId").value(response.getMemberId()))
+                .andExpect(jsonPath("$.data.userName").value(response.getUserName()))
+                .andExpect(jsonPath("$.data.profileImage").value(response.getProfileImage()))
+                .andExpect(jsonPath("$.data.postingContent").value(response.getPostingContent()))
+                .andDo(document(
+                        "get-single-posting",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        ),
+                        pathParameters(
+                                parameterWithName("posting-id").description("게시글 식별자")
+                        ),
+                        responseFields(
+                                fieldWithPath("data.postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
+                                fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
+                                fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                fieldWithPath("data.postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
+                                fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
+                                fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
+                                fieldWithPath("data.tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
+                                fieldWithPath("data.likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
+                                fieldWithPath("data.postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
+                                fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
+                                fieldWithPath("data.comments").type(JsonFieldType.ARRAY).description("댓글 작성한 회원 리스르"),
+                                fieldWithPath("data.scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트")
+                        )
+                ));
+    }
+    
 //    @Test
-//    public void getPostingTest() throws Exception {
+//    public void getPostingsTest() throws Exception {
 //        // given
-//        long postingId = 1L;
-//        PostingResponseDto response =
+//        long postingId1 = 1L;
+//        PostingResponseDto response1 =
 //                new PostingResponseDto(
-//                        postingId,
+//                        postingId1,
 //                        1L,
 //                        "gimhae_person",
 //                        "image",
-//                        "게시글 test",
+//                        "게시글 test1",
+//                        new ArrayList<>(),
+//                        LocalDateTime.now(),
+//                        LocalDateTime.now(),
+//                        new ArrayList<>(),
+//                        0L,
+//                        new ArrayList<>(),
+//                        0L,
+//                        new ArrayList<>(),
+//                        new ArrayList<>()
+//                );
+//
+//        long postingId2 = 2L;
+//        PostingResponseDto response =
+//                new PostingResponseDto(
+//                        postingId2,
+//                        1L,
+//                        "taebong98",
+//                        "image",
+//                        "게시글 test2",
 //                        new ArrayList<>(),
 //                        LocalDateTime.now(),
 //                        LocalDateTime.now(),
@@ -316,7 +408,6 @@ public class PostingControllerRestDocs {
 //                );
 //
 //        // when
-//
 //
 //        // then
 //    }
