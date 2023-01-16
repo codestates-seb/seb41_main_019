@@ -151,11 +151,6 @@ public class PostingController {
     public ResponseEntity deleteMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("media-id") @Positive long mediaId) {
 
-        Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
-        if (posting.getPostingMedias().stream().count() == 1) {
-            throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
-        }
-
         storageService.remove(mediaId);
         postingService.deleteMedia(mediaId,token);
 

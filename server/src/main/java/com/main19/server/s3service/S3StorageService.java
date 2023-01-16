@@ -96,6 +96,11 @@ public class S3StorageService {
 	}
 
 	public void remove(long mediaId) {
+		Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
+		if (posting.getPostingMedias().stream().count() == 1) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
+		}
+
 		Media findmedia = findVerfiedMedia(mediaId);
 		String fileName = (findmedia.getMediaUrl()).substring(68);
 
