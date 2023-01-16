@@ -152,4 +152,31 @@ include::{snippets}/patch-sse/http-response.adoc[]
 .response-fields
 include::{snippets}/patch-sse/response-fields.adoc[]
 
+=== 알림 조회
+.curl-request
+include::{snippets}/get-sse/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-sse/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-sse/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-sse/http-response.adoc[]
+
+=== 알림 삭제
+.curl-request
+include::{snippets}/delete-sse/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-sse/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-sse/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-sse/http-response.adoc[]
+
+
 
