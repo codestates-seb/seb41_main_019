@@ -24,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -34,8 +35,13 @@ import java.util.List;
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
 import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -120,31 +126,88 @@ public class MemberControllerRestDocs {
                 ));
     }
 
-//    @Test
-//    public void getMemberTest() throws Exception {
-//        // given
-//        long memberId = 1L;
-//        MemberDto.Response response =
-//                new MemberDto.Response(
-//                        1L,
-//                        "taebong98",
-//                        "aaa@naver.com",
-//                        "코드스테이츠",
-//                        null,
-//                        "자기소개",
-//                        new ArrayList<>());
-//
-//        // when
-//        given(memberService.findMember(memberId)).willReturn(new Member());
-//        given(mapper.memberToMemberResponse(Mockito.any(Member.class))).willReturn(response);
-//
-//        ResultActions actions = mockMvc.perform(
-//                get("/members/{member-id}", memberId)
-//                        .accept(MediaType.APPLICATION_JSON)
-//        );
-//
-//        // then
-//        actions
-//                .andExpect("$.data.")
-//    }
+    @Test
+    public void getMemberTest() throws Exception {
+        // given
+        long memberId = 1L;
+        MemberDto.Response response =
+                new MemberDto.Response(
+                        1L,
+                        "taebong98",
+                        "aaa@naver.com",
+                        "코드스테이츠",
+                        null,
+                        "자기소개",
+                        new ArrayList<>());
+
+        // when
+        given(memberService.findMember(memberId)).willReturn(new Member());
+        given(mapper.memberToMemberResponse(Mockito.any(Member.class))).willReturn(response);
+
+        ResultActions actions = mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/members/{member-id}", memberId)
+                        .accept(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions // get요청시 나오는 response 가 맞는지 확인
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.memberId").value(response.getMemberId()))
+                .andExpect(jsonPath("$.data.userName").value(response.getUserName()))
+                .andExpect(jsonPath("$.data.email").value(response.getEmail()))
+                .andExpect(jsonPath("$.data.location").value(response.getLocation()))
+                .andExpect(jsonPath("$.data.profileImage").value(response.getProfileImage()))
+                .andExpect(jsonPath("$.data.profileText").value(response.getProfileText()))
+                .andDo(document(
+                        "get-member",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                List.of(
+                                        parameterWithName("member-id").description("회원 식별자")
+                                )
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("식별자"),
+                                        fieldWithPath("data.userName").type(JsonFieldType.STRING).description("닉네임"),
+                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("data.location").type(JsonFieldType.STRING).description("소속"),
+                                        fieldWithPath("data.profileImage").type(JsonFieldType.NULL).description("프로필사진"),
+                                        fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기소개"),
+                                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    public void deleteMemberTest() throws Exception {
+        // given
+        long memberId = 1L;
+        doNothing().when(memberService).deleteMember(memberId, "token");
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                RestDocumentationRequestBuilders.delete("/members/{member-id}", memberId)
+                        .header("Authorization", "Bearer AccessToken")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        actions
+                .andExpect(status().isNoContent())
+                .andDo(document(
+                        "delete-member",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("member-id").description("회원 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        )
+                ));
+    }
 }
