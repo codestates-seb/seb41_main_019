@@ -31,7 +31,6 @@ public class ChatController {
     private final ChatService chatService;
     private final ChatRoomService chatRoomService;
     private final ChatMapper chatMapper;
-    private final MemberService memberService;
 
     @MessageMapping("/chat/{roomId}")
     public void chat(@DestinationVariable long roomId, ChatDto.Post chatDto) throws Exception {

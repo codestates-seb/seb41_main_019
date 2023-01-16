@@ -14,6 +14,7 @@ FE: 이민훈 강래헌 장은지
 BE: 김혜인 김태현 한대호
 
 ***
+
 == Member
 
 === 회원 프로필 등록
@@ -31,6 +32,8 @@ include::{snippets}/post-member-image/http-response.adoc[]
 
 .response-fields
 include::{snippets}/post-member-image/response-fields.adoc[]
+
+== comment
 
 === 댓글 등록
 .curl-request
@@ -83,6 +86,101 @@ include::{snippets}/delete-comment/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-comment/http-response.adoc[]
 
+== chat
+
+=== 채팅방 생성
+.curl-request
+include::{snippets}/post-chat-room/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-chat-room/http-request.adoc[]
+
+.http-response
+include::{snippets}/post-chat-room/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-chat-room/response-fields.adoc[]
+
+
+=== 채팅방 조회
+.curl-request
+include::{snippets}/get-chat-room/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-chat-room/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-chat-room/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-chat-room/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-chat-room/response-fields.adoc[]
+
+=== 채팅 내역 조회
+.curl-request
+include::{snippets}/get-chat/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-chat/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-chat/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-chat/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-chat/response-fields.adoc[]
+
+== notification
+
+=== 알림 확인
+.curl-request
+include::{snippets}/patch-sse/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-sse/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-sse/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/patch-sse/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-sse/response-fields.adoc[]
+
+=== 알림 조회
+.curl-request
+include::{snippets}/get-sse/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-sse/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-sse/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-sse/http-response.adoc[]
+
+=== 알림 삭제
+.curl-request
+include::{snippets}/delete-sse/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-sse/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-sse/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-sse/http-response.adoc[]
+
+
+
+=======
 == Posting
 
 === 포스팅 등록

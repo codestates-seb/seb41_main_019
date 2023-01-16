@@ -244,8 +244,6 @@ public class CommentControllerRestDocs {
             mockMvc.perform(
                 delete("/comments/{comment-id}", commentId)
                     .header("Authorization", "Bearer AccessToken")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .contentType(MediaType.APPLICATION_JSON)
             );
 
         actions.andExpect(status().isNoContent())
