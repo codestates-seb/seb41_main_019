@@ -8,6 +8,8 @@ import javax.annotation.PostConstruct;
 
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.service.MemberService;
+import com.main19.server.posting.entity.Posting;
+import com.main19.server.posting.service.PostingService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +37,7 @@ public class S3StorageService {
 	private final AmazonS3 s3Client;
 	private final MediaRepository mediaRepository;
 	private final MemberService memberService;
+	private final PostingService postingService;
 
 	@Value("${cloud.aws.credentials.accessKey}")
 	private String accessKey;
@@ -75,6 +78,21 @@ public class S3StorageService {
 			}
 		}
 		return mediaUrlList;
+	}
+
+	public void removeAll(long postingId) {
+		Posting posting = postingService.findPosting(postingId);
+		List<Media> findMedias = posting.getPostingMedias();
+
+		for (Media fileMedia : findMedias) {
+			Media findMedia = findVerfiedMedia(fileMedia.getMediaId());
+			String fileName = (fileMedia.getMediaUrl()).substring(68);
+
+			if (!s3Client.doesObjectExist(bucket + "/posting/media", fileName)) {
+				throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
+			}
+			s3Client.deleteObject(bucket + "/posting/media", fileName);
+		}
 	}
 
 	public void remove(long mediaId) {

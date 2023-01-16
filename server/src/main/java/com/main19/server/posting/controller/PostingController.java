@@ -128,6 +128,8 @@ public class PostingController {
     @DeleteMapping(value = "/{posting-id}")
     public ResponseEntity deletePosting(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId) {
+
+        storageService.removeAll(postingId);
         postingService.deletePosting(postingId,token);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
