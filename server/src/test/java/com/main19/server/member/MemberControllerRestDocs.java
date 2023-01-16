@@ -73,6 +73,8 @@ public class MemberControllerRestDocs {
                         "코드스테이츠",
                         null,
                         "자기소개",
+                        new ArrayList<>(),
+                        new ArrayList<>(),
                         new ArrayList<>());
 
         given(mapper.memberPostToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
@@ -138,6 +140,8 @@ public class MemberControllerRestDocs {
                         "코드스테이츠",
                         "profileImage.jpeg",
                         "자기소개",
+                        new ArrayList<>(),
+                        new ArrayList<>(),
                         new ArrayList<>());
 
 
@@ -197,6 +201,8 @@ public class MemberControllerRestDocs {
                         "코드스테이츠",
                         null,
                         "자기소개",
+                        new ArrayList<>(),
+                        new ArrayList<>(),
                         new ArrayList<>());
 
         // when
