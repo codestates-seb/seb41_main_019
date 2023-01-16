@@ -87,6 +87,12 @@ include::{snippets}/post-posting/curl-request.adoc[]
 .http-request
 include::{snippets}/post-posting/http-request.adoc[]
 
+.request-part
+include::{snippets}/post-posting/request-parts.adoc[]
+
+.requestBody-field
+include::{snippets}/post-posting/request-part-requestBody-fields.adoc[]
+
 .http-response
 include::{snippets}/post-posting/http-response.adoc[]
 
@@ -163,6 +169,22 @@ include::{snippets}/delete-posting/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/delete-posting/http-response.adoc[]
+
+=== 게시글 첨부파일 추가
+.curl-request
+include::{snippets}/post-posting-media/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-posting-media/http-request.adoc[]
+
+.request-part
+include::{snippets}/post-posting-media/request-parts.adoc[]
+
+.path-parameters
+include::{snippets}/post-posting-media/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/post-posting-media/http-response.adoc[]
 
 === 게시글 좋아요
 .curl-request
