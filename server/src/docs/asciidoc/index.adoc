@@ -121,6 +121,19 @@ include::{snippets}/patch-comment/http-response.adoc[]
 .response-fields
 include::{snippets}/patch-comment/response-fields.adoc[]
 
+=== 댓글 삭제
+.curl-request
+include::{snippets}/delete-comment/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-comment/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-comment/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-comment/http-response.adoc[]
+
 === 댓글 좋아요
 .curl-request
 include::{snippets}/post-comment-like/curl-request.adoc[]
@@ -146,19 +159,6 @@ include::{snippets}/delete-comment-like/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/delete-comment-like/http-response.adoc[]
-
-=== 댓글 삭제
-.curl-request
-include::{snippets}/delete-comment/curl-request.adoc[]
-
-.http-request
-include::{snippets}/delete-comment/http-request.adoc[]
-
-.path-parameters
-include::{snippets}/delete-comment/path-parameters.adoc[]
-
-.http-response
-include::{snippets}/delete-comment/http-response.adoc[]
 
 == chat
 
