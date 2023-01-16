@@ -142,7 +142,10 @@ public class PostingController {
         List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
         postingService.addMedia(postingId, mediaPaths, token);
-        return new ResponseEntity<>("Selected media uploaded successfully.",
+
+        Posting response = postingService.findPosting(postingId);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.postingToPostingResponseDto(response)),
             HttpStatus.OK);
     }
 
