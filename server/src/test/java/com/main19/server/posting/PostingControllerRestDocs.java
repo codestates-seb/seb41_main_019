@@ -55,6 +55,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.XMLFormatter;
 
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
 import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
@@ -115,7 +116,7 @@ public class PostingControllerRestDocs {
         LocalDateTime modifiedAt = LocalDateTime.now();
 
         // multipart/form-data
-        MockMultipartFile multipartFiles = new MockMultipartFile("multipartFiles", "profileImage.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        MockMultipartFile multipartFiles = new MockMultipartFile("multipartFiles", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
         MockMultipartFile requestBody = new MockMultipartFile("requestBody", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
 
         PostingResponseDto response =
@@ -240,6 +241,7 @@ public class PostingControllerRestDocs {
                         new ArrayList<>(),
                         new ArrayList<>()
                 );
+
         given(mapper.postingPatchDtoToPosting(Mockito.any(PostingPatchDto.class))).willReturn(new Posting());
         given(postingService.updatePosting(Mockito.any(Posting.class), Mockito.anyString())).willReturn(new Posting());
         given(mapper.tagPostDtoToTag(Mockito.anyString())).willReturn(new Tag());
@@ -688,5 +690,78 @@ public class PostingControllerRestDocs {
                                         headerWithName("Authorization").description("Bearer (accessToken)")
                                 )
                         ));
+    }
+    
+    @Test
+    public void postMediaTest() throws Exception {
+        // given
+        long postingId = 1L;
+        long memberId = 1L;
+
+        MockMultipartFile multipartFiles = new MockMultipartFile("multipartFiles", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+
+        PostingResponseDto response =
+                new PostingResponseDto(
+                        postingId,
+                        memberId,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test",
+                        new ArrayList<>(),
+                        LocalDateTime.now(),
+                        LocalDateTime.now(),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>()
+                );
+
+        given(storageService.uploadMedia(Mockito.anyList())).willReturn(new ArrayList<>());
+        given(postingService.addMedia(Mockito.anyLong(), Mockito.anyList(), Mockito.anyString())).willReturn(new Posting());
+        given(mapper.postingToPostingResponseDto(Mockito.any(Posting.class))).willReturn(response);
+        // when
+        ResultActions actions =
+                mockMvc.perform(
+                        RestDocumentationRequestBuilders.multipart("/posts/{posting-id}/medias", postingId)
+                                .file(multipartFiles)
+                                .header("Authorization", "Bearer AccessToken")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .contentType(MediaType.MULTIPART_FORM_DATA)
+                );
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andDo(document(
+                        "post-posting-media",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        ),
+                        pathParameters(
+                                parameterWithName("posting-id").description("게시글 식별자")
+                        ),
+                        requestParts(
+                                RequestDocumentation.partWithName("multipartFiles").description("첨부파일")
+                        ),
+                        responseFields(
+                                fieldWithPath("data.postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
+                                fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
+                                fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                fieldWithPath("data.postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
+                                fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
+                                fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
+                                fieldWithPath("data.tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
+                                fieldWithPath("data.likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
+                                fieldWithPath("data.postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
+                                fieldWithPath("data.commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
+                                fieldWithPath("data.comments").type(JsonFieldType.ARRAY).description("댓글 작성한 회원 리스르"),
+                                fieldWithPath("data.scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트")
+                        )
+                ));
     }
 }
