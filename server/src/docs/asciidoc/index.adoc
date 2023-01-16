@@ -186,6 +186,19 @@ include::{snippets}/post-posting-media/path-parameters.adoc[]
 .http-response
 include::{snippets}/post-posting-media/http-response.adoc[]
 
+=== 게시글 첨부파일 삭제
+.curl-request
+include::{snippets}/delete-media/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-media/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-media/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-media/http-response.adoc[]
+
 === 게시글 좋아요
 .curl-request
 include::{snippets}/post-posting-like/curl-request.adoc[]
