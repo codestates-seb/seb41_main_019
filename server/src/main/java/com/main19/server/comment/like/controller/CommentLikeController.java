@@ -26,13 +26,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/comments")
 @RequiredArgsConstructor
 public class CommentLikeController {
 
     private final CommentLikeService commentLikeService;
     private final CommentLikeMapper commentLikeMapper;
-    private final CommentLikeRepository commentLikeRepository;
 
     @PostMapping("/{comment-id}/likes")
     public ResponseEntity postLike(@RequestHeader(name = "Authorization") String token,
