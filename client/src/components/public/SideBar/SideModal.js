@@ -44,14 +44,17 @@ const StyledModal = styled.div`
   }
 `;
 
-const SideModal = () => {
+const SideModal = ({ handleOpendModal }) => {
   const navigate = useNavigate();
 
     return (
         <StyledModal>
           <ul>
             <li>
-              <span onClick={() => navigate("/setting")}>설정</span>
+              <span onClick={() => {
+                navigate("/setting")
+                handleOpendModal();
+              }}>설정</span>
               <AiFillSetting />
             </li>
             <li>
