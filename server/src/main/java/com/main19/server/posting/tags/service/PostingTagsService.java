@@ -2,6 +2,7 @@ package com.main19.server.posting.tags.service;
 
 import java.util.List;
 
+import com.main19.server.posting.repository.PostingRepository;
 import org.springframework.stereotype.Service;
 
 import com.main19.server.posting.entity.Posting;
@@ -19,8 +20,7 @@ public class PostingTagsService {
 	private final PostingService postingService;
 	private final TagService tagService;
 
-	public PostingTags createPostingTags(PostingTags postingTags, long postingId, String tagName) {
-		Posting posting = postingService.findVerifiedPosting(postingId);
+	public PostingTags createPostingTags(PostingTags postingTags, Posting posting, String tagName) {
 		postingTags.setPosting(posting);
 		Tag tag	 = tagService.findTag(tagName);
 		postingTags.setTag(tag);

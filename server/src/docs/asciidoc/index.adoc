@@ -180,3 +180,18 @@ include::{snippets}/delete-sse/http-response.adoc[]
 
 
 
+=======
+== Posting
+
+=== 포스팅 등록
+.curl-request
+include::{snippets}/posting/curl-request.adoc[]
+
+.http-request
+include::{snippets}/posting/http-request.adoc[]
+
+.http-response
+include::{snippets}/posting/http-response.adoc[]
+
+.response-fields
+include::{snippets}/posting/response-fields.adoc[]
