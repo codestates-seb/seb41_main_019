@@ -9,6 +9,7 @@ import FeedMenu from "./FeedMenu";
 import { useState } from "react";
 
 const Wrapper = styled.div`
+    position: relative;
     width: 500px;
     height: 730px;
     margin-bottom: 20px;
