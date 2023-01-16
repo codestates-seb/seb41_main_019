@@ -78,8 +78,62 @@ include::{snippets}/delete-member/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-member/http-response.adoc[]
 
+== Posting
 
+=== 게시글 등록
+.curl-request
+include::{snippets}/post-posting/curl-request.adoc[]
 
+.http-request
+include::{snippets}/post-posting/http-request.adoc[]
+
+.http-response
+include::{snippets}/post-posting/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-posting/response-fields.adoc[]
+
+=== 게시글 수정
+.curl-request
+include::{snippets}/patch-posting/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-posting/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-posting/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/patch-posting/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-posting/response-fields.adoc[]
+
+=== 게시글 좋아요
+.curl-request
+include::{snippets}/post-posting-like/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-posting-like/http-request.adoc[]
+
+.http-response
+include::{snippets}/post-posting-like/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-posting-like/response-fields.adoc[]
+
+=== 게시글 좋아요 취소
+.curl-request
+include::{snippets}/delete-posting-like/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-posting-like/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-posting-like/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-posting-like/http-response.adoc[]
 
 == comment
 
@@ -134,6 +188,32 @@ include::{snippets}/delete-comment/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-comment/http-response.adoc[]
 
+=== 댓글 좋아요
+.curl-request
+include::{snippets}/post-comment-like/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-comment-like/http-request.adoc[]
+
+.http-response
+include::{snippets}/post-comment-like/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-comment-like/response-fields.adoc[]
+
+=== 댓글 좋아요 취소
+.curl-request
+include::{snippets}/delete-comment-like/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-comment-like/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-comment-like/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-comment-like/http-response.adoc[]
+
 == chat
 
 === 채팅방 생성
@@ -148,7 +228,6 @@ include::{snippets}/post-chat-room/http-response.adoc[]
 
 .response-fields
 include::{snippets}/post-chat-room/response-fields.adoc[]
-
 
 === 채팅방 조회
 .curl-request
@@ -225,36 +304,3 @@ include::{snippets}/delete-sse/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/delete-sse/http-response.adoc[]
-
-
-
-== Posting
-
-=== 포스팅 등록
-.curl-request
-include::{snippets}/post-posting/curl-request.adoc[]
-
-.http-request
-include::{snippets}/post-posting/http-request.adoc[]
-
-.http-response
-include::{snippets}/post-posting/http-response.adoc[]
-
-.response-fields
-include::{snippets}/post-posting/response-fields.adoc[]
-
-=== 포스팅 수정
-.curl-request
-include::{snippets}/patch-posting/curl-request.adoc[]
-
-.http-request
-include::{snippets}/patch-posting/http-request.adoc[]
-
-.path-parameters
-include::{snippets}/patch-posting/path-parameters.adoc[]
-
-.http-response
-include::{snippets}/patch-posting/http-response.adoc[]
-
-.response-fields
-include::{snippets}/patch-posting/response-fields.adoc[]
