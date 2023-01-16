@@ -61,6 +61,7 @@ import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -658,5 +659,34 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
                         )
                 ));
+    }
+    
+    @Test
+    public void deletePostingTest() throws Exception {
+        // given
+        long postingId = 1L;
+        doNothing().when(storageService).removeAll(Mockito.anyLong());
+        doNothing().when(postingService).deletePosting(Mockito.anyLong(), Mockito.anyString());
+        
+        // when
+        ResultActions actions =
+                mockMvc.perform(
+                        RestDocumentationRequestBuilders.delete("/posts/{posting-id}", postingId)
+                                .header("Authorization", "Bearer AccessToken")
+                );
+
+        // then
+        actions.andExpect(status().isNoContent())
+                .andDo(
+                        document(
+                                "delete-posting",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor(),
+                                pathParameters(parameterWithName("posting-id").description("게시글 식별자")
+                                ),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("Bearer (accessToken)")
+                                )
+                        ));
     }
 }
