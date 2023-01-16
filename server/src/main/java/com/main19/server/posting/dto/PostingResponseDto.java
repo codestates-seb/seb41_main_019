@@ -8,11 +8,15 @@ import com.main19.server.posting.like.dto.PostingLikeGetResponseDto;
 import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class PostingResponseDto {
 	private long postingId;
 	private long memberId;

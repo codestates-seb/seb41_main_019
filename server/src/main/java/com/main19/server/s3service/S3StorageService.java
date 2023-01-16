@@ -6,6 +6,8 @@ import java.util.*;
 
 import javax.annotation.PostConstruct;
 
+import com.main19.server.member.entity.Member;
+import com.main19.server.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class S3StorageService {
 	private final AmazonS3 s3Client;
 	private final MediaRepository mediaRepository;
+	private final MemberService memberService;
 
 	@Value("${cloud.aws.credentials.accessKey}")
 	private String accessKey;
@@ -57,10 +60,8 @@ public class S3StorageService {
 	public List<String> uploadMedia(List<MultipartFile> multipartFiles) {
 		List<String> mediaUrlList = new ArrayList<>();
 
-		// forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
 		for (MultipartFile file : multipartFiles) {
 			String fileName = createFileName(file.getOriginalFilename());
-			// 지울거 System.out.println(fileName);
 			ObjectMetadata objectMetadata = new ObjectMetadata();
 			objectMetadata.setContentLength(file.getSize());
 			objectMetadata.setContentType(file.getContentType());
@@ -80,7 +81,6 @@ public class S3StorageService {
 		Media findmedia = findVerfiedMedia(mediaId);
 		String fileName = (findmedia.getMediaUrl()).substring(68);
 
-		// s3 버킷내에 해당 파일 있는지 먼저 확인
 		if (!s3Client.doesObjectExist(bucket + "/posting/media", fileName)) {
 			throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
 		}
@@ -95,18 +95,15 @@ public class S3StorageService {
 
 			return findMedia;
 		}
-		// 이미지파일명 중복 방지, 파일명에 UUID를 붙여서 저장
 		private String createFileName(String fileName) {
 			return UUID.randomUUID().toString().concat(getFileExtension(fileName));
 		}
 
-		// 파일 유효성 검사
 		private String getFileExtension(String fileName) {
 			if (fileName.length() == 0) {
 				throw new BusinessLogicException(ExceptionCode.WRONG_POSTING_MEDIA);
 			}
 
-			// 파일 유형 추가할 거 있으면 추가하자
 			ArrayList<String> fileValidate = new ArrayList<>();
 			fileValidate.add(".jpg");
 			fileValidate.add(".jpeg");
@@ -122,8 +119,6 @@ public class S3StorageService {
 			return fileName.substring(fileName.lastIndexOf("."));
 	}
 
-	// 프로필 이미지 업로드
-	// todo Exception나는거 마다 잡아다가 처리해줬는데 괜찮을지 모르겠음
 	public String uploadProfileImage(MultipartFile profileImage) {
 		String profileImageUrl;
 
@@ -136,10 +131,20 @@ public class S3StorageService {
 			s3Client.putObject(new PutObjectRequest(bucket + "/member/profileImage", fileName, inputStream, objectMetadata)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
 			profileImageUrl = (s3Client.getUrl(bucket + "/member/profileImage", fileName).toString());
-			} catch(IOException | IllegalArgumentException e) {
-				profileImageUrl = null;
+			} catch(IOException  e) {
+				throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
 			}
 		return  profileImageUrl;
+	}
+
+	public void removeProfileImage(long memberId) {
+		Member findMember = memberService.findMember(memberId);
+		String fileName = (findMember.getProfileImage()).substring(74);
+
+		if (!s3Client.doesObjectExist(bucket + "/member/profileImage", fileName)) {
+			throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
+		}
+		s3Client.deleteObject(bucket + "/member/profileImage", fileName);
 	}
 
 	private String createProfileImageName(String fileName) {

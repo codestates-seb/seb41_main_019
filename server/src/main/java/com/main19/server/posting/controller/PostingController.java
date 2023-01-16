@@ -63,12 +63,11 @@ public class PostingController {
         Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody),
             requestBody.getMemberId(), mediaPaths, token);
 
-        for (int i = 0; i < requestBody.getTagName().size(); i++) {
+        for(int i = 0; i < requestBody.getTagName().size(); i++) {
             tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
             PostingTags postingTags = mapper.postingPostDtoToPostingTag(requestBody);
-            Long postingId = posting.getPostingId();
             String tagName = requestBody.getTagName().get(i);
-            postingTagsService.createPostingTags(postingTags, postingId, tagName);
+            postingTagsService.createPostingTags(postingTags, posting, tagName);
         }
 
         return new ResponseEntity<>(
@@ -153,12 +152,12 @@ public class PostingController {
 
         Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
         if (posting.getPostingMedias().stream().count() == 1) {
-            throw new BusinessLogicException(ExceptionCode.POSTING_REQUIRES_AT_LEAST_ONE_MEDIA);
+            throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
         }
 
         storageService.remove(mediaId);
         postingService.deleteMedia(mediaId,token);
 
-        return new ResponseEntity<>("Selected media deleted successfully.", HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

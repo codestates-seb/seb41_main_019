@@ -1,9 +1,9 @@
 package com.main19.server.sse.entity;
 
+import com.main19.server.posting.entity.Posting;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import com.main19.server.member.entity.Member;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -45,18 +45,23 @@ public class Sse {
     @JoinColumn(name = "sender_id")
     private Member sender;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "posting_id")
+    private Posting posting;
+
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public enum SseType {
-        message,comment,like
+        message,comment,postLike,commentLike
     }
 
     @Builder
-    public Sse(Member receiver, SseType sseType, Member sender, Boolean isRead) {
+    public Sse(Member receiver, SseType sseType, Member sender, Boolean isRead, Posting posting) {
         this.receiver = receiver;
         this.sseType = sseType;
         this.sender = sender;
         this.isRead = isRead;
+        this.posting = posting;
     }
 }

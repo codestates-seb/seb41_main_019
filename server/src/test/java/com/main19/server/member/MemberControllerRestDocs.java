@@ -1,20 +1,13 @@
 package com.main19.server.member;
 
 import com.google.gson.Gson;
-import com.main19.server.ServerApplication;
 import com.main19.server.auth.jwt.JwtTokenizer;
-import com.main19.server.comment.controller.CommentController;
-import com.main19.server.comment.mapper.CommentMapper;
-import com.main19.server.comment.service.CommentService;
 import com.main19.server.member.controller.MemberController;
 import com.main19.server.member.dto.MemberDto;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.mapper.MemberMapper;
 import com.main19.server.member.service.MemberService;
-import com.main19.server.redis.RedisDao;
-import com.main19.server.resources.S3MockConfig;
 import com.main19.server.s3service.S3StorageService;
-import com.main19.server.utils.DocumentUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +17,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
 import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
@@ -40,6 +38,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -193,6 +192,36 @@ public class MemberControllerRestDocs {
                         .header("Authorization", "Bearer AccessToken")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
+                        
+    public void MemberProfileImageTest() throws Exception {
+        // given
+
+        long memberId = 1L;
+
+        MockMultipartFile profileImage = new MockMultipartFile("profileImage", "profileImage.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+
+        MemberDto.Response response =
+            new MemberDto.Response(
+                1L,
+                "taebong98",
+                "aaa@naver.com",
+                "코드스테이츠",
+                "profileImage.jpeg",
+                "자기소개",
+                new ArrayList<>());
+
+
+        given(storageService.uploadProfileImage(Mockito.any())).willReturn("profileImageUrl");
+        given(memberService.createProfileImage(Mockito.anyLong(),Mockito.anyString(),Mockito.anyString())).willReturn(new Member());
+        given(mapper.memberToMemberResponse(Mockito.any(Member.class))).willReturn(response);
+
+        // when
+        ResultActions actions = mockMvc.perform(
+            RestDocumentationRequestBuilders.multipart("/members/{member-id}/profileimage",memberId)
+                .file(profileImage)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization","Atk")
         );
 
         // then
@@ -209,5 +238,33 @@ public class MemberControllerRestDocs {
                                 headerWithName("Authorization").description("Bearer AccessToken")
                         )
                 ));
+    }
+            .andExpect(status().isCreated())
+            .andDo(document(
+                "post-member-image",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                    requestHeaders(
+                        headerWithName("Authorization").description("Bearer AccessToken")
+                    ),
+                    pathParameters(
+                        parameterWithName("member-id").description("회원 식별자")
+                    ),
+                    RequestDocumentation.requestParts
+                        (RequestDocumentation.partWithName("profileImage").description("회원 이미지")),
+                    responseFields(
+                        List.of(
+                            fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                            fieldWithPath("userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                            fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
+                            fieldWithPath("location").type(JsonFieldType.STRING).description("회원 소속"),
+                            fieldWithPath("profileImage").type(JsonFieldType.STRING).description("회원 프로필 이미지"),
+                            fieldWithPath("profileText").type(JsonFieldType.STRING).description("자기 소개"),
+                            fieldWithPath("scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩 포스팅")
+                        )
+                    )
+
+            )
+                );
     }
 }

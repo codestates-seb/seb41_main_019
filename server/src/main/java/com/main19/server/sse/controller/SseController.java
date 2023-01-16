@@ -1,6 +1,8 @@
 package com.main19.server.sse.controller;
 
 import com.main19.server.dto.MultiResponseDto;
+import com.main19.server.dto.SingleResponseDto;
+import com.main19.server.sse.dto.SseResponseDto;
 import com.main19.server.sse.entity.Sse;
 import com.main19.server.sse.mapper.SseMapper;
 import com.main19.server.sse.service.SseService;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,13 +41,13 @@ public class SseController {
         @PathVariable("sse-id") @Positive long sseId) {
 
         sseService.updateSse(sseId, token);
+        SseResponseDto response = sseMapper.sseToSseResponseDto(sseService.findSseId(sseId));
 
-        return ResponseEntity.ok().build();
+        return new ResponseEntity(new SingleResponseDto<>(response),HttpStatus.OK);
     }
 
     @GetMapping("/notification/{member-id}")
-    public ResponseEntity getSse(@RequestHeader(name = "Authorization") String token,
-        @PathVariable("member-id") @Positive long memberId,
+    public ResponseEntity getSse(@PathVariable("member-id") @Positive long memberId,
         @PageableDefault(size = 10, sort = "sse_id", direction = Direction.ASC) Pageable pageable) {
 
         Page<Sse> pageSse = sseService.findSse(memberId,pageable);
@@ -53,5 +56,14 @@ public class SseController {
         return new ResponseEntity<>(
             new MultiResponseDto<>(sseMapper.sseToSseResponseDtos(response),
                 pageSse), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/notification/{sse-id}")
+    public ResponseEntity deleteSee(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("sse-id") @Positive long sseId) {
+
+        sseService.deleteSee(sseId,token);
+
+        return ResponseEntity.noContent().build();
     }
 }
