@@ -1,31 +1,20 @@
 package com.main19.server.posting;
 
-import com.amazonaws.Request;
 import com.google.gson.Gson;
-import com.main19.server.auth.jwt.JwtTokenizer;
-import com.main19.server.comment.dto.CommentDto;
-import com.main19.server.comment.entity.Comment;
-import com.main19.server.member.controller.MemberController;
 import com.main19.server.member.entity.Member;
-import com.main19.server.member.mapper.MemberMapper;
-import com.main19.server.member.repository.MemberRepository;
-import com.main19.server.member.service.MemberService;
 import com.main19.server.posting.controller.PostingController;
 import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
 import com.main19.server.posting.dto.PostingResponseDto;
 import com.main19.server.posting.entity.Posting;
-import com.main19.server.posting.like.repository.PostingLikeRepository;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.service.PostingService;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
-import com.main19.server.posting.tags.dto.TagPostDto;
 import com.main19.server.posting.tags.entity.PostingTags;
 import com.main19.server.posting.tags.entity.Tag;
 import com.main19.server.posting.tags.service.PostingTagsService;
 import com.main19.server.posting.tags.service.TagService;
 import com.main19.server.s3service.S3StorageService;
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,41 +24,29 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
 
-import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.XMLFormatter;
 
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
 import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(value = PostingController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
@@ -763,5 +740,35 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트")
                         )
                 ));
+    }
+
+    @Test
+    public void deleteMedia() throws Exception {
+        // given
+        long mediaId = 1L;
+
+        doNothing().when(storageService).remove(Mockito.anyLong());
+        doNothing().when(postingService).deleteMedia(Mockito.anyLong(), Mockito.anyString());
+
+        // when
+        ResultActions actions =
+                mockMvc.perform(
+                        RestDocumentationRequestBuilders.delete("/posts/medias/{media-id}", mediaId)
+                                .header("Authorization", "Bearer AccessToken")
+                );
+
+        // then
+        actions.andExpect(status().isNoContent())
+                .andDo(
+                        document(
+                                "delete-media",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor(),
+                                pathParameters(parameterWithName("media-id").description("첨부파일 식별자")
+                                ),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("Bearer (accessToken)")
+                                )
+                        ));
     }
 }
