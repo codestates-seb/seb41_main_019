@@ -114,7 +114,7 @@ public class PostingController {
             HttpStatus.OK);
     }
 
-    @GetMapping("/member/{member-id}")
+    @GetMapping("/members/{member-id}")
     public ResponseEntity getPostingsByMember(@PathVariable("member-id") @Positive long memberId,
                                               @Positive @RequestParam int page,
                                               @Positive @RequestParam int size) {
@@ -133,7 +133,7 @@ public class PostingController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping(value = "/{posting-id}/media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{posting-id}/medias", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId,
         @RequestPart List<MultipartFile> multipartFiles) {
@@ -144,7 +144,7 @@ public class PostingController {
             HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/media/{media-id}")
+    @DeleteMapping(value = "/medias/{media-id}")
     public ResponseEntity deleteMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("media-id") @Positive long mediaId) {
 
