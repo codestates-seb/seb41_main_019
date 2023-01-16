@@ -1,12 +1,14 @@
 package com.main19.server.follow.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class FollowDto {
     @Getter
-    public static class Post {
+    @AllArgsConstructor
+    public static class Response {
         private long followId;
         private long followingId;
-        private long followerId;
+        private long followedId;
     }
 }
