@@ -111,7 +111,7 @@ public class PostingService {
 		mediaRepository.delete(findMedia);
 	}
 
-	public void addMedia(long postingId, List<String> mediaPaths, String token) {
+	public Posting addMedia(long postingId, List<String> mediaPaths, String token) {
 
 		long tokenId = jwtTokenizer.getMemberId(token);
 
@@ -127,6 +127,7 @@ public class PostingService {
 			Media media = new Media(mediaUrl, findPosting);
 			mediaRepository.save(media);
 		}
+		return findPosting;
 	}
 
 	public Posting findVerifiedPosting(long postingId) {
