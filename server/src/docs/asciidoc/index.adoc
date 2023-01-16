@@ -48,21 +48,21 @@ include::{snippets}/get-member/http-response.adoc[]
 .response-fields
 include::{snippets}/get-member/response-fields.adoc[]
 
-=== 회원조회
+=== 회원삭제
 .curl-request
-include::{snippets}/get-member/curl-request.adoc[]
+include::{snippets}/delete-member/curl-request.adoc[]
 
 .http-request
-include::{snippets}/get-member/http-request.adoc[]
+include::{snippets}/delete-member/http-request.adoc[]
 
 .request-fields
-include::{snippets}/get-member/request-fields.adoc[]
+include::{snippets}/delete-member/request-fields.adoc[]
 
 .http-response
-include::{snippets}/get-member/http-response.adoc[]
+include::{snippets}/delete-member/http-response.adoc[]
 
 .response-fields
-include::{snippets}/get-member/response-fields.adoc[]
+include::{snippets}/delete-member/response-fields.adoc[]
 
 == Comment
 
