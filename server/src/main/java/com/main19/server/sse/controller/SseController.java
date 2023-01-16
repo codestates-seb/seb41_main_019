@@ -58,7 +58,7 @@ public class SseController {
                 pageSse), HttpStatus.OK);
     }
 
-    @DeleteMapping("/notification/{member-id}")
+    @DeleteMapping("/notification/{sse-id}")
     public ResponseEntity deleteSee(@RequestHeader(name = "Authorization") String token,
         @PathVariable("sse-id") @Positive long sseId) {
 
