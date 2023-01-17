@@ -15,7 +15,7 @@ const StyledHeader = styled.header`
     height: 50px;
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 80px;
     margin-top: 8px;
 
     .active {

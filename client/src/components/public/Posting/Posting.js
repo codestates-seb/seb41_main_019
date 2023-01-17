@@ -22,9 +22,14 @@ const Wrapper= styled.div`
     padding: 50px;
     color: gray;
     z-index: 1000;
+    box-shadow: 4px 4px 4px 1px rgba(0,0,0,0.3); 
 
     > div:first-child {
         margin: 0 0 0 auto;
+    }
+
+    button:last-of-type{
+        background-color: #D96848;
     }
 
     @media screen and (max-width: 1255px) {
@@ -65,7 +70,10 @@ const Posting = ({ handleIsPosted }) => {
             <Upload />
             <StyledTextarea placeholder="당신의 식물을 소개해주세요." />
             <Tags />
-            <BlueBtn>올리기</BlueBtn>
+            <div>
+                <BlueBtn>올리기</BlueBtn>
+                <BlueBtn onClick={handleIsPosted}>취소</BlueBtn>
+            </div>
         </Wrapper>
     )
 }
