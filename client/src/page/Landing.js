@@ -79,7 +79,7 @@ const Landing = () => {
                 </nav>
             </StyledHeader>
             {
-                selected === 0 ? <Main /> :  selected === 1 ? <Login setSelected={setSelected} /> : <Sign />
+                selected === 0 ? <Main /> :  selected === 1 ? <Login setSelected={setSelected} /> : <Sign setSelected={setSelected}/>
             }
         </Wrapper>
     )
