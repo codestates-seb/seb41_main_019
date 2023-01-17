@@ -14,6 +14,8 @@ public enum ExceptionCode {
 	TAG_NOT_FOUND(404, "Tag not found"),
 	SCRAP_NOT_FOUND(404, "Scrap not found"),
 	SCRAP_ALREADY_EXIST(409, "Scrap already exist"),
+	FOLLOW_NOT_FOUND(404, "Follow not found"),
+	FOLLOW_ALREADY_EXIST(409, "Follow already exist"),
 	WRONG_POSTING_MEDIA(405, "Wrong posting media"), // 첨부파일 없이 포스팅 할 시
 	WRONG_MEDIA_FORMAT(405, "Wrong media format"), // 지원하는 포맷이 아닐 때
 	MEDIA_UPLOAD_ERROR(404, "Media upload error"), // s3에 업로드하다가 뭐 안됐을 때

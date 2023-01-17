@@ -26,8 +26,6 @@ public class FollowController {
     public ResponseEntity postFollow(@PathVariable("member-id") @Positive long followedMemberId,
                                      @RequestHeader(name = "Authorization") String token) {
 
-        // todo 같은 사람 팔로우 할수 없게 막는 기능 추가
-
         long followingMemberId = jwtTokenizer.getMemberId(token);
         Follow follow = followService.createFollow(followingMemberId, followedMemberId);
 

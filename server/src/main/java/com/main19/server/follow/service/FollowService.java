@@ -18,29 +18,34 @@ public class FollowService {
     private final MemberRepository memberRepository;
 
     public Follow createFollow(long followingMemberId, long followedMemberId) {
-        Follow follow = new Follow();
         if (followedMemberId == followingMemberId) {
             throw new BusinessLogicException(ExceptionCode.SAME_MEMBER);
         }
-        follow.setFollowedId(findFollowingMember(followedMemberId));
-        follow.setFollowingId(findFollowingMember(followingMemberId));
+
+        Follow follow = new Follow();
+        follow.setFollowingId(findFollowMember(followingMemberId));
+        follow.setFollowedId(findFollowMember(followedMemberId));
+
         return followRepository.save(follow);
     }
 
     public void deleteFollowing(long followingMemberId, long followedMemberId) {
-        Follow follow = findFollow(followingMemberId, followedMemberId);
+        Follow follow = findExistFollow(followingMemberId, followedMemberId);
         followRepository.delete(follow);
     }
 
 
-    private Member findFollowingMember(long followId) {
+
+    private Member findFollowMember(long followId) {
         Optional<Member> optionalFollow = memberRepository.findById(followId);
         Member member = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return member;
     }
 
-    private Follow findFollow(long followingMemberId, long followedMemberId) {
-        Follow follow = followRepository.findFollowId(followingMemberId, followedMemberId);
+
+    private Follow findExistFollow(long followingMemberId, long followedMemberId) {
+        Optional<Follow> optionalFollow = followRepository.findFollowId(followingMemberId, followedMemberId);
+        Follow follow = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
         return follow;
     }
 }
