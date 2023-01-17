@@ -24,7 +24,9 @@ public enum ExceptionCode {
 	COMMENT_LIKE_EXISTS(409,"You Already Pressed Like"),
 	CHATROOM_NOT_FOUND(404, "ChatRoom Not Found"),
 	CHATROOM_EXISTS(409, "ChatRoom Already Exists"),
-	NOTIFICATION_NOT_FOUND(404, "Notification Not Found");
+	NOTIFICATION_NOT_FOUND(404, "Notification Not Found"),
+	MYPLANTS_NOT_FOUND(404, "My Plants Not Found"),
+	GALLERY_NOT_FOUND(404, "Gallery Not Found"),;
 
 
 	@Getter
