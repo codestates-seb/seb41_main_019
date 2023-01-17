@@ -45,10 +45,10 @@ public class Posting {
 	 @OneToMany(mappedBy = "posting")
 	 private List<Comment> comments;
 
-	@OneToMany(mappedBy = "posting")
+	@OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
 	private List<PostingTags> tags = new ArrayList<>();
 
-	@OneToMany(mappedBy = "posting")
+	@OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
 	private List<Scrap> scrapMemberList = new ArrayList<>();
 	private long likeCount;
 	private long commentCount;

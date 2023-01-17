@@ -114,8 +114,7 @@ public class PostingController {
             HttpStatus.OK);
     }
 
-    //특정 회원의 포스팅 목록 조회 추가해야함
-    @GetMapping("/member/{member-id}")
+    @GetMapping("/members/{member-id}")
     public ResponseEntity getPostingsByMember(@PathVariable("member-id") @Positive long memberId,
                                               @Positive @RequestParam int page,
                                               @Positive @RequestParam int size) {
@@ -126,34 +125,31 @@ public class PostingController {
                 HttpStatus.OK);
     }
 
-
     @DeleteMapping(value = "/{posting-id}")
     public ResponseEntity deletePosting(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId) {
+
+        storageService.removeAll(postingId);
         postingService.deletePosting(postingId,token);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping(value = "/{posting-id}/media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{posting-id}/medias", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId,
         @RequestPart List<MultipartFile> multipartFiles) {
         List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
-        postingService.addMedia(postingId, mediaPaths, token);
-        return new ResponseEntity<>("Selected media uploaded successfully.",
+        Posting updatedPosting = postingService.addMedia(postingId, mediaPaths, token);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.postingToPostingResponseDto(updatedPosting)),
             HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/media/{media-id}")
+    @DeleteMapping(value = "/medias/{media-id}")
     public ResponseEntity deleteMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("media-id") @Positive long mediaId) {
-
-        Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
-        if (posting.getPostingMedias().stream().count() == 1) {
-            throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
-        }
 
         storageService.remove(mediaId);
         postingService.deleteMedia(mediaId,token);

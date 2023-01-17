@@ -87,6 +87,12 @@ include::{snippets}/post-posting/curl-request.adoc[]
 .http-request
 include::{snippets}/post-posting/http-request.adoc[]
 
+.request-part
+include::{snippets}/post-posting/request-parts.adoc[]
+
+.requestBody-field
+include::{snippets}/post-posting/request-part-requestBody-fields.adoc[]
+
 .http-response
 include::{snippets}/post-posting/http-response.adoc[]
 
@@ -108,6 +114,90 @@ include::{snippets}/patch-posting/http-response.adoc[]
 
 .response-fields
 include::{snippets}/patch-posting/response-fields.adoc[]
+
+=== 게시글 단일 조회
+.http-request
+include::{snippets}/get-single-posting/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-single-posting/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-single-posting/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-single-posting/response-fields.adoc[]
+
+=== 게시글 전체 조회
+.http-request
+include::{snippets}/get-single-posting/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-single-posting/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-single-posting/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-single-posting/response-fields.adoc[]
+
+=== 특정 회원의 게시글 전체 조회
+.http-request
+include::{snippets}/get-postings-by-member/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-postings-by-member/path-parameters.adoc[]
+
+.request-parameters
+include::{snippets}/get-postings-by-member/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-postings-by-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-postings-by-member/response-fields.adoc[]
+
+=== 게시글 삭제
+.curl-request
+include::{snippets}/delete-posting/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-posting/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-posting/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-posting/http-response.adoc[]
+
+=== 게시글 첨부파일 추가
+.curl-request
+include::{snippets}/post-posting-media/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-posting-media/http-request.adoc[]
+
+.request-part
+include::{snippets}/post-posting-media/request-parts.adoc[]
+
+.path-parameters
+include::{snippets}/post-posting-media/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/post-posting-media/http-response.adoc[]
+
+=== 게시글 첨부파일 삭제
+.curl-request
+include::{snippets}/delete-media/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-media/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-media/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-media/http-response.adoc[]
 
 === 게시글 좋아요
 .curl-request

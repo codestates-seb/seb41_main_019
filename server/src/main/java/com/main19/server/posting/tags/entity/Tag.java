@@ -3,11 +3,7 @@ package com.main19.server.posting.tags.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +17,7 @@ public class Tag {
 	private Long tagId;
 	private String tagName;
 
-	@OneToMany(mappedBy = "tag")
+	@OneToMany(mappedBy = "tag", cascade = CascadeType.PERSIST)
 	private List<PostingTags> postings = new ArrayList<>();
 
 }
