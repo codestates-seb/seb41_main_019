@@ -1,6 +1,10 @@
 import styled from "styled-components";
+import jwtDecode from "jwt-decode";
+import axios from "axios";
+
 import { AiFillSetting } from "react-icons/ai";
 import { useState } from "react";
+import Cookie from "../../util/Cookie";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -34,9 +38,6 @@ const StyledInfoBox = styled.div`
 const StyledUserName = styled.div`
   display: flex;
   justify-content: space-between;
-  span:first-child {
-    font-size: 20px;
-  }
   span {
     display: flex;
     align-items: center;
@@ -52,26 +53,26 @@ const StyledInfoItem = styled.div`
   width: 80px;
 `;
 
-// 더미데이터, 추후 API 완성시 GET 요청으로 받아올 것
-const dummyData = {
-  memberId: 10,
-  userName: "USER",
-  location: "Seoul",
-  profileImage:
-    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-  profileText: "방어먹고싶다",
-  followingCount: 39,
-  followerCount: 123,
-};
-
 const UserInfo = () => {
-  const [userInfo, setUserInfo] = useState(dummyData);
-  const { userName, profileImage, profileText, followingCount, followerCount } =
-    userInfo;
+  const cookie = new Cookie();
+  const getJWT = cookie.get("authorization");
+  const decodedJWT = jwtDecode(getJWT);
 
-  const handleSettingClick = () => {
-    // 세팅 모달 활성화 로직
-  };
+  const [userInfo, setUserInfo] = useState(JSON.stringify(decodedJWT));
+
+  const {
+    memberId,
+    username,
+    profileImage,
+    profileText,
+    followingCount,
+    followerCount,
+  } = userInfo;
+
+  // const postCount = axios({
+  //   method: "get",
+  //   url: `http://13.124.33.113:8080/posts/member/${memberId}?page=1&size=20`,
+  // });
 
   return (
     <>
@@ -81,18 +82,21 @@ const UserInfo = () => {
         </StyledUserImgWrapper>
         <StyledInfoBox>
           <StyledUserName>
-            <span>{userName}</span>
-            <span onClick={handleSettingClick}>
-              <AiFillSetting />
-              설정
-            </span>
+            <span>{username}</span>
+            <a href="/setting">
+              <span>
+                <AiFillSetting />
+                설정
+              </span>
+            </a>
           </StyledUserName>
           <StyledUserInfoList>
             <a href="#">
               <StyledInfoItem>
                 <p>게시물</p>
                 {/* 게시물 숫자 데이터 API 협의하거나 게시물 GET 요청 후 데이터 length 사용 필요 */}
-                <p>10</p>
+                {/* <p>{postCount}</p> */}
+                <p>000</p>
               </StyledInfoItem>
             </a>
             <a href="#">
