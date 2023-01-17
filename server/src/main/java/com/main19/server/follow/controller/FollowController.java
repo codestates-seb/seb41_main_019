@@ -34,4 +34,12 @@ public class FollowController {
                 new SingleResponseDto(mapper.followToFollowResponseDto(follow)), HttpStatus.CREATED
         );
     }
+
+    @DeleteMapping("{member-id}")
+    public ResponseEntity deleteFollow(@PathVariable("member-id") @Positive long followedMemberId,
+                                       @RequestHeader(name = "Authorization") String token) {
+        long followingMemberId = jwtTokenizer.getMemberId(token);
+        followService.deleteFollowing(followingMemberId, followedMemberId);
+        return ResponseEntity.noContent().build();
+    }
 }
