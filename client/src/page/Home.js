@@ -1,5 +1,5 @@
 import Recommends from "../components/Home/Recommends";
-import Feeds from "../components/Home/Feeds";
+import Feed from "../components/Home/Feed";
 import styled from "styled-components";
 import View from "../components/Home/View";
 import { useState } from "react";
@@ -32,7 +32,7 @@ const Home = ({ handleIsCovered }) => {
             {deleteMenu ? <DeleteModal handleDelete={handleDelete} /> : null}
             <StyledMain>
                 <Recommends />
-                <Feeds handleModal={handleModal} handleDelete={handleDelete}/>
+                <Feed handleModal={handleModal} handleDelete={handleDelete}/>
             </StyledMain>
         </>
     )
