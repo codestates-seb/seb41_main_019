@@ -8,6 +8,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.main19.server.member.entity.Member;
 import com.main19.server.myplants.controller.MyPlantsController;
 import com.main19.server.myplants.dto.MyPlantsDto;
 import com.main19.server.myplants.dto.MyPlantsDto.Patch;
@@ -38,6 +40,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -176,6 +180,68 @@ public class MyPlantsControllerRestDocs {
                     fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
                     fieldWithPath("data.plantName").type(JsonFieldType.STRING).description("식물 이름"),
                     fieldWithPath("data.galleryList[].galleryId").type(JsonFieldType.NUMBER).description("갤러리 식별자")
+                )
+            ));
+    }
+
+    @Test
+    public void GetMyPlantsTest() throws Exception {
+
+        long plantsId = 1L;
+
+        Member member = new Member();
+
+        MyPlants myPlants1 = new MyPlants(plantsId,"머호",member,new ArrayList<>());
+        MyPlants myPlants2 = new MyPlants(plantsId,"머호",member,new ArrayList<>());
+
+        Page<MyPlants> pageMyPlants = new PageImpl<>(List.of(myPlants1, myPlants2));
+        List<MyPlants> listMyPlants = List.of(myPlants1,myPlants2);
+
+        given(myPlantsService.findByMyPlants(Mockito.anyInt(),Mockito.anyInt()))
+            .willReturn(pageMyPlants);
+
+        given(myPlantsMapper.myPlantsListToMyPlantsResponseDto(Mockito.anyList())).willReturn(
+            List.of(
+                new MyPlantsDto.Response(
+                    listMyPlants.get(0).getMyPlantsId(),
+                    listMyPlants.get(0).getPlantName(),
+                    new ArrayList<>()),
+                new MyPlantsDto.Response(
+                    listMyPlants.get(1).getMyPlantsId(),
+                    listMyPlants.get(1).getPlantName(),
+                    new ArrayList<>())));
+
+        ResultActions actions =
+            mockMvc.perform(
+                get("/myplants")
+                    .header("Authorization", "Bearer AccessToken")
+                    .param("page","1")
+                    .param("size","10")
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+        actions
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data[0].myPlantsId").value(listMyPlants.get(0).getMyPlantsId()))
+            .andExpect(jsonPath("$.data[0].plantName").value(listMyPlants.get(0).getPlantName()))
+            .andExpect(jsonPath("$.data[0].galleryList").value(listMyPlants.get(0).getGalleryList()))
+            .andExpect(jsonPath("$.data[1].myPlantsId").value(listMyPlants.get(1).getMyPlantsId()))
+            .andExpect(jsonPath("$.data[1].plantName").value(listMyPlants.get(1).getPlantName()))
+            .andExpect(jsonPath("$.data[1].galleryList").value(listMyPlants.get(1).getGalleryList()))
+
+            .andDo(document(
+                "gets-my-plants",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                responseFields(
+                    fieldWithPath("data[].myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
+                    fieldWithPath("data[].plantName").type(JsonFieldType.STRING).description("식물 이름"),
+                    fieldWithPath("data[].galleryList").type(JsonFieldType.ARRAY).description("갤러리 리스트"),
+                    fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
+                    fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                    fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                    fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
+                    fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
                 )
             ));
     }
