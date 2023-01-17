@@ -56,7 +56,7 @@ const StyledHeader = styled.header`
     }
 `
 
-const Landing = () => {
+const Landing = ({ setIsLanded }) => {
     const [ selected, setSelected ] = useState(0);
 
     return (
@@ -79,7 +79,7 @@ const Landing = () => {
                 </nav>
             </StyledHeader>
             {
-                selected === 0 ? <Main /> :  selected === 1 ? <Login setSelected={setSelected} /> : <Sign setSelected={setSelected}/>
+                selected === 0 ? <Main /> :  selected === 1 ? <Login setSelected={setSelected} setIsLanded={setIsLanded} /> : <Sign setSelected={setSelected}/>
             }
         </Wrapper>
     )
