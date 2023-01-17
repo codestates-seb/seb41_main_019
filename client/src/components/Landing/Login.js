@@ -1,6 +1,6 @@
 import Logo from "../public/Logo"
 import styled from "styled-components"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import DefaultInput from "./DefaultInput"
 
 const Wrapper = styled.div`
@@ -12,8 +12,8 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
 
-    div:nth-child(2) {
-        margin : 0px 0px 0px 0px;
+    form div:first-child {
+        margin: 0px 0px 0px 0px;
     }
 `
 const StyledLogin = styled.div`
@@ -76,14 +76,22 @@ const StyledBtn2 = styled(StyledBtn)`
 const Login = ({ setSelected }) => {
     const [ id, setId ] = useState("");
     const [ pw, setPw ] = useState("");
+    const inputRef = useRef([]);
+
+    useEffect(() => {
+        inputRef.current[0].focus();
+    }, [])
 
     return (
         <Wrapper>
             <StyledLogin>
                 <Logo />
-                <DefaultInput label="아이디" id="id" state={id} setState={setId} />
-                <DefaultInput label="패스워드" id="password" type="password"
-                    state={pw} setState={setPw} />
+                <form onSubmit={() => false}>
+                    <DefaultInput label="아이디" id="id" state={id} setState={setId} inputRef={inputRef} idx={0} 
+                        autocomplete="off" />
+                    <DefaultInput label="패스워드" id="password" type="password"
+                        state={pw} setState={setPw} inputRef={inputRef} idx={1} />
+                </form>
                 <StyledCheck>
                     <input type="checkbox" id="saveId" hidden />
                     <label htmlFor="saveId">ID 저장하기</label>
@@ -95,4 +103,4 @@ const Login = ({ setSelected }) => {
     )
 }
 
-export default Login
+export default Login;
