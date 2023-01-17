@@ -94,6 +94,14 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    public boolean findMemberName(String search) {
+        Member member = memberRepository.findByUserName(search);
+        if(member == null) {
+            return false;
+        }
+        return true;
+    }
+
 
     private void verifiedByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
