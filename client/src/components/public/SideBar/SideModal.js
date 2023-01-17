@@ -68,6 +68,7 @@ const SideModal = ({ handleOpendModal, setIsLanded }) => {
           </li>
           <li onClick={() => {
             cookie.removeAll();
+            navigate("/");
             setIsLanded(true);
           }}>
             <span>로그아웃</span>
