@@ -3,7 +3,6 @@ import styled from "styled-components"
 import { useEffect, useRef, useState } from "react"
 import DefaultInput from "./DefaultInput"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
 import Cookie from "../../util/Cookie"
 
 const Wrapper = styled.div`
@@ -80,7 +79,6 @@ const Login = ({ setSelected, setIsLanded }) => {
     const [ id, setId ] = useState("");
     const [ pw, setPw ] = useState("");
     const inputRef = useRef([]);
-    const navigate = useNavigate();
     const cookie = new Cookie()
 
     useEffect(() => {
@@ -104,7 +102,6 @@ const Login = ({ setSelected, setIsLanded }) => {
             date.setMinutes(date.getMinutes() + 420);
             cookie.set("refresh", res.headers.refresh, { expires: date });
 
-            navigate("/");
             setIsLanded(false);
         })
         .catch(e => {

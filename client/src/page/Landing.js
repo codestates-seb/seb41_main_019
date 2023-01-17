@@ -56,7 +56,7 @@ const StyledHeader = styled.header`
     }
 `
 
-const Landing = ({ setIsLanded }) => {
+const Landing = ({ setIsLanded, isLanded }) => {
     const [ selected, setSelected ] = useState(0);
 
     return (
