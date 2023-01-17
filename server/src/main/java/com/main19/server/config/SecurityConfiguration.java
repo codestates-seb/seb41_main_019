@@ -56,7 +56,7 @@ public class SecurityConfiguration {
                         // TODO Admin 계정 생성시 권한 추가가 필요합니다.
                         .antMatchers(HttpMethod.POST, "/members/reissues/**").permitAll()
                         .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER")
-                        .antMatchers(HttpMethod.GET, "/members/**").hasRole("USER") // 로그아웃, refresh토큰 재발행
+                        .antMatchers(HttpMethod.GET, "/members/**").permitAll()
                         .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("USER")
                         .antMatchers(HttpMethod.POST, "/posts/**").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/posts/**").hasRole("USER")
