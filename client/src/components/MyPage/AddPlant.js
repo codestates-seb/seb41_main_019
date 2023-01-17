@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 
 import CloseBtn from "../public/CloseBtn";
+import { BlueBtn } from "../public/BlueBtn";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -17,6 +18,7 @@ const StyledContainer = styled.div`
   border-radius: 5px;
   background-color: white;
   z-index: 1000;
+  padding: 20px;
 
   > form {
     display: flex;
@@ -35,16 +37,10 @@ const StyledContainer = styled.div`
         box-shadow: 0 0 6px #5e8b7e;
       }
     }
-    > button {
-      width: 100px;
-      height: 40px;
-      margin: 30px 0;
-      border: 0px;
-      border-radius: 5px;
-      cursor: pointer;
-      box-shadow: 1px 3px 8px -2px rgb(90, 90, 90);
-      background-color: #2f4858;
-      color: white;
+    > div {
+      button:last-of-type {
+        background-color: #d96848;
+      }
     }
   }
 `;
@@ -54,9 +50,7 @@ const StyledModalHeader = styled.div`
   flex-direction: column;
   width: 100%;
   > div {
-    display: flex;
-    flex-direction: row-reverse;
-    margin: 20px 20px 0 0;
+    margin: 0 0 0 auto;
   }
   > p {
     width: 100%;
@@ -119,7 +113,10 @@ const AddPlant = ({ handleModal }) => {
             placeholder="처음 만난 날"
             onChange={handleInputChange}
           />
-          <button type="submit">완료</button>
+          <div className="button-container">
+            <BlueBtn type="submit">완료</BlueBtn>
+            <BlueBtn onClick={handleModal}>취소</BlueBtn>
+          </div>
         </form>
       </StyledContainer>
     </>
