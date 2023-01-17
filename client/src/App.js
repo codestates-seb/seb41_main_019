@@ -7,10 +7,11 @@ import Setting from "./page/Setting";
 import Posting from "./components/public/Posting/Posting";
 import Background from "./components/public/Background";
 import { useState } from "react";
+import Cookie from "./util/Cookie";
 
 function App() {
   const [isCovered, setIsCovered] = useState(false);
-  const [isLanded, setIsLanded] = useState(true);
+  const [isLanded, setIsLanded] = useState(!new Cookie().get("authorization"));
   const [isPosted, setIsPosted] = useState(false);
   const handleIsCovered = () => setIsCovered(!isCovered); 
   const handleIsPosted = () => {
