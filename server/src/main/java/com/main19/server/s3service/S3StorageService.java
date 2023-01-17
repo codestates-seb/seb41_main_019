@@ -1,5 +1,10 @@
 package com.main19.server.s3service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
+import com.main19.server.myplants.entity.MyPlants;
+import com.main19.server.myplants.gallery.entity.Gallery;
+import com.main19.server.myplants.gallery.service.GalleryService;
+import com.main19.server.myplants.service.MyPlantsService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -38,6 +43,9 @@ public class S3StorageService {
 	private final MediaRepository mediaRepository;
 	private final MemberService memberService;
 	private final PostingService postingService;
+	private final GalleryService galleryService;
+	private final JwtTokenizer jwtTokenizer;
+	private final MyPlantsService myPlantsService;
 
 	@Value("${cloud.aws.credentials.accessKey}")
 	private String accessKey;
@@ -160,6 +168,24 @@ public class S3StorageService {
 		return  profileImageUrl;
 	}
 
+	public String uploadGalleryImage(MultipartFile galleryImage) {
+		String galleryImageUrl;
+
+		String fileName = createProfileImageName(galleryImage.getOriginalFilename());
+		ObjectMetadata objectMetadata = new ObjectMetadata();
+		objectMetadata.setContentLength(galleryImage.getSize());
+		objectMetadata.setContentType(galleryImage.getContentType());
+
+		try(InputStream inputStream = galleryImage.getInputStream()) {
+			s3Client.putObject(new PutObjectRequest(bucket + "/gallery/plantImage", fileName, inputStream, objectMetadata)
+				.withCannedAcl(CannedAccessControlList.PublicRead));
+			galleryImageUrl = (s3Client.getUrl(bucket + "/gallery/plantImage", fileName).toString());
+		} catch(IOException  e) {
+			throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
+		}
+		return  galleryImageUrl;
+	}
+
 	public void removeProfileImage(long memberId) {
 		Member findMember = memberService.findMember(memberId);
 		String fileName = (findMember.getProfileImage()).substring(74);
@@ -168,6 +194,47 @@ public class S3StorageService {
 			throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
 		}
 		s3Client.deleteObject(bucket + "/member/profileImage", fileName);
+	}
+
+	public void removeGalleryImage(long galleryId, String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		Gallery findMyGallery = galleryService.findGallery(galleryId);
+
+		if (findMyGallery.getMyPlants().getMember().getMemberId() != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
+		Gallery findGallery = galleryService.findGallery(galleryId);
+		String fileName = (findGallery.getPlantImage()).substring(73);
+
+		if (!s3Client.doesObjectExist(bucket + "/gallery/plantImage", fileName)) {
+			throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
+		}
+		s3Client.deleteObject(bucket + "/gallery/plantImage", fileName);
+	}
+
+	public void removeAllGalleryImage(long myPlantsId,String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		MyPlants findMyPlants = myPlantsService.findMyPlants(myPlantsId);
+
+		if (findMyPlants.getMember().getMemberId() != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
+		List<Gallery> findGallery = galleryService.findByMyPlantsId(myPlantsId);
+
+		for(int i= 0; i<findGallery.size(); i++) {
+			String fileName = findGallery.get(i).getPlantImage().substring(73);
+
+			if (!s3Client.doesObjectExist(bucket + "/gallery/plantImage", fileName)) {
+				throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
+			}
+			s3Client.deleteObject(bucket + "/gallery/plantImage", fileName);
+		}
 	}
 
 	private String createProfileImageName(String fileName) {
