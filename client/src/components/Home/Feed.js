@@ -5,12 +5,16 @@ import { FiUserPlus } from "react-icons/fi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
+import FeedMenu from "./FeedMenu";
+import { useState } from "react";
 
 const Wrapper = styled.div`
-    width: 600px;
-    height: 850px;
+    position: relative;
+    width: 500px;
+    height: 730px;
+    padding-top: 25px;
     margin-bottom: 20px;
-    border-bottom: 1px solid #DBDBDB;
+    border-top: 1px solid #DBDBDB;
 
     img {
         width: 100%;
@@ -23,16 +27,15 @@ const Wrapper = styled.div`
         color: #222426;
         cursor: pointer;
     }
-    @media screen and (max-width: 1255px) {
 
-    }
     @media screen and (max-width: 770px) {
-        width: 500px;
-        height: 750px;
+        width: 460px;
+        height: 700px;
     }
 `;
 
 const StyledHeader = styled.div`
+    width: 100%;
     display: flex;
     align-items: flex-end;
     margin-bottom: 10px;
@@ -75,11 +78,18 @@ const StyledHeader = styled.div`
 `;
 
 
-const Feed = ({ handleModal, handleMenu }) => {
+const Feed = ({ handleModal, handleDelete }) => {
+    const [menu, setMenu] = useState(false);
+
+    const handleMenu = () => {
+        setMenu(!menu);
+    }
+    
     const img = [ A, B ];
 
     return (
         <Wrapper>
+            { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} /> : null }
             <StyledHeader>
                 <img src={A} alt="img" />
                 <div>
@@ -88,7 +98,7 @@ const Feed = ({ handleModal, handleMenu }) => {
                 </div>
                 <div className="icons">
                     <FiUserPlus />
-                    <BiDotsVerticalRounded onClick={handleMenu ? () => handleMenu(true) : null}/>
+                    <BiDotsVerticalRounded onClick={handleMenu} />
                 </div>
             </StyledHeader>
             {  img.length > 1

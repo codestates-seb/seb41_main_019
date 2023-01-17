@@ -3,18 +3,19 @@ import Feed from "./Feed";
 
 const Wrapper = styled.section`
     display: flex;
+    width: 100%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 `
 
-const Feeds = ({ handleModal, handleMenu }) => { 
+const Feeds = ({ handleModal, handleDelete }) => { 
     const datas = new Array(10).fill(0);
 
     return (
         <Wrapper>
             {
-                datas.map((data,idx) => <Feed key={idx} handleModal={handleModal} handleMenu={handleMenu} />)
+                datas.map((data,idx) => <Feed key={idx} handleModal={handleModal} handleDelete={handleDelete} />)
             }
         </Wrapper>
     )

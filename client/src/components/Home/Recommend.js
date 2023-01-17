@@ -8,7 +8,7 @@ const StyledLi = styled.li`
     img {
         width: 88px;
         height: 88px;
-        padding: 5px;
+        padding: 10px;
         border-radius: 50px;
         cursor: pointer;
     }

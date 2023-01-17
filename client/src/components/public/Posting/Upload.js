@@ -29,6 +29,15 @@ const StyledDiv = styled.div`
     cursor: pointer;
     margin-right: 10px;
 
+    :hover {
+        background-color: gray;
+        opacity: 0.2;
+
+        svg {
+            color: black;
+        }
+    }
+
     img {
         width: 100%;
         height: 100%;
@@ -49,6 +58,10 @@ const StyledCancel = styled.div`
         position: relative;
         left: -27px;
         background-color: white;
+
+        :hover {
+            scale: 1.2;
+        }
     }
 `
 

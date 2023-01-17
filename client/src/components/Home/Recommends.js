@@ -4,7 +4,7 @@ import Recommend from "./Recommend";
 import { allPlants, followPlants } from "../../assets/dummyData/plantImage";
 
 const StyledSection = styled.section`
-    width: 500px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -15,7 +15,7 @@ const StyledHeader = styled.header`
     height: 50px;
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 80px;
     margin-top: 8px;
 
     .active {

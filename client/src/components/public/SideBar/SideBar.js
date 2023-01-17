@@ -3,11 +3,12 @@ import { RiLeafLine } from "react-icons/ri";
 import { AiOutlineHome, AiOutlineMessage, AiOutlineMenu } from "react-icons/ai";
 import { BsSearch, BsPerson, BsPlusSquareDotted } from "react-icons/bs";
 import { IoAlertCircleOutline } from "react-icons/io5";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SideModal from "./SideModal";
 import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
+import { useLocation } from "react-router-dom";
 import Alert from "../Alert/Alert";
 
 const StyledSidebar = styled.aside`
@@ -198,6 +199,7 @@ const StyledHeader = styled.header`
 
 const StyledExtend = styled.div`
   > div {
+    z-index: 500;
     position: fixed;
     top: 0px;
     left: 60px; 
@@ -215,10 +217,17 @@ const StyledExtend = styled.div`
   }
 `
 
-const Sidebar = ({ handleIsPosted }) => {
+const Sidebar = ({ handleIsPosted, setIsLanded }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
+  const location = useLocation().pathname;
+
+  useEffect(() => {
+    if(location === "/landing") {
+      setIsLanded(true);
+    }
+  }, [location, setIsLanded])
 
   const handleIsOpend = (value) => {
     if(value === isOpend) setIsOpend(null);   
@@ -276,7 +285,7 @@ const Sidebar = ({ handleIsPosted }) => {
           </ul>
         </nav>
         {
-          opendModal ? <SideModal /> : null
+          opendModal ? <SideModal handleOpendModal={handleOpendModal} /> : null
         }
         <div onClick={handleOpendModal}>
           <AiOutlineMenu />
