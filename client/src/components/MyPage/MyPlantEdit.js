@@ -8,6 +8,7 @@ const StyledContainer = styled.div`
     display: flex;
     position: absolute;
     transform: translateX(-50px);
+    width: 50px;
     margin: 20px 0;
     cursor: pointer;
   }
@@ -18,19 +19,33 @@ const StyledContainer = styled.div`
 `;
 
 const StyledMenuContainer = styled.div`
+  position: absolute;
+  top: 40px;
+  right: 0;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  margin: 20px 0;
+  width: 100px;
+  height: 100px;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+  box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.3);
 `;
 const StyledMenuItem = styled.div`
-  width: 80px;
-  height: 20px;
+  z-index: auto;
+  display: flex;
+  height: 100%;
   background-color: white;
+  opacity: 0.4;
+  border: 0;
+  border-bottom: 1px solid #dbdbdb;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  transform: translate(-80px, -10px);
-  border: 1px solid #dbdbdb;
-  text-align: center;
+
+  :hover {
+    opacity: 1;
+  }
 `;
 
 const MyPlantEdit = ({ handleUpdateMode }) => {
@@ -45,18 +60,17 @@ const MyPlantEdit = ({ handleUpdateMode }) => {
 
   return (
     <StyledContainer>
-      {isEditModalOn ? (
+      <p onClick={handleEditModal}>
+        <BsThreeDotsVertical />
+        편집
+      </p>
+      {isEditModalOn && (
         <StyledMenuContainer>
           <StyledMenuItem onClick={handleUpdateMode}>식물 수정</StyledMenuItem>
           <StyledMenuItem>식물 삭제</StyledMenuItem>
           <StyledMenuItem>앨범 편집</StyledMenuItem>
           <StyledMenuItem onClick={handleEditModal}>취소</StyledMenuItem>
         </StyledMenuContainer>
-      ) : (
-        <p onClick={handleEditModal}>
-          <BsThreeDotsVertical />
-          편집
-        </p>
       )}
     </StyledContainer>
   );

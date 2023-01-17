@@ -6,6 +6,7 @@ import { BsTag, BsCalendar3 } from "react-icons/bs";
 import { TbPlant } from "react-icons/tb";
 
 const StyledContainer = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
   border-top: 1px solid #dbdbdb;
@@ -111,8 +112,7 @@ const MyPlantInfo = ({ currentPlantData }) => {
           </div>
         </StyledPlantInfoBox>
       )}
-
-      {isUpdateMode ? (
+      {isUpdateMode && (
         <StyledButtonsContainer>
           <div className="wrapper">
             <StyledUpdateButtons>수정 완료</StyledUpdateButtons>
@@ -121,9 +121,8 @@ const MyPlantInfo = ({ currentPlantData }) => {
             </StyledUpdateButtons>
           </div>
         </StyledButtonsContainer>
-      ) : (
-        <MyPlantEdit handleUpdateMode={handleUpdateMode} />
       )}
+      <MyPlantEdit handleUpdateMode={handleUpdateMode} />
     </StyledContainer>
   );
 };

@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import SideModal from "./SideModal";
 import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
-import { useLocation } from "react-router-dom";
 import Alert from "../Alert/Alert";
 
 const StyledSidebar = styled.aside`
@@ -221,13 +220,6 @@ const Sidebar = ({ handleIsPosted, setIsLanded }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
-  const location = useLocation().pathname;
-
-  useEffect(() => {
-    if(location === "/landing") {
-      setIsLanded(true);
-    }
-  }, [location, setIsLanded])
 
   const handleIsOpend = (value) => {
     if(value === isOpend) setIsOpend(null);   
