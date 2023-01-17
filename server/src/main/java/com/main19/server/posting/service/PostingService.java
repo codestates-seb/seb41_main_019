@@ -21,7 +21,6 @@ import com.main19.server.posting.repository.PostingRepository;
 import com.main19.server.utils.CustomBeanUtils;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +51,6 @@ public class PostingService {
 		for (String mediaUrl: mediaPaths) {
 			Media media = new Media(mediaUrl, posting);
 			mediaRepository.save(media);
-			posting.getPostingMedias().add(media);
 		}
 
 		return postingRepository.save(posting);
@@ -113,9 +111,7 @@ public class PostingService {
 		mediaRepository.delete(findMedia);
 	}
 
-
-	@Transactional
-	public void addMedia(long postingId, List<String> mediaPaths, String token) {
+	public Posting addMedia(long postingId, List<String> mediaPaths, String token) {
 
 		long tokenId = jwtTokenizer.getMemberId(token);
 
@@ -130,9 +126,8 @@ public class PostingService {
 		for (String mediaUrl: mediaPaths) {
 			Media media = new Media(mediaUrl, findPosting);
 			mediaRepository.save(media);
-			findPosting.getPostingMedias().add(media);
 		}
-
+		return findPosting;
 	}
 
 	public Posting findVerifiedPosting(long postingId) {
