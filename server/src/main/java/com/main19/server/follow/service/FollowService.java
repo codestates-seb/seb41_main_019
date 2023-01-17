@@ -36,6 +36,11 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
+    public void deleteFollowed(long followingMemberId, long followedMemberId) {
+        Follow follow = findExistFollow(followedMemberId, followingMemberId);
+        followRepository.delete(follow);
+    }
+
 
     private void verifiedFollow(long followingMemberId, long followedMemberId) {
         Follow findFollow = followRepository.findFollow(followingMemberId, followedMemberId);
