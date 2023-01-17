@@ -22,18 +22,25 @@ public class FollowService {
         if (followedMemberId == followingMemberId) {
             throw new BusinessLogicException(ExceptionCode.SAME_MEMBER);
         }
-        follow.setFollowedId(findFollow(followedMemberId));
-        follow.setFollowingId(findFollow(followingMemberId));
+        follow.setFollowedId(findFollowingMember(followedMemberId));
+        follow.setFollowingId(findFollowingMember(followingMemberId));
         return followRepository.save(follow);
     }
 
-    public void deleteFollow(long memberId) {
+    public void deleteFollowing(long followingMemberId, long followedMemberId) {
+        Follow follow = findFollow(followingMemberId, followedMemberId);
+        followRepository.delete(follow);
     }
 
 
-    private Member findFollow(long followId) {
+    private Member findFollowingMember(long followId) {
         Optional<Member> optionalFollow = memberRepository.findById(followId);
         Member member = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return member;
+    }
+
+    private Follow findFollow(long followingMemberId, long followedMemberId) {
+        Follow follow = followRepository.findFollowId(followingMemberId, followedMemberId);
+        return follow;
     }
 }
