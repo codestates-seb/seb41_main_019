@@ -1,5 +1,6 @@
 package com.main19.server.posting.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -56,7 +57,12 @@ public class PostingController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postPosting(@RequestHeader(name = "Authorization") String token,
         @Valid @RequestPart PostingPostDto requestBody,
-        @RequestPart List<MultipartFile> multipartFiles) {
+        @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2, @RequestPart(required = false) MultipartFile file3) {
+
+        List<MultipartFile> multipartFiles = new ArrayList<>();
+        multipartFiles.add(file1);
+        multipartFiles.add(file2);
+        multipartFiles.add(file3);
 
         List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
@@ -138,7 +144,12 @@ public class PostingController {
     @PostMapping(value = "/{posting-id}/medias", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId,
-        @RequestPart List<MultipartFile> multipartFiles) {
+        @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2) {
+
+        List<MultipartFile> multipartFiles = new ArrayList<>();
+        multipartFiles.add(file1);
+        multipartFiles.add(file2);
+
         List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
         Posting updatedPosting = postingService.addMedia(postingId, mediaPaths, token);

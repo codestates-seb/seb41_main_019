@@ -93,7 +93,7 @@ public class PostingControllerRestDocs {
         LocalDateTime modifiedAt = LocalDateTime.now();
 
         // multipart/form-data
-        MockMultipartFile multipartFiles = new MockMultipartFile("multipartFiles", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        MockMultipartFile multipartFiles = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
         MockMultipartFile requestBody = new MockMultipartFile("requestBody", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
 
         PostingResponseDto response =
@@ -130,7 +130,6 @@ public class PostingControllerRestDocs {
                         .file(requestBody)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer AccessToken")
         );
 
@@ -149,7 +148,7 @@ public class PostingControllerRestDocs {
                                 headerWithName("Authorization").description("Bearer AccessToken")
                         ),
                         requestParts(
-                                RequestDocumentation.partWithName("multipartFiles").description("첨부파일"),
+                                RequestDocumentation.partWithName("file1").description("첨부파일"),
                                 RequestDocumentation.partWithName("requestBody").description("게시글 내용")
                         ),
                         requestPartFields(
@@ -675,7 +674,7 @@ public class PostingControllerRestDocs {
         long postingId = 1L;
         long memberId = 1L;
 
-        MockMultipartFile multipartFiles = new MockMultipartFile("multipartFiles", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        MockMultipartFile multipartFiles = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
 
         PostingResponseDto response =
                 new PostingResponseDto(
@@ -721,7 +720,7 @@ public class PostingControllerRestDocs {
                                 parameterWithName("posting-id").description("게시글 식별자")
                         ),
                         requestParts(
-                                RequestDocumentation.partWithName("multipartFiles").description("첨부파일")
+                                RequestDocumentation.partWithName("file1").description("첨부파일")
                         ),
                         responseFields(
                                 fieldWithPath("data.postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
