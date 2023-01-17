@@ -22,6 +22,8 @@ public class FollowService {
             throw new BusinessLogicException(ExceptionCode.SAME_MEMBER);
         }
 
+        verifiedFollow(followingMemberId, followedMemberId);
+
         Follow follow = new Follow();
         follow.setFollowingId(findFollowMember(followingMemberId));
         follow.setFollowedId(findFollowMember(followedMemberId));
@@ -35,6 +37,12 @@ public class FollowService {
     }
 
 
+    private void verifiedFollow(long followingMemberId, long followedMemberId) {
+        Follow findFollow = followRepository.findFollow(followingMemberId, followedMemberId);
+        if (findFollow != null) {
+            throw new BusinessLogicException(ExceptionCode.FOLLOW_ALREADY_EXIST);
+        }
+    }
 
     private Member findFollowMember(long followId) {
         Optional<Member> optionalFollow = memberRepository.findById(followId);
