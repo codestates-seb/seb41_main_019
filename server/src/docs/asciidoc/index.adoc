@@ -350,11 +350,27 @@ include::{snippets}/post-my-plants/curl-request.adoc[]
 .http-request
 include::{snippets}/post-my-plants/http-request.adoc[]
 
+.request-fields
+include::{snippets}/post-my-plants/request-fields.adoc[]
+
 .http-response
 include::{snippets}/post-my-plants/http-response.adoc[]
 
 .response-fields
 include::{snippets}/post-my-plants/response-fields.adoc[]
+
+=== 내 식물 조회
+.curl-request
+include::{snippets}/gets-my-plants/curl-request.adoc[]
+
+.http-request
+include::{snippets}/gets-my-plants/http-request.adoc[]
+
+.http-response
+include::{snippets}/gets-my-plants/http-response.adoc[]
+
+.response-fields
+include::{snippets}/gets-my-plants/response-fields.adoc[]
 
 === 내 식물 삭제
 .curl-request
@@ -396,6 +412,9 @@ include::{snippets}/patch-my-plants/http-request.adoc[]
 
 .path-parameters
 include::{snippets}/patch-my-plants/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patch-my-plants/request-fields.adoc[]
 
 .http-response
 include::{snippets}/patch-my-plants/http-response.adoc[]
