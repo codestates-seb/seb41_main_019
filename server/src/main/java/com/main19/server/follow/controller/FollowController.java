@@ -17,13 +17,12 @@ import javax.validation.constraints.Positive;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/follows")
 public class FollowController {
     private final JwtTokenizer jwtTokenizer;
     private final FollowMapper mapper;
     private final FollowService followService;
 
-    @PostMapping("/{member-id}")
+    @PostMapping("/followings/{member-id}")
     public ResponseEntity postFollow(@PathVariable("member-id") @Positive long followedMemberId,
                                      @RequestHeader(name = "Authorization") String token) {
 
@@ -33,5 +32,21 @@ public class FollowController {
         return new ResponseEntity(
                 new SingleResponseDto(mapper.followToFollowResponseDto(follow)), HttpStatus.CREATED
         );
+    }
+
+    @DeleteMapping("/followings/{member-id}")
+    public ResponseEntity deleteFollowing(@PathVariable("member-id") @Positive long followedMemberId,
+                                       @RequestHeader(name = "Authorization") String token) {
+        long followingMemberId = jwtTokenizer.getMemberId(token);
+        followService.deleteFollowing(followingMemberId, followedMemberId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/followed/{member-id}")
+    public ResponseEntity deleteFollowed(@PathVariable("member-id") @Positive long followingMemberId,
+                                       @RequestHeader(name = "Authorization") String token) {
+        long followedMemberId = jwtTokenizer.getMemberId(token);
+        followService.deleteFollowed(followedMemberId, followingMemberId);
+        return ResponseEntity.noContent().build();
     }
 }
