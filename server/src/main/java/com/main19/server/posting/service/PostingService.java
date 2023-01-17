@@ -39,10 +39,6 @@ public class PostingService {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		if (mediaPaths == null || mediaPaths.size() > 10) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
-		}
-
 		Member findMember = memberService.findMember(memberId);
 		posting.setMember(findMember);
 
@@ -99,7 +95,6 @@ public class PostingService {
 		postingRepository.delete(findPosting);
 	}
 
-	// 첨부파일 삭제
 	public void deleteMedia(long mediaId, String token) {
 
 		long tokenId = jwtTokenizer.getMemberId(token);
@@ -121,14 +116,16 @@ public class PostingService {
 		}
 
 		Posting findPosting = findVerifiedPosting(postingId);
-		if (findPosting.getPostingMedias().size() + 1 > 10) {
+		if (findPosting.getPostingMedias().size() + mediaPaths.size() > 3) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}
+
 		for (String mediaUrl: mediaPaths) {
 			Media media = new Media(mediaUrl, findPosting);
 			mediaRepository.save(media);
 			findPosting.getPostingMedias().add(media);
 		}
+
 		return findPosting;
 	}
 
