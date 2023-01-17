@@ -17,15 +17,16 @@ import javax.validation.constraints.Positive;
 @Validated
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/follows")
 public class FollowController {
     private final JwtTokenizer jwtTokenizer;
     private final FollowMapper mapper;
     private final FollowService followService;
 
-    @PostMapping("/{member-id}")
+    @PostMapping("/followings/{member-id}")
     public ResponseEntity postFollow(@PathVariable("member-id") @Positive long followedMemberId,
                                      @RequestHeader(name = "Authorization") String token) {
+
+        // todo 같은 사람 팔로우 할수 없게 막는 기능 추가
 
         long followingMemberId = jwtTokenizer.getMemberId(token);
         Follow follow = followService.createFollow(followingMemberId, followedMemberId);
@@ -35,7 +36,7 @@ public class FollowController {
         );
     }
 
-    @DeleteMapping("{member-id}")
+    @DeleteMapping("/followings/{member-id}")
     public ResponseEntity deleteFollow(@PathVariable("member-id") @Positive long followedMemberId,
                                        @RequestHeader(name = "Authorization") String token) {
         long followingMemberId = jwtTokenizer.getMemberId(token);
