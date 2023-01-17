@@ -1,10 +1,7 @@
 import styled from "styled-components";
-import jwtDecode from "jwt-decode";
-import axios from "axios";
 
 import { AiFillSetting } from "react-icons/ai";
 import { useState } from "react";
-import Cookie from "../../util/Cookie";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -53,13 +50,7 @@ const StyledInfoItem = styled.div`
   width: 80px;
 `;
 
-const UserInfo = () => {
-  const cookie = new Cookie();
-  const getJWT = cookie.get("authorization");
-  const decodedJWT = jwtDecode(getJWT);
-
-  const [userInfo, setUserInfo] = useState(JSON.stringify(decodedJWT));
-
+const UserInfo = ({ userInfo }) => {
   const {
     memberId,
     username,

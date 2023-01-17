@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 import { TiArrowSortedDown } from "react-icons/ti";
 import { TiArrowSortedUp } from "react-icons/ti";
 import { BsGrid3X3 } from "react-icons/bs";
 import { BsBookmark } from "react-icons/bs";
 
+import Cookie from "../util/Cookie";
 import MyPlants from "../components/MyPage/MyPlants";
 import UserInfo from "../components/MyPage/UserInfo";
 import Gallery from "../components/MyPage/Gallery";
@@ -63,6 +65,11 @@ const StyledChangeViewButton = styled.div`
 `;
 
 const MyPage = ({ isCovered, handleIsCovered }) => {
+  const cookie = new Cookie();
+  const getJWT = cookie.get("authorization");
+  const decodedJWT = jwtDecode(getJWT);
+
+  const [userInfo, setUserInfo] = useState(JSON.stringify(decodedJWT));
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
   const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
@@ -126,7 +133,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     <>
       {isCovered && isModalOpened && <AddPlant handleModal={handleModal} />}
       <StyledContainer>
-        <UserInfo />
+        <UserInfo userInfo={userInfo} />
         {isFolderOpened ? (
           <div className="container">
             <MyPlants
