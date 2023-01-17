@@ -1,0 +1,222 @@
+package com.main19.server.gallery;
+
+import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
+import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.google.gson.Gson;
+import com.main19.server.myplants.entity.MyPlants;
+import com.main19.server.myplants.gallery.controller.GalleryController;
+import com.main19.server.myplants.gallery.dto.GalleryDto;
+import com.main19.server.myplants.gallery.dto.GalleryDto.Post;
+import com.main19.server.myplants.gallery.dto.GalleryDto.Response;
+import com.main19.server.myplants.gallery.entity.Gallery;
+import com.main19.server.myplants.gallery.mapper.GalleryMapper;
+import com.main19.server.myplants.gallery.service.GalleryService;
+import com.main19.server.myplants.service.MyPlantsService;
+import com.main19.server.posting.dto.PostingPostDto;
+import com.main19.server.posting.dto.PostingResponseDto;
+import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
+import com.main19.server.s3service.S3StorageService;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.restdocs.request.RequestDocumentation;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+@WebMvcTest(value = GalleryController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@MockBean(JpaMetamodelMappingContext.class)
+@AutoConfigureRestDocs
+public class GalleryControllerRestDocs {
+
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private Gson gson;
+    @MockBean
+    private S3StorageService storageService;
+    @MockBean
+    private GalleryMapper galleryMapper;
+    @MockBean
+    private GalleryService galleryService;
+    @MockBean
+    private MyPlantsService myPlantsService;
+
+    @Test
+    public void postGalleryTest() throws Exception {
+
+        long myPlantsId = 1L;
+        long galleryId = 1L;
+
+        GalleryDto.Post galleryPost = new Post("안녕 난 머호");
+
+        String content = gson.toJson(galleryPost);
+
+        MockMultipartFile galleryImage = new MockMultipartFile("galleryImage", "Image.jpeg",
+            "image/jpeg", "<<jpeg data>>".getBytes());
+        MockMultipartFile requestBody = new MockMultipartFile("requestBody", "", "application/json",
+            content.getBytes(
+                StandardCharsets.UTF_8));
+
+        GalleryDto.Response response = new Response(myPlantsId, galleryId, "안녕 난 머호", "plantImage",
+            LocalDateTime.now());
+
+        given(storageService.uploadGalleryImage(Mockito.any())).willReturn("imageUrl");
+        given(galleryMapper.galleryDtoPostToGallery(Mockito.any())).willReturn(new Gallery());
+        given(myPlantsService.findMyPlants(Mockito.anyLong())).willReturn(new MyPlants());
+        given(galleryService.createGallery(Mockito.any(), Mockito.any(), Mockito.anyString(),
+            Mockito.anyString())).willReturn(new Gallery());
+        given(galleryMapper.galleryToGalleryDtoResponse(Mockito.any())).willReturn(response);
+
+        ResultActions actions = mockMvc.perform(
+            RestDocumentationRequestBuilders.multipart("/myplants/{myplants-id}/gallery",
+                    myPlantsId)
+                .file(galleryImage)
+                .file(requestBody)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer AccessToken")
+        );
+
+        actions
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.data.content").value(galleryPost.getContent()))
+            .andDo(document(
+                "post-gallery",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                ),
+                pathParameters(
+                    parameterWithName("myplants-id").description("내 식물 식별자")
+                ),
+                requestParts(
+                    RequestDocumentation.partWithName("galleryImage").description("첨부파일"),
+                    RequestDocumentation.partWithName("requestBody").description("게시글 내용")
+                ),
+                requestPartFields(
+                    "requestBody",
+                    List.of(
+                        fieldWithPath("content").type(JsonFieldType.STRING).description("갤러리 내용")
+                    )
+                ),
+                responseFields(
+                    fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER)
+                        .description("내 식물 식별자"),
+                    fieldWithPath("data.galleryId").type(JsonFieldType.NUMBER)
+                        .description("갤러리 식별자"),
+                    fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
+                    fieldWithPath("data.plantImage").type(JsonFieldType.STRING)
+                        .description("식물 이미지"),
+                    fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성 시간")
+                )
+            ));
+    }
+
+    @Test
+    public void getGalleryTest() throws Exception {
+
+        long myPlantsId = 1L;
+        long galleryId = 1L;
+
+        GalleryDto.Response response = new Response(myPlantsId, galleryId, "안녕 난 머호", "plantImage",
+            LocalDateTime.now());
+
+        given(galleryService.findGallery(Mockito.anyLong())).willReturn(new Gallery());
+        given(galleryMapper.galleryToGalleryDtoResponse(Mockito.any())).willReturn(response);
+
+        ResultActions actions = mockMvc.perform(
+            RestDocumentationRequestBuilders.get("/myplants/gallery/{gallery-id}", galleryId)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer AccessToken")
+        );
+
+        actions
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.myPlantsId").value(response.getMyPlantsId()))
+            .andExpect(jsonPath("$.data.galleryId").value(response.getGalleryId()))
+            .andExpect(jsonPath("$.data.content").value(response.getContent()))
+            .andExpect(jsonPath("$.data.plantImage").value(response.getPlantImage()))
+            .andDo(document(
+                "get-gallery",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                ),
+                pathParameters(
+                    parameterWithName("gallery-id").description("갤러리 식별자")
+                ),
+                responseFields(
+                    fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER)
+                        .description("내 식물 식별자"),
+                    fieldWithPath("data.galleryId").type(JsonFieldType.NUMBER)
+                        .description("갤러리 식별자"),
+                    fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
+                    fieldWithPath("data.plantImage").type(JsonFieldType.STRING)
+                        .description("식물 이미지"),
+                    fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성 시간")
+                )
+            ));
+    }
+
+    @Test
+    public void deleteGalleryTest() throws Exception {
+
+        long galleryId = 1L;
+
+        doNothing().when(storageService).removeGalleryImage(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(galleryService).deleteGallery(Mockito.anyLong(), Mockito.anyString());
+
+        ResultActions actions =
+            mockMvc.perform(
+                delete("/myplants/gallery/{gallery-id}", galleryId)
+                    .header("Authorization", "Bearer AccessToken")
+            );
+
+        actions.andExpect(status().isNoContent())
+            .andDo(
+                document(
+                    "delete-gallery",
+                    getRequestPreProcessor(),
+                    getResponsePreProcessor(),
+                    pathParameters(
+                        parameterWithName("gallery-id").description("갤러리 식별자")
+                    ),
+                    requestHeaders(
+                        headerWithName("Authorization").description("Bearer (accessToken)")
+                    )
+                )
+            );
+    }
+}
