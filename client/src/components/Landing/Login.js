@@ -2,6 +2,8 @@ import Logo from "../public/Logo"
 import styled from "styled-components"
 import { useEffect, useRef, useState } from "react"
 import DefaultInput from "./DefaultInput"
+import axios from "axios"
+import Cookie from "../../util/Cookie"
 
 const Wrapper = styled.div`
     position: absolute;
@@ -73,14 +75,39 @@ const StyledBtn2 = styled(StyledBtn)`
     background-color : #D96846;
 `
 
-const Login = ({ setSelected }) => {
+const Login = ({ setSelected, setIsLanded }) => {
     const [ id, setId ] = useState("");
     const [ pw, setPw ] = useState("");
     const inputRef = useRef([]);
+    const cookie = new Cookie()
 
     useEffect(() => {
         inputRef.current[0].focus();
     }, [])
+
+    const handleLogin = () => {
+        axios({
+            method: "post",
+            url: "http://13.124.33.113:8080/member",
+            data: {
+                email: id,
+                password: pw
+            }
+        }).then(res => {
+            const date = new Date();
+
+            date.setMinutes(date.getMinutes() + 40);
+            cookie.set("authorization", res.headers.authorization, { expires: date });
+
+            date.setMinutes(date.getMinutes() + 420);
+            cookie.set("refresh", res.headers.refresh, { expires: date });
+
+            setIsLanded(false);
+        })
+        .catch(e => {
+            //실패 처리
+        })
+    }
 
     return (
         <Wrapper>
@@ -96,7 +123,7 @@ const Login = ({ setSelected }) => {
                     <input type="checkbox" id="saveId" hidden />
                     <label htmlFor="saveId">ID 저장하기</label>
                 </StyledCheck>
-                <StyledBtn>로그인</StyledBtn>
+                <StyledBtn onClick={handleLogin}>로그인</StyledBtn>
                 <StyledBtn2 onClick={() => setSelected(2)}>회원가입</StyledBtn2>
             </StyledLogin>
         </Wrapper>

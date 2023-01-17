@@ -10,7 +10,7 @@ import { useState } from "react";
 
 function App() {
   const [isCovered, setIsCovered] = useState(false);
-  const [isLanded, setIsLanded] = useState(false);
+  const [isLanded, setIsLanded] = useState(true);
   const [isPosted, setIsPosted] = useState(false);
   const handleIsCovered = () => setIsCovered(!isCovered); 
   const handleIsPosted = () => {
@@ -27,17 +27,15 @@ function App() {
       { isPosted ? <Posting handleIsPosted={handleIsPosted} />: null }
       <Routes>
         <Route
-          path={"/"}
+          path={isLanded ? null : "/"}
           element={<Home handleIsCovered={handleIsCovered} />}
         />
         <Route
-          path={"/mypage"}
+          path={isLanded ? null : "/mypage"}
           element={<MyPage handleIsCovered={handleIsCovered} />}
         />
-        <Route path={"/landing"} element={<Landing />} />
-        <Route
-          path={"/setting"}
-          element={<Setting />}
+        <Route path={isLanded ? "/" : null} element={<Landing setIsLanded={setIsLanded} isLanded={isLanded} />} />
+        <Route path={isLanded ? null :"/setting"} element={<Setting />}
         />
       </Routes>
     </BrowserRouter>
