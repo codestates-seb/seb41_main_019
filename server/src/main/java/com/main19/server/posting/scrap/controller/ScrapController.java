@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Positive;
 
 @RestController
-@RequestMapping("/scrap")
+@RequestMapping("/scraps")
 @Validated
 @Slf4j
 @RequiredArgsConstructor
