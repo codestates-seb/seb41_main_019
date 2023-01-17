@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import DefaultInput from "./DefaultInput"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import Cookie from "../../util/Cookie"
 
 const Wrapper = styled.div`
     position: absolute;
@@ -80,6 +81,7 @@ const Login = ({ setSelected, setIsLanded }) => {
     const [ pw, setPw ] = useState("");
     const inputRef = useRef([]);
     const navigate = useNavigate();
+    const cookie = new Cookie()
 
     useEffect(() => {
         inputRef.current[0].focus();
@@ -94,6 +96,14 @@ const Login = ({ setSelected, setIsLanded }) => {
                 password: pw
             }
         }).then(res => {
+            const date = new Date();
+
+            date.setMinutes(date.getMinutes() + 40);
+            cookie.set("authorization", res.headers.authorization, { expires: date });
+
+            date.setMinutes(date.getMinutes() + 420);
+            cookie.set("refresh", res.headers.refresh, { expires: date });
+
             navigate("/");
             setIsLanded(false);
         })

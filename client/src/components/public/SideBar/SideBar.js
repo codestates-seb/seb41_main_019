@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import SideModal from "./SideModal";
 import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
-import { useLocation } from "react-router-dom";
 import Alert from "../Alert/Alert";
 
 const StyledSidebar = styled.aside`
