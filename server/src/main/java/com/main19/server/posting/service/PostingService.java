@@ -51,6 +51,7 @@ public class PostingService {
 		for (String mediaUrl: mediaPaths) {
 			Media media = new Media(mediaUrl, posting);
 			mediaRepository.save(media);
+			posting.getPostingMedias().add(media);
 		}
 
 		return postingRepository.save(posting);
@@ -126,6 +127,7 @@ public class PostingService {
 		for (String mediaUrl: mediaPaths) {
 			Media media = new Media(mediaUrl, findPosting);
 			mediaRepository.save(media);
+			findPosting.getPostingMedias().add(media);
 		}
 		return findPosting;
 	}
