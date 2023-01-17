@@ -106,4 +106,9 @@ public class MemberController {
         memberService.deleteProfileImage(memberId, token);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/name")
+    public ResponseEntity findMemberName(@RequestParam String name) {
+        return new ResponseEntity(new SingleResponseDto<>(memberService.findMemberName(name)),HttpStatus.OK);
+    }
 }
