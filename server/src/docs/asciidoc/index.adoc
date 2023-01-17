@@ -106,6 +106,9 @@ include::{snippets}/patch-posting/curl-request.adoc[]
 .http-request
 include::{snippets}/patch-posting/http-request.adoc[]
 
+.request-field
+include::{snippets}/patch-posting/request-fields.adoc[]
+
 .path-parameters
 include::{snippets}/patch-posting/path-parameters.adoc[]
 
@@ -303,6 +306,40 @@ include::{snippets}/delete-comment-like/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/delete-comment-like/http-response.adoc[]
+
+== scrap
+
+=== 스크랩 등록
+.curl-request
+include::{snippets}/post-scrap/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-scrap/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-scrap/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/post-scrap/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-scrap/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-scrap/response-fields.adoc[]
+
+=== 스크랩 삭제
+.curl-request
+include::{snippets}/delete-scrap/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-scrap/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-scrap/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-scrap/http-response.adoc[]
 
 == chat
 
