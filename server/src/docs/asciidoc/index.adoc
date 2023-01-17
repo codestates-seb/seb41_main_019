@@ -183,6 +183,9 @@ include::{snippets}/post-posting-media/http-request.adoc[]
 .request-part
 include::{snippets}/post-posting-media/request-parts.adoc[]
 
+.requestBody-field
+include::{snippets}/post-posting-media/request-part-requestBody-fields.adoc[]
+
 .path-parameters
 include::{snippets}/post-posting-media/path-parameters.adoc[]
 

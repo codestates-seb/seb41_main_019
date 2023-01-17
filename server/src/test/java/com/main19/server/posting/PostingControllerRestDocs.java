@@ -3,6 +3,7 @@ package com.main19.server.posting;
 import com.google.gson.Gson;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.controller.PostingController;
+import com.main19.server.posting.dto.MediaPostDto;
 import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
 import com.main19.server.posting.dto.PostingResponseDto;
@@ -93,7 +94,7 @@ public class PostingControllerRestDocs {
         LocalDateTime modifiedAt = LocalDateTime.now();
 
         // multipart/form-data
-        MockMultipartFile multipartFiles = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        MockMultipartFile file1 = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
         MockMultipartFile requestBody = new MockMultipartFile("requestBody", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
 
         PostingResponseDto response =
@@ -114,9 +115,9 @@ public class PostingControllerRestDocs {
                         new ArrayList<>()
                 );
 
-        given(storageService.uploadMedia(Mockito.anyList())).willReturn(new ArrayList<>());
+        given(storageService.uploadMedia(Mockito.anyList(), Mockito.anyLong(), Mockito.anyString())).willReturn(new ArrayList<>());
         given(mapper.postingPostDtoToPosting(Mockito.any(PostingPostDto.class))).willReturn(new Posting());
-        given(postingService.createPosting(Mockito.any(Posting.class), Mockito.anyLong(), Mockito.anyList(), Mockito.anyString())).willReturn(new Posting());
+        given(postingService.createPosting(Mockito.any(Posting.class), Mockito.anyLong(), Mockito.anyList())).willReturn(new Posting());
         given(mapper.tagPostDtoToTag(Mockito.anyString())).willReturn(new Tag());
         given(tagService.createTag(Mockito.any(Tag.class))).willReturn(new Tag());
         given(mapper.postingPostDtoToPostingTag(Mockito.any(PostingPostDto.class))).willReturn(new PostingTags());
@@ -126,7 +127,7 @@ public class PostingControllerRestDocs {
         // when
         ResultActions actions = mockMvc.perform(
                 RestDocumentationRequestBuilders.multipart("/posts")
-                        .file(multipartFiles)
+                        .file(file1)
                         .file(requestBody)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -148,7 +149,9 @@ public class PostingControllerRestDocs {
                                 headerWithName("Authorization").description("Bearer AccessToken")
                         ),
                         requestParts(
-                                RequestDocumentation.partWithName("file1").description("첨부파일"),
+                                RequestDocumentation.partWithName("file1").description("첨부파일1"),
+                                RequestDocumentation.partWithName("file2").optional().description("첨부파일2"),
+                                RequestDocumentation.partWithName("file3").optional().description("첨부파일3"),
                                 RequestDocumentation.partWithName("requestBody").description("게시글 내용")
                         ),
                         requestPartFields(
@@ -643,8 +646,8 @@ public class PostingControllerRestDocs {
     public void deletePostingTest() throws Exception {
         // given
         long postingId = 1L;
-        doNothing().when(storageService).removeAll(Mockito.anyLong());
-        doNothing().when(postingService).deletePosting(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(storageService).removeAll(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(postingService).deletePosting(Mockito.anyLong());
         
         // when
         ResultActions actions =
@@ -673,8 +676,12 @@ public class PostingControllerRestDocs {
         // given
         long postingId = 1L;
         long memberId = 1L;
+        MediaPostDto post = new MediaPostDto(memberId);
 
-        MockMultipartFile multipartFiles = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        String content = gson.toJson(post);
+
+        MockMultipartFile file1 = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        MockMultipartFile requestBody = new MockMultipartFile("requestBody", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
 
         PostingResponseDto response =
                 new PostingResponseDto(
@@ -694,17 +701,19 @@ public class PostingControllerRestDocs {
                         new ArrayList<>()
                 );
 
-        given(storageService.uploadMedia(Mockito.anyList())).willReturn(new ArrayList<>());
-        given(postingService.addMedia(Mockito.anyLong(), Mockito.anyList(), Mockito.anyString())).willReturn(new Posting());
+        given(storageService.uploadMedia(Mockito.anyList(), Mockito.anyLong(), Mockito.anyString())).willReturn(new ArrayList<>());
+        given(postingService.addMedia(Mockito.anyLong(), Mockito.anyList())).willReturn(new Posting());
         given(mapper.postingToPostingResponseDto(Mockito.any(Posting.class))).willReturn(response);
         // when
         ResultActions actions =
                 mockMvc.perform(
                         RestDocumentationRequestBuilders.multipart("/posts/{posting-id}/medias", postingId)
-                                .file(multipartFiles)
+                                .file(file1)
+                                .file(requestBody)
                                 .header("Authorization", "Bearer AccessToken")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
+                                .content(content)
                 );
         // then
         actions
@@ -720,7 +729,13 @@ public class PostingControllerRestDocs {
                                 parameterWithName("posting-id").description("게시글 식별자")
                         ),
                         requestParts(
-                                RequestDocumentation.partWithName("file1").description("첨부파일")
+                                RequestDocumentation.partWithName("requestBody").description("회원 식별자"),
+                                RequestDocumentation.partWithName("file1").description("첨부파일1"),
+                                RequestDocumentation.partWithName("file2").optional().description("첨부파일2")
+                        ),
+                        requestPartFields(
+                                "requestBody",
+                                fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자")
                         ),
                         responseFields(
                                 fieldWithPath("data.postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
@@ -746,8 +761,8 @@ public class PostingControllerRestDocs {
         // given
         long mediaId = 1L;
 
-        doNothing().when(storageService).remove(Mockito.anyLong());
-        doNothing().when(postingService).deleteMedia(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(storageService).remove(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(postingService).deleteMedia(Mockito.anyLong());
 
         // when
         ResultActions actions =

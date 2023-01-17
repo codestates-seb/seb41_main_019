@@ -6,6 +6,8 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+import com.main19.server.member.entity.Member;
+import com.main19.server.posting.dto.MediaPostDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -64,10 +66,10 @@ public class PostingController {
         multipartFiles.add(file2);
         multipartFiles.add(file3);
 
-        List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
+        List<String> mediaPaths = storageService.uploadMedia(multipartFiles, requestBody.getMemberId() ,token);
 
         Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody),
-            requestBody.getMemberId(), mediaPaths, token);
+            requestBody.getMemberId(), mediaPaths);
 
         for(int i = 0; i < requestBody.getTagName().size(); i++) {
             tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
@@ -135,24 +137,24 @@ public class PostingController {
     public ResponseEntity deletePosting(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId) {
 
-        storageService.removeAll(postingId);
-        postingService.deletePosting(postingId,token);
+        storageService.removeAll(postingId, token);
+        postingService.deletePosting(postingId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(value = "/{posting-id}/medias", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postMedia(@RequestHeader(name = "Authorization") String token,
-        @PathVariable("posting-id") @Positive long postingId,
-        @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2) {
+                                    @PathVariable("posting-id") @Positive long postingId,
+                                    @RequestPart MediaPostDto requestBody, @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2) {
 
         List<MultipartFile> multipartFiles = new ArrayList<>();
         multipartFiles.add(file1);
         multipartFiles.add(file2);
 
-        List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
+        List<String> mediaPaths = storageService.uploadMedia(multipartFiles, requestBody.getMemberId() ,token);
 
-        Posting updatedPosting = postingService.addMedia(postingId, mediaPaths, token);
+        Posting updatedPosting = postingService.addMedia(postingId, mediaPaths);
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.postingToPostingResponseDto(updatedPosting)),
             HttpStatus.OK);
@@ -162,8 +164,8 @@ public class PostingController {
     public ResponseEntity deleteMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("media-id") @Positive long mediaId) {
 
-        storageService.remove(mediaId);
-        postingService.deleteMedia(mediaId,token);
+        storageService.remove(mediaId, token);
+        postingService.deleteMedia(mediaId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

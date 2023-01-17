@@ -31,13 +31,7 @@ public class PostingService {
 	private final CustomBeanUtils<Posting> beanUtils;
 	private final JwtTokenizer jwtTokenizer;
 
-	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths, String token) {
-
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (memberId != tokenId) {
-			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		}
+	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths) {
 
 		Member findMember = memberService.findMember(memberId);
 		posting.setMember(findMember);
@@ -83,37 +77,12 @@ public class PostingService {
 		return postingRepository.findByMember_MemberId(memberId, PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
 
-	public void deletePosting(long postingId, String token) {
-
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (findPosting(postingId).getMember().getMemberId() != tokenId) {
-			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		}
-
+	public void deletePosting(long postingId) {
 		Posting findPosting = findVerifiedPosting(postingId);
 		postingRepository.delete(findPosting);
 	}
 
-	public void deleteMedia(long mediaId, String token) {
-
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (findVerfiedMedia(mediaId).getPosting().getMember().getMemberId() != tokenId) {
-			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		}
-
-		Media findMedia = findVerfiedMedia(mediaId);
-		mediaRepository.delete(findMedia);
-	}
-
-	public Posting addMedia(long postingId, List<String> mediaPaths, String token) {
-
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (findPosting(postingId).getMember().getMemberId() != tokenId) {
-			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		}
+	public Posting addMedia(long postingId, List<String> mediaPaths) {
 
 		Posting findPosting = findVerifiedPosting(postingId);
 		if (findPosting.getPostingMedias().size() + mediaPaths.size() > 3) {
@@ -127,6 +96,11 @@ public class PostingService {
 		}
 
 		return findPosting;
+	}
+
+	public void deleteMedia(long mediaId) {
+		Media findMedia = findVerfiedMedia(mediaId);
+		mediaRepository.delete(findMedia);
 	}
 
 	public Posting findVerifiedPosting(long postingId) {
