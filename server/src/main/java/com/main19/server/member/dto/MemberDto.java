@@ -19,19 +19,11 @@ public class MemberDto {
 	public static class Post {
 		@NotBlank
 		private String userName;
-		@Email
+//		@Email
 		private String email;
 		private String location; // todo 이거 프론트에서 받을건지 정하기
 		private String profileText;
 		private String password; // todo password를 어떻게 받아올지 프론트와 논의
-
-		public void updateMember(String userName, String email, String location, String profileText, String password) {
-			this.userName = userName;
-			this.email = email;
-			this.location = location;
-			this.profileText = profileText;
-			this.password = password;
-		}
 	}
 
 	@Getter
