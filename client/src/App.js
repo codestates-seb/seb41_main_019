@@ -4,7 +4,7 @@ import Home from "./page/Home";
 import MyPage from "./page/MyPage";
 import Landing from "./page/Landing";
 import Setting from "./page/Setting";
-import Posting from "./components/public/Posting/Posting";
+import WritePost from "./components/public/Post/WritePost";
 import Background from "./components/public/Background";
 import { useState } from "react";
 import Cookie from "./util/Cookie";
@@ -25,7 +25,7 @@ function App() {
       {
         isLanded ? null : <SideBar setIsLanded={setIsLanded} handleIsPosted={handleIsPosted} />
       }
-      { isPosted ? <Posting handleIsPosted={handleIsPosted} />: null }
+      { isPosted ? <WritePost handleIsPosted={handleIsPosted} />: null }
       <Routes>
         <Route
           path={isLanded ? null : "/"}

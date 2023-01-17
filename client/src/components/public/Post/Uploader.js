@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { BsFillCameraFill } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
-import React, { useRef, useState } from "react";
 
 const Wrapper = styled.div`
     > p {
@@ -11,10 +10,21 @@ const Wrapper = styled.div`
     > div:nth-of-type(1) {
         display: flex;
         flex-direction: row;
+
     }
 
     input {
         display: none;
+    }
+
+    .photo {
+        width: 25%;
+    }
+
+    .img {
+        display: flex;
+        width: 25%;
+        
     }
 `
 
@@ -30,8 +40,7 @@ const StyledDiv = styled.div`
     margin-right: 10px;
 
     :hover {
-        background-color: gray;
-        opacity: 0.2;
+        opacity: 0.7;
 
         svg {
             color: black;
@@ -47,6 +56,9 @@ const StyledDiv = styled.div`
         width: 50px;
         height: 50px;
         color: gray;
+        @media screen and (max-width: 770px) {
+            width: 20px;   
+        }
     }
 `;
 
@@ -65,52 +77,52 @@ const StyledCancel = styled.div`
     }
 `
 
-const Upload = () => {
-    const fileInputRef = useRef();
-    const [images, setImages] = useState([]);
-
-    const onFileInputClick = (e) => {
-        fileInputRef.current.click();
-    };
-
-    const handleDelete = (index) => {
-       setImages(images.slice())
+const Uploader = ({ images, handleImg, fileInputRef }) => {
+   
+    const onFileInputClick = () => {
+        if(images.length < 3) {
+            fileInputRef.current[images.length].click();
+        }
     };
 
     return (
         <Wrapper>
                 <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
                 <div>
-                    <StyledDiv onClick={onFileInputClick}>
+                    <StyledDiv className="photo" onClick={onFileInputClick}>
                         <BsFillCameraFill />
                     </StyledDiv>
                     { images.map((image, idx) => {
                             return (
-                                <>
-                                    <StyledDiv key={idx}>
+                                <div className="img" key={idx}>
+                                    <StyledDiv>
                                         <img src={image} alt="img" />
                                     </StyledDiv>
                                     <StyledCancel>
-                                        <AiOutlineClose onClick={handleDelete} />
+                                        <AiOutlineClose />
                                     </StyledCancel>
-                                </>
+                                </div>
                             )
                         })
                     }
                 </div>
                 <input 
                     type="file"
-                    ref={fileInputRef} 
-                    onChange={(e) => {
-                        const file = fileInputRef.current.files[0];
-	                    const reader = new FileReader();
-                        reader.readAsDataURL(file);
-                        reader.onloadend = () => {
-                            setImages([...images, reader.result]);
-                        };
-                    }} />
+                    accept="image/*,audio/*,video/mp4"
+                    ref={(el) => fileInputRef.current[0] = el} 
+                    onChange={handleImg} />
+                <input 
+                    type="file"
+                    accept="image/*,audio/*,video/mp4"
+                    ref={(el) => fileInputRef.current[1] = el} 
+                    onChange={handleImg} />
+                <input 
+                    type="file"
+                    accept="image/*,audio/*,video/mp4"
+                    ref={(el) => fileInputRef.current[2] = el} 
+                    onChange={handleImg} />
         </Wrapper>
     )
 };
 
-export default Upload;
+export default Uploader;

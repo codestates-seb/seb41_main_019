@@ -13,26 +13,26 @@ const Wrapper = styled.div`
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
-    width: 400px;
-    height: 120px;
     background-color: white;
     z-index: 1000;
     border: 1px solid #dbdbdb;
     border-radius: 5px;
     box-shadow: 5px 10px 10px 1px rgba(0,0,0,0.3); 
+    padding: 35px 25px;
 
     > div {
         display: flex;
-        gap: 20px;
+        align-items: center;
+        gap: 7px;
 
         svg {
-            font-size: 20px;
+            font-size: 25px;
         }
     }
 
     .buttons {
         display: flex;
-        gap: 10px;
+        gap: 5px;
 
         button {
             border: 0;
@@ -46,6 +46,7 @@ const Wrapper = styled.div`
 
         button:last-child {
             background-color: #D96848;
+            margin-right: 0px;
         }
     }
 `;
