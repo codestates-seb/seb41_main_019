@@ -107,7 +107,7 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/name")
+    @GetMapping
     public ResponseEntity findMemberName(@RequestParam String name) {
         return new ResponseEntity(new SingleResponseDto<>(memberService.findMemberName(name)),HttpStatus.OK);
     }
