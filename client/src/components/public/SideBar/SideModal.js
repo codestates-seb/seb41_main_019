@@ -1,8 +1,8 @@
 import styled from "styled-components"
 import { AiFillSetting, AiOutlineClockCircle, AiOutlinePoweroff, } from "react-icons/ai";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
-import { FaExchangeAlt } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
+import Cookie from "../../../util/Cookie"
 
 const StyledModal = styled.div`
   display: inline-block;
@@ -44,34 +44,38 @@ const StyledModal = styled.div`
   }
 `;
 
-const SideModal = ({ handleOpendModal }) => {
+const SideModal = ({ handleOpendModal, setIsLanded }) => {
   const navigate = useNavigate();
+  const cookie = new Cookie();
 
-    return (
-        <StyledModal>
-          <ul>
-            <li>
-              <span onClick={() => {
-                navigate("/setting")
-                handleOpendModal();
-              }}>설정</span>
-              <AiFillSetting />
-            </li>
-            <li>
-              <span>스크랩</span>
-              <BsFillJournalBookmarkFill />
-            </li>
-            <li>
-              <span>내 활동</span>
-              <AiOutlineClockCircle />
-            </li>
-            <li>
-              <span>로그아웃</span>
-              <AiOutlinePoweroff />
-            </li>
-          </ul>
-        </StyledModal>
-    )
+  return (
+      <StyledModal>
+        <ul>
+          <li>
+            <span onClick={() => {
+              navigate("/setting")
+              handleOpendModal();
+            }}>설정</span>
+            <AiFillSetting />
+          </li>
+          <li>
+            <span>스크랩</span>
+            <BsFillJournalBookmarkFill />
+          </li>
+          <li>
+            <span>내 활동</span>
+            <AiOutlineClockCircle />
+          </li>
+          <li onClick={() => {
+            cookie.removeAll();
+            setIsLanded(true);
+          }}>
+            <span>로그아웃</span>
+            <AiOutlinePoweroff />
+          </li>
+        </ul>
+      </StyledModal>
+  )
 }
 
 export default SideModal;
