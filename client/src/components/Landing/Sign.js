@@ -2,6 +2,7 @@ import Logo from "../public/Logo"
 import styled from "styled-components"
 import { useEffect, useRef, useState } from "react"
 import DefaultInput from "./DefaultInput"
+import axios from "axios"
 
 const Wrapper = styled.div`
     position: absolute;
@@ -46,6 +47,7 @@ const StyledBtn2 = styled(StyledBtn)`
 `
 
 const Sign = ({ setSelected }) => {
+    const [ name, setName ] = useState("");
     const [ id, setId ] = useState("");
     const [ pw, setPw ] = useState("");
     const [ rePw, setRePw ] = useState("");
@@ -56,7 +58,20 @@ const Sign = ({ setSelected }) => {
     },[])
 
     const handleSubmit = () => {
-
+        axios({
+            method: "post",
+            url: "http://13.124.33.113:8080/members",
+            data: {
+                "userName" : name,
+                "email" : id,
+                "password" : rePw
+            }
+        }).then(res => {
+            setSelected(1);
+        })
+        .catch(e => {
+            //실패 처리
+        });
     }
 
     return (
@@ -64,13 +79,14 @@ const Sign = ({ setSelected }) => {
             <StyledLogin>
                 <Logo />
                 <form onSubmit={() => false}>
-                    <DefaultInput label="아이디" id="id" state={id} setState={setId} inputRef={inputRef} idx={0}/>
+                    <DefaultInput label="닉네임" id="name" state={name} setState={setName} inputRef={inputRef} idx={0}/>
+                    <DefaultInput label="아이디" id="id" state={id} setState={setId} inputRef={inputRef} idx={1}/>
                     <DefaultInput label="패스워드" id="password" type="password"
-                        state={pw} setState={setPw} inputRef={inputRef} idx={1} />
+                        state={pw} setState={setPw} inputRef={inputRef} idx={2} />
                     <DefaultInput label="재확인" id="re-password" type="password"
-                    state={rePw} setState={setRePw} inputRef={inputRef} idx={2} />
+                    state={rePw} setState={setRePw} inputRef={inputRef} idx={3} />
                 </form>
-                <StyledBtn>회원가입</StyledBtn>
+                <StyledBtn onClick={handleSubmit}>회원가입</StyledBtn>
                 <StyledBtn2 onClick={() => setSelected(1)}>취소 </StyledBtn2>
             </StyledLogin>
         </Wrapper>
