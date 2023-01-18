@@ -151,9 +151,6 @@ include::{snippets}/get-postings-by-member/http-request.adoc[]
 .path-parameters
 include::{snippets}/get-postings-by-member/path-parameters.adoc[]
 
-.request-parameters
-include::{snippets}/get-postings-by-member/path-parameters.adoc[]
-
 .http-response
 include::{snippets}/get-postings-by-member/http-response.adoc[]
 
@@ -180,11 +177,11 @@ include::{snippets}/post-posting-media/curl-request.adoc[]
 .http-request
 include::{snippets}/post-posting-media/http-request.adoc[]
 
-.request-part
-include::{snippets}/post-posting-media/request-parts.adoc[]
-
 .path-parameters
 include::{snippets}/post-posting-media/path-parameters.adoc[]
+
+.request-part
+include::{snippets}/post-posting-media/request-parts.adoc[]
 
 .http-response
 include::{snippets}/post-posting-media/http-response.adoc[]
@@ -208,6 +205,9 @@ include::{snippets}/post-posting-like/curl-request.adoc[]
 
 .http-request
 include::{snippets}/post-posting-like/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-posting-like/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/post-posting-like/http-response.adoc[]
@@ -287,6 +287,9 @@ include::{snippets}/post-comment-like/curl-request.adoc[]
 
 .http-request
 include::{snippets}/post-comment-like/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-comment-like/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/post-comment-like/http-response.adoc[]
@@ -393,6 +396,9 @@ include::{snippets}/post-gallery/curl-request.adoc[]
 
 .http-request
 include::{snippets}/post-gallery/http-request.adoc[]
+
+.requestBody-field
+include::{snippets}/post-gallery/request-part-requestBody-fields.adoc[]
 
 .path-parameters
 include::{snippets}/post-gallery/path-parameters.adoc[]
