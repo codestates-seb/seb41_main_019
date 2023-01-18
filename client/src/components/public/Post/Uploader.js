@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { BsFillCameraFill } from "react-icons/bs";
-import { AiOutlineClose } from "react-icons/ai";
 
 const Wrapper = styled.div`
     > p {
@@ -10,21 +9,23 @@ const Wrapper = styled.div`
     > div:nth-of-type(1) {
         display: flex;
         flex-direction: row;
-
-    }
-
-    input {
-        display: none;
     }
 
     .photo {
-        width: 25%;
+        width: 20%;
+        margin-right: 10px;
     }
 
     .img {
         display: flex;
-        width: 25%;
-        
+        width: 150px; 
+        @media screen and (max-width: 1255px) {
+            width: 150px;
+        }      
+    }
+
+    input {
+        display: none;
     }
 `
 
@@ -34,10 +35,9 @@ const StyledDiv = styled.div`
     align-items: center;
     border: 1px solid #dbdbdb;
     border-radius: 5px;
-    width: 150px;
-    height: 150px;
+    height: 140px;
+    width: 140px;
     cursor: pointer;
-    margin-right: 10px;
 
     :hover {
         opacity: 0.7;
@@ -60,28 +60,36 @@ const StyledDiv = styled.div`
             width: 20px;   
         }
     }
+
+    @media screen and (max-width: 770px) {
+        width: 100px;
+        height: 100px;
+    }
 `;
 
-const StyledCancel = styled.div`
-    width: 0;
-
-    svg {
-        cursor: pointer;
-        position: relative;
-        left: -27px;
-        background-color: white;
-
-        :hover {
-            scale: 1.2;
-        }
-    }
+const StyledCancel = styled.button`
+    position: relative;
+    left: -19px;
+    width: 20px;
+    height: 20px;
+    background-color: white !important;
+    border: 0px;
+    cursor: pointer;
 `
 
-const Uploader = ({ images, handleImg, fileInputRef }) => {
-   
+const Uploader = ({ images, handleImg, deleteImg, fileInputs }) => {
     const onFileInputClick = () => {
+        fileInputs.current.childNodes.forEach(input => {
+            if(input.files.length === 0) input.remove();
+        });
+        
         if(images.length < 3) {
-            fileInputRef.current[images.length].click();
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*,audio/*,video/mp4";
+            input.onchange = handleImg;
+            fileInputs.current.append(input);
+            fileInputs.current.lastChild.click();
         }
     };
 
@@ -98,29 +106,14 @@ const Uploader = ({ images, handleImg, fileInputRef }) => {
                                     <StyledDiv>
                                         <img src={image} alt="img" />
                                     </StyledDiv>
-                                    <StyledCancel>
-                                        <AiOutlineClose />
-                                    </StyledCancel>
+                                    <StyledCancel id={idx} onClick={deleteImg}>x</StyledCancel>
                                 </div>
                             )
                         })
                     }
                 </div>
-                <input 
-                    type="file"
-                    accept="image/*,audio/*,video/mp4"
-                    ref={(el) => fileInputRef.current[0] = el} 
-                    onChange={handleImg} />
-                <input 
-                    type="file"
-                    accept="image/*,audio/*,video/mp4"
-                    ref={(el) => fileInputRef.current[1] = el} 
-                    onChange={handleImg} />
-                <input 
-                    type="file"
-                    accept="image/*,audio/*,video/mp4"
-                    ref={(el) => fileInputRef.current[2] = el} 
-                    onChange={handleImg} />
+                <div ref={fileInputs}>
+                </div>
         </Wrapper>
     )
 };

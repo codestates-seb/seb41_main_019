@@ -10,10 +10,10 @@ const StyledBtn = styled.div`
     }
 `;
 
-const CloseBtn = ({ handleModal }) => {
+const CloseBtn = ({ handleEvent }) => {
     return (
         <StyledBtn>
-            <AiOutlineClose onClick={() => handleModal()} />
+            <AiOutlineClose onClick={handleEvent} />
         </StyledBtn>
     )
 };

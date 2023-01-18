@@ -6,30 +6,37 @@ import Landing from "./page/Landing";
 import Setting from "./page/Setting";
 import WritePost from "./components/public/Post/WritePost";
 import Background from "./components/public/Background";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cookie from "./util/Cookie";
 
 function App() {
   const [isCovered, setIsCovered] = useState(false);
   const [isLanded, setIsLanded] = useState(!new Cookie().get("authorization"));
   const [isPosted, setIsPosted] = useState(false);
+  const [change, setChange] = useState(false);
+
   const handleIsCovered = () => setIsCovered(!isCovered); 
+
   const handleIsPosted = () => {
     setIsPosted(!isPosted);
     setIsCovered(!isCovered);
   }
 
+  const handleChange = () => setChange(!change);
+
+  useEffect(() => {
+    document.body.style.overflow = isCovered ? "hidden" : "auto";
+  }, [isCovered]);
+
   return (
     <BrowserRouter>
-      <Background isCovered={isCovered} handleIsCovered={handleIsCovered} />
-      {
-        isLanded ? null : <SideBar setIsLanded={setIsLanded} handleIsPosted={handleIsPosted} />
-      }
-      { isPosted ? <WritePost handleIsPosted={handleIsPosted} />: null }
+      { isCovered ? <Background isCovered={isCovered} /> : null }
+      { isLanded ? null : <SideBar setIsLanded={setIsLanded} handleIsPosted={handleIsPosted} /> }
+      { isPosted ? <WritePost handleIsPosted={handleIsPosted} handleChange={handleChange} />: null }
       <Routes>
         <Route
           path={isLanded ? null : "/"}
-          element={<Home handleIsCovered={handleIsCovered} />}
+          element={<Home handleIsCovered={handleIsCovered} change={change} handleChange={handleChange} />}
         />
         <Route
           path={isLanded ? null : "/mypage"}

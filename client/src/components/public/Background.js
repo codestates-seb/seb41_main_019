@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import styled from "styled-components";
 
 const StyledBackground = styled.div`
@@ -9,17 +8,12 @@ const StyledBackground = styled.div`
   left: 0;
   background: rgba(0, 0, 0, 0.6);
   z-index: 999;
-  display: ${({ isCovered }) => (isCovered ? null : "none")};
+  display: block;
 `;
 
-const Background = ({ isCovered, handleIsCovered }) => {
-  useEffect(() => {
-    document.body.style.overflow = isCovered ? "hidden" : "auto";
-  }, [isCovered]);
-
+const Background = ({ isCovered }) => {
   return (
     <StyledBackground
-      isCovered={isCovered}
       id="bg"
     ></StyledBackground>
   );

@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import A from "../../assets/img/plants/1.jpg";
-import B from "../../assets/img/plants/알보1.png";
 import { FiUserPlus } from "react-icons/fi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
 import FeedMenu from "./FeedMenu";
 import { useState } from "react";
+import { exchangeTime } from "../../util/exchangeTime";
+import defaultImg from "../../assets/img/profile.jpg"
+import Cookie from "../../util/Cookie";
 
 const Wrapper = styled.div`
     position: relative;
@@ -77,35 +78,38 @@ const StyledHeader = styled.div`
     }
 `;
 
-
-const Post = ({ handleModal, handleDelete }) => {
+const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) => {
     const [menu, setMenu] = useState(false);
+    const cookie = new Cookie();
 
     const handleMenu = () => {
         setMenu(!menu);
     }
     
-    const img = [ A, B ];
-
     return (
         <Wrapper>
-            { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} /> : null }
+            { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
-                <img src={A} alt="img" />
+                <img src={post.profileImage ? "" : defaultImg} alt="profileImg" />
                 <div>
-                    <span>홍길동</span>
-                    <span>7시간 전</span>
+                    <span>{post.userName}</span>
+                    <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
                     <FiUserPlus />
-                    <BiDotsVerticalRounded onClick={handleMenu} />
+                    { post.memberId === cookie.get("memberId") ?
+                        <BiDotsVerticalRounded onClick={() => {
+                            handleMenu(); 
+                            handleCurPost(post);
+                            }} />
+                        : null
+                    }
                 </div>
             </StyledHeader>
-            {  img.length > 1
-                ? <Slider img={img} /> 
-                : <img src={B} alt="img" />
+            { post.postingMedias.length > 0 ?
+                <Slider imgs={post.postingMedias} /> : null
             }
-            <FeedInteraction setModal={handleModal} />
+            <FeedInteraction post={post} setModal={handleModal} handleCurPost={handleCurPost} />
         </Wrapper>
     );
 }
