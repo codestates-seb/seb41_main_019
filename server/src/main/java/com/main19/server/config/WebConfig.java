@@ -1,6 +1,6 @@
 package com.main19.server.config;
 
-import com.main19.server.auth.LoginUserArgumentResolver;
+import com.main19.server.utils.LoginUserArgumentResolver;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

@@ -1,29 +1,22 @@
 package com.main19.server.comment.like.controller;
 
-import com.main19.server.auth.Login;
+import com.main19.server.utils.Login;
 import com.main19.server.comment.like.dto.CommentLikeDto;
 import com.main19.server.comment.like.entity.CommentLike;
 import com.main19.server.comment.like.mapper.CommentLikeMapper;
-import com.main19.server.comment.like.repository.CommentLikeRepository;
 import com.main19.server.comment.like.service.CommentLikeService;
-import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.member.entity.Member;
-import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

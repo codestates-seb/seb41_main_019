@@ -1,6 +1,6 @@
 package com.main19.server.chat.controller;
 
-import com.main19.server.auth.Login;
+import com.main19.server.utils.Login;
 import com.main19.server.chat.dto.ChatDto;
 import com.main19.server.chat.entitiy.Chat;
 import com.main19.server.chat.mapper.ChatMapper;
@@ -9,7 +9,6 @@ import com.main19.server.chatroom.service.ChatRoomService;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
-import com.main19.server.member.service.MemberService;
 import java.util.List;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

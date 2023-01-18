@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.auth.LoginUserArgumentResolver;
+import com.main19.server.utils.LoginUserArgumentResolver;
 import com.main19.server.posting.like.controller.PostingLikeController;
 import com.main19.server.posting.like.dto.PostingLikeDto;
 import com.main19.server.posting.like.dto.PostingLikeResponseDto;

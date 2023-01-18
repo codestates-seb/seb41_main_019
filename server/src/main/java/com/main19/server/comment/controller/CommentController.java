@@ -1,14 +1,12 @@
 package com.main19.server.comment.controller;
 
-import com.main19.server.auth.Login;
+import com.main19.server.utils.Login;
 import com.main19.server.comment.dto.CommentDto;
 import com.main19.server.comment.entity.Comment;
 import com.main19.server.comment.mapper.CommentMapper;
 import com.main19.server.comment.service.CommentService;
 import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
-import com.main19.server.exception.BusinessLogicException;
-import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
 import java.util.List;
 import javax.validation.Valid;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

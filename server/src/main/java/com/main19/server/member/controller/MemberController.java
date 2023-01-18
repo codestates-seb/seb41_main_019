@@ -1,6 +1,6 @@
 package com.main19.server.member.controller;
 
-import com.main19.server.auth.Login;
+import com.main19.server.utils.Login;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -12,7 +12,6 @@ import com.main19.server.s3service.S3StorageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

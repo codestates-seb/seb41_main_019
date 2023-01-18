@@ -1,6 +1,6 @@
 package com.main19.server.sse.controller;
 
-import com.main19.server.auth.Login;
+import com.main19.server.utils.Login;
 import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.member.entity.Member;

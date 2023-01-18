@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.auth.LoginUserArgumentResolver;
+import com.main19.server.utils.LoginUserArgumentResolver;
 import com.main19.server.member.entity.Member;
 import com.main19.server.myplants.controller.MyPlantsController;
 import com.main19.server.myplants.dto.MyPlantsDto;

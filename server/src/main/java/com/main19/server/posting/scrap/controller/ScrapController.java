@@ -1,6 +1,6 @@
 package com.main19.server.posting.scrap.controller;
 
-import com.main19.server.auth.Login;
+import com.main19.server.utils.Login;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.mapper.PostingMapper;

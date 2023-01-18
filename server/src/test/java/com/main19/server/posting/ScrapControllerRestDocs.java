@@ -1,7 +1,7 @@
 package com.main19.server.posting;
 
 import com.google.gson.Gson;
-import com.main19.server.auth.LoginUserArgumentResolver;
+import com.main19.server.utils.LoginUserArgumentResolver;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.scrap.controller.ScrapController;
 import com.main19.server.posting.scrap.dto.ScrapDto;
@@ -22,7 +22,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;

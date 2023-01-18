@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.auth.LoginUserArgumentResolver;
+import com.main19.server.utils.LoginUserArgumentResolver;
 import com.main19.server.chatroom.controller.ChatRoomController;
 import com.main19.server.chatroom.dto.ChatRoomDto;
 import com.main19.server.chatroom.entity.ChatRoom;

@@ -1,4 +1,4 @@
-package com.main19.server.auth;
+package com.main19.server.utils;
 
 import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.member.service.MemberService;

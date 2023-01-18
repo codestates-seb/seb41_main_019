@@ -1,7 +1,7 @@
 package com.main19.server.member;
 
 import com.google.gson.Gson;
-import com.main19.server.auth.LoginUserArgumentResolver;
+import com.main19.server.utils.LoginUserArgumentResolver;
 import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.member.controller.MemberController;
 import com.main19.server.member.dto.MemberDto;

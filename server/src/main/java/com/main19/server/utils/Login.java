@@ -1,4 +1,4 @@
-package com.main19.server.auth;
+package com.main19.server.utils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

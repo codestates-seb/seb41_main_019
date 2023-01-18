@@ -1,7 +1,7 @@
 package com.main19.server.posting;
 
 import com.google.gson.Gson;
-import com.main19.server.auth.LoginUserArgumentResolver;
+import com.main19.server.utils.LoginUserArgumentResolver;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.controller.PostingController;
 import com.main19.server.posting.dto.MediaPostDto;
