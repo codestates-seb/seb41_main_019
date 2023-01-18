@@ -10,6 +10,9 @@ import com.main19.server.myplants.gallery.service.GalleryService;
 import com.main19.server.myplants.repository.MyPlantsRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -61,6 +64,10 @@ public class MyPlantsService {
 
     public MyPlants findMyPlants(long myPlantsId) {
         return findVerifiedMyPlants(myPlantsId);
+    }
+
+    public Page<MyPlants> findByMyPlants(int page, int size) {
+        return myPlantsRepository.findAll(PageRequest.of(page, size, Sort.by("myPlantsId").descending()));
     }
 
     public void deleteMyPlants(long myPlantsId, String token) {

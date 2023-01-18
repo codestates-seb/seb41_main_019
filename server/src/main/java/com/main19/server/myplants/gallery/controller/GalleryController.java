@@ -35,7 +35,7 @@ public class GalleryController {
 
     @PostMapping(value = "/{myplants-id}/gallery" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postGallery(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
-        @RequestPart("post") GalleryDto.Post requestBody, @RequestPart MultipartFile galleryImage) {
+        @RequestPart GalleryDto.Post requestBody, @RequestPart MultipartFile galleryImage) {
 
         String imagePath = storageService.uploadGalleryImage(galleryImage);
         Gallery gallery = galleryMapper.galleryDtoPostToGallery(requestBody);

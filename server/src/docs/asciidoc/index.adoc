@@ -341,6 +341,117 @@ include::{snippets}/delete-scrap/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-scrap/http-response.adoc[]
 
+== myPlants
+
+=== 내 식물 등록
+.curl-request
+include::{snippets}/post-my-plants/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-my-plants/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-my-plants/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-my-plants/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-my-plants/response-fields.adoc[]
+
+=== 내 식물 조회
+.curl-request
+include::{snippets}/gets-my-plants/curl-request.adoc[]
+
+.http-request
+include::{snippets}/gets-my-plants/http-request.adoc[]
+
+.http-response
+include::{snippets}/gets-my-plants/http-response.adoc[]
+
+.response-fields
+include::{snippets}/gets-my-plants/response-fields.adoc[]
+
+=== 내 식물 삭제
+.curl-request
+include::{snippets}/delete-my-plants/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-my-plants/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-my-plants/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-my-plants/http-response.adoc[]
+
+== gallery
+
+=== 갤러리 등록
+.curl-request
+include::{snippets}/post-gallery/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-gallery/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-gallery/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/post-gallery/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-gallery/response-fields.adoc[]
+
+=== 갤러리 위치 변경
+.curl-request
+include::{snippets}/patch-my-plants/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-my-plants/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-my-plants/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patch-my-plants/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-my-plants/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-my-plants/response-fields.adoc[]
+
+=== 갤러리 조회
+.curl-request
+include::{snippets}/get-gallery/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-gallery/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-gallery/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-gallery/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-gallery/response-fields.adoc[]
+
+=== 갤러리 삭제
+.curl-request
+include::{snippets}/delete-gallery/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-gallery/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-gallery/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-gallery/http-response.adoc[]
+
+
 == chat
 
 === 채팅방 생성
