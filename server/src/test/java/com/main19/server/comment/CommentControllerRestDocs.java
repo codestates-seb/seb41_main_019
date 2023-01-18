@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.comment.controller.CommentController;
 import com.main19.server.comment.dto.CommentDto;
 import com.main19.server.comment.dto.CommentDto.Patch;
@@ -57,6 +58,8 @@ public class CommentControllerRestDocs {
     private CommentMapper commentMapper;
     @Autowired
     private Gson gson;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Test
     public void PostCommentTest() throws Exception {
@@ -89,7 +92,7 @@ public class CommentControllerRestDocs {
             .willReturn(new Comment());
 
         given(commentService.createComment(Mockito.any(Comment.class), Mockito.anyLong(),
-            Mockito.anyLong(), Mockito.anyString()))
+            Mockito.anyLong(), Mockito.any()))
             .willReturn(new Comment());
 
         given(commentMapper.commentsToCommentsResponseDto(Mockito.any(Comment.class))).willReturn(
@@ -169,7 +172,7 @@ public class CommentControllerRestDocs {
         given(commentMapper.commentsPatchDtoToComments(Mockito.any(CommentDto.Patch.class)))
             .willReturn(new Comment());
 
-        given(commentService.updateComment(Mockito.any(Comment.class), Mockito.anyString()))
+        given(commentService.updateComment(Mockito.any(Comment.class), Mockito.any()))
             .willReturn(new Comment());
 
         given(commentMapper.commentsToCommentsResponseDto(Mockito.any(Comment.class))).willReturn(
@@ -228,12 +231,13 @@ public class CommentControllerRestDocs {
         LocalDateTime modifiedAt = LocalDateTime.now();
 
         Member member = new Member();
+        member.setMemberId(1L);
 
         Posting posting = new Posting();
 
         Comment comment = new Comment(commentId, "댓글 삭제 test", createdAt, modifiedAt, 0L, posting, member, new ArrayList<>());
 
-        doNothing().when(commentService).deleteComment(comment.getCommentId(), "token");
+        doNothing().when(commentService).deleteComment(comment.getCommentId(), member);
 
         ResultActions actions =
             mockMvc.perform(

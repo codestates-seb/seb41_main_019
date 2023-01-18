@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.posting.like.controller.PostingLikeController;
 import com.main19.server.posting.like.dto.PostingLikeDto;
 import com.main19.server.posting.like.dto.PostingLikeResponseDto;
@@ -52,6 +53,8 @@ public class PostingLikeControllerRestDocs {
     private PostingLikeService postingLikeService;
     @MockBean
     private PostingMapper postingMapper;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Test
     public void postPostingLikeTest() throws Exception {
@@ -69,7 +72,7 @@ public class PostingLikeControllerRestDocs {
         given(postingMapper.postingLikeDtoToPostingLike(Mockito.any())).willReturn(
             new PostingLike());
         given(postingLikeService.createPostingLike(Mockito.any(PostingLike.class), Mockito.anyLong(),
-                Mockito.anyLong(), Mockito.anyString())).willReturn(new PostingLike());
+                Mockito.anyLong(), Mockito.any())).willReturn(new PostingLike());
         given(postingMapper.postingLikeToPostingLikeResponseDto(Mockito.any(PostingLike.class))).willReturn(response);
 
         ResultActions actions =
@@ -114,7 +117,7 @@ public class PostingLikeControllerRestDocs {
 
         long postingLikeId = 1L;
 
-        doNothing().when(postingLikeService).deletePostingLike(Mockito.anyLong(),Mockito.anyString());
+        doNothing().when(postingLikeService).deletePostingLike(Mockito.anyLong(),Mockito.any());
 
         ResultActions actions =
             mockMvc.perform(

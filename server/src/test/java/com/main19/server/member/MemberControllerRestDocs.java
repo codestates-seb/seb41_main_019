@@ -1,6 +1,7 @@
 package com.main19.server.member;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.member.controller.MemberController;
 import com.main19.server.member.dto.MemberDto;
@@ -57,6 +58,8 @@ public class MemberControllerRestDocs {
     private JwtTokenizer jwtTokenizer;
     @MockBean
     private S3StorageService storageService;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
 
     @Test
@@ -130,7 +133,6 @@ public class MemberControllerRestDocs {
     @Test
     public void MemberProfileImageTest() throws Exception {
         // given
-
         long memberId = 1L;
 
         MockMultipartFile profileImage = new MockMultipartFile("profileImage", "profileImage.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
@@ -149,7 +151,7 @@ public class MemberControllerRestDocs {
 
 
         given(storageService.uploadProfileImage(Mockito.any())).willReturn("profileImageUrl");
-        given(memberService.createProfileImage(Mockito.anyLong(),Mockito.anyString(),Mockito.anyString())).willReturn(new Member());
+        given(memberService.createProfileImage(Mockito.anyString(),Mockito.anyLong(),Mockito.anyString())).willReturn(new Member());
         given(mapper.memberToMemberResponse(Mockito.any(Member.class))).willReturn(response);
 
         // when
@@ -158,7 +160,7 @@ public class MemberControllerRestDocs {
                         .file(profileImage)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header("Authorization","Atk")
+                        .header("Authorization","Bearer AccessToken")
         );
 
         // then
@@ -258,7 +260,11 @@ public class MemberControllerRestDocs {
     public void deleteMemberTest() throws Exception {
         // given
         long memberId = 1L;
-        doNothing().when(memberService).deleteMember(memberId, "token");
+
+        Member member = new Member();
+        member.setMemberId(memberId);
+
+        doNothing().when(memberService).deleteMember(memberId, member);
 
         // when
         ResultActions actions = mockMvc.perform(

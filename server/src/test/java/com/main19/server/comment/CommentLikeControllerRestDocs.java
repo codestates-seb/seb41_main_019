@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.comment.like.controller.CommentLikeController;
 import com.main19.server.comment.like.dto.CommentLikeDto;
 import com.main19.server.comment.like.dto.CommentLikeDto.Post;
@@ -57,6 +58,8 @@ public class CommentLikeControllerRestDocs {
     private CommentLikeService commentLikeService;
     @MockBean
     private CommentLikeMapper commentLikeMapper;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Test
     public void postCommentLikeTest() throws Exception {
@@ -75,7 +78,7 @@ public class CommentLikeControllerRestDocs {
             new CommentLike());
 
         given(commentLikeService.createLike(Mockito.any(CommentLike.class), Mockito.anyLong(),
-                Mockito.anyLong(), Mockito.anyString())).willReturn(new CommentLike());
+                Mockito.anyLong(), Mockito.any())).willReturn(new CommentLike());
 
         given(commentLikeMapper.commentLikeToCommentLikeResponse(
             Mockito.any(CommentLike.class))).willReturn(response);
@@ -123,7 +126,7 @@ public class CommentLikeControllerRestDocs {
         long commentLikeId = 1L;
 
         doNothing().when(commentLikeService)
-            .deleteLike(Mockito.anyLong(), Mockito.anyString());
+            .deleteLike(Mockito.anyLong(), Mockito.any());
 
         ResultActions actions =
             mockMvc.perform(

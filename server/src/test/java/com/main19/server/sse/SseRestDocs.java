@@ -17,6 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
+import com.main19.server.config.WebConfig;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.entity.Posting;
 import com.main19.server.sse.controller.SseController;
@@ -53,6 +55,8 @@ public class SseRestDocs {
     private SseService sseService;
     @MockBean
     private SseMapper sseMapper;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
     @Autowired
     private Gson gson;
 
@@ -63,7 +67,7 @@ public class SseRestDocs {
 
         SseResponseDto response = new SseResponseDto(sseId,1L,1L,"profileImage","머호",true,"posting");
 
-        given(sseService.updateSse(Mockito.anyLong(),Mockito.anyString())).willReturn(new Sse());
+        given(sseService.updateSse(Mockito.anyLong(),Mockito.any())).willReturn(new Sse());
         given(sseService.findSseId(Mockito.anyLong())).willReturn(new Sse());
         given(sseMapper.sseToSseResponseDto(Mockito.any())).willReturn(response);
 

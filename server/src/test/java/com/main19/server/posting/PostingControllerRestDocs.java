@@ -1,6 +1,7 @@
 package com.main19.server.posting;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.controller.PostingController;
 import com.main19.server.posting.dto.MediaPostDto;
@@ -70,6 +71,8 @@ public class PostingControllerRestDocs {
     private PostingTagsService postingTagsService;
     @MockBean
     private PostingMapper mapper;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Test
     public void postPostingTest() throws Exception {
@@ -126,7 +129,7 @@ public class PostingControllerRestDocs {
                         new ArrayList<>()
                 );
 
-        given(storageService.uploadMedia(Mockito.anyList(), Mockito.anyLong(), Mockito.anyString())).willReturn(new ArrayList<>());
+        given(storageService.uploadMedia(Mockito.anyList(), Mockito.anyLong(), Mockito.any())).willReturn(new ArrayList<>());
         given(mapper.postingPostDtoToPosting(Mockito.any(PostingPostDto.class))).willReturn(new Posting());
         given(postingService.createPosting(Mockito.any(Posting.class), Mockito.anyLong(), Mockito.anyList())).willReturn(new Posting());
         given(mapper.tagPostDtoToTag(Mockito.anyString())).willReturn(new Tag());
@@ -242,7 +245,7 @@ public class PostingControllerRestDocs {
                 );
 
         given(mapper.postingPatchDtoToPosting(Mockito.any(PostingPatchDto.class))).willReturn(new Posting());
-        given(postingService.updatePosting(Mockito.any(Posting.class), Mockito.anyString())).willReturn(new Posting());
+        given(postingService.updatePosting(Mockito.any(Posting.class), Mockito.any())).willReturn(new Posting());
         given(mapper.tagPostDtoToTag(Mockito.anyString())).willReturn(new Tag());
         given(tagService.createTag(Mockito.any(Tag.class))).willReturn(new Tag());
         given(mapper.postingPatchDtoToPostingTag(Mockito.any(PostingPatchDto.class))).willReturn(new PostingTags());
@@ -730,7 +733,7 @@ public class PostingControllerRestDocs {
     public void deletePostingTest() throws Exception {
         // given
         long postingId = 1L;
-        doNothing().when(storageService).removeAll(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(storageService).removeAll(Mockito.anyLong(), Mockito.any());
         doNothing().when(postingService).deletePosting(Mockito.anyLong());
         
         // when
@@ -793,7 +796,7 @@ public class PostingControllerRestDocs {
                         new ArrayList<>()
                 );
 
-        given(storageService.uploadMedia(Mockito.anyList(), Mockito.anyLong(), Mockito.anyString())).willReturn(new ArrayList<>());
+        given(storageService.uploadMedia(Mockito.anyList(), Mockito.anyLong(), Mockito.any())).willReturn(new ArrayList<>());
         given(postingService.addMedia(Mockito.anyLong(), Mockito.anyList())).willReturn(new Posting());
         given(mapper.postingToPostingResponseDto(Mockito.any(Posting.class))).willReturn(response);
         // when
@@ -854,7 +857,7 @@ public class PostingControllerRestDocs {
         // given
         long mediaId = 1L;
 
-        doNothing().when(storageService).remove(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(storageService).remove(Mockito.anyLong(), Mockito.any());
         doNothing().when(postingService).deleteMedia(Mockito.anyLong());
 
         // when

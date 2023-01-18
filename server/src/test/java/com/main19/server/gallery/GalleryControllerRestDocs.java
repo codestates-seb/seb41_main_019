@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.gallery.controller.GalleryController;
 import com.main19.server.myplants.gallery.dto.GalleryDto;
@@ -67,6 +68,8 @@ public class GalleryControllerRestDocs {
     private GalleryService galleryService;
     @MockBean
     private MyPlantsService myPlantsService;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Test
     public void postGalleryTest() throws Exception {
@@ -91,7 +94,7 @@ public class GalleryControllerRestDocs {
         given(galleryMapper.galleryDtoPostToGallery(Mockito.any())).willReturn(new Gallery());
         given(myPlantsService.findMyPlants(Mockito.anyLong())).willReturn(new MyPlants());
         given(galleryService.createGallery(Mockito.any(), Mockito.any(), Mockito.anyString(),
-            Mockito.anyString())).willReturn(new Gallery());
+            Mockito.any())).willReturn(new Gallery());
         given(galleryMapper.galleryToGalleryDtoResponse(Mockito.any())).willReturn(response);
 
         ResultActions actions = mockMvc.perform(
@@ -256,8 +259,8 @@ public class GalleryControllerRestDocs {
 
         long galleryId = 1L;
 
-        doNothing().when(storageService).removeGalleryImage(Mockito.anyLong(), Mockito.anyString());
-        doNothing().when(galleryService).deleteGallery(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(storageService).removeGalleryImage(Mockito.anyLong(), Mockito.any());
+        doNothing().when(galleryService).deleteGallery(Mockito.anyLong(), Mockito.any());
 
         ResultActions actions =
             mockMvc.perform(

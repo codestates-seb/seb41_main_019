@@ -1,6 +1,7 @@
 package com.main19.server.posting;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.scrap.controller.ScrapController;
 import com.main19.server.posting.scrap.dto.ScrapDto;
@@ -50,6 +51,8 @@ public class ScrapControllerRestDocs {
     private ScrapService scrapService;
     @MockBean
     private PostingMapper mapper;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Test
     public void postScrapTest() throws Exception {
@@ -65,7 +68,7 @@ public class ScrapControllerRestDocs {
         ScrapResponseDto response = new ScrapResponseDto(scrapId, postingId, memberId);
 
         given(mapper.scrapDtoToScrap(Mockito.any(ScrapDto.class))).willReturn(new Scrap());
-        given(scrapService.createScrap(Mockito.any(Scrap.class), Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString())).willReturn(new Scrap());
+        given(scrapService.createScrap(Mockito.any(Scrap.class), Mockito.anyLong(), Mockito.anyLong(), Mockito.any())).willReturn(new Scrap());
         given(mapper.scrapToScrapResponseDto(Mockito.any(Scrap.class))).willReturn(response);
 
         // when
@@ -110,7 +113,7 @@ public class ScrapControllerRestDocs {
         // given
         long scrapId = 1L;
 
-        doNothing().when(scrapService).deleteScrap(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(scrapService).deleteScrap(Mockito.anyLong(), Mockito.any());
 
         // when
         ResultActions actions =

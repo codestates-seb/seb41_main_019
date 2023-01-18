@@ -14,6 +14,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.chat.controller.ChatController;
 import com.main19.server.chat.dto.ChatDto;
 import com.main19.server.chat.entitiy.Chat;
@@ -53,6 +54,8 @@ public class ChatRestDocs {
     private ChatRoomService chatRoomService;;
     @MockBean
     private SimpMessagingTemplate simpMessagingTemplate;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Test
     public void GetChatTest() throws Exception {
@@ -79,7 +82,7 @@ public class ChatRestDocs {
 
         List<Chat> list = List.of(chat1,chat2);
 
-        given(chatService.findAllChat(Mockito.anyLong(),Mockito.anyString()))
+        given(chatService.findAllChat(Mockito.anyLong(),Mockito.any()))
             .willReturn(list);
 
         given(chatMapper.chatToChatDtoResponse(Mockito.anyList())).willReturn(

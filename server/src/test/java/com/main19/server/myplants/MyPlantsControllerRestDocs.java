@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.member.entity.Member;
 import com.main19.server.myplants.controller.MyPlantsController;
 import com.main19.server.myplants.dto.MyPlantsDto;
@@ -63,6 +64,8 @@ public class MyPlantsControllerRestDocs {
     private MyPlantsService myPlantsService;
     @MockBean
     private S3StorageService storageService;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
 
     @Test
@@ -81,7 +84,7 @@ public class MyPlantsControllerRestDocs {
             .willReturn(new MyPlants());
 
         given(myPlantsService.createMyPlants(Mockito.any(MyPlants.class), Mockito.anyLong(),
-            Mockito.anyString()))
+            Mockito.any()))
             .willReturn(new MyPlants());
 
         given(myPlantsMapper.myPlantsToMyPlantsResponseDto(Mockito.any(MyPlants.class))).willReturn(
@@ -142,7 +145,7 @@ public class MyPlantsControllerRestDocs {
         MyPlantsDto.Response response = new Response(myPlantsId, "머호", responses);
 
         given(myPlantsService.changeMyPlants(Mockito.anyLong(), Mockito.anyLong(),
-            Mockito.anyInt(), Mockito.anyString()))
+            Mockito.anyInt(), Mockito.any()))
             .willReturn(new MyPlants());
 
         given(myPlantsMapper.myPlantsToMyPlantsResponseDto(Mockito.any(MyPlants.class))).willReturn(
@@ -290,8 +293,8 @@ public class MyPlantsControllerRestDocs {
 
             long myPlantsId = 1L;
 
-            doNothing().when(storageService).removeAllGalleryImage(Mockito.anyLong(),Mockito.anyString());
-            doNothing().when(myPlantsService).deleteMyPlants(Mockito.anyLong(),Mockito.anyString());
+            doNothing().when(storageService).removeAllGalleryImage(Mockito.anyLong(),Mockito.any());
+            doNothing().when(myPlantsService).deleteMyPlants(Mockito.anyLong(),Mockito.any());
 
             ResultActions actions =
                 mockMvc.perform(

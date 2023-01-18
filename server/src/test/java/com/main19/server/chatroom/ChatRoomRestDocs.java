@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
+import com.main19.server.auth.LoginUserArgumentResolver;
 import com.main19.server.chatroom.controller.ChatRoomController;
 import com.main19.server.chatroom.dto.ChatRoomDto;
 import com.main19.server.chatroom.entity.ChatRoom;
@@ -50,6 +51,8 @@ public class ChatRoomRestDocs {
     private ChatRoomMapper chatRoomMapper;
     @Autowired
     private Gson gson;
+    @MockBean
+    private LoginUserArgumentResolver loginUserArgumentResolver;
 
     @Test
     public void PostChatRoomTest() throws Exception {
@@ -72,7 +75,7 @@ public class ChatRoomRestDocs {
             .willReturn(new ChatRoom());
 
         given(chatRoomService.createChatRoom(Mockito.any(ChatRoom.class), Mockito.anyLong(),
-            Mockito.anyLong(), Mockito.anyString()))
+            Mockito.anyLong(), Mockito.any()))
             .willReturn(new ChatRoom());
 
         given(chatRoomMapper.chatRoomToChatRoomResponseDto(Mockito.any(ChatRoom.class))).willReturn(
@@ -138,7 +141,7 @@ public class ChatRoomRestDocs {
 
         List<ChatRoom> list = List.of(chatRoom1,chatRoom2);
 
-        given(chatRoomService.findAllChatRoom(Mockito.anyLong(),Mockito.anyString()))
+        given(chatRoomService.findAllChatRoom(Mockito.anyLong(),Mockito.any()))
             .willReturn(list);
 
         given(chatRoomMapper.chatRoomToChatRoomDtoResponse(Mockito.anyList())).willReturn(
