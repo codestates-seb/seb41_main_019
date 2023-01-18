@@ -148,9 +148,6 @@ include::{snippets}/get-single-posting/response-fields.adoc[]
 .http-request
 include::{snippets}/get-postings-by-member/http-request.adoc[]
 
-.path-parameters
-include::{snippets}/get-postings-by-member/path-parameters.adoc[]
-
 .request-parameters
 include::{snippets}/get-postings-by-member/path-parameters.adoc[]
 
@@ -182,6 +179,9 @@ include::{snippets}/post-posting-media/http-request.adoc[]
 
 .request-part
 include::{snippets}/post-posting-media/request-parts.adoc[]
+
+.requestBody-field
+include::{snippets}/post-posting-media/request-part-requestBody-fields.adoc[]
 
 .path-parameters
 include::{snippets}/post-posting-media/path-parameters.adoc[]

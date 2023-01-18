@@ -68,28 +68,46 @@ public class S3StorageService {
 			.build();
 	}
 
-	public List<String> uploadMedia(List<MultipartFile> multipartFiles) {
+	public List<String> uploadMedia(List<MultipartFile> multipartFiles, long memberId ,String token) {
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (memberId != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		List<String> mediaUrlList = new ArrayList<>();
 
 		for (MultipartFile file : multipartFiles) {
-			String fileName = createFileName(file.getOriginalFilename());
-			ObjectMetadata objectMetadata = new ObjectMetadata();
-			objectMetadata.setContentLength(file.getSize());
-			objectMetadata.setContentType(file.getContentType());
+			if (file != null) {
+				String fileName = createFileName(file.getOriginalFilename());
+				ObjectMetadata objectMetadata = new ObjectMetadata();
+				objectMetadata.setContentLength(file.getSize());
+				objectMetadata.setContentType(file.getContentType());
 
-			try(InputStream inputStream = file.getInputStream()) {
-				s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
-					.withCannedAcl(CannedAccessControlList.PublicRead));
-				mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
-			} catch(IOException e) {
-				throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
+				try (InputStream inputStream = file.getInputStream()) {
+					System.out.println(file.getInputStream());
+
+					s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
+							.withCannedAcl(CannedAccessControlList.PublicRead));
+					mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
+				} catch (IOException e) {
+					throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
+				}
 			}
 		}
 		return mediaUrlList;
 	}
 
-	public void removeAll(long postingId) {
+	public void removeAll(long postingId, String token) {
 		Posting posting = postingService.findPosting(postingId);
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (posting.getMember().getMemberId() != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		List<Media> findMedias = posting.getPostingMedias();
 
 		for (Media fileMedia : findMedias) {
@@ -103,8 +121,15 @@ public class S3StorageService {
 		}
 	}
 
-	public void remove(long mediaId) {
+	public void remove(long mediaId, String token) {
 		Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
+
+		long tokenId = jwtTokenizer.getMemberId(token);
+
+		if (posting.getMember().getMemberId() != tokenId) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
 		if (posting.getPostingMedias().stream().count() == 1) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}
