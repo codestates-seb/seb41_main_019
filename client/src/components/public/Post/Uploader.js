@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { BsFillCameraFill } from "react-icons/bs";
-import { AiOutlineClose } from "react-icons/ai";
 
 const Wrapper = styled.div`
     > p {
@@ -10,15 +9,11 @@ const Wrapper = styled.div`
     > div:nth-of-type(1) {
         display: flex;
         flex-direction: row;
-
-    }
-
-    input {
-
     }
 
     .photo {
         width: 20%;
+        margin-right: 10px;
     }
 
     .img {
@@ -29,8 +24,8 @@ const Wrapper = styled.div`
         }      
     }
 
-    .photo {
-        margin-right: 10px;
+    input {
+        display: none;
     }
 `
 
@@ -82,7 +77,7 @@ const StyledCancel = styled.button`
     cursor: pointer;
 `
 
-const Uploader = ({ images, handleImg, fileInputRef, deleteImg, fileInputs }) => {
+const Uploader = ({ images, handleImg, deleteImg, fileInputs }) => {
     const onFileInputClick = () => {
         fileInputs.current.childNodes.forEach(input => {
             if(input.files.length === 0) input.remove();

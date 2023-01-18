@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Uploader from "./Uploader";
 import Tags from "./Tags";
 import CloseBtn from "../CloseBtn";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { BlueBtn } from "../BlueBtn";
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
@@ -27,7 +27,8 @@ const Wrapper= styled.div`
     box-shadow: 4px 4px 4px 1px rgba(0,0,0,0.3); 
 
     > div:first-child {
-        margin: 0 0 0 auto;
+        margin: 0 0 -30px auto;
+        
     }
 
     button:last-of-type{
@@ -59,7 +60,7 @@ const StyledTextarea = styled.textarea`
 `;
 
 // 기능 추가: 태그 줄 자동바꿈
-const WritePost = ({ handleIsPosted }) => {
+const WritePost = ({ handleIsPosted, handleChange }) => {
     const [images, setImages] = useState([]);
     const [files, setFiles] = useState([]);
     const [value, setValue] = useState("");
@@ -84,7 +85,6 @@ const WritePost = ({ handleIsPosted }) => {
         const newImgs = images.slice();
         newFiles.splice(delIdx, 1)
         newImgs.splice(delIdx, 1)
-
         setFiles(newFiles);
         setImages(newImgs);
         fileInputs.current.childNodes[delIdx].remove();
@@ -99,12 +99,12 @@ const WritePost = ({ handleIsPosted }) => {
             setTags([...tags, e.target.value]);
             e.target.value = "";
         }
-        deleteTags(e);
     };
 
-    const deleteTags = (e,idx) => {
-        if(e.key === "Backspace") {
-            setTags(tags.slice(0, tags.length - 1));
+    const removeTags = (e) => {
+        const removeIdx = e.target.parentNode.parentNode.id;
+        if(removeIdx.length > 0) {
+            setTags(tags.filter((tag, idx) => idx !== Number(removeIdx)));
         }
     };
 
@@ -126,7 +126,8 @@ const WritePost = ({ handleIsPosted }) => {
             data: formData,
             headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
             }).then(res => {
-                console.log(res);
+                handleChange();
+                handleIsPosted();
             })
             .catch(e => {
                 //에러 처리
@@ -135,20 +136,16 @@ const WritePost = ({ handleIsPosted }) => {
 
     return (
         <Wrapper>
-            <CloseBtn handleModal={handleIsPosted}/>
-            <Uploader images={images} handleImg={handleImg} fileInputRef={fileInputRef} deleteImg={deleteImg} 
+            <CloseBtn handleEvent={handleIsPosted}/>
+            <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
                 fileInputs={fileInputs} />
             <StyledTextarea value={value} onChange={handleValue}
                 placeholder="당신의 식물을 소개해주세요.">
                     {value}
             </StyledTextarea>
-            <Tags tags={tags} addTags={addTags} />
+            <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
             <div>
-                <BlueBtn onClick={()=> {
-                    handleSubmit();
-                    handleIsPosted();
-                    }}>작성
-                </BlueBtn>
+                <BlueBtn onClick={handleSubmit}>작성</BlueBtn>
                 <BlueBtn onClick={handleIsPosted}>취소</BlueBtn>
             </div>
         </Wrapper>

@@ -3,6 +3,7 @@ import CloseBtn from "../CloseBtn";
 
 const Wrapper = styled.div`
     display: flex;
+    flex-direction: column;
     border: 1px solid #dbdbdb;
     padding: 10px 10px;
     width: 100%;
@@ -24,6 +25,7 @@ const Wrapper = styled.div`
 
     ul {
         display: flex;
+        flex-wrap: wrap;
         margin: 0;
         padding: 0;
         list-style: none;
@@ -32,30 +34,37 @@ const Wrapper = styled.div`
     ul li {
         display: flex;
         align-items: center;
-        border: 1px solid #dbdbdb;
-        border-radius: 5px;
-        padding: 0px 10px 0px 10px;
+        background-color: #A7C4BC;
+        border-radius: 30px;
+        padding: 6px 10px 6px 10px;
+        font-size: 14px;
+        color: white;
         cursor: pointer;
-        margin: 0px 5px 0px 0px;
+        margin: 10px 5px 5px 0px;
         white-space: nowrap;
 
         svg {
+            margin-left: 5px;
             font-size: 15px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            color: gray;
+            padding: 2px;
         }
     }
 `;
 
-const Tags = ({ tags, addTags }) => {
+const Tags = ({ tags, addTags, removeTags }) => {
     return (
-        <Wrapper className="tags">
+        <Wrapper>
+            <input onKeyUp={addTags} placeholder="# 키워드"></input>
             <ul>
                 {
                     tags.map((tags,idx) => {
-                        return <li key={idx}>{tags}<CloseBtn /></li>
+                        return <li key={idx} id={idx}>{tags}<CloseBtn handleEvent={removeTags} /></li>
                     })
                 }
             </ul>
-            <input onKeyUp={addTags} placeholder="# 키워드"></input>
         </Wrapper>
     )
 };

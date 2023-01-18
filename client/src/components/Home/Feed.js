@@ -25,7 +25,7 @@ const Wrapper = styled.section`
     }
 `
 
-const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit }) => { 
+const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change }) => { 
     const [ posts, setPosts ] = useState([]);
     const cookie = new Cookie();
 
@@ -40,7 +40,7 @@ const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit }) => {
             .catch(e => {
                console.log(e);
             });
-    }, [posts])
+    }, [change])
   
     return (
         <Wrapper>

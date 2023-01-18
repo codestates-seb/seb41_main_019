@@ -1,8 +1,6 @@
 import { AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
 import { BsBookmarkPlus } from "react-icons/bs";
 import styled from "styled-components";
-import axios from "axios";
-import Cookie from "../../util/Cookie";
 
 const StyledInteraction = styled.div`
     background-color: white;

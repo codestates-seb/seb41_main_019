@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useEffect } from "react";
 
 const Wrapper = styled.div`
     position: absolute;
@@ -12,6 +11,7 @@ const Wrapper = styled.div`
     border: 1px solid #dbdbdb;
     border-radius: 5px;
     box-shadow: 5px 5px 10px 1px rgba(0,0,0,.3);
+    z-index: 100;
 
     button {
         height: 100%;
@@ -29,7 +29,6 @@ const Wrapper = styled.div`
 `;
 
 const FeedMenu = ({ handleDelete, handleMenu, handleEdit }) => {
-
     return (
         <Wrapper>
             <button 

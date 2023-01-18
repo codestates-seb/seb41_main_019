@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import { BlueBtn } from "../public/BlueBtn.js";
+import axios from "axios";
+import Cookie from "../../util/Cookie.js";
 
 const Wrapper = styled.div`
     display: flex;
@@ -50,12 +52,27 @@ const Wrapper = styled.div`
     }
 `;
 
-const DeleteModal = ({ handleDelete }) => {
+const DeleteModal = ({ handleDelete, postId, handleChange }) => {
+    const cookie = new Cookie();
+
     useEffect(() => {
         document.getElementById("bg").addEventListener("click", () => {
             handleDelete();
         })
     },[handleDelete])
+
+    const deletePost = () => {
+        axios({
+            method: "delete",
+            url: `http://13.124.33.113:8080/posts/${postId}`,
+            headers: { Authorization: cookie.get("authorization") }
+            }).then(res => {
+                handleChange();
+            })
+            .catch(e => {
+               console.log(e);
+            });
+    };
 
     return (
         <Wrapper>
@@ -64,7 +81,7 @@ const DeleteModal = ({ handleDelete }) => {
                 <span> 정말 이 게시물을 삭제하시겠습니까?</span>
             </div>
             <div className="buttons">
-                <BlueBtn>Yes</BlueBtn>
+                <BlueBtn onClick={deletePost}>Yes</BlueBtn>
                 <BlueBtn onClick={handleDelete}>No</BlueBtn>
             </div>
         </Wrapper>

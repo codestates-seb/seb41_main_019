@@ -6,6 +6,8 @@ import FeedInteraction from "./FeedInteraction";
 import FeedMenu from "./FeedMenu";
 import { useState } from "react";
 import { exchangeTime } from "../../util/exchangeTime";
+import defaultImg from "../../assets/img/profile.jpg"
+import Cookie from "../../util/Cookie";
 
 const Wrapper = styled.div`
     position: relative;
@@ -78,23 +80,30 @@ const StyledHeader = styled.div`
 
 const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) => {
     const [menu, setMenu] = useState(false);
+    const cookie = new Cookie();
 
     const handleMenu = () => {
         setMenu(!menu);
     }
-
+    
     return (
         <Wrapper>
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
-                <img src={post.profileImage} alt="profileImg" />
+                <img src={post.profileImage ? "" : defaultImg} alt="profileImg" />
                 <div>
                     <span>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
                     <FiUserPlus />
-                    <BiDotsVerticalRounded onClick={handleMenu} />
+                    { post.memberId === cookie.get("memberId") ?
+                        <BiDotsVerticalRounded onClick={() => {
+                            handleMenu(); 
+                            handleCurPost(post);
+                            }} />
+                        : null
+                    }
                 </div>
             </StyledHeader>
             { post.postingMedias.length > 0 ?

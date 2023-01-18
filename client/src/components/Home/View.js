@@ -2,10 +2,9 @@ import styled from "styled-components";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
 import Comments from "./Comments";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CloseBtn from "../public/CloseBtn";
-import axios from "axios";
-import Cookie from "../../util/Cookie";
+
 import { exchangeTime } from "../../util/exchangeTime";
 
 const Wrapper = styled.div`
@@ -134,7 +133,7 @@ const View = ({ handleModal, curPost }) => {
                         <img src={curPost.profileImage} alt="profileImg" />
                         <span>{curPost.userName}</span>
                         <span>{curPost.modifiedAt ? exchangeTime(curPost) : ""}</span>
-                        <CloseBtn handleModal={handleModal} />
+                        <CloseBtn handleEvent={handleModal} />
                     </div>
                     <FeedInteraction post={curPost} type={1} />
                     <Comments />

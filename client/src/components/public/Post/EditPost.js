@@ -30,6 +30,23 @@ const Wrapper= styled.div`
         margin: 0 0 0 auto;
     }
 
+    > div:nth-of-type(2) {
+        display: flex;
+    }
+
+    ul {
+        display: flex;
+        list-style: none;
+
+        img {
+        display: flex;
+        width: 150px; 
+        @media screen and (max-width: 1255px) {
+            width: 150px;
+            }    
+        }     
+    }
+
     button:last-of-type{
         background-color: #D96848;
     }
@@ -65,16 +82,34 @@ const EditPost = ({ handleEdit, curPost }) => {
     const [value, setValue] = useState("");
     const [tags, setTags] = useState([]);
     const fileInputRef = useRef([]);
+    const fileInputs = useRef(null);
     const cookie = new Cookie();
 
     const handleImg = (e) => {
-        const file = fileInputRef.current[images.length].files[0];
+        const file = e.target.files[0];
+        setFiles([...files, file]);
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
             setImages([...images, reader.result]);
         }
     };
+
+    const deleteImg = (e) => {
+        const delIdx = e.target.id;
+        const newFiles = files.slice();
+        const newImgs = images.slice();
+        newFiles.splice(delIdx, 1)
+        newImgs.splice(delIdx, 1)
+        setFiles(newFiles);
+        setImages(newImgs);
+        fileInputs.current.childNodes[delIdx].remove();
+    };
+
+    useEffect(() => {
+        setValue(curPost.postingContent);
+        setTags(curPost.tags.map(tag => tag.tagName))
+    },[])
 
     const handleValue = (e) => {
         setValue(e.target.value);
@@ -85,12 +120,12 @@ const EditPost = ({ handleEdit, curPost }) => {
             setTags([...tags, e.target.value]);
             e.target.value = "";
         }
-        deleteTags(e);
     };
 
-    const deleteTags = (e,idx) => {
-        if(e.key === "Backspace") {
-            setTags(tags.slice(0, tags.length - 1));
+    const removeTags = (e) => {
+        const removeIdx = e.target.parentNode.parentNode.id;
+        if(removeIdx.length > 0) {
+            setTags(tags.filter((tag, idx) => idx !== Number(removeIdx)));
         }
     };
 
@@ -108,9 +143,14 @@ const EditPost = ({ handleEdit, curPost }) => {
 
     //     axios({
     //         method: "patch",
-    //         url: "http://13.124.33.113:8080/posts",
-    //         data: formData,
+    //         url: "http://13.124.33.113:8080/posts/cookie.get("memberId")",
+    //         data: {
+    //        "postingId" : 1,
+    //        "postingContent" : "게시글 수정 test",
+    //        "tagName" : [ "스투키", "몬스테라" ]
+    //         } 
     //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
+    
     //         }).then(res => {
     //             console.log(res);
     //         })
@@ -119,18 +159,21 @@ const EditPost = ({ handleEdit, curPost }) => {
     //         });
     // };
 
-    useEffect(() => {
-        document.getElementById("bg").addEventListener("click", () => {
-            handleEdit();
-        })
-    },[handleEdit])
-
     return (
         <Wrapper>
-            <CloseBtn handleModal={handleEdit}/>
-            <Uploader images={images} handleImg={handleImg} fileInputRef={fileInputRef} />
+            <CloseBtn handleEvent={handleEdit}/>
+            <div className="preview">
+                <Uploader images={images} handleImg={handleImg} />
+                <ul>
+                    {
+                        curPost.postingMedias.map((media, idx) => {
+                            return <li><img src={media.mediaUrl} alt="img" /></li>
+                        })
+                    }
+                </ul>
+            </div>
             <StyledTextarea value={value} onChange={handleValue} placeholder="수정할 거에용">{value}</StyledTextarea>
-            <Tags tags={tags} addTags={addTags} />
+            <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
             <div>
                 <BlueBtn>수정하기</BlueBtn>
                 <BlueBtn onClick={handleEdit}>취소</BlueBtn>

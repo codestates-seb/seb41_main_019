@@ -9,6 +9,12 @@ const Wrapper = styled.div`
         padding: 0px;
         list-style: none;
 
+        li {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
         li div:first-child {
             height: ${({type}) => type ? "" : "500px"};
             background-color: black;
@@ -23,9 +29,10 @@ const Wrapper = styled.div`
         li div:nth-of-type(2) {
             display: flex;
             justify-content: space-between;
-            position: relative;
-            top: -260px;
-            height: 1px;
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            
 
             .hidden {
                 visibility: hidden;
@@ -38,7 +45,7 @@ const Wrapper = styled.div`
                 border-radius: 30px;
             }
         }
-
+        
         .none {
             display: none;
         }
@@ -58,7 +65,7 @@ const Slider = ({ imgs }) => {
                                     <img src={img.mediaUrl} alt="img" />
                                 </div>
                                 { imgs.length > 1 ?
-                                    <div>
+                                    <div className="arrow">
                                         <BsFillArrowLeftCircleFill onClick={() => setCur(cur - 1)} className={`pre ${cur === 0 ? "hidden" : null}`} />
                                         <BsFillArrowRightCircleFill onClick={() => setCur(cur + 1)} className={`next ${cur === imgs.length - 1 ? "hidden" : null}`} />
                                     </div> 

@@ -2,10 +2,8 @@ import Recommends from "../components/Home/Recommends";
 import Feed from "../components/Home/Feed";
 import styled from "styled-components";
 import View from "../components/Home/View";
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import DeleteModal from "../components/Home/DeleteModal";
-import axios from "axios";
-import Cookie from "../util/Cookie";
 import EditPost from "../components/public/Post/EditPost";
 
 const StyledMain = styled.main`
@@ -15,13 +13,11 @@ const StyledMain = styled.main`
     }
 `;
 
-const Home = ({ handleIsCovered }) => {
+const Home = ({ handleIsCovered, change, handleChange }) => {
     const [ modal, setModal ] = useState(false);
     const [ edit, setEdit ] = useState(false);
     const [ deleteMenu, setDeleteMenu ] = useState(false);
-    const [ post, setPost ]= useState({});
     const [ curPost, setCurPost ] = useState(null);
-    const cookie = new Cookie();
 
     const handleModal = () => {
         handleIsCovered();
@@ -46,10 +42,11 @@ const Home = ({ handleIsCovered }) => {
         <>
             { edit ? <EditPost curPost={curPost} handleEdit={handleEdit}/> : null }
             { modal ? <View handleModal={handleModal} curPost={curPost} /> : null }
-            { deleteMenu ? <DeleteModal handleDelete={handleDelete} /> : null }
+            { deleteMenu ? <DeleteModal postId={curPost.postingId} handleDelete={handleDelete} handleChange={handleChange} /> : null }
             <StyledMain>
                 <Recommends />
-                <Feed handleModal={handleModal} handleDelete={handleDelete} handleEdit={handleEdit} handleCurPost={handleCurPost} />
+                <Feed handleModal={handleModal} handleDelete={handleDelete} handleEdit={handleEdit}
+                    handleCurPost={handleCurPost} change={change} />
             </StyledMain>
         </>
     )
