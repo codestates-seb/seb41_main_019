@@ -9,7 +9,6 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -28,9 +27,6 @@ import com.main19.server.myplants.gallery.entity.Gallery;
 import com.main19.server.myplants.gallery.mapper.GalleryMapper;
 import com.main19.server.myplants.gallery.service.GalleryService;
 import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.posting.dto.PostingPostDto;
-import com.main19.server.posting.dto.PostingResponseDto;
-import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
 import com.main19.server.s3service.S3StorageService;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -43,6 +39,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -178,14 +176,77 @@ public class GalleryControllerRestDocs {
                     parameterWithName("gallery-id").description("갤러리 식별자")
                 ),
                 responseFields(
-                    fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER)
-                        .description("내 식물 식별자"),
-                    fieldWithPath("data.galleryId").type(JsonFieldType.NUMBER)
-                        .description("갤러리 식별자"),
+                    fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
+                    fieldWithPath("data.galleryId").type(JsonFieldType.NUMBER).description("갤러리 식별자"),
                     fieldWithPath("data.content").type(JsonFieldType.STRING).description("게시글 내용"),
-                    fieldWithPath("data.plantImage").type(JsonFieldType.STRING)
-                        .description("식물 이미지"),
+                    fieldWithPath("data.plantImage").type(JsonFieldType.STRING).description("식물 이미지"),
                     fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성 시간")
+                )
+            ));
+    }
+
+    @Test
+    public void getsGalleryTest() throws Exception {
+
+        long myPlantsId = 1L;
+        long galleryId1 = 1L;
+        long galleryId2 = 1L;
+
+        MyPlants myPlants = new MyPlants();
+        myPlants.setMyPlantsId(myPlantsId);
+
+        Gallery gallery1 = new Gallery(galleryId1,"안녕 난 머호","plantImage",LocalDateTime.now(),myPlants);
+        Gallery gallery2 = new Gallery(galleryId1,"안녕 난 머호","plantImage",LocalDateTime.now(),myPlants);
+
+        Page<Gallery> gallery = new PageImpl<>(List.of(gallery1, gallery2));
+
+        GalleryDto.Response response1 = new Response(myPlantsId, galleryId1, "안녕 난 머호", "plantImage",
+            LocalDateTime.now());
+        GalleryDto.Response response2 = new Response(myPlantsId, galleryId2, "안녕 난 머호", "plantImage",
+            LocalDateTime.now());
+
+        List<GalleryDto.Response> response = new ArrayList<>();
+        response.add(response1);
+        response.add(response2);
+
+        given(galleryService.findByAllMyPlantsId(Mockito.anyLong(),Mockito.anyInt(),Mockito.anyInt())).willReturn(gallery);
+        given(galleryMapper.galleryListToGalleryResponseList(Mockito.any())).willReturn(response);
+
+        ResultActions actions = mockMvc.perform(
+            RestDocumentationRequestBuilders.get("/myplants/{myplants-id}/gallery", myPlantsId)
+                .param("page","1")
+                .param("size","10")
+                .accept(MediaType.APPLICATION_JSON)
+        );
+
+        actions
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data[0].myPlantsId").value(response.get(0).getMyPlantsId()))
+            .andExpect(jsonPath("$.data[0].galleryId").value(response.get(0).getGalleryId()))
+            .andExpect(jsonPath("$.data[0].content").value(response.get(0).getContent()))
+            .andExpect(jsonPath("$.data[0].plantImage").value(response.get(0).getPlantImage()))
+            .andExpect(jsonPath("$.data[1].myPlantsId").value(response.get(1).getMyPlantsId()))
+            .andExpect(jsonPath("$.data[1].galleryId").value(response.get(1).getGalleryId()))
+            .andExpect(jsonPath("$.data[1].content").value(response.get(1).getContent()))
+            .andExpect(jsonPath("$.data[1].plantImage").value(response.get(1).getPlantImage()))
+            .andDo(document(
+                "gets-gallery",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                pathParameters(
+                    parameterWithName("myplants-id").description("내 식물 식별자")
+                ),
+                responseFields(
+                    fieldWithPath("data[].myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
+                    fieldWithPath("data[].galleryId").type(JsonFieldType.NUMBER).description("갤러리 식별자"),
+                    fieldWithPath("data[].content").type(JsonFieldType.STRING).description("게시글 내용"),
+                    fieldWithPath("data[].plantImage").type(JsonFieldType.STRING).description("식물 이미지"),
+                    fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성 시간"),
+                    fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
+                    fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                    fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                    fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
+                    fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
                 )
             ));
     }
