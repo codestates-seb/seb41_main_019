@@ -22,7 +22,6 @@ const Wrapper = styled.section`
     }
 `
 
-
 const Feed = ({ handleModal, handleDelete }) => { 
     const datas = new Array(0).fill(0);
 

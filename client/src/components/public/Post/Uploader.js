@@ -18,7 +18,7 @@ const Wrapper = styled.div`
     }
 
     .photo {
-        width: 25%;
+        width: 20%;
     }
 
     .img {
@@ -34,8 +34,8 @@ const StyledDiv = styled.div`
     align-items: center;
     border: 1px solid #dbdbdb;
     border-radius: 5px;
-    width: 150px;
-    height: 150px;
+    height: 140px;
+    width: 140px;
     cursor: pointer;
     margin-right: 10px;
 

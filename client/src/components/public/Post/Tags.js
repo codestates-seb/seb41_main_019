@@ -45,13 +45,13 @@ const Wrapper = styled.div`
     }
 `;
 
-const Tags = ({ tags, addTags, removeTag, tagRef }) => {
+const Tags = ({ tags, addTags }) => {
     return (
         <Wrapper className="tags">
             <ul>
                 {
                     tags.map((tags,idx) => {
-                        return <li key={idx}>{tags}<CloseBtn onClick={removeTag} ref={tagRef} /></li>
+                        return <li key={idx}>{tags}<CloseBtn /></li>
                     })
                 }
             </ul>
