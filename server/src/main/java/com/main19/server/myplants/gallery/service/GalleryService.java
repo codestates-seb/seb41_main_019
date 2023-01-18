@@ -11,6 +11,9 @@ import com.main19.server.posting.entity.Media;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,6 +44,10 @@ public class GalleryService {
 
     public List<Gallery> findByMyPlantsId(long myPlantsId) {
         return galleryRepository.findByMyPlants_MyPlantsId(myPlantsId);
+    }
+
+    public Page<Gallery> findByAllMyPlantsId(long myPlantsId, int page, int size) {
+        return galleryRepository.findByMyPlants_MyPlantsId(myPlantsId, PageRequest.of(page, size, Sort.by("my_Plants_Id").descending()));
     }
 
     public void deleteGallery(long galleryId, String token) {

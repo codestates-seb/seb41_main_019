@@ -1,5 +1,6 @@
 package com.main19.server.myplants.gallery.controller;
 
+import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.gallery.dto.GalleryDto;
@@ -8,8 +9,10 @@ import com.main19.server.myplants.gallery.mapper.GalleryMapper;
 import com.main19.server.myplants.gallery.service.GalleryService;
 import com.main19.server.myplants.service.MyPlantsService;
 import com.main19.server.s3service.S3StorageService;
+import java.util.List;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,6 +59,17 @@ public class GalleryController {
         GalleryDto.Response response = galleryMapper.galleryToGalleryDtoResponse(gallery);
 
         return new ResponseEntity(new SingleResponseDto<>(response),HttpStatus.OK);
+    }
+
+    @GetMapping("/{myplants-id}/gallery")
+    public ResponseEntity getsGallery(@PathVariable("myplants-id") @Positive long myPlantsId,
+        @RequestParam  @Positive int page, @RequestParam  @Positive int size) {
+
+        Page<Gallery> galleryPage = galleryService.findByAllMyPlantsId(myPlantsId,page-1,size);
+        List<Gallery> content = galleryPage.getContent();
+        List<GalleryDto.Response> response = galleryMapper.galleryListToGalleryResponseList(content);
+
+        return new ResponseEntity(new MultiResponseDto<>(response,galleryPage),HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/gallery/{gallery-id}")

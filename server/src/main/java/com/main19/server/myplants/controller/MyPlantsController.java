@@ -21,20 +21,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/myplants")
 public class MyPlantsController {
 
     private final MyPlantsMapper myPlantsMapper;
     private final MyPlantsService myPlantsService;
     private final S3StorageService storageService;
 
-    @PostMapping
+    @PostMapping("/myplants")
     public ResponseEntity postMyPlants(@RequestHeader(name = "Authorization") String token,
         @Valid @RequestBody MyPlantsDto.Post requestBody) {
 
@@ -47,7 +45,7 @@ public class MyPlantsController {
         return new ResponseEntity(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{myplants-id}")
+    @PatchMapping("/myplants/{myplants-id}")
     public ResponseEntity patchMyPlants(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
         @Valid @RequestBody MyPlantsDto.Patch requestBody) {
 
@@ -59,17 +57,17 @@ public class MyPlantsController {
         return new ResponseEntity(new SingleResponseDto<>(response),HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity getsMyPlants(@RequestParam @Positive int page, @RequestParam @Positive int size) {
+    @GetMapping("/{member-id}/myplants")
+    public ResponseEntity getsMyPlants(@PathVariable("member-id") @Positive long memberId, @RequestParam @Positive int page, @RequestParam @Positive int size) {
 
-        Page<MyPlants> myPlantsPage = myPlantsService.findByMyPlants(page-1,size);
+        Page<MyPlants> myPlantsPage = myPlantsService.findByMyPlants(page-1,size,memberId);
         List<MyPlants> content = myPlantsPage.getContent();
         List<MyPlantsDto.Response> response = myPlantsMapper.myPlantsListToMyPlantsResponseDto(content);
 
         return new ResponseEntity(new MultiResponseDto<>(response,myPlantsPage),HttpStatus.OK);
     }
 
-    @GetMapping("/{myplants-id}")
+    @GetMapping("/myplants/{myplants-id}")
     public ResponseEntity getMyPlants(@PathVariable("myplants-id") @Positive long myPlantsId) {
 
         MyPlants myPlants = myPlantsService.findMyPlants(myPlantsId);
@@ -78,7 +76,7 @@ public class MyPlantsController {
         return new ResponseEntity(new SingleResponseDto<>(response),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{myplants-id}")
+    @DeleteMapping("/myplants/{myplants-id}")
     public ResponseEntity deleteMyPlants(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId) {
 
         storageService.removeAllGalleryImage(myPlantsId,token);
