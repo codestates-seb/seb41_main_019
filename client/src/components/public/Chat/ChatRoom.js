@@ -1,8 +1,8 @@
 import styled from "styled-components";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
 
 const StyledFriend = styled.li`
   display: flex;
-  ${({ top }) => (top ? null : "border-bottom: 1px solid #dbdbdb;")}
   margin: 0px 0px 10px 0px;
   padding: 0px 0px 5px 0px;
 
@@ -34,7 +34,14 @@ const StyledFriend = styled.li`
   }
 `;
 
-const StyledButton = styled.button``;
+const StyledButton = styled.button`
+  border: 0px;
+  cursor: pointer;
+
+  svg {
+    font-size: 22px;
+  }
+`;
 
 const ChatRoom = ({ handleCurChat, freind }) => {
   return (
@@ -48,8 +55,8 @@ const ChatRoom = ({ handleCurChat, freind }) => {
       <div>
         <span>임의</span>
         <span>profile</span>
-      </div>
-      <StyledButton onClick={() => handleCurChat(freind)}>chat</StyledButton>
+      </div>  
+      <StyledButton onClick={() => handleCurChat(freind)}><IoChatbubbleEllipsesOutline /></StyledButton>
     </StyledFriend>
   );
 };

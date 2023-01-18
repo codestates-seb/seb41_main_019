@@ -12,6 +12,10 @@ const StyledChatList = styled.div`
     ::-webkit-scrollbar {
       display: none;
     }
+
+    li: last-child {
+      margin : 0px;
+    }
   }
 
   > p::before {

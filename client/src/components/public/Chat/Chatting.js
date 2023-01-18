@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import Massage from "./Massage";
 import Friend from "./Friend";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect, subscribe, disConnect, send } from "../../../util/chat";
+import axios from "axios";
 
 const StyledChatLog = styled.div`
   display: flex;
@@ -103,8 +104,9 @@ const Chatting = ({ curChat, handleCurChat, chatLog }) => {
 
   const handleSend = () => {
     send(1, 1, 2, message);
-
   }
+
+  console.log(curChat);
 
   return (
     <div className="chat-area">
