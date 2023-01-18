@@ -187,12 +187,13 @@ public class MyPlantsControllerRestDocs {
     @Test
     public void GetMyPlantsTest() throws Exception {
 
-        long plantsId = 1L;
+        long plantsId1 = 1L;
+        long plantsId2 = 2L;
 
         Member member = new Member();
 
-        MyPlants myPlants1 = new MyPlants(plantsId,"머호",member,new ArrayList<>());
-        MyPlants myPlants2 = new MyPlants(plantsId,"머호",member,new ArrayList<>());
+        MyPlants myPlants1 = new MyPlants(plantsId1,"머호",member,new ArrayList<>());
+        MyPlants myPlants2 = new MyPlants(plantsId2,"머호",member,new ArrayList<>());
 
         Page<MyPlants> pageMyPlants = new PageImpl<>(List.of(myPlants1, myPlants2));
         List<MyPlants> listMyPlants = List.of(myPlants1,myPlants2);
