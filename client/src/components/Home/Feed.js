@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import Post from "./Post";
 import { ReactComponent as NoContent } from "../../assets/svg/monstera.svg";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Cookie from "../../util/Cookie";
 
 const Wrapper = styled.section`
     position: relative;
@@ -22,7 +25,23 @@ const Wrapper = styled.section`
     }
 `
 
-const Feed = ({ handleModal, handleDelete, posts }) => { 
+const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit }) => { 
+    const [ posts, setPosts ] = useState([]);
+    const cookie = new Cookie();
+
+    useEffect(() => {
+        axios({
+            method: "get",
+            url: "http://13.124.33.113:8080/posts?page=1&size=10",
+            headers: { Authorization: cookie.get("authorization") }
+            }).then(res => {
+                setPosts(res.data.data);
+            })
+            .catch(e => {
+               console.log(e);
+            });
+    }, [posts])
+  
     return (
         <Wrapper>
             { posts.length < 1 
@@ -31,7 +50,10 @@ const Feed = ({ handleModal, handleDelete, posts }) => {
                         <NoContent />
                         <span>게시물이 없습니다.</span> 
                     </div>
-                : posts.map((post, idx) => <Post post={post} key={idx} handleModal={handleModal} handleDelete={handleDelete} />)
+                : posts.map((post, idx) => {
+                    return (<Post post={post} key={idx} handleModal={handleModal}
+                            handleCurPost={handleCurPost} handleDelete={handleDelete} handleEdit={handleEdit} />)
+                })
             }
         </Wrapper>
     )

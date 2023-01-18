@@ -4,20 +4,20 @@ import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 import { BsFillArrowRightCircleFill } from "react-icons/bs";
 
 const Wrapper = styled.div`
-    width: 100%;
-
     ul {
         margin: 0px;
         padding: 0px;
         list-style: none;
 
         li div:first-child {
-            height: 500px;
+            height: ${({type}) => type ? "" : "500px"};
             background-color: black;
         }
 
         li div img {
             object-fit: contain;
+            width: 100%;
+            height: 100%;
         }
 
         li div:nth-of-type(2) {

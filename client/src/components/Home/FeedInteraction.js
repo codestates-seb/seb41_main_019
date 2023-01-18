@@ -1,6 +1,8 @@
 import { AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
 import { BsBookmarkPlus } from "react-icons/bs";
 import styled from "styled-components";
+import axios from "axios";
+import Cookie from "../../util/Cookie";
 
 const StyledInteraction = styled.div`
     background-color: white;
@@ -44,8 +46,7 @@ const StyledInteraction = styled.div`
     }
 `;
 
-const FeedInteraction = ({ setModal, type=null, post }) => {
-    console.log(post);
+const FeedInteraction = ({ setModal, type=null, post, handleCurPost }) => {
     return (
         <StyledInteraction>
             <div className="interact">
@@ -64,7 +65,10 @@ const FeedInteraction = ({ setModal, type=null, post }) => {
                 }
             </div>
             { type ? null
-            : <span onClick={setModal ? () => setModal(true) : null} >댓글 보기 및 댓글쓰기</span>
+            : <span onClick={() => {
+                handleCurPost(post.postingId);
+                setModal(false);
+            }} >댓글 보기 및 댓글쓰기</span>
             }
         </StyledInteraction>
     )

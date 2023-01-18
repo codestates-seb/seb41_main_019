@@ -70,6 +70,7 @@ const StyledCancel = styled.div`
         position: relative;
         left: -27px;
         background-color: white;
+        opacity: 0.6;
 
         :hover {
             scale: 1.2;
@@ -77,7 +78,7 @@ const StyledCancel = styled.div`
     }
 `
 
-const Uploader = ({ images, handleImg, fileInputRef }) => {
+const Uploader = ({ images, handleImg, fileInputRef, deleteImg }) => {
    
     const onFileInputClick = () => {
         if(images.length < 3) {
@@ -98,7 +99,7 @@ const Uploader = ({ images, handleImg, fileInputRef }) => {
                                     <StyledDiv>
                                         <img src={image} alt="img" />
                                     </StyledDiv>
-                                    <StyledCancel>
+                                    <StyledCancel onClick={deleteImg}>
                                         <AiOutlineClose />
                                     </StyledCancel>
                                 </div>

@@ -77,6 +77,10 @@ const WritePost = ({ handleIsPosted }) => {
         }
     };
 
+    const deleteImg = () => {
+        
+    }
+
     const handleValue = (e) => {
         setValue(e.target.value);
     };
@@ -133,7 +137,7 @@ const WritePost = ({ handleIsPosted }) => {
     return (
         <Wrapper>
             <CloseBtn handleModal={handleIsPosted}/>
-            <Uploader images={images} handleImg={handleImg} fileInputRef={fileInputRef} />
+            <Uploader images={images} handleImg={handleImg} fileInputRef={fileInputRef} deleteImg={deleteImg} />
             <StyledTextarea value={value} onChange={handleValue} placeholder="당신의 식물을 소개해주세요.">{value}</StyledTextarea>
             <Tags tags={tags} addTags={addTags} />
             <div>

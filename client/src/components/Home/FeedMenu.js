@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useEffect } from "react";
 
 const Wrapper = styled.div`
     position: absolute;
@@ -27,15 +28,22 @@ const Wrapper = styled.div`
     }
 `;
 
-const FeedMenu = ({ handleDelete, handleMenu }) => {
+const FeedMenu = ({ handleDelete, handleMenu, handleEdit }) => {
+
     return (
         <Wrapper>
-            <button>Edit</button>
+            <button 
+                onClick={() => { 
+                    handleEdit(); 
+                    handleMenu();
+                }}>
+                Edit
+            </button>
             <button 
                 onClick={() => {
-                        handleDelete(); 
-                        handleMenu();
-                        }}>
+                    handleDelete(); 
+                    handleMenu();
+                    }}>
                 Delete
             </button>
             <button onClick={handleMenu}>Cancel</button>

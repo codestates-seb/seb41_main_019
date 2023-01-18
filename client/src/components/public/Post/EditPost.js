@@ -59,12 +59,12 @@ const StyledTextarea = styled.textarea`
 `;
 
 // 기능 추가: 사진 x클릭시 사진 삭제, 태그 줄 자동바꿈,
-const EditPost = ({ handleIsPosted }) => {
+const EditPost = ({ handleEdit, post }) => {
     const [images, setImages] = useState([]);
+    const [files, setFiles] = useState([]);
     const [value, setValue] = useState("");
     const [tags, setTags] = useState([]);
     const fileInputRef = useRef([]);
-    const tagRef = useRef();
     const cookie = new Cookie();
 
     const handleImg = (e) => {
@@ -94,48 +94,50 @@ const EditPost = ({ handleIsPosted }) => {
         }
     };
 
-    const removeTag = (idx) => {
-        // setTags([...tags.filter((tag) => tags.indexOf(tag) !== idx)]);
-    }
+    // const handleSubmit = () => {
+    //     const formData = new FormData();
 
-    const handleSubmit = () => {
-        const formData = new FormData();
-        formData.append("data", {
-            "memberId": 1,
-            "postingContent": value,
-            "tagName": tags
-        });
-        formData.append("file1", images[0]);
-        formData.append("file2", images[1]);
-        formData.append("file3", images[2]);
+    //     files.forEach((file, idx) => {
+    //         formData.append(`file${idx + 1}`, file);
+    //     });
+    //     formData.append("requestBody", new Blob([JSON.stringify({
+    //         "memberId": Number(cookie.get("memberId")),
+    //         "postingContent": value,
+    //         "tagName": tags
+    //     })], { type: "application/json"}));
 
-        axios({
-            method: 'post',
-            url: "http://localhost:8080/posts",
-            data: formData,
-            headers: { "Content-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
-            }).then(function (response) {
-                console.log('성공');
-            }).catch(function (error) {
-                console.log('전송 실패');
-        })
-    };
+    //     console.log(formData.get("file1"))
+    //     console.log(formData.get("file2"))
+    //     console.log(formData.get("file3"))
+
+    //     axios({
+    //         method: "post",
+    //         url: "http://13.124.33.113:8080/posts",
+    //         data: formData,
+    //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
+    //         }).then(res => {
+    //             console.log(res);
+    //         })
+    //         .catch(e => {
+    //             //에러 처리
+    //         });
+    // };
 
     useEffect(() => {
         document.getElementById("bg").addEventListener("click", () => {
-            handleIsPosted();
+            handleEdit();
         })
-    },[handleIsPosted])
+    },[handleEdit])
 
     return (
         <Wrapper>
-            <CloseBtn handleModal={handleIsPosted}/>
+            <CloseBtn handleModal={handleEdit}/>
             <Uploader images={images} handleImg={handleImg} fileInputRef={fileInputRef} />
-            <StyledTextarea value={value} onChange={handleValue} placeholder="당신의 식물을 소개해주세요.">{value}</StyledTextarea>
-            <Tags tags={tags} addTags={addTags} removeTag={removeTag} tagRef={tagRef}/>
+            <StyledTextarea value={value} onChange={handleValue} placeholder="수정할 거에용">{value}</StyledTextarea>
+            <Tags tags={tags} addTags={addTags} />
             <div>
-                <BlueBtn onClick={handleSubmit}>수정하기</BlueBtn>
-                <BlueBtn onClick={handleIsPosted}>취소</BlueBtn>
+                <BlueBtn>수정하기</BlueBtn>
+                <BlueBtn onClick={handleEdit}>취소</BlueBtn>
             </div>
         </Wrapper>
     )
