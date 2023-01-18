@@ -119,6 +119,9 @@ include::{snippets}/patch-posting/http-response.adoc[]
 include::{snippets}/patch-posting/response-fields.adoc[]
 
 === 게시글 단일 조회
+.curl-request
+include::{snippets}/get-single-posting/curl-request.adoc[]
+
 .http-request
 include::{snippets}/get-single-posting/http-request.adoc[]
 
@@ -132,23 +135,26 @@ include::{snippets}/get-single-posting/http-response.adoc[]
 include::{snippets}/get-single-posting/response-fields.adoc[]
 
 === 게시글 전체 조회
-.http-request
-include::{snippets}/get-single-posting/http-request.adoc[]
+.curl-request
+include::{snippets}/get-all-posting/curl-request.adoc[]
 
-.request-parameters
-include::{snippets}/get-single-posting/path-parameters.adoc[]
+.http-request
+include::{snippets}/get-all-posting/http-request.adoc[]
 
 .http-response
-include::{snippets}/get-single-posting/http-response.adoc[]
+include::{snippets}/get-all-posting/http-response.adoc[]
 
 .response-fields
-include::{snippets}/get-single-posting/response-fields.adoc[]
+include::{snippets}/get-all-posting/response-fields.adoc[]
 
 === 특정 회원의 게시글 전체 조회
+.curl-request
+include::{snippets}/get-postings-by-member/curl-request.adoc[]
+
 .http-request
 include::{snippets}/get-postings-by-member/http-request.adoc[]
 
-.request-parameters
+.path-parameters
 include::{snippets}/get-postings-by-member/path-parameters.adoc[]
 
 .http-response
@@ -177,14 +183,11 @@ include::{snippets}/post-posting-media/curl-request.adoc[]
 .http-request
 include::{snippets}/post-posting-media/http-request.adoc[]
 
-.request-part
-include::{snippets}/post-posting-media/request-parts.adoc[]
-
-.requestBody-field
-include::{snippets}/post-posting-media/request-part-requestBody-fields.adoc[]
-
 .path-parameters
 include::{snippets}/post-posting-media/path-parameters.adoc[]
+
+.request-part
+include::{snippets}/post-posting-media/request-parts.adoc[]
 
 .http-response
 include::{snippets}/post-posting-media/http-response.adoc[]
@@ -208,6 +211,9 @@ include::{snippets}/post-posting-like/curl-request.adoc[]
 
 .http-request
 include::{snippets}/post-posting-like/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-posting-like/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/post-posting-like/http-response.adoc[]
@@ -287,6 +293,9 @@ include::{snippets}/post-comment-like/curl-request.adoc[]
 
 .http-request
 include::{snippets}/post-comment-like/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-comment-like/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/post-comment-like/http-response.adoc[]
@@ -393,6 +402,9 @@ include::{snippets}/post-gallery/curl-request.adoc[]
 
 .http-request
 include::{snippets}/post-gallery/http-request.adoc[]
+
+.requestBody-field
+include::{snippets}/post-gallery/request-part-requestBody-fields.adoc[]
 
 .path-parameters
 include::{snippets}/post-gallery/path-parameters.adoc[]

@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.controller.PostingController;
 import com.main19.server.posting.dto.MediaPostDto;
+import com.main19.server.posting.dto.MediaResponseDto;
 import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
 import com.main19.server.posting.dto.PostingResponseDto;
+import com.main19.server.posting.entity.Media;
 import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.service.PostingService;
@@ -95,6 +97,15 @@ public class PostingControllerRestDocs {
 
         // multipart/form-data
         MockMultipartFile file1 = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+        MockMultipartFile file2 = new MockMultipartFile("file2", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
+
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+
+        List<MediaResponseDto> responseList = new ArrayList<>();
+        responseList.add(response1);
+        responseList.add(response2);
+
         MockMultipartFile requestBody = new MockMultipartFile("requestBody", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
 
         PostingResponseDto response =
@@ -104,7 +115,7 @@ public class PostingControllerRestDocs {
                         "gimhae_person",
                         "image",
                         "게시글 test",
-                        new ArrayList<>(),
+                        responseList,
                         createdAt,
                         modifiedAt,
                         tags,
@@ -128,6 +139,7 @@ public class PostingControllerRestDocs {
         ResultActions actions = mockMvc.perform(
                 RestDocumentationRequestBuilders.multipart("/posts")
                         .file(file1)
+                        .file(file2)
                         .file(requestBody)
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -167,7 +179,8 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[].tagName").type(JsonFieldType.STRING).description("태그 이름"),
@@ -198,6 +211,13 @@ public class PostingControllerRestDocs {
         tags.add(tag1);
         tags.add(tag2);
 
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+
+        List<MediaResponseDto> responseList = new ArrayList<>();
+        responseList.add(response1);
+        responseList.add(response2);
+
         String content = gson.toJson(patch);
 
         LocalDateTime createdAt = LocalDateTime.now();
@@ -210,7 +230,7 @@ public class PostingControllerRestDocs {
                         "gimhae_person",
                         "image",
                         "게시글 수정 test",
-                        new ArrayList<>(),
+                        responseList,
                         createdAt,
                         modifiedAt,
                         tags,
@@ -268,7 +288,8 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[].tagName").type(JsonFieldType.STRING).description("태그 이름"),
@@ -284,6 +305,14 @@ public class PostingControllerRestDocs {
     @Test
     public void getPostingTest() throws Exception {
         // given
+
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+
+        List<MediaResponseDto> responseList = new ArrayList<>();
+        responseList.add(response1);
+        responseList.add(response2);
+
         long postingId = 1L;
         PostingResponseDto response =
                 new PostingResponseDto(
@@ -292,7 +321,7 @@ public class PostingControllerRestDocs {
                         "gimhae_person",
                         "image",
                         "게시글 test",
-                        new ArrayList<>(),
+                        responseList,
                         LocalDateTime.of(2023,01,01,23,59,59),
                         LocalDateTime.of(2023,01,01,23,59,59),
                         new ArrayList<>(),
@@ -340,7 +369,8 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -366,10 +396,36 @@ public class PostingControllerRestDocs {
         member2.setUserName("taebong98");
         member2.setProfileImage("image");
 
+        Media media1 = new Media("imageUrl", new Posting());
+        Media media2 = new Media("imageUrl", new Posting());
+        List<Media> mediaList1 = new ArrayList<>();
+        mediaList1.add(media1);
+        mediaList1.add(media2);
+
+        Media media3 = new Media("imageUrl", new Posting());
+        Media media4 = new Media("imageUrl", new Posting());
+        List<Media> mediaList2 = new ArrayList<>();
+        mediaList2.add(media3);
+        mediaList2.add(media4);
+
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+
+        List<MediaResponseDto> responseList1 = new ArrayList<>();
+        responseList1.add(response1);
+        responseList1.add(response2);
+
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl");
+
+        List<MediaResponseDto> responseList2 = new ArrayList<>();
+        responseList2.add(response3);
+        responseList2.add(response4);
+
         Posting posting1 = new Posting(
                 1L,
                 "게시글 test1",
-                new ArrayList<>(),
+                mediaList1,
                 LocalDateTime.of(2023,01,01,23,59,59),
                 LocalDateTime.of(2023,01,01,23,59,59),
                 member1,
@@ -384,7 +440,7 @@ public class PostingControllerRestDocs {
         Posting posting2 = new Posting(
                 2L,
                 "게시글 test2",
-                new ArrayList<>(),
+                mediaList2,
                 LocalDateTime.of(2023,01,01,23,59,59),
                 LocalDateTime.of(2023,01,01,23,59,59),
                 member2,
@@ -407,7 +463,7 @@ public class PostingControllerRestDocs {
                         "gimhae_person",
                         "image",
                         "게시글 test1",
-                        new ArrayList<>(),
+                        responseList1,
                         LocalDateTime.of(2023,01,01,23,59,59),
                         LocalDateTime.of(2023,01,01,23,59,59),
                         new ArrayList<>(),
@@ -422,7 +478,7 @@ public class PostingControllerRestDocs {
                         "taebong98",
                         "image",
                         "게시글 test2",
-                        new ArrayList<>(),
+                        responseList2,
                         LocalDateTime.of(2023,01,01,23,59,59),
                         LocalDateTime.of(2023,01,01,23,59,59),
                         new ArrayList<>(),
@@ -480,7 +536,8 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data[].postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
                                 fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -506,10 +563,36 @@ public class PostingControllerRestDocs {
         member.setUserName("gimhae_person");
         member.setProfileImage("image");
 
+        Media media1 = new Media("imageUrl", new Posting());
+        Media media2 = new Media("imageUrl", new Posting());
+        List<Media> mediaList1 = new ArrayList<>();
+        mediaList1.add(media1);
+        mediaList1.add(media2);
+
+        Media media3 = new Media("imageUrl", new Posting());
+        Media media4 = new Media("imageUrl", new Posting());
+        List<Media> mediaList2 = new ArrayList<>();
+        mediaList2.add(media3);
+        mediaList2.add(media4);
+
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+
+        List<MediaResponseDto> responseList1 = new ArrayList<>();
+        responseList1.add(response1);
+        responseList1.add(response2);
+
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl");
+
+        List<MediaResponseDto> responseList2 = new ArrayList<>();
+        responseList2.add(response3);
+        responseList2.add(response4);
+
         Posting posting1 = new Posting(
                 1L,
                 "게시글 test1",
-                new ArrayList<>(),
+                mediaList1,
                 LocalDateTime.of(2023,01,01,23,59,59),
                 LocalDateTime.of(2023,01,01,23,59,59),
                 member,
@@ -524,7 +607,7 @@ public class PostingControllerRestDocs {
         Posting posting2 = new Posting(
                 2L,
                 "게시글 test2",
-                new ArrayList<>(),
+                mediaList2,
                 LocalDateTime.of(2023,01,01,23,59,59),
                 LocalDateTime.of(2023,01,01,23,59,59),
                 member,
@@ -548,7 +631,7 @@ public class PostingControllerRestDocs {
                         "gimhae_person",
                         "image",
                         "게시글 test1",
-                        new ArrayList<>(),
+                        responseList1,
                         LocalDateTime.of(2023,01,01,23,59,59),
                         LocalDateTime.of(2023,01,01,23,59,59),
                         new ArrayList<>(),
@@ -563,7 +646,7 @@ public class PostingControllerRestDocs {
                         "gimhae_person",
                         "image",
                         "게시글 test2",
-                        new ArrayList<>(),
+                        responseList2,
                         LocalDateTime.of(2023,01,01,23,59,59),
                         LocalDateTime.of(2023,01,01,23,59,59),
                         new ArrayList<>(),
@@ -624,7 +707,8 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data[].postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
                                 fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -678,6 +762,14 @@ public class PostingControllerRestDocs {
         long memberId = 1L;
         MediaPostDto post = new MediaPostDto(memberId);
 
+
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+
+        List<MediaResponseDto> responseList = new ArrayList<>();
+        responseList.add(response1);
+        responseList.add(response2);
+
         String content = gson.toJson(post);
 
         MockMultipartFile file1 = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
@@ -690,7 +782,7 @@ public class PostingControllerRestDocs {
                         "gimhae_person",
                         "image",
                         "게시글 test",
-                        new ArrayList<>(),
+                        responseList,
                         LocalDateTime.now(),
                         LocalDateTime.now(),
                         new ArrayList<>(),
@@ -743,7 +835,8 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias").type(JsonFieldType.ARRAY).description("첨부파일 리스트"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
