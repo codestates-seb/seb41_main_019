@@ -22,9 +22,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
 import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -81,6 +83,31 @@ public class FollowControllerRestdocs {
                                 fieldWithPath("data.followedId").type(JsonFieldType.NUMBER).description("팔로워 식별자"),
                                 fieldWithPath("data.followingId").type(JsonFieldType.NUMBER).description("팔로잉 식별자")
                         )
+                ));
+    }
+
+    @Test
+    public void deleteFollowingTest() throws Exception {
+        // given
+        long followingMemberId = 1L;
+        long followedMemberId = 2L;
+
+        // when
+        doNothing().when(followService).deleteFollowing(followingMemberId, followedMemberId);
+
+        // then
+        ResultActions actions = mockMvc.perform(
+                delete("/followings/{member-id}", followedMemberId)
+                        .header("Authorization", "Bearer AccessToken")
+        );
+
+        actions.andExpect(status().isNoContent())
+                .andDo(document(
+                        "delete-follow",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(parameterWithName("member-id").description("내가 팔로우하고 있는 유저의 식별자")),
+                        requestHeaders(headerWithName("Authorization").description("Bearer AccessToken"))
                 ));
     }
 }
