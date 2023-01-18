@@ -187,10 +187,49 @@ public class MyPlantsControllerRestDocs {
     @Test
     public void GetMyPlantsTest() throws Exception {
 
+        long myPlantsId = 1L;
+
+        MyPlantsDto.Response response = new MyPlantsDto.Response(myPlantsId,"머호",new ArrayList<>());
+
+        given(myPlantsService.findMyPlants(Mockito.anyLong())).willReturn(new MyPlants());
+        given(myPlantsMapper.myPlantsToMyPlantsResponseDto(Mockito.any())).willReturn(response);
+
+        ResultActions actions =
+            mockMvc.perform(
+                get("/myplants/{myplants-id}", myPlantsId)
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+        actions
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.myPlantsId").value(response.getMyPlantsId()))
+            .andExpect(jsonPath("$.data.plantName").value(response.getPlantName()))
+            .andExpect(jsonPath("$.data.galleryList").value(response.getGalleryList()))
+
+            .andDo(document(
+                "get-my-plants",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                pathParameters(
+                    parameterWithName("myplants-id").description("내 식물 식별자")
+                ),
+                responseFields(
+                    fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
+                    fieldWithPath("data.plantName").type(JsonFieldType.STRING).description("식물 이름"),
+                    fieldWithPath("data.galleryList").type(JsonFieldType.ARRAY).description("갤러리 리스트")
+                )
+            ));
+    }
+
+    @Test
+    public void GetsMyPlantsTest() throws Exception {
+
         long plantsId1 = 1L;
         long plantsId2 = 2L;
+        long memberId = 1L;
 
         Member member = new Member();
+        member.setMemberId(memberId);
 
         MyPlants myPlants1 = new MyPlants(plantsId1,"머호",member,new ArrayList<>());
         MyPlants myPlants2 = new MyPlants(plantsId2,"머호",member,new ArrayList<>());
@@ -198,7 +237,7 @@ public class MyPlantsControllerRestDocs {
         Page<MyPlants> pageMyPlants = new PageImpl<>(List.of(myPlants1, myPlants2));
         List<MyPlants> listMyPlants = List.of(myPlants1,myPlants2);
 
-        given(myPlantsService.findByMyPlants(Mockito.anyInt(),Mockito.anyInt()))
+        given(myPlantsService.findByMyPlants(Mockito.anyInt(),Mockito.anyInt(),Mockito.anyLong()))
             .willReturn(pageMyPlants);
 
         given(myPlantsMapper.myPlantsListToMyPlantsResponseDto(Mockito.anyList())).willReturn(
@@ -214,8 +253,7 @@ public class MyPlantsControllerRestDocs {
 
         ResultActions actions =
             mockMvc.perform(
-                get("/myplants")
-                    .header("Authorization", "Bearer AccessToken")
+                get("/{member-id}/myplants", memberId)
                     .param("page","1")
                     .param("size","10")
                     .accept(MediaType.APPLICATION_JSON)
