@@ -1,7 +1,3 @@
-import a from "../../assets/img/plants/알보1.png";
-import b from "../../assets/img/plants/알보2.jpg";
-import c from "../../assets/img/plants/알보3.jpg";
-import d from "../../assets/img/plants/알보4.jpeg";
 import styled from "styled-components";
 import { useState } from "react";
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
@@ -15,11 +11,16 @@ const Wrapper = styled.div`
         padding: 0px;
         list-style: none;
 
-        .none {
-            display: none;
+        li div:first-child {
+            height: 500px;
+            background-color: black;
         }
 
-        li div:first-of-type {
+        li div img {
+            object-fit: contain;
+        }
+
+        li div:nth-of-type(2) {
             display: flex;
             justify-content: space-between;
             position: relative;
@@ -37,25 +38,32 @@ const Wrapper = styled.div`
                 border-radius: 30px;
             }
         }
+
+        .none {
+            display: none;
+        }
     }
 `;
 
-const Slider = () => {
+const Slider = ({ imgs }) => {
     const [cur, setCur] = useState(0);
-    const img = [ a, b, c, d ];
-    
 
     return (
         <Wrapper>
             <ul>
-                { img.map((el,idx) => {
+                { imgs.map((img, idx) => {
                         return (
                             <li key={idx} className={cur === idx ? null : "none"}>
-                                <img src={el} alt="img" />
                                 <div>
-                                    <BsFillArrowLeftCircleFill onClick={() => setCur(cur - 1)} className={`pre ${cur === 0 ? "hidden" : null}`} />
-                                    <BsFillArrowRightCircleFill onClick={() => setCur(cur + 1)} className={`next ${cur === img.length - 1 ? "hidden" : null}`} />
+                                    <img src={img.mediaUrl} alt="img" />
                                 </div>
+                                { imgs.length > 1 ?
+                                    <div>
+                                        <BsFillArrowLeftCircleFill onClick={() => setCur(cur - 1)} className={`pre ${cur === 0 ? "hidden" : null}`} />
+                                        <BsFillArrowRightCircleFill onClick={() => setCur(cur + 1)} className={`next ${cur === imgs.length - 1 ? "hidden" : null}`} />
+                                    </div> 
+                                    : null
+                                }
                             </li>
                         );
                     })

@@ -137,7 +137,11 @@ const WritePost = ({ handleIsPosted }) => {
             <StyledTextarea value={value} onChange={handleValue} placeholder="당신의 식물을 소개해주세요.">{value}</StyledTextarea>
             <Tags tags={tags} addTags={addTags} />
             <div>
-                <BlueBtn onClick={handleSubmit}>작성</BlueBtn>
+                <BlueBtn onClick={()=> {
+                    handleSubmit();
+                    handleIsPosted();
+                    }}>작성
+                </BlueBtn>
                 <BlueBtn onClick={handleIsPosted}>취소</BlueBtn>
             </div>
         </Wrapper>

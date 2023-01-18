@@ -1,9 +1,6 @@
 import styled from "styled-components";
 import Post from "./Post";
 import { ReactComponent as NoContent } from "../../assets/svg/monstera.svg";
-import Cookie from "../../util/Cookie";
-import axios from "axios";
-import { useEffect, useState } from "react";
 
 const Wrapper = styled.section`
     position: relative;
@@ -25,24 +22,7 @@ const Wrapper = styled.section`
     }
 `
 
-const Feed = ({ handleModal, handleDelete }) => { 
-    const [ posts, setPosts ] = useState([]);
-    const cookie = new Cookie();
-
-    useEffect(() => {
-        axios({
-            method: "get",
-            url: "http://13.124.33.113:8080/posts?page=1&size=10",
-            headers: { Authorization: cookie.get("authorization") }
-            }).then(res => {
-                setPosts(res.data.data);
-            })
-            .catch(e => {
-               console.log(e);
-            });
-    }, [])
-
-
+const Feed = ({ handleModal, handleDelete, posts }) => { 
     return (
         <Wrapper>
             { posts.length < 1 

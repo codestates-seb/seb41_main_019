@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import A from "../../assets/img/plants/1.jpg";
-import B from "../../assets/img/plants/알보1.png";
 import { FiUserPlus } from "react-icons/fi";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Slider from "./Slider";
@@ -77,16 +75,12 @@ const StyledHeader = styled.div`
     }
 `;
 
-
 const Post = ({ post, handleModal, handleDelete }) => {
-    // console.log(post);
     const [menu, setMenu] = useState(false);
 
     const handleMenu = () => {
         setMenu(!menu);
     }
-    
-    const img = [ A, B ];
 
     const exchangeTime = () => {
         //일 차이 계산
@@ -145,11 +139,10 @@ const Post = ({ post, handleModal, handleDelete }) => {
                     <BiDotsVerticalRounded onClick={handleMenu} />
                 </div>
             </StyledHeader>
-            {  img.length > 1
-                ? <Slider img={img} /> 
-                : <img src={B} alt="img" />
+            { post.postingMedias.length > 0 ?
+                <Slider imgs={post.postingMedias} /> : null
             }
-            <FeedInteraction setModal={handleModal} />
+            <FeedInteraction post={post} setModal={handleModal} />
         </Wrapper>
     );
 }

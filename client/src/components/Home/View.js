@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import Slider from "./Slider";
-import A from "../../assets/img/plants/1.jpg";
-import B from "../../assets/img/plants/알보1.png";
 import FeedInteraction from "./FeedInteraction";
 import Comments from "./Comments";
 import { useEffect } from "react";
@@ -118,7 +116,7 @@ const StyledInteraction = styled.div`
 `;
 
 
-const View = ({ handleModal }) => {
+const View = ({ handleModal, posts }) => {
     const img = [ A ] ;
 
     useEffect(() => {
@@ -131,13 +129,13 @@ const View = ({ handleModal }) => {
             <Wrapper>
                 <StyledSlider>
                     {  img.length > 1
-                        ? <Slider img={img} /> 
+                        ? <Slider /> 
                         : <img src={B} alt="img" />
                     }
                 </StyledSlider>
                 <StyledInteraction>
                     <div className="profile">
-                        <img src={A} alt="profileImg" />
+                        <img src={posts.profileImage} alt="profileImg" />
                         <span>홍길동</span>
                         <span>7시간 전</span>
                         <CloseBtn handleModal={handleModal} />

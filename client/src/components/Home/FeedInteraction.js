@@ -44,7 +44,8 @@ const StyledInteraction = styled.div`
     }
 `;
 
-const FeedInteraction = ({ setModal, type=null }) => {
+const FeedInteraction = ({ setModal, type=null, post }) => {
+    console.log(post);
     return (
         <StyledInteraction>
             <div className="interact">
@@ -52,11 +53,15 @@ const FeedInteraction = ({ setModal, type=null }) => {
                 <AiOutlineShareAlt />
                 <BsBookmarkPlus />
             </div>
-            <p>좋아요 700개</p>
-            <p>제가 키우는 몬스테라 알보에요!</p>
+            <p>좋아요 {post.likeCount}개</p>
+            <p>{post.postingContent}</p>
             <div className="tags">
-                <span>#식테크</span> 
-                <span>#몬스테라알보</span>
+                { post.tags ? 
+                    post.tags.map((tag, idx) => {
+                        return <span key={idx}>#{tag.tagName}</span> 
+                    })
+                    : null
+                }
             </div>
             { type ? null
             : <span onClick={setModal ? () => setModal(true) : null} >댓글 보기 및 댓글쓰기</span>
