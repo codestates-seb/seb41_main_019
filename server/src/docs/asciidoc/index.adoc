@@ -148,9 +148,6 @@ include::{snippets}/get-single-posting/response-fields.adoc[]
 .http-request
 include::{snippets}/get-postings-by-member/http-request.adoc[]
 
-.path-parameters
-include::{snippets}/get-postings-by-member/path-parameters.adoc[]
-
 .request-parameters
 include::{snippets}/get-postings-by-member/path-parameters.adoc[]
 
