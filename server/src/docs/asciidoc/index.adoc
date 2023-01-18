@@ -356,28 +356,40 @@ include::{snippets}/delete-scrap/http-response.adoc[]
 .curl-request
 include::{snippets}/post-follow/curl-request.adoc[]
 
+.http-response
+include::{snippets}/post-follow/http-request.adoc[]
+
 .path-parameters
 include::{snippets}/post-follow/path-parameters.adoc[]
-
-.http-response
-include::{snippets}/post-follow/http-response.adoc[]
 
 .response-fields
 include::{snippets}/post-follow/response-fields.adoc[]
 
 === following 삭제
 .curl-request
-include::{snippets}/delete-follow/curl-request.adoc[]
+include::{snippets}/delete-following/curl-request.adoc[]
 
 .http-request
-include::{snippets}/delete-follow/http-request.adoc[]
+include::{snippets}/delete-following/http-request.adoc[]
 
 .path-parameters
-include::{snippets}/delete-follow/path-parameters.adoc[]
+include::{snippets}/delete-following/path-parameters.adoc[]
 
 .http-response
-include::{snippets}/delete-follow/http-response.adoc[]
+include::{snippets}/delete-following/http-response.adoc[]
 
+=== follower(followed) 삭제
+.curl-request
+include::{snippets}/delete-followed/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-followed/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-followed/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-followed/http-response.adoc[]
 
 == myPlants
 
