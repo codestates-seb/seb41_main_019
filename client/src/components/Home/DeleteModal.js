@@ -32,13 +32,12 @@ const Wrapper = styled.div`
 
     .buttons {
         display: flex;
-        gap: 5px;
-
+        
         button {
             border: 0;
             cursor: pointer;
             color: #ededed;
-            width: 60px;
+            width: 70px;
             height: 30px;
             border-radius: 5px;
             box-shadow: 1px 3px 8px -2px rgb(90, 90, 90);

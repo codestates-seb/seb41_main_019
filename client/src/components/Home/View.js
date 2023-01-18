@@ -115,7 +115,7 @@ const StyledInteraction = styled.div`
 `;
 
 
-const View = ({ handleModal, post }) => {
+const View = ({ handleModal, curPost }) => {
     useEffect(() => {
         document.getElementById("bg").addEventListener("click", () => {
             handleModal();
@@ -125,18 +125,18 @@ const View = ({ handleModal, post }) => {
     return (
             <Wrapper>
                 <StyledSlider>
-                    { post.postingMedias ?
-                        <Slider imgs={post.postingMedias} type={true} /> : null
+                    { curPost.postingMedias ?
+                        <Slider imgs={curPost.postingMedias} type={true} /> : null
                     }
                 </StyledSlider>
                 <StyledInteraction>
                     <div className="profile">
-                        <img src={post.profileImage} alt="profileImg" />
-                        <span>{post.userName}</span>
-                        <span>{post.modifiedAt ? exchangeTime(post) : ""}</span>
+                        <img src={curPost.profileImage} alt="profileImg" />
+                        <span>{curPost.userName}</span>
+                        <span>{curPost.modifiedAt ? exchangeTime(curPost) : ""}</span>
                         <CloseBtn handleModal={handleModal} />
                     </div>
-                    <FeedInteraction post={post} type={1} />
+                    <FeedInteraction post={curPost} type={1} />
                     <Comments />
                 </StyledInteraction>
             </Wrapper>

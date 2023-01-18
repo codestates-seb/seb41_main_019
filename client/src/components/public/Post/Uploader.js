@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     }
 
     input {
-        display: none;
+
     }
 
     .photo {
@@ -23,8 +23,14 @@ const Wrapper = styled.div`
 
     .img {
         display: flex;
-        width: 25%;
-        
+        width: 150px; 
+        @media screen and (max-width: 1255px) {
+            width: 150px;
+        }      
+    }
+
+    .photo {
+        margin-right: 10px;
     }
 `
 
@@ -37,7 +43,6 @@ const StyledDiv = styled.div`
     height: 140px;
     width: 140px;
     cursor: pointer;
-    margin-right: 10px;
 
     :hover {
         opacity: 0.7;
@@ -60,29 +65,32 @@ const StyledDiv = styled.div`
             width: 20px;   
         }
     }
+
+    @media screen and (max-width: 770px) {
+        width: 100px;
+        height: 100px;
+    }
 `;
 
-const StyledCancel = styled.div`
-    width: 0;
-
-    svg {
-        cursor: pointer;
-        position: relative;
-        left: -27px;
-        background-color: white;
-        opacity: 0.6;
-
-        :hover {
-            scale: 1.2;
-        }
-    }
+const StyledCancel = styled.button`
+    position: relative;
+    left: -19px;
+    width: 20px;
+    height: 20px;
+    background-color: white !important;
+    border: 0px;
+    cursor: pointer;
 `
 
-const Uploader = ({ images, handleImg, fileInputRef, deleteImg }) => {
-   
+const Uploader = ({ images, handleImg, fileInputRef, deleteImg, fileInputs }) => {
     const onFileInputClick = () => {
         if(images.length < 3) {
-            fileInputRef.current[images.length].click();
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*,audio/*,video/mp4";
+            input.onchange = handleImg;
+            fileInputs.current.append(input);
+            fileInputs.current.lastChild.click();
         }
     };
 
@@ -99,29 +107,14 @@ const Uploader = ({ images, handleImg, fileInputRef, deleteImg }) => {
                                     <StyledDiv>
                                         <img src={image} alt="img" />
                                     </StyledDiv>
-                                    <StyledCancel onClick={deleteImg}>
-                                        <AiOutlineClose />
-                                    </StyledCancel>
+                                    <StyledCancel id={idx} onClick={deleteImg}>x</StyledCancel>
                                 </div>
                             )
                         })
                     }
                 </div>
-                <input 
-                    type="file"
-                    accept="image/*,audio/*,video/mp4"
-                    ref={(el) => fileInputRef.current[0] = el} 
-                    onChange={handleImg} />
-                <input 
-                    type="file"
-                    accept="image/*,audio/*,video/mp4"
-                    ref={(el) => fileInputRef.current[1] = el} 
-                    onChange={handleImg} />
-                <input 
-                    type="file"
-                    accept="image/*,audio/*,video/mp4"
-                    ref={(el) => fileInputRef.current[2] = el} 
-                    onChange={handleImg} />
+                <div ref={fileInputs}>
+                </div>
         </Wrapper>
     )
 };

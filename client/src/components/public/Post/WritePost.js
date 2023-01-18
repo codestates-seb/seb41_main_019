@@ -58,17 +58,18 @@ const StyledTextarea = styled.textarea`
     }
 `;
 
-// 기능 추가: 사진 x클릭시 사진 삭제, 태그 줄 자동바꿈,
+// 기능 추가: 태그 줄 자동바꿈
 const WritePost = ({ handleIsPosted }) => {
     const [images, setImages] = useState([]);
     const [files, setFiles] = useState([]);
     const [value, setValue] = useState("");
     const [tags, setTags] = useState([]);
     const fileInputRef = useRef([]);
+    const fileInputs = useRef(null);
     const cookie = new Cookie();
 
     const handleImg = (e) => {
-        const file = fileInputRef.current[images.length].files[0];
+        const file = e.target.files[0];
         setFiles([...files, file]);
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -77,9 +78,17 @@ const WritePost = ({ handleIsPosted }) => {
         }
     };
 
-    const deleteImg = () => {
-        
-    }
+    const deleteImg = (e) => {
+        const delIdx = e.target.id;
+        const newFiles = files.slice();
+        const newImgs = images.slice();
+        newFiles.splice(delIdx, 1)
+        newImgs.splice(delIdx, 1)
+
+        setFiles(newFiles);
+        setImages(newImgs);
+        fileInputs.current.childNodes[delIdx].remove();
+    };
 
     const handleValue = (e) => {
         setValue(e.target.value);
@@ -111,10 +120,6 @@ const WritePost = ({ handleIsPosted }) => {
             "tagName": tags
         })], { type: "application/json"}));
 
-        console.log(formData.get("file1"))
-        console.log(formData.get("file2"))
-        console.log(formData.get("file3"))
-
         axios({
             method: "post",
             url: "http://13.124.33.113:8080/posts",
@@ -128,17 +133,15 @@ const WritePost = ({ handleIsPosted }) => {
             });
     };
 
-    useEffect(() => {
-        document.getElementById("bg").addEventListener("click", () => {
-            handleIsPosted();
-        })
-    },[handleIsPosted])
-
     return (
         <Wrapper>
             <CloseBtn handleModal={handleIsPosted}/>
-            <Uploader images={images} handleImg={handleImg} fileInputRef={fileInputRef} deleteImg={deleteImg} />
-            <StyledTextarea value={value} onChange={handleValue} placeholder="당신의 식물을 소개해주세요.">{value}</StyledTextarea>
+            <Uploader images={images} handleImg={handleImg} fileInputRef={fileInputRef} deleteImg={deleteImg} 
+                fileInputs={fileInputs} />
+            <StyledTextarea value={value} onChange={handleValue}
+                placeholder="당신의 식물을 소개해주세요.">
+                    {value}
+            </StyledTextarea>
             <Tags tags={tags} addTags={addTags} />
             <div>
                 <BlueBtn onClick={()=> {

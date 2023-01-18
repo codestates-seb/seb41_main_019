@@ -66,7 +66,7 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost }) => {
             </div>
             { type ? null
             : <span onClick={() => {
-                handleCurPost(post.postingId);
+                handleCurPost(post);
                 setModal(false);
             }} >댓글 보기 및 댓글쓰기</span>
             }

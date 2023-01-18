@@ -42,25 +42,10 @@ const Home = ({ handleIsCovered }) => {
         setEdit(!edit);
     };
 
-    useEffect(() => {
-        axios({
-            method: "get",
-            url: `http://13.124.33.113:8080/posts/${curPost}`,
-            headers: { Authorization: cookie.get("authorization") }
-            }).then(res => {
-                setPost(res.data.data);
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    }, [])
-
-    console.log(post);
-
     return (
         <>
-            { edit ? <EditPost post={post} handleEdit={handleEdit}/> : null }
-            { modal ? <View handleModal={handleModal} post={post} /> : null }
+            { edit ? <EditPost curPost={curPost} handleEdit={handleEdit}/> : null }
+            { modal ? <View handleModal={handleModal} curPost={curPost} /> : null }
             { deleteMenu ? <DeleteModal handleDelete={handleDelete} /> : null }
             <StyledMain>
                 <Recommends />

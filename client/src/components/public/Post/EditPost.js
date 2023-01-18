@@ -59,7 +59,7 @@ const StyledTextarea = styled.textarea`
 `;
 
 // 기능 추가: 사진 x클릭시 사진 삭제, 태그 줄 자동바꿈,
-const EditPost = ({ handleEdit, post }) => {
+const EditPost = ({ handleEdit, curPost }) => {
     const [images, setImages] = useState([]);
     const [files, setFiles] = useState([]);
     const [value, setValue] = useState("");
@@ -106,12 +106,8 @@ const EditPost = ({ handleEdit, post }) => {
     //         "tagName": tags
     //     })], { type: "application/json"}));
 
-    //     console.log(formData.get("file1"))
-    //     console.log(formData.get("file2"))
-    //     console.log(formData.get("file3"))
-
     //     axios({
-    //         method: "post",
+    //         method: "patch",
     //         url: "http://13.124.33.113:8080/posts",
     //         data: formData,
     //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
