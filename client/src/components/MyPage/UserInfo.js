@@ -3,11 +3,17 @@ import axios from "axios";
 
 import { AiFillSetting } from "react-icons/ai";
 import { useState, useEffect } from "react";
+import defaultProfileImg from "../../assets/img/plants/defaultProfileImg.png";
 
 const StyledContainer = styled.div`
   display: flex;
   margin-top: 20px;
   justify-content: center;
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
   > div {
     margin: 0 10px;
   }
@@ -16,6 +22,7 @@ const StyledUserImgWrapper = styled.div`
   width: 150px;
   height: 150px;
   border-radius: 70%;
+  border: solid 1px #dbdbdb;
   overflow: hidden;
   img {
     width: 100%;
@@ -52,7 +59,7 @@ const StyledInfoItem = styled.div`
 `;
 
 const UserInfo = ({ userInfo, jwt }) => {
-  const [postCount, setPostCount] = useState(0);
+  const [postCount, setPostCount] = useState();
   const {
     memberId,
     username,
@@ -84,7 +91,10 @@ const UserInfo = ({ userInfo, jwt }) => {
     <>
       <StyledContainer>
         <StyledUserImgWrapper>
-          <img src={profileImage} alt="user profile image" />
+          <img
+            src={profileImage ? profileImage : defaultProfileImg}
+            alt="user profile"
+          />
         </StyledUserImgWrapper>
         <StyledInfoBox>
           <StyledUserName>
@@ -106,13 +116,13 @@ const UserInfo = ({ userInfo, jwt }) => {
             <a href="#">
               <StyledInfoItem>
                 <p>팔로워</p>
-                <p>{followerCount}</p>
+                <p>{followerCount ? followerCount : 0}</p>
               </StyledInfoItem>
             </a>
             <a href="#">
               <StyledInfoItem>
                 <p>팔로잉</p>
-                <p>{followingCount}</p>
+                <p>{followingCount ? followingCount : 0}</p>
               </StyledInfoItem>
             </a>
           </StyledUserInfoList>
