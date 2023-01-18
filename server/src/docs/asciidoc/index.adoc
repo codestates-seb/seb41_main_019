@@ -370,6 +370,22 @@ include::{snippets}/post-my-plants/response-fields.adoc[]
 
 === 내 식물 조회
 .curl-request
+include::{snippets}/get-my-plants/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-my-plants/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-my-plants/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-my-plants/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-my-plants/response-fields.adoc[]
+
+=== 내 식물 전체 조회
+.curl-request
 include::{snippets}/gets-my-plants/curl-request.adoc[]
 
 .http-request
@@ -449,6 +465,23 @@ include::{snippets}/get-gallery/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-gallery/response-fields.adoc[]
+
+=== 전체 갤러리 조회
+.curl-request
+include::{snippets}/gets-gallery/curl-request.adoc[]
+
+.http-request
+include::{snippets}/gets-gallery/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/gets-gallery/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/gets-gallery/http-response.adoc[]
+
+.response-fields
+include::{snippets}/gets-gallery/response-fields.adoc[]
+
 
 === 갤러리 삭제
 .curl-request
