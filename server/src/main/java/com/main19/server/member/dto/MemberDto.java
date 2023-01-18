@@ -56,7 +56,7 @@ public class MemberDto {
 		private String profileImage;
 		private String profileText;
 		private List<ScrapResponseDto> scrapPostingList;
-		private List<FollowDto.FollowingResponse> followingList;
-		private List<FollowDto.FollowedResponse> followedList;
+		private List<FollowDto.FollowingResponse> followings;
+		private List<FollowDto.FollowedResponse> followeds;
 	}
 }
