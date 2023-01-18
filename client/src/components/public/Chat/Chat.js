@@ -7,6 +7,7 @@ import Friends from "./Friends";
 import { useEffect } from "react";
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
+import { RiContactsBookLine } from "react-icons/ri";
 
 const StyledChat = styled.div`
   display: flex;
@@ -51,7 +52,7 @@ const Chat = () => {
       url: `http://13.124.33.113:8080/chatroom/${cookie.get("memberId")}`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
-      setRooms((res.data.data));  
+      setRooms((res.data));  
     })
   }, [])
 
@@ -61,7 +62,7 @@ const Chat = () => {
       url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
-      setFreinds(res.data.data.followingList);
+      setFreinds(res.data.data.followingList);  
     })
   }, [])
 
