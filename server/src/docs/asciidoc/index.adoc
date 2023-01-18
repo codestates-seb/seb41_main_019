@@ -350,6 +350,35 @@ include::{snippets}/delete-scrap/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-scrap/http-response.adoc[]
 
+== follow
+
+=== follow 등록(신청)
+.curl-request
+include::{snippets}/post-follow/curl-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-follow/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/post-follow/http-response.adoc[]
+
+.response-fields
+include::{snippets}/post-follow/response-fields.adoc[]
+
+=== following 삭제
+.curl-request
+include::{snippets}/delete-follow/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-follow/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-follow/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-follow/http-response.adoc[]
+
+
 == myPlants
 
 === 내 식물 등록
