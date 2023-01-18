@@ -84,6 +84,10 @@ const StyledCancel = styled.button`
 
 const Uploader = ({ images, handleImg, fileInputRef, deleteImg, fileInputs }) => {
     const onFileInputClick = () => {
+        fileInputs.current.childNodes.forEach(input => {
+            if(input.files.length === 0) input.remove();
+        });
+        
         if(images.length < 3) {
             const input = document.createElement("input");
             input.type = "file";
