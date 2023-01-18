@@ -45,7 +45,7 @@ public class CommentLikeService {
 
         commentLike.setComment(comment);
 
-        if(comment.getMember().getMemberId() != tokenMember.getMemberId()) {
+        if(comment.getMemberId() != tokenMember.getMemberId()) {
             sseService.sendPosting(comment.getMember(), SseType.commentLike, memberService.findMember(memberId),comment.getPosting());
         }
 

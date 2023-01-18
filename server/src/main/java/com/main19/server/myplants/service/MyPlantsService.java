@@ -72,7 +72,7 @@ public class MyPlantsService {
 
         MyPlants findMyPlants = findVerifiedMyPlants(myPlantsId);
 
-        if (findMyPlants.getMember().getMemberId() != tokenMember.getMemberId()) {
+        if (findMyPlants.getMemberId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

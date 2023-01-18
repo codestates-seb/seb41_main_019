@@ -50,7 +50,7 @@ public class GalleryService {
 
         Gallery gallery = findVerifiedGallery(galleryId);
 
-        if(gallery.getMyPlants().getMember().getMemberId() != tokenMember.getMemberId()){
+        if(gallery.getMyPlantsMemberId() != tokenMember.getMemberId()){
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
         galleryRepository.delete(gallery);

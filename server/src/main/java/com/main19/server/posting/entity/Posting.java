@@ -78,4 +78,7 @@ public class Posting {
 			this.member.getPostings().add(this);
 		}
 	}
+	public long getMemberId() {
+		return member.getMemberId();
+	}
 }

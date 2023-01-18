@@ -36,8 +36,8 @@ public class ChatService {
 
     public List<Chat> findAllChat(long chatRoomId, Member tokenMember) {
 
-        if (chatRoomService.findChatRoom(chatRoomId).getReceiver().getMemberId() != tokenMember.getMemberId()
-            || chatRoomService.findChatRoom(chatRoomId).getSender().getMemberId() != tokenMember.getMemberId()) {
+        if (chatRoomService.findChatRoom(chatRoomId).getReceiverId() != tokenMember.getMemberId()
+            || chatRoomService.findChatRoom(chatRoomId).getSenderId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

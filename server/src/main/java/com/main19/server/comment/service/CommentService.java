@@ -41,7 +41,7 @@ public class CommentService {
         comment.setMember(member);
         posting.createCommentCount();
 
-        if(posting.getMember().getMemberId() != tokenMember.getMemberId()) {
+        if(posting.getMemberId() != tokenMember.getMemberId()) {
             sseService.sendPosting(posting.getMember(), SseType.comment, member, comment.getPosting());
         }
 
@@ -76,7 +76,7 @@ public class CommentService {
 
     public void deleteComment(long commentId, Member tokenMember) {
 
-        if (findComment(commentId).getMember().getMemberId() != tokenMember.getMemberId()) {
+        if (findComment(commentId).getMemberId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

@@ -40,4 +40,8 @@ public class Gallery {
     @JoinColumn(name = "myPlantsId")
     private MyPlants myPlants;
 
+    public long getMyPlantsMemberId() {
+        return myPlants.getMemberId();
+    }
+
 }
