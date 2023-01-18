@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -19,8 +21,8 @@ import java.nio.file.StandardCopyOption;
 @RequiredArgsConstructor
 public class FileSystemStorageService {
     private final FFmpegService fFmpegService;
-    private final Path rootLocation = Paths.get("/home/ubuntu/main19/ffmpeg");
-    public void store(MultipartFile file) {
+    private final Path rootLocation = Paths.get("C:/Users/hyein/Desktop/image");
+    public File store(MultipartFile file) {
         try {
             if (file.isEmpty()) {
                 throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
@@ -33,10 +35,9 @@ public class FileSystemStorageService {
                         ExceptionCode.MEDIA_NOT_FOUND);
             }
             try (InputStream inputStream = file.getInputStream()) {
-                log.info("# store coffee image!");
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
-            fFmpegService.export(file);
+            return new File(fFmpegService.export(file));
         }
         catch (IOException e) {
             throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);

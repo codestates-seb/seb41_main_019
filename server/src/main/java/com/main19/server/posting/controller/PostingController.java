@@ -64,8 +64,6 @@ public class PostingController {
         @Valid @RequestPart PostingPostDto requestBody,
         @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2, @RequestPart(required = false) MultipartFile file3) {
 
-        fileSystemStorageService.store(file1);
-
         List<MultipartFile> multipartFiles = new ArrayList<>();
         multipartFiles.add(file1);
         multipartFiles.add(file2);

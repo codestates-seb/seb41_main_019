@@ -1,12 +1,15 @@
 package com.main19.server.s3service;
 
+import com.amazonaws.util.IOUtils;
 import com.main19.server.auth.jwt.JwtTokenizer;
+import com.main19.server.ffmpeg.FileSystemStorageService;
 import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.gallery.entity.Gallery;
 import com.main19.server.myplants.gallery.service.GalleryService;
 import com.main19.server.myplants.service.MyPlantsService;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +18,8 @@ import com.main19.server.member.entity.Member;
 import com.main19.server.member.service.MemberService;
 import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.service.PostingService;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +39,7 @@ import com.main19.server.posting.repository.MediaRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @Slf4j
 @Service
@@ -46,6 +52,7 @@ public class S3StorageService {
 	private final GalleryService galleryService;
 	private final JwtTokenizer jwtTokenizer;
 	private final MyPlantsService myPlantsService;
+	private final FileSystemStorageService fileSystemStorageService;
 
 	@Value("${cloud.aws.credentials.accessKey}")
 	private String accessKey;
@@ -80,19 +87,38 @@ public class S3StorageService {
 
 		for (MultipartFile file : multipartFiles) {
 			if (file != null) {
-				String fileName = createFileName(file.getOriginalFilename());
-				ObjectMetadata objectMetadata = new ObjectMetadata();
-				objectMetadata.setContentLength(file.getSize());
-				objectMetadata.setContentType(file.getContentType());
+				if (file.getContentType().contains("video")) {
+					try {
+						MultipartFile convertedFile = getMultipartFile(fileSystemStorageService.store(file));
+						String fileName = convertedFile.getName();
+						ObjectMetadata objectMetadata = new ObjectMetadata();
+						objectMetadata.setContentLength(convertedFile.getSize());
+						objectMetadata.setContentType(convertedFile.getContentType());
 
-				try (InputStream inputStream = file.getInputStream()) {
-					System.out.println(file.getInputStream());
+						try (InputStream inputStream = convertedFile.getInputStream()) {
 
-					s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
-							.withCannedAcl(CannedAccessControlList.PublicRead));
-					mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
-				} catch (IOException e) {
-					throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
+							s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
+									.withCannedAcl(CannedAccessControlList.PublicRead));
+							mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
+						} catch (IOException e) {
+							throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
+						}
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				} else {
+					String fileName = createFileName(file.getOriginalFilename());
+					ObjectMetadata objectMetadata = new ObjectMetadata();
+					objectMetadata.setContentLength(file.getSize());
+					objectMetadata.setContentType(file.getContentType());
+
+					try (InputStream inputStream = file.getInputStream()) {
+						s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
+								.withCannedAcl(CannedAccessControlList.PublicRead));
+						mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
+					} catch (IOException e) {
+						throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
+					}
 				}
 			}
 		}
@@ -282,5 +308,23 @@ public class S3StorageService {
 			throw new BusinessLogicException(ExceptionCode.WRONG_MEDIA_FORMAT);
 		}
 		return fileName.substring(fileName.lastIndexOf("."));
+	}
+
+	private MultipartFile getMultipartFile(File file) throws IOException {
+		FileItem fileItem = new DiskFileItem("originFile", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
+
+		try {
+			InputStream input = new FileInputStream(file);
+			OutputStream os = fileItem.getOutputStream();
+			IOUtils.copy(input, os);
+			// Or faster..
+			// IOUtils.copy(new FileInputStream(file), fileItem.getOutputStream());
+		} catch (IOException ex) {
+			// do something.
+		}
+
+		//jpa.png -> multipart 변환
+		MultipartFile mFile = new CommonsMultipartFile(fileItem);
+		return mFile;
 	}
 }
