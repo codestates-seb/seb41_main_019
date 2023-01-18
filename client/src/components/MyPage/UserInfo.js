@@ -1,7 +1,8 @@
 import styled from "styled-components";
+import axios from "axios";
 
 import { AiFillSetting } from "react-icons/ai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -50,7 +51,8 @@ const StyledInfoItem = styled.div`
   width: 80px;
 `;
 
-const UserInfo = ({ userInfo }) => {
+const UserInfo = ({ userInfo, jwt }) => {
+  const [postCount, setPostCount] = useState(0);
   const {
     memberId,
     username,
@@ -60,10 +62,23 @@ const UserInfo = ({ userInfo }) => {
     followerCount,
   } = userInfo;
 
-  // const postCount = axios({
-  //   method: "get",
-  //   url: `http://13.124.33.113:8080/posts/member/${memberId}?page=1&size=20`,
-  // });
+  useEffect(() => {
+    getPostCount();
+  }, []);
+
+  const getPostCount = async () => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,
+      headers: {
+        Authorization: jwt,
+      },
+    }).then((res) => {
+      const data = JSON.stringify(res.data);
+      const JSONdata = JSON.parse(data);
+      setPostCount(JSONdata.pageInfo.totalElements);
+    });
+  };
 
   return (
     <>
@@ -85,9 +100,7 @@ const UserInfo = ({ userInfo }) => {
             <a href="#">
               <StyledInfoItem>
                 <p>게시물</p>
-                {/* 게시물 숫자 데이터 API 협의하거나 게시물 GET 요청 후 데이터 length 사용 필요 */}
-                {/* <p>{postCount}</p> */}
-                <p>000</p>
+                <p>{postCount}</p>
               </StyledInfoItem>
             </a>
             <a href="#">

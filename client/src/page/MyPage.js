@@ -66,10 +66,10 @@ const StyledChangeViewButton = styled.div`
 
 const MyPage = ({ isCovered, handleIsCovered }) => {
   const cookie = new Cookie();
-  const getJWT = cookie.get("authorization");
-  const decodedJWT = jwtDecode(getJWT);
+  const jwt = cookie.get("authorization");
+  const decodedJWT = JSON.stringify(jwtDecode(jwt));
 
-  const [userInfo, setUserInfo] = useState(JSON.stringify(decodedJWT));
+  const [userInfo, setUserInfo] = useState(JSON.parse(decodedJWT));
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
   const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
@@ -133,7 +133,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     <>
       {isCovered && isModalOpened && <AddPlant handleModal={handleModal} />}
       <StyledContainer>
-        <UserInfo userInfo={userInfo} />
+        <UserInfo userInfo={userInfo} jwt={jwt} />
         {isFolderOpened ? (
           <div className="container">
             <MyPlants
