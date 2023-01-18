@@ -127,7 +127,7 @@ const UserInfo = ({ userInfo, jwt }) => {
             </a>
           </StyledUserInfoList>
           <div>
-            <p>{profileText}</p>
+            <p>{profileText ? profileText : "..."}</p>
           </div>
         </StyledInfoBox>
       </StyledContainer>
