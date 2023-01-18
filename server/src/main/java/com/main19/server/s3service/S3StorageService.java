@@ -88,29 +88,25 @@ public class S3StorageService {
 		for (MultipartFile file : multipartFiles) {
 			if (file != null) {
 				if (file.getContentType().contains("video")) {
-					try {
-						MultipartFile convertedFile = getMultipartFile(fileSystemStorageService.store(file));
-						String fileName = convertedFile.getName();
-						ObjectMetadata objectMetadata = new ObjectMetadata();
-						objectMetadata.setContentLength(convertedFile.getSize());
-						objectMetadata.setContentType(convertedFile.getContentType());
-
-						try (InputStream inputStream = convertedFile.getInputStream()) {
-
-							s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
-									.withCannedAcl(CannedAccessControlList.PublicRead));
-							mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
-						} catch (IOException e) {
-							throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
-						}
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-				} else {
-					String fileName = createFileName(file.getOriginalFilename());
+					MultipartFile convertedFile = fileSystemStorageService.store(file);
+					String fileName = convertedFile.getName();
 					ObjectMetadata objectMetadata = new ObjectMetadata();
-					objectMetadata.setContentLength(file.getSize());
-					objectMetadata.setContentType(file.getContentType());
+					objectMetadata.setContentLength(convertedFile.getSize());
+					objectMetadata.setContentType(convertedFile.getContentType());
+
+					try (InputStream inputStream = convertedFile.getInputStream()) {
+
+						s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
+								.withCannedAcl(CannedAccessControlList.PublicRead));
+						mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
+					} catch (IOException e) {
+						throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
+					}
+				}
+				String fileName = createFileName(file.getOriginalFilename());
+				ObjectMetadata objectMetadata = new ObjectMetadata();
+				objectMetadata.setContentLength(file.getSize());
+				objectMetadata.setContentType(file.getContentType());
 
 					try (InputStream inputStream = file.getInputStream()) {
 						s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
@@ -119,7 +115,6 @@ public class S3StorageService {
 					} catch (IOException e) {
 						throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
 					}
-				}
 			}
 		}
 		return mediaUrlList;
@@ -308,23 +303,5 @@ public class S3StorageService {
 			throw new BusinessLogicException(ExceptionCode.WRONG_MEDIA_FORMAT);
 		}
 		return fileName.substring(fileName.lastIndexOf("."));
-	}
-
-	private MultipartFile getMultipartFile(File file) throws IOException {
-		FileItem fileItem = new DiskFileItem("originFile", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
-
-		try {
-			InputStream input = new FileInputStream(file);
-			OutputStream os = fileItem.getOutputStream();
-			IOUtils.copy(input, os);
-			// Or faster..
-			// IOUtils.copy(new FileInputStream(file), fileItem.getOutputStream());
-		} catch (IOException ex) {
-			// do something.
-		}
-
-		//jpa.png -> multipart 변환
-		MultipartFile mFile = new CommonsMultipartFile(fileItem);
-		return mFile;
 	}
 }
