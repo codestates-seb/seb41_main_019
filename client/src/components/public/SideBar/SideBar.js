@@ -199,6 +199,7 @@ const StyledHeader = styled.header`
 
 const StyledExtend = styled.div`
   > div {
+    z-index: 500;
     position: fixed;
     top: 0px;
     left: 60px; 
@@ -216,7 +217,7 @@ const StyledExtend = styled.div`
   }
 `
 
-const Sidebar = ({ setIsLanded, handleIsPosted }) => {
+const Sidebar = ({ handleIsPosted, setIsLanded }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
@@ -284,7 +285,7 @@ const Sidebar = ({ setIsLanded, handleIsPosted }) => {
           </ul>
         </nav>
         {
-          opendModal ? <SideModal /> : null
+          opendModal ? <SideModal handleOpendModal={handleOpendModal} setIsLanded={setIsLanded} /> : null
         }
         <div onClick={handleOpendModal}>
           <AiOutlineMenu />

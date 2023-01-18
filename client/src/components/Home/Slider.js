@@ -23,7 +23,7 @@ const Wrapper = styled.div`
             display: flex;
             justify-content: space-between;
             position: relative;
-            top: -300px;
+            top: -260px;
             height: 1px;
 
             .hidden {

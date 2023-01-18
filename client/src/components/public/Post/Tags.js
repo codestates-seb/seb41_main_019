@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import CloseBtn from "../CloseBtn";
 
 const Wrapper = styled.div`
     display: flex;
@@ -38,38 +38,26 @@ const Wrapper = styled.div`
         cursor: pointer;
         margin: 0px 5px 0px 0px;
         white-space: nowrap;
+
+        svg {
+            font-size: 15px;
+        }
     }
 `;
 
-const Tag = () => {
-    const [tags, setTags] = useState([]);
-
-    const tagList = tags.map((tag,idx) => {
-        return (
-            <li key={idx}>{tag}</li>
-        )
-    });
-
-    const addTags = (e) => {
-        if(e.key === "Enter" && e.target.value.length > 0) {
-            setTags([...tags, e.target.value]);
-            e.target.value = "";
-        }
-        deleteTags(e);
-    };
-
-    const deleteTags = (e) => {
-        if(e.key === "Backspace") {
-            setTags(tags.slice(0, tags.length - 1));
-        }
-    };
-
+const Tags = ({ tags, addTags, removeTag, tagRef }) => {
     return (
         <Wrapper className="tags">
-            <ul>{tagList}</ul>
+            <ul>
+                {
+                    tags.map((tags,idx) => {
+                        return <li key={idx}>{tags}<CloseBtn onClick={removeTag} ref={tagRef} /></li>
+                    })
+                }
+            </ul>
             <input onKeyUp={addTags} placeholder="# 키워드"></input>
         </Wrapper>
     )
 };
 
-export default Tag;
+export default Tags;
