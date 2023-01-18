@@ -234,7 +234,7 @@ include::{snippets}/delete-posting-like/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-posting-like/http-response.adoc[]
 
-== comment
+== Comment
 
 === 댓글 등록
 .curl-request
@@ -316,7 +316,7 @@ include::{snippets}/delete-comment-like/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-comment-like/http-response.adoc[]
 
-== scrap
+== Scrap
 
 === 스크랩 등록
 .curl-request
@@ -391,7 +391,7 @@ include::{snippets}/delete-followed/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-followed/http-response.adoc[]
 
-== myPlants
+== MyPlants
 
 === 내 식물 등록
 .curl-request
@@ -435,7 +435,7 @@ include::{snippets}/delete-my-plants/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-my-plants/http-response.adoc[]
 
-== gallery
+== Gallery
 
 === 갤러리 등록
 .curl-request
@@ -505,7 +505,7 @@ include::{snippets}/delete-gallery/path-parameters.adoc[]
 include::{snippets}/delete-gallery/http-response.adoc[]
 
 
-== chat
+== Chat
 
 === 채팅방 생성
 .curl-request
@@ -552,7 +552,7 @@ include::{snippets}/get-chat/http-response.adoc[]
 .response-fields
 include::{snippets}/get-chat/response-fields.adoc[]
 
-== notification
+== Notification
 
 === 알림 확인
 .curl-request
