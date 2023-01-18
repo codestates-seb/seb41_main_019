@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import DefaultInput from "./DefaultInput"
 import axios from "axios"
 import Cookie from "../../util/Cookie"
+import { decode } from "../../util/decode"
 
 const Wrapper = styled.div`
     position: absolute;
@@ -95,9 +96,12 @@ const Login = ({ setSelected, setIsLanded }) => {
             }
         }).then(res => {
             const date = new Date();
+            const user = decode(res.headers.authorization);
 
-            date.setMinutes(date.getMinutes() + 40);
+            date.setMinutes(date.getMinutes() + 420);
             cookie.set("authorization", res.headers.authorization, { expires: date });
+            cookie.set("memberId", user.memberId, { expires : date });
+            cookie.set("username", user.username, { expires : date });
 
             date.setMinutes(date.getMinutes() + 420);
             cookie.set("refresh", res.headers.refresh, { expires: date });
