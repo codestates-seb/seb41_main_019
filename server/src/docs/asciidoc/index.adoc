@@ -119,6 +119,9 @@ include::{snippets}/patch-posting/http-response.adoc[]
 include::{snippets}/patch-posting/response-fields.adoc[]
 
 === 게시글 단일 조회
+.curl-request
+include::{snippets}/get-single-posting/curl-request.adoc[]
+
 .http-request
 include::{snippets}/get-single-posting/http-request.adoc[]
 
@@ -132,19 +135,22 @@ include::{snippets}/get-single-posting/http-response.adoc[]
 include::{snippets}/get-single-posting/response-fields.adoc[]
 
 === 게시글 전체 조회
-.http-request
-include::{snippets}/get-single-posting/http-request.adoc[]
+.curl-request
+include::{snippets}/get-all-posting/curl-request.adoc[]
 
-.request-parameters
-include::{snippets}/get-single-posting/path-parameters.adoc[]
+.http-request
+include::{snippets}/get-all-posting/http-request.adoc[]
 
 .http-response
-include::{snippets}/get-single-posting/http-response.adoc[]
+include::{snippets}/get-all-posting/http-response.adoc[]
 
 .response-fields
-include::{snippets}/get-single-posting/response-fields.adoc[]
+include::{snippets}/get-all-posting/response-fields.adoc[]
 
 === 특정 회원의 게시글 전체 조회
+.curl-request
+include::{snippets}/get-postings-by-member/curl-request.adoc[]
+
 .http-request
 include::{snippets}/get-postings-by-member/http-request.adoc[]
 
