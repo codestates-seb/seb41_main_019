@@ -23,7 +23,7 @@ import java.nio.file.StandardCopyOption;
 public class FileSystemStorageService {
     private final FFmpegService fFmpegService;
     private final Path rootLocation = Paths.get("C:/Users/hyein/Desktop/image");
-    public MultipartFile store(MultipartFile file) {
+    public File store(MultipartFile file) {
         try {
             if (file.isEmpty()) {
                 throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
@@ -39,29 +39,10 @@ public class FileSystemStorageService {
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
             File returnFile = new File(fFmpegService.export(file));
-            return getMultipartFile(returnFile);
+            return returnFile;
         }
         catch (IOException e) {
             throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
         }
-    }
-
-
-    private MultipartFile getMultipartFile(File file) throws IOException {
-        FileItem fileItem = new DiskFileItem("originFile", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
-
-        try {
-            InputStream input = new FileInputStream(file);
-            OutputStream os = fileItem.getOutputStream();
-            IOUtils.copy(input, os);
-            // Or faster..
-            // IOUtils.copy(new FileInputStream(file), fileItem.getOutputStream());
-        } catch (IOException ex) {
-            // do something.
-        }
-
-        //jpa.png -> multipart 변환
-        MultipartFile mFile = new CommonsMultipartFile(fileItem);
-        return mFile;
     }
 }

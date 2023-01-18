@@ -24,7 +24,7 @@ public class FFmpegService {
         System.out.println(path);
         FFmpegBuilder builder = new FFmpegBuilder().setInput(path) // 파일경로
                 .overrideOutputFiles(true) // 오버라이드
-                .addOutput("C:/Users/hyein/Desktop/image/" + filename.substring(filename.length() - 4) + "converted.mp4") // 저장 경로 ( mov to mp4 )
+                .addOutput("C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + "converted.mp4") // 저장 경로 ( mov to mp4 )
                 .setFormat("mp4") // 포맷 ( 확장자 )
                 .setVideoCodec("libx264") // 비디오 코덱
                 .disableSubtitle() // 서브타이틀 제거
@@ -36,6 +36,6 @@ public class FFmpegService {
 
         FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
         executor.createJob(builder).run();
-        return "C:/Users/hyein/Desktop/image/" + filename.substring(filename.length() - 4) + "converted.mp4";
+        return "C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + "converted.mp4";
     }
 }
