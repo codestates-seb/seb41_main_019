@@ -68,11 +68,9 @@ public class S3StorageService {
 			.build();
 	}
 
-	public List<String> uploadMedia(List<MultipartFile> multipartFiles, long memberId ,String token) {
+	public List<String> uploadMedia(List<MultipartFile> multipartFiles, long memberId ,Member tokenMember) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (memberId != tokenId) {
+		if (memberId != tokenMember.getMemberId()) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -99,12 +97,11 @@ public class S3StorageService {
 		return mediaUrlList;
 	}
 
-	public void removeAll(long postingId, String token) {
+	public void removeAll(long postingId, Member tokenMember) {
+
 		Posting posting = postingService.findPosting(postingId);
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (posting.getMember().getMemberId() != tokenId) {
+		if (posting.getMember().getMemberId() != tokenMember.getMemberId()) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -121,12 +118,11 @@ public class S3StorageService {
 		}
 	}
 
-	public void remove(long mediaId, String token) {
+	public void remove(long mediaId, Member tokenMember) {
+
 		Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (posting.getMember().getMemberId() != tokenId) {
+		if (posting.getMember().getMemberId() != tokenMember.getMemberId()) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -221,13 +217,11 @@ public class S3StorageService {
 		s3Client.deleteObject(bucket + "/member/profileImage", fileName);
 	}
 
-	public void removeGalleryImage(long galleryId, String token) {
-
-		long tokenId = jwtTokenizer.getMemberId(token);
+	public void removeGalleryImage(long galleryId, Member tokenMember) {
 
 		Gallery findMyGallery = galleryService.findGallery(galleryId);
 
-		if (findMyGallery.getMyPlants().getMember().getMemberId() != tokenId) {
+		if (findMyGallery.getMyPlants().getMember().getMemberId() != tokenMember.getMemberId()) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -240,13 +234,11 @@ public class S3StorageService {
 		s3Client.deleteObject(bucket + "/gallery/plantImage", fileName);
 	}
 
-	public void removeAllGalleryImage(long myPlantsId,String token) {
-
-		long tokenId = jwtTokenizer.getMemberId(token);
+	public void removeAllGalleryImage(long myPlantsId,Member tokenMember) {
 
 		MyPlants findMyPlants = myPlantsService.findMyPlants(myPlantsId);
 
-		if (findMyPlants.getMember().getMemberId() != tokenId) {
+		if (findMyPlants.getMember().getMemberId() != tokenMember.getMemberId()) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 

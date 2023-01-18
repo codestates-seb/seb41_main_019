@@ -1,5 +1,6 @@
 package com.main19.server.comment.controller;
 
+import com.main19.server.auth.Login;
 import com.main19.server.comment.dto.CommentDto;
 import com.main19.server.comment.entity.Comment;
 import com.main19.server.comment.mapper.CommentMapper;
@@ -8,6 +9,7 @@ import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
+import com.main19.server.member.entity.Member;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -37,27 +39,27 @@ public class CommentController {
     private final CommentMapper commentMapper;
 
     @PostMapping("/{posting-id}")
-    public ResponseEntity postComment(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity postComment(@Login Member tokenMember,
         @PathVariable("posting-id") @Positive long postingId,
         @Valid @RequestBody CommentDto.Post commentPostDto) {
 
         Comment comment = commentMapper.commentsPostDtoToComments(commentPostDto);
         Comment createdComment = commentService.createComment(comment, postingId,
-            commentPostDto.getMemberId(),token);
+            commentPostDto.getMemberId(),tokenMember);
 
         CommentDto.Response response = commentMapper.commentsToCommentsResponseDto(createdComment);
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{comment-id}")
-    public ResponseEntity patchComment(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity patchComment(@Login Member tokenMember,
         @PathVariable("comment-id") @Positive long commentId,
         @Valid @RequestBody CommentDto.Patch commentPatchDto) {
 
         commentPatchDto.setCommentId(commentId);
 
         Comment response = commentService.updateComment(
-            commentMapper.commentsPatchDtoToComments(commentPatchDto),token);
+            commentMapper.commentsPatchDtoToComments(commentPatchDto),tokenMember);
 
         return new ResponseEntity<>(
             new SingleResponseDto<>(commentMapper.commentsToCommentsResponseDto(response)),
@@ -86,10 +88,10 @@ public class CommentController {
     }
 
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity deleteComment(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity deleteComment(@Login Member tokenMember,
         @PathVariable("comment-id") @Positive long commentId) {
 
-        commentService.deleteComment(commentId,token);
+        commentService.deleteComment(commentId,tokenMember);
 
         return ResponseEntity.noContent().build();
     }

@@ -1,5 +1,6 @@
 package com.main19.server.posting.controller;
 
+import com.main19.server.auth.Login;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class PostingController {
     private final PostingMapper mapper;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity postPosting(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity postPosting(@Login Member tokenMember,
         @Valid @RequestPart PostingPostDto requestBody,
         @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2, @RequestPart(required = false) MultipartFile file3) {
 
@@ -66,7 +67,7 @@ public class PostingController {
         multipartFiles.add(file2);
         multipartFiles.add(file3);
 
-        List<String> mediaPaths = storageService.uploadMedia(multipartFiles, requestBody.getMemberId() ,token);
+        List<String> mediaPaths = storageService.uploadMedia(multipartFiles, requestBody.getMemberId() ,tokenMember);
 
         Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody),
             requestBody.getMemberId(), mediaPaths);
@@ -84,12 +85,12 @@ public class PostingController {
     }
 
     @PatchMapping(value = "/{posting-id}")
-    public ResponseEntity updatePosting(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity updatePosting(@Login Member tokenMember,
         @PathVariable("posting-id") @Positive long postingId,
         @Valid @RequestBody PostingPatchDto requestBody) {
         requestBody.setPostingId(postingId);
         Posting updatedposting = postingService.updatePosting(
-            mapper.postingPatchDtoToPosting(requestBody),token);
+            mapper.postingPatchDtoToPosting(requestBody),tokenMember);
 
         for (int i = 0; i < requestBody.getTagName().size(); i++) {
             tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
@@ -134,17 +135,17 @@ public class PostingController {
     }
 
     @DeleteMapping(value = "/{posting-id}")
-    public ResponseEntity deletePosting(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity deletePosting(@Login Member tokenMember,
         @PathVariable("posting-id") @Positive long postingId) {
 
-        storageService.removeAll(postingId, token);
+        storageService.removeAll(postingId, tokenMember);
         postingService.deletePosting(postingId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(value = "/{posting-id}/medias", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity postMedia(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity postMedia(@Login Member tokenMember,
                                     @PathVariable("posting-id") @Positive long postingId,
                                     @RequestPart MediaPostDto requestBody, @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2) {
 
@@ -152,7 +153,7 @@ public class PostingController {
         multipartFiles.add(file1);
         multipartFiles.add(file2);
 
-        List<String> mediaPaths = storageService.uploadMedia(multipartFiles, requestBody.getMemberId() ,token);
+        List<String> mediaPaths = storageService.uploadMedia(multipartFiles, requestBody.getMemberId() ,tokenMember);
 
         Posting updatedPosting = postingService.addMedia(postingId, mediaPaths);
         return new ResponseEntity<>(
@@ -161,10 +162,10 @@ public class PostingController {
     }
 
     @DeleteMapping(value = "/medias/{media-id}")
-    public ResponseEntity deleteMedia(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity deleteMedia(@Login Member tokenMember,
         @PathVariable("media-id") @Positive long mediaId) {
 
-        storageService.remove(mediaId, token);
+        storageService.remove(mediaId, tokenMember);
         postingService.deleteMedia(mediaId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

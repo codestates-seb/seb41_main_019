@@ -38,12 +38,11 @@ public class MemberService {
         return savedMember;
     }
 
-    public Member updateMember(Member member ,String token) {
+    public Member updateMember(Member member ,Member tokenMember) {
         // todo 토큰 정보 확인해서 권한 검증후 수정 해야함
         // todo password 수정할지?
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (member.getMemberId() != tokenId) {
+        if (member.getMemberId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -58,22 +57,20 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
-    public void deleteMember(long memberId, String token){
+    public void deleteMember(long memberId, Member member){
         // todo 토큰 정보 확인해서 권한 검증후 삭제 해야함
 
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (memberId != tokenId) {
+        if (memberId != member.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
         memberRepository.deleteById(memberId);
     }
 
-    public Member createProfileImage(long memberId, String imagePath, String token) {
-        long tokenId = jwtTokenizer.getMemberId(token);
+    public Member createProfileImage(String token, long memberId, String imagePath) {
 
-        if (memberId != tokenId) {
+        if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -82,10 +79,9 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public void deleteProfileImage(long memberId, String token) {
-        long tokenId = jwtTokenizer.getMemberId(token);
+    public void deleteProfileImage(long memberId, Member tokenMember) {
 
-        if (memberId != tokenId) {
+        if (memberId != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

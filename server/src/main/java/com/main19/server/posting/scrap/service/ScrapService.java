@@ -24,10 +24,9 @@ public class ScrapService {
     private final MemberService memberService;
     private final JwtTokenizer jwtTokenizer;
 
-    public Scrap createScrap(Scrap scrap, long postingId, long memberId, String token) {
-        long tokenId = jwtTokenizer.getMemberId(token);
+    public Scrap createScrap(Scrap scrap, long postingId, long memberId, Member tokenMember) {
 
-        if(memberId != tokenId) {
+        if(memberId != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -46,12 +45,11 @@ public class ScrapService {
        return scrapRepository.save(scrap);
     }
 
-    public void deleteScrap(long scrapId, String token) {
-        long tokenId = jwtTokenizer.getMemberId(token);
+    public void deleteScrap(long scrapId, Member tokenMember) {
 
         Scrap findScrap = findVerifiedScrap(scrapId);
 
-        if (findScrap.getMember().getMemberId() != tokenId) {
+        if (findScrap.getMember().getMemberId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

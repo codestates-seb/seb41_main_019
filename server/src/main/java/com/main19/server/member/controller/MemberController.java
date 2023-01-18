@@ -1,17 +1,18 @@
 package com.main19.server.member.controller;
 
+import com.main19.server.auth.Login;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.member.entity.Member;
-import com.main19.server.redis.RedisDao;
 import org.springframework.http.HttpHeaders;
 import com.main19.server.s3service.S3StorageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +21,7 @@ import com.main19.server.member.mapper.MemberMapper;
 import com.main19.server.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,12 +44,12 @@ public class MemberController {
     }
 
     @PatchMapping(value = "/{member-id}")
-    public ResponseEntity patchMember(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity patchMember(@Login Member tokenMember,
                                       @PathVariable("member-id") @Positive long memberId,
                                       @Valid @RequestBody MemberDto.Patch requestBody) {
         requestBody.setMemberId(memberId);
 
-        Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody), token);
+        Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody), tokenMember);
 
         return new ResponseEntity(
             new SingleResponseDto(mapper.memberToMemberResponse(member)), HttpStatus.OK);
@@ -64,10 +63,10 @@ public class MemberController {
                 mapper.memberToMemberResponse(member)), HttpStatus.OK);
     }
 
-    @DeleteMapping("{member-id}")
-    public ResponseEntity deleteMember(@RequestHeader(name = "Authorization") String token,
-        @PathVariable("member-id") @Positive long memberId) {
-        memberService.deleteMember(memberId,token);
+    @DeleteMapping("/{member-id}")
+    public ResponseEntity deleteMember(@Login Member tokenMember, @PathVariable("member-id") @Positive long memberId) {
+        System.out.println("controller");
+        memberService.deleteMember(memberId,tokenMember);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -92,18 +91,20 @@ public class MemberController {
     }
 
     @PostMapping(value = "/{member-id}/profileimage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity postProfileImage(@PathVariable("member-id") @Positive long memberId,
-                                           @RequestHeader(name = "Authorization") String token,
+    public ResponseEntity postProfileImage(@RequestHeader("Authorization") String token , @PathVariable("member-id") @Positive long memberId,
                                            @RequestPart MultipartFile profileImage) {
+
         String imagePath = storageService.uploadProfileImage(profileImage);
-        return new ResponseEntity(mapper.memberToMemberResponse(memberService.createProfileImage(memberId, imagePath, token)), HttpStatus.CREATED);
+
+        Member member = memberService.createProfileImage(token, memberId, imagePath);
+
+        return new ResponseEntity(mapper.memberToMemberResponse(member), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{member-id}/profileimage")
-    public ResponseEntity deleteProfileImage(@PathVariable("member-id") @Positive long memberId,
-                                             @RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity deleteProfileImage(@PathVariable("member-id") @Positive long memberId, @Login Member tokenMember) {
         storageService.removeProfileImage(memberId);
-        memberService.deleteProfileImage(memberId, token);
+        memberService.deleteProfileImage(memberId, tokenMember);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

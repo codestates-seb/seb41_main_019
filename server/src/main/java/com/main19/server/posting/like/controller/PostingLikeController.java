@@ -1,5 +1,7 @@
 package com.main19.server.posting.like.controller;
 
+import com.main19.server.auth.Login;
+import com.main19.server.member.entity.Member;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -34,21 +36,21 @@ public class PostingLikeController {
     private final PostingMapper mapper;
 
     @PostMapping("/{posting-id}/likes")
-    public ResponseEntity postPosingLike(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity postPosingLike(@Login Member tokenMember,
         @PathVariable("posting-id") @Positive long postingId,
         @Valid @RequestBody PostingLikeDto requestBody) {
         PostingLike postingLike = postingLikeService.createPostingLike(
             mapper.postingLikeDtoToPostingLike(requestBody),
-            postingId, requestBody.getMemberId(),token);
+            postingId, requestBody.getMemberId(),tokenMember);
         return new ResponseEntity<>(
             new SingleResponseDto<>(mapper.postingLikeToPostingLikeResponseDto(postingLike)),
             HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/likes/{posting-like-id}")
-    public ResponseEntity deletePostingLike(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity deletePostingLike(@Login Member tokenMember,
         @PathVariable("posting-like-id") @Positive long postingLikeId) {
-        postingLikeService.deletePostingLike(postingLikeId,token);
+        postingLikeService.deletePostingLike(postingLikeId,tokenMember);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

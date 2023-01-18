@@ -6,8 +6,7 @@ import com.main19.server.exception.ExceptionCode;
 import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.gallery.entity.Gallery;
 import com.main19.server.myplants.gallery.repository.GalleryRepository;
-import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.posting.entity.Media;
+import com.main19.server.member.entity.Member;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +22,9 @@ public class GalleryService {
     private final JwtTokenizer jwtTokenizer;
     private final GalleryRepository galleryRepository;
 
-    public Gallery createGallery(Gallery gallery, MyPlants myPlants, String mediaPaths, String token) {
+    public Gallery createGallery(Gallery gallery, MyPlants myPlants, String mediaPaths, Member tokenMember) {
 
-
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (myPlants.getMember().getMemberId() != tokenId) {
+        if (myPlants.getMember().getMemberId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -50,12 +46,11 @@ public class GalleryService {
         return galleryRepository.findByMyPlants_MyPlantsId(myPlantsId, PageRequest.of(page, size, Sort.by("my_Plants_Id").descending()));
     }
 
-    public void deleteGallery(long galleryId, String token) {
+    public void deleteGallery(long galleryId, Member tokenMember) {
 
         Gallery gallery = findVerifiedGallery(galleryId);
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if(gallery.getMyPlants().getMember().getMemberId() != tokenId){
+        if(gallery.getMyPlants().getMember().getMemberId() != tokenMember.getMemberId()){
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
         galleryRepository.delete(gallery);

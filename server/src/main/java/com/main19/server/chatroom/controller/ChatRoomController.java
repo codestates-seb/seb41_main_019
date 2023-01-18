@@ -1,5 +1,6 @@
 package com.main19.server.chatroom.controller;
 
+import com.main19.server.auth.Login;
 import com.main19.server.chatroom.dto.ChatRoomDto;
 import com.main19.server.chatroom.entity.ChatRoom;
 import com.main19.server.chatroom.mapper.ChatRoomMapper;
@@ -7,6 +8,7 @@ import com.main19.server.chatroom.service.ChatRoomService;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
+import com.main19.server.member.entity.Member;
 import java.util.List;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +32,12 @@ public class ChatRoomController {
     private final ChatRoomMapper chatRoomMapper;
 
     @PostMapping
-    public ResponseEntity postChatRoom (@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity postChatRoom (@Login Member tokenMember,
         @RequestBody ChatRoomDto.Post requestBody) {
-
-        if(token == null) {
-            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-        }
 
         ChatRoom chatRoom = chatRoomMapper.chatRoomPostDtoToChatRoom(requestBody);
         ChatRoom response = chatRoomService.createChatRoom(chatRoom, requestBody.getReceiverId(),
-            requestBody.getSenderId(), token);
+            requestBody.getSenderId(), tokenMember);
 
         return new ResponseEntity(
             new SingleResponseDto<>(chatRoomMapper.chatRoomToChatRoomResponseDto(response)),
@@ -47,10 +45,10 @@ public class ChatRoomController {
     }
 
     @GetMapping("/{member-id}")
-    public ResponseEntity getChatRoom(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity getChatRoom(@Login Member tokenMember,
         @PathVariable("member-id") @Positive long memberId) {
 
-        List<ChatRoom> chatRooms = chatRoomService.findAllChatRoom(memberId,token);
+        List<ChatRoom> chatRooms = chatRoomService.findAllChatRoom(memberId,tokenMember);
         List<ChatRoomDto.Response> response = chatRoomMapper.chatRoomToChatRoomDtoResponse(
             chatRooms);
 

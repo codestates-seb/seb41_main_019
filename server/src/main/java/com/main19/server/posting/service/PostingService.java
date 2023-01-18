@@ -29,7 +29,6 @@ public class PostingService {
 	private final MediaRepository mediaRepository;
 	private final MemberService memberService;
 	private final CustomBeanUtils<Posting> beanUtils;
-	private final JwtTokenizer jwtTokenizer;
 
 	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths) {
 
@@ -47,11 +46,9 @@ public class PostingService {
 		return postingRepository.save(posting);
 	}
 
-	public Posting updatePosting(Posting posting, String token) {
+	public Posting updatePosting(Posting posting, Member tokenMember) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (posting.getMember().getMemberId() != tokenId) {
+		if (posting.getMember().getMemberId() != tokenMember.getMemberId()) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 

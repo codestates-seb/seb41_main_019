@@ -27,13 +27,10 @@ public class CommentService {
     private final PostingService postingService;
     private final MemberService memberService;
     private final SseService sseService;
-    private final JwtTokenizer jwtTokenizer;
 
-    public Comment createComment(Comment comment, long postingId, long memberId, String token) {
+    public Comment createComment(Comment comment, long postingId, long memberId, Member tokenMember) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (memberId != tokenId) {
+        if (memberId != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -44,18 +41,16 @@ public class CommentService {
         comment.setMember(member);
         posting.createCommentCount();
 
-        if(posting.getMember().getMemberId() != tokenId) {
+        if(posting.getMember().getMemberId() != tokenMember.getMemberId()) {
             sseService.sendPosting(posting.getMember(), SseType.comment, member, comment.getPosting());
         }
 
         return commentRepository.save(comment);
     }
 
-    public Comment updateComment(Comment comments, String token) {
+    public Comment updateComment(Comment comments, Member tokenMember) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (comments.getMember().getMemberId() != tokenId) {
+        if (comments.getMember().getMemberId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -79,11 +74,9 @@ public class CommentService {
             Sort.by("commentId").descending()));
     }
 
-    public void deleteComment(long commentId, String token) {
+    public void deleteComment(long commentId, Member tokenMember) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (findComment(commentId).getMember().getMemberId() != tokenId) {
+        if (findComment(commentId).getMember().getMemberId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

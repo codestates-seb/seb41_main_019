@@ -1,7 +1,9 @@
 package com.main19.server.myplants.controller;
 
+import com.main19.server.auth.Login;
 import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
+import com.main19.server.member.entity.Member;
 import com.main19.server.myplants.dto.MyPlantsDto;
 import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.mapper.MyPlantsMapper;
@@ -33,12 +35,12 @@ public class MyPlantsController {
     private final S3StorageService storageService;
 
     @PostMapping("/myplants")
-    public ResponseEntity postMyPlants(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity postMyPlants(@Login Member tokenMember,
         @Valid @RequestBody MyPlantsDto.Post requestBody) {
 
         MyPlants myPlants = myPlantsMapper.myPlantsPostDtoToMyPlants(requestBody);
 
-        MyPlants createdMyPlants = myPlantsService.createMyPlants(myPlants, requestBody.getMemberId(), token);
+        MyPlants createdMyPlants = myPlantsService.createMyPlants(myPlants, requestBody.getMemberId(), tokenMember);
 
         MyPlantsDto.Response response = myPlantsMapper.myPlantsToMyPlantsResponseDto(createdMyPlants);
 
@@ -46,11 +48,11 @@ public class MyPlantsController {
     }
 
     @PatchMapping("/myplants/{myplants-id}")
-    public ResponseEntity patchMyPlants(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
+    public ResponseEntity patchMyPlants(@Login Member tokenMember, @PathVariable("myplants-id") @Positive long myPlantsId,
         @Valid @RequestBody MyPlantsDto.Patch requestBody) {
 
         MyPlants myPlants = myPlantsService.changeMyPlants(myPlantsId, requestBody.getGalleryId(),
-            requestBody.getChangeNumber(), token);
+            requestBody.getChangeNumber(), tokenMember);
 
         MyPlantsDto.Response response = myPlantsMapper.myPlantsToMyPlantsResponseDto(myPlants);
 
@@ -58,7 +60,8 @@ public class MyPlantsController {
     }
 
     @GetMapping("/{member-id}/myplants")
-    public ResponseEntity getsMyPlants(@PathVariable("member-id") @Positive long memberId, @RequestParam @Positive int page, @RequestParam @Positive int size) {
+    public ResponseEntity getsMyPlants(@PathVariable("member-id") @Positive long memberId,
+        @RequestParam @Positive int page, @RequestParam @Positive int size) {
 
         Page<MyPlants> myPlantsPage = myPlantsService.findByMyPlants(page-1,size,memberId);
         List<MyPlants> content = myPlantsPage.getContent();
@@ -77,10 +80,10 @@ public class MyPlantsController {
     }
 
     @DeleteMapping("/myplants/{myplants-id}")
-    public ResponseEntity deleteMyPlants(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId) {
+    public ResponseEntity deleteMyPlants(@Login Member tokenMember, @PathVariable("myplants-id") @Positive long myPlantsId) {
 
-        storageService.removeAllGalleryImage(myPlantsId,token);
-        myPlantsService.deleteMyPlants(myPlantsId,token);
+        storageService.removeAllGalleryImage(myPlantsId,tokenMember);
+        myPlantsService.deleteMyPlants(myPlantsId,tokenMember);
 
         return ResponseEntity.noContent().build();
     }

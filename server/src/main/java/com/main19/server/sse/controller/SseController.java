@@ -1,7 +1,9 @@
 package com.main19.server.sse.controller;
 
+import com.main19.server.auth.Login;
 import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
+import com.main19.server.member.entity.Member;
 import com.main19.server.sse.dto.SseResponseDto;
 import com.main19.server.sse.entity.Sse;
 import com.main19.server.sse.mapper.SseMapper;
@@ -37,10 +39,10 @@ public class SseController {
     }
 
     @PatchMapping("/notification/{sse-id}")
-    public ResponseEntity patchSse(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity patchSse(@Login Member tokenMember,
         @PathVariable("sse-id") @Positive long sseId) {
 
-        sseService.updateSse(sseId, token);
+        sseService.updateSse(sseId, tokenMember);
         SseResponseDto response = sseMapper.sseToSseResponseDto(sseService.findSseId(sseId));
 
         return new ResponseEntity(new SingleResponseDto<>(response),HttpStatus.OK);

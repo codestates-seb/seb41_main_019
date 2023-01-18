@@ -1,5 +1,6 @@
 package com.main19.server.comment.like.controller;
 
+import com.main19.server.auth.Login;
 import com.main19.server.comment.like.dto.CommentLikeDto;
 import com.main19.server.comment.like.entity.CommentLike;
 import com.main19.server.comment.like.mapper.CommentLikeMapper;
@@ -34,14 +35,14 @@ public class CommentLikeController {
     private final CommentLikeMapper commentLikeMapper;
 
     @PostMapping("/{comment-id}/likes")
-    public ResponseEntity postLike(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity postLike(@Login Member tokenMember,
         @PathVariable("comment-id") @Positive long commentId,
         @Valid @RequestBody CommentLikeDto.Post commentLikePostDto) {
 
         CommentLike commentLikes = commentLikeMapper.commentLikePostDtoToCommentLike(
             commentLikePostDto);
         CommentLike createdComment = commentLikeService.createLike(commentLikes, commentId,
-            commentLikePostDto.getMemberId(), token);
+            commentLikePostDto.getMemberId(), tokenMember);
         CommentLikeDto.Response response = commentLikeMapper.commentLikeToCommentLikeResponse(
             createdComment);
 
@@ -49,10 +50,10 @@ public class CommentLikeController {
     }
 
     @DeleteMapping("/likes/{comment-like-id}")
-    public ResponseEntity deleteLike(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity deleteLike(@Login Member tokenMember,
         @PathVariable("comment-like-id") @Positive long commentLikeId) {
 
-        commentLikeService.deleteLike(commentLikeId, token);
+        commentLikeService.deleteLike(commentLikeId, tokenMember);
 
         return ResponseEntity.noContent().build();
     }

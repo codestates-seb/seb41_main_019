@@ -1,7 +1,9 @@
 package com.main19.server.myplants.gallery.controller;
 
+import com.main19.server.auth.Login;
 import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
+import com.main19.server.member.entity.Member;
 import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.gallery.dto.GalleryDto;
 import com.main19.server.myplants.gallery.entity.Gallery;
@@ -38,14 +40,14 @@ public class GalleryController {
     private final MyPlantsService myPlantsService;
 
     @PostMapping(value = "/{myplants-id}/gallery" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity postGallery(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
+    public ResponseEntity postGallery(@Login Member tokenMember, @PathVariable("myplants-id") @Positive long myPlantsId,
         @RequestPart GalleryDto.Post requestBody, @RequestPart MultipartFile galleryImage) {
 
         String imagePath = storageService.uploadGalleryImage(galleryImage);
         Gallery gallery = galleryMapper.galleryDtoPostToGallery(requestBody);
         MyPlants myPlants = myPlantsService.findMyPlants(myPlantsId);
 
-        Gallery createdGallery = galleryService.createGallery(gallery,myPlants,imagePath,token);
+        Gallery createdGallery = galleryService.createGallery(gallery,myPlants,imagePath,tokenMember);
 
         GalleryDto.Response response = galleryMapper.galleryToGalleryDtoResponse(createdGallery);
 
@@ -73,10 +75,10 @@ public class GalleryController {
     }
 
     @DeleteMapping(value = "/gallery/{gallery-id}")
-    public ResponseEntity deleteGallery(@RequestHeader(name = "Authorization") String token, @PathVariable("gallery-id") @Positive long galleryId) {
+    public ResponseEntity deleteGallery(@Login Member tokenMember, @PathVariable("gallery-id") @Positive long galleryId) {
 
-        storageService.removeGalleryImage(galleryId,token);
-        galleryService.deleteGallery(galleryId,token);
+        storageService.removeGalleryImage(galleryId,tokenMember);
+        galleryService.deleteGallery(galleryId,tokenMember);
 
         return ResponseEntity.noContent().build();
     }

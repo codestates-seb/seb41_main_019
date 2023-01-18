@@ -17,13 +17,11 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final MemberService memberService;
-    private final JwtTokenizer jwtTokenizer;
 
-    public ChatRoom createChatRoom(ChatRoom chatRoom, long receiverId, long senderId, String token) {
+    public ChatRoom createChatRoom(ChatRoom chatRoom, long receiverId, long senderId, Member tokenMember) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (senderId != tokenId) {
+        if (senderId != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -48,11 +46,9 @@ public class ChatRoomService {
         return chatRoomRepository.findById(chatRoomId);
     }
 
-    public List<ChatRoom> findAllChatRoom(long memberId, String token) {
+    public List<ChatRoom> findAllChatRoom(long memberId, Member tokenMember) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (memberId != tokenId) {
+        if (memberId != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

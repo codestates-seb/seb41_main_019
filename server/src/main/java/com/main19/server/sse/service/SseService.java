@@ -130,11 +130,9 @@ public class SseService {
             .build();
     }
 
-    public Sse updateSse(long sseId,String token) {
+    public Sse updateSse(long sseId, Member tokenMember) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if(findVerifiedSse(sseId).getReceiver().getMemberId() != tokenId) {
+        if(findVerifiedSse(sseId).getReceiver().getMemberId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

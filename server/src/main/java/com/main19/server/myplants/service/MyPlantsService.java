@@ -8,6 +8,7 @@ import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.gallery.entity.Gallery;
 import com.main19.server.myplants.gallery.service.GalleryService;
 import com.main19.server.myplants.repository.MyPlantsRepository;
+import com.main19.server.member.entity.Member;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,14 +22,11 @@ public class MyPlantsService {
 
     private final MyPlantsRepository myPlantsRepository;
     private final GalleryService galleryService;
-    private final JwtTokenizer jwtTokenizer;
     private final MemberService memberService;
 
-    public MyPlants createMyPlants(MyPlants myPlants, long memberId, String token) {
+    public MyPlants createMyPlants(MyPlants myPlants, long memberId, Member tokenMember) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (memberId != tokenId) {
+        if (memberId != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -37,9 +35,9 @@ public class MyPlantsService {
         return myPlantsRepository.save(myPlants);
     }
 
-    public MyPlants changeMyPlants(long myPlantsId , long galleryId, int changeNumber, String token) {
+    public MyPlants changeMyPlants(long myPlantsId , long galleryId, int changeNumber, Member tokenMember) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
+        long tokenId = tokenMember.getMemberId();
         MyPlants findMyPlants = findVerifiedMyPlants(myPlantsId);
         Gallery findGallery = galleryService.findGallery(galleryId);
 
@@ -70,13 +68,11 @@ public class MyPlantsService {
         return myPlantsRepository.findByMember_MemberId(memberId,(PageRequest.of(page, size, Sort.by("myPlantsId").descending())));
     }
 
-    public void deleteMyPlants(long myPlantsId, String token) {
-
-        long tokenId = jwtTokenizer.getMemberId(token);
+    public void deleteMyPlants(long myPlantsId, Member tokenMember) {
 
         MyPlants findMyPlants = findVerifiedMyPlants(myPlantsId);
 
-        if (findMyPlants.getMember().getMemberId() != tokenId) {
+        if (findMyPlants.getMember().getMemberId() != tokenMember.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

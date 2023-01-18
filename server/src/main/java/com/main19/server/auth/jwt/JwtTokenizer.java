@@ -1,6 +1,5 @@
 package com.main19.server.auth.jwt;
 
-import com.main19.server.auth.filter.JwtAuthenticationFilter;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
