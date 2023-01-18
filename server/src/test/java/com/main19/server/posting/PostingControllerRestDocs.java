@@ -1,6 +1,7 @@
 package com.main19.server.posting;
 
 import com.google.gson.Gson;
+import com.main19.server.ffmpeg.FileSystemStorageService;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.controller.PostingController;
 import com.main19.server.posting.dto.MediaPostDto;
@@ -68,6 +69,8 @@ public class PostingControllerRestDocs {
     private TagService tagService;
     @MockBean
     private PostingTagsService postingTagsService;
+    @MockBean
+    private FileSystemStorageService fileSystemStorageService;
     @MockBean
     private PostingMapper mapper;
 

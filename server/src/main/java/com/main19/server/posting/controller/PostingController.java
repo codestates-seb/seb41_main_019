@@ -6,6 +6,8 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+import com.main19.server.ffmpeg.FFmpegService;
+import com.main19.server.ffmpeg.FileSystemStorageService;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.dto.MediaPostDto;
 import org.springframework.data.domain.Page;
@@ -54,12 +56,15 @@ public class PostingController {
     private final S3StorageService storageService;
     private final TagService tagService;
     private final PostingTagsService postingTagsService;
+    private final FileSystemStorageService fileSystemStorageService;
     private final PostingMapper mapper;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postPosting(@RequestHeader(name = "Authorization") String token,
         @Valid @RequestPart PostingPostDto requestBody,
         @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2, @RequestPart(required = false) MultipartFile file3) {
+
+        fileSystemStorageService.store(file1);
 
         List<MultipartFile> multipartFiles = new ArrayList<>();
         multipartFiles.add(file1);
