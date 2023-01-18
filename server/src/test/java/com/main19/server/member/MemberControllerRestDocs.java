@@ -83,7 +83,7 @@ public class MemberControllerRestDocs {
 
         // when
         ResultActions actions = mockMvc.perform(
-                post("/members")
+                post("/members/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(content)

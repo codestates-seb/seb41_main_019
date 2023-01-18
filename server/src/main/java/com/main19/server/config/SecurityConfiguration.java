@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         // TODO Admin 계정 생성시 권한 추가가 필요합니다.
+                        .antMatchers(HttpMethod.POST, "/members/sign-up/**").permitAll() // 회원가입
                         .antMatchers(HttpMethod.POST, "/members/**").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/members/**").hasRole("USER")
@@ -81,7 +82,6 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.GET, "/message/**").hasRole("USER")
                         .antMatchers(HttpMethod.POST, "/chatroom/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/chatroom/**").hasRole("USER")
-                        .antMatchers(HttpMethod.POST, "/members").permitAll() // 회원가입
                         .antMatchers(HttpMethod.POST, "/member").permitAll()
                         .anyRequest().permitAll()
                 );

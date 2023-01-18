@@ -35,7 +35,7 @@ public class MemberController {
     private final JwtTokenizer jwtTokenizer;
     private final S3StorageService storageService;
 
-    @PostMapping
+    @PostMapping("/sign-up")
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
         Member member = mapper.memberPostToMember(requestBody);
         return new ResponseEntity(
