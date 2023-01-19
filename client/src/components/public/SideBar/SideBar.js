@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import SideModal from "./SideModal";
 import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
+import { useLocation } from "react-router-dom";
 import Alert from "../Alert/Alert";
 
 const StyledSidebar = styled.aside`
@@ -207,7 +208,7 @@ const StyledExtend = styled.div`
     transition: width 0.2s linear;
     overflow: hidden;
     background-color: white;
-    box-shadow: 1px 0px 10px gray;
+    box-shadow: 1px 0px 5px gray;
   }
 
   .active {
@@ -220,6 +221,13 @@ const Sidebar = ({ handleIsPosted, setIsLanded }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
+  const location = useLocation().pathname;
+
+  useEffect(() => {
+    if(location === "/landing") {
+      setIsLanded(true);
+    }
+  }, [location, setIsLanded])
 
   const handleIsOpend = (value) => {
     if(value === isOpend) setIsOpend(null);   

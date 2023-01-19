@@ -4,8 +4,10 @@ import Input from "../Input";
 import ChatRooms from "./ChatRooms";
 import Chatting from "./Chatting";
 import Friends from "./Friends";
-import { chatLogData } from "../../../assets/dummyData/chatLogData";
-import { friendsData } from "../../../assets/dummyData/friendsData";
+import { useEffect } from "react";
+import axios from "axios";
+import Cookie from "../../../util/Cookie";
+import { RiContactsBookLine } from "react-icons/ri";
 
 const StyledChat = styled.div`
   display: flex;
@@ -39,39 +41,22 @@ const StyledChat = styled.div`
 `;
 
 const Chat = () => {
-  const [curChat, setCurChat] = useState(null);
-  const [chatLog, setChatLog] = useState(chatLogData);
-  const [freinds, setFreinds] = useState(friendsData);
-
-  const handleCurChat = (value) => {
-    setCurChat(value);
-  };
-
+  const [curChat, setCurChat] = useState(false);
+  
   return (  
     <>
       <StyledChat>
         <Input label={"채팅"} />
+        <button onClick={() => setCurChat(!curChat)}>x</button>
         {curChat ? (
           <>
-            <Chatting
-              handleCurChat={handleCurChat}
-              curChat={curChat}
-              chatLog={chatLog}
-            />
-            <ChatRooms
-              handleCurChat={handleCurChat}
-              chatLog={chatLog}
-              freinds={freinds}
-            />
+            <Chatting />
+            <ChatRooms />
           </>
         ) : (
           <>
-            <ChatRooms
-              handleCurChat={handleCurChat}
-              chatLog={chatLog}
-              freinds={freinds}
-            />
-            <Friends handleCurChat={handleCurChat} freinds={freinds} />
+            <ChatRooms />
+            <Friends />
           </>
         )}
       </StyledChat>

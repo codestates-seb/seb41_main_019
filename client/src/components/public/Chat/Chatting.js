@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Massage from "./Massage";
 import Friend from "./Friend";
 import { useState } from "react";
+import { connect, subscribe, disConnect, send } from "../../../util/chat";
+import { chatLogData } from "../../../assets/dummyData/chatLogData"
 
 const StyledChatLog = styled.div`
   display: flex;
@@ -76,15 +78,14 @@ const StyledInput = styled.div`
   }
 `;
 
-const Chatting = ({ curChat, handleCurChat, chatLog }) => {
-  const [curLog, setCurLog] = useState(15);
-
-  const handleCurLog = () => setCurLog(curLog + 15);
+const Chatting = () => {
+  const [ message, setMessage ] = useState("");
+  const [ curLog, setCurLog ] = useState(15);
 
   const soltChat = () => {
     const solted = [];
-    chatLog[0]
-      .filter((data, idx) => idx >= chatLog.length - curLog)
+    chatLogData[0]
+      .filter((data, idx) => idx >= chatLogData.length - curLog)
       .reduce((acc, cur) => {
         if (!solted[0]) solted.push([acc]);
 
@@ -98,12 +99,22 @@ const Chatting = ({ curChat, handleCurChat, chatLog }) => {
     return solted;
   };
 
+  const handleSend = () => {
+    send(1, 1, 2, message);
+  }
+
   soltChat();
 
   return (
     <div className="chat-area">
+      <button onClick={() => connect()}>ac</button>
+      <button onClick={() => disConnect()}>de</button>
+      <button onClick={() => subscribe(1, (body) => {
+        const json = JSON.parse(body.body);
+        console.log(json, 1);
+      })}>sub</button>
       <div>
-        <Friend friend={curChat} handleCurChat={handleCurChat} top />
+        {/* <Friend top /> */}
       </div>
       <StyledChatLog>
         {soltChat().map((data, idx) => {
@@ -120,8 +131,8 @@ const Chatting = ({ curChat, handleCurChat, chatLog }) => {
         })}
       </StyledChatLog>
       <StyledInput>
-        <input type="text" placeholder="text.."></input>
-        <button>Send</button>
+        <input type="text" placeholder="text.." value={message} onChange={(e) => setMessage(e.target.value)}></input>
+        <button onClick={handleSend}>Send</button>
       </StyledInput>
     </div>
   );

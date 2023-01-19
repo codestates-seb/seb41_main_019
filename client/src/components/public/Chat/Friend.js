@@ -1,10 +1,13 @@
 import styled from "styled-components";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
+import axios from "axios";
+import Cookie from "../../../util/Cookie";
 
 const StyledFriend = styled.li`
   display: flex;
-  ${({ top }) => (top ? null : "border-bottom: 1px solid #dbdbdb;")}
-  margin: 0px 0px 10px 0px;
+  ${({ top }) => (top ? "border-bottom: 1px solid #dbdbdb;" : null)}
   padding: 0px 0px 5px 0px;
+  margin: 0px 0px 10px 0px;
 
   div:nth-of-type(1) {
     width: 10%;
@@ -34,9 +37,30 @@ const StyledFriend = styled.li`
   }
 `;
 
-const StyledButton = styled.button``;
+const StyledButton = styled.button`
+  border: 0px;
+  cursor: pointer;
+  
+  svg {
+    font-size: 22px;
+  }
+`;
 
-const Friend = ({ friend, handleCurChat, top }) => {
+const Friend = ({ friend, top }) => {
+  const cookie = new Cookie();
+  
+  const createRoom = () => {
+    axios({
+      method: "post",
+      url: `http://13.124.33.113:8080/chatroom`,
+      headers: { Authorization: new Cookie().get("authorization") },
+      data: {
+        receiverId: friend.followId,
+        senderId: cookie.get("memberId")
+      }
+    })
+  }
+
   return (
     <StyledFriend top={top}>
       <div>
@@ -46,13 +70,15 @@ const Friend = ({ friend, handleCurChat, top }) => {
         ></img>
       </div>
       <div>
-        <span>{friend.username}</span>
+        <span>{friend.followId}</span>
         <span>profile</span>
       </div>
       {top ? (
-        <StyledButton onClick={() => handleCurChat(null)}>x</StyledButton>
+        <StyledButton>x</StyledButton>
       ) : (
-        <StyledButton onClick={() => handleCurChat(friend)}>chat</StyledButton>
+        <StyledButton onClick={() => {
+          // createRoom()
+        }}><IoChatbubbleEllipsesOutline /></StyledButton>
       )}
     </StyledFriend>
   );
