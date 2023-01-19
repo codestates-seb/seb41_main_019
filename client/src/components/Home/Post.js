@@ -12,7 +12,7 @@ import Cookie from "../../util/Cookie";
 const Wrapper = styled.div`
     position: relative;
     width: 500px;
-    height: 730px;
+    height: 760px;
     padding-top: 25px;
     margin-bottom: 20px;
     border-top: 1px solid #DBDBDB;
@@ -31,7 +31,7 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 770px) {
         width: 460px;
-        height: 700px;
+        height: 750px;
     }
 `;
 
@@ -85,19 +85,19 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
     const handleMenu = () => {
         setMenu(!menu);
     }
-    
+
     return (
         <Wrapper>
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
-                <img src={post.profileImage ? "" : defaultImg} alt="profileImg" />
+                <img src={post.profileImage ? post.profileImage : defaultImg} alt="profileImg" />
                 <div>
                     <span>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
                     <FiUserPlus />
-                    { post.memberId === cookie.get("memberId") ?
+                    { post.memberId === Number(cookie.get("memberId")) ?
                         <BiDotsVerticalRounded onClick={() => {
                             handleMenu(); 
                             handleCurPost(post);

@@ -4,8 +4,8 @@ import FeedInteraction from "./FeedInteraction";
 import Comments from "./Comments";
 import { useEffect } from "react";
 import CloseBtn from "../public/CloseBtn";
-
 import { exchangeTime } from "../../util/exchangeTime";
+import defaultImg from "../../assets/img/profile.jpg";
 
 const Wrapper = styled.div`
     display: flex;
@@ -130,7 +130,7 @@ const View = ({ handleModal, curPost }) => {
                 </StyledSlider>
                 <StyledInteraction>
                     <div className="profile">
-                        <img src={curPost.profileImage} alt="profileImg" />
+                        <img src={curPost.profileImage ? curPost.profileImage : defaultImg} alt="profileImg" />
                         <span>{curPost.userName}</span>
                         <span>{curPost.modifiedAt ? exchangeTime(curPost) : ""}</span>
                         <CloseBtn handleEvent={handleModal} />
