@@ -60,32 +60,36 @@ const DeleteModal = ({ handleDelete, postId, handleChange }) => {
     });
   }, [handleDelete]);
 
-  const deletePost = () => {
-    axios({
-      method: "delete",
-      url: `http://13.124.33.113:8080/posts/${postId}`,
-      headers: { Authorization: cookie.get("authorization") },
-    })
-      .then((res) => {
-        handleChange();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const DeletePost = () => {
+
+          axios({
+              method: "delete",
+              url: `http://13.124.33.113:8080/posts/${postId}`,
+              headers: { Authorization: cookie.get("authorization") }
+              }).then(res => {
+                  handleChange();
+              })
+              .catch(e => {
+                 console.log(e);
+              });
   };
 
   return (
-    <Wrapper>
-      <div>
-        <FiAlertCircle />
-        <span> 정말 이 게시물을 삭제하시겠습니까?</span>
-      </div>
-      <div className="buttons">
-        <BlueBtn onClick={deletePost}>Yes</BlueBtn>
-        <BlueBtn onClick={handleDelete}>No</BlueBtn>
-      </div>
-    </Wrapper>
-  );
+      <Wrapper>
+          <div>
+              <FiAlertCircle />
+              <span> 정말 이 게시물을 삭제하시겠습니까?</span>
+          </div>
+          <div className="buttons">
+              <BlueBtn 
+                  onClick={() => {
+                      DeletePost()
+                      handleDelete()
+                  }}>Yes</BlueBtn>
+              <BlueBtn onClick={handleDelete}>No</BlueBtn>
+          </div>
+      </Wrapper>
+  )
 };
 
 export default DeleteModal;

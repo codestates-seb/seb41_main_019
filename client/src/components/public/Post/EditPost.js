@@ -32,18 +32,72 @@ const Wrapper = styled.div`
 
   > div:nth-of-type(2) {
     display: flex;
-  }
+    flex-direction: column;
+    gap: 30px;
+    width: 800px;
+    height: auto;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    margin: 0 auto;
+    padding: 50px;
+    color: gray;
+    z-index: 1000;
+    box-shadow: 4px 4px 4px 1px rgba(0,0,0,0.3); 
 
-  ul {
-    display: flex;
-    list-style: none;
+    > div:first-child {
+        margin: 0 0 0 auto;
+    }
 
-    img {
-      display: flex;
-      width: 150px;
-      @media screen and (max-width: 1255px) {
-        width: 150px;
-      }
+    p {
+        margin: -20px 0px 0px 0px;
+    }
+
+    .preview {
+        display: flex;
+        height: auto;
+        
+        p {
+            display: none;
+        }
+
+        div {
+            width: 140px;
+            height: 140px;
+            margin: 0;
+            @media screen and (max-width: 755px) {
+                    width: 85px;
+                    height: 85px;
+            } 
+        }
+  
+
+        ul {
+            margin: 0px 0px 0px 10px;
+            height: 100%;
+            padding: 0;
+            display: flex;
+            list-style: none;
+
+            li {
+                height: 100%;
+            }
+
+            li img {
+                display: flex;
+                width: 140px;
+                height: 140px; 
+                margin-right: 10px;
+                cursor: pointer;
+                    @media screen and (max-width: 755px) {
+                        width: 85px;
+                        height: 85px;
+                    }    
+            }
+
+            .none {
+                display: none;
+            }
+        }
     }
   }
 
@@ -77,21 +131,57 @@ const StyledTextarea = styled.textarea`
 
 // 기능 추가: 사진 x클릭시 사진 삭제, 태그 줄 자동바꿈,
 const EditPost = ({ handleEdit, curPost }) => {
-  const [images, setImages] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [value, setValue] = useState("");
-  const [tags, setTags] = useState([]);
-  const fileInputRef = useRef([]);
-  const fileInputs = useRef(null);
-  const cookie = new Cookie();
+    const [images, setImages] = useState([]);
+    const [files, setFiles] = useState([]);
+    const [value, setValue] = useState("");
+    const [tags, setTags] = useState([]);
+    const [preview, setPreview] = useState(false);
+    const fileInputRef = useRef([]);
+    const fileInputs = useRef(null);
+    const cookie = new Cookie();
 
-  const handleImg = (e) => {
-    const file = e.target.files[0];
-    setFiles([...files, file]);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImages([...images, reader.result]);
+    const handleImg = (e) => {
+        const file = e.target.files[0];
+        setFiles([...files, file]);
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setImages([...images, reader.result]);
+        }
+    };
+
+    const deleteImg = (e) => {
+        const delIdx = e.target.id;
+        const newFiles = files.slice();
+        const newImgs = images.slice();
+        newFiles.splice(delIdx, 1)
+        newImgs.splice(delIdx, 1)
+        setFiles(newFiles);
+        setImages(newImgs);
+        fileInputs.current.childNodes[delIdx].remove();
+    };
+
+    useEffect(() => {
+        setValue(curPost.postingContent);
+        setTags(curPost.tags.map(tag => tag.tagName))
+    },[])
+
+    const handleValue = (e) => {
+        setValue(e.target.value);
+    };
+
+    const addTags = (e) => {
+        if(e.key === "Enter" && e.target.value.length > 0 && tags.length < 5) {
+            setTags([...tags, e.target.value]);
+            e.target.value = "";
+        }
+    };
+
+    const removeTags = (e) => {
+        const removeIdx = e.target.parentNode.parentNode.id;
+        if(removeIdx.length > 0) {
+            setTags(tags.filter((tag, idx) => idx !== Number(removeIdx)));
+        }
     };
   };
 
@@ -122,72 +212,66 @@ const EditPost = ({ handleEdit, curPost }) => {
     }
   };
 
-  const removeTags = (e) => {
-    const removeIdx = e.target.parentNode.parentNode.id;
-    if (removeIdx.length > 0) {
-      setTags(tags.filter((tag, idx) => idx !== Number(removeIdx)));
+    // const handleSubmit = () => {
+    //     const formData = new FormData();
+
+    //     files.forEach((file, idx) => {
+    //         formData.append(`file${idx + 1}`, file);
+    //     });
+    //     formData.append("requestBody", new Blob([JSON.stringify({
+    //         "memberId": Number(cookie.get("memberId")),
+    //         "postingContent": value,
+    //         "tagName": tags
+    //     })], { type: "application/json"}));
+
+    //     axios({
+    //         method: "patch",
+    //         url: "http://13.124.33.113:8080/posts/cookie.get("memberId")",
+    //         data: {
+    //        "postingId" : 1,
+    //        "postingContent" : "게시글 수정 test",
+    //        "tagName" : [ "스투키", "몬스테라" ]
+    //         } 
+    //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
+    
+    //         }).then(res => {
+    //             console.log(res);
+    //         })
+    //         .catch(e => {
+    //             //에러 처리
+    //         });
+    // };
+
+    const handleDiv = () => {
+        setPreview(!preview);
     }
-  };
 
-  // const handleSubmit = () => {
-  //     const formData = new FormData();
-
-  //     files.forEach((file, idx) => {
-  //         formData.append(`file${idx + 1}`, file);
-  //     });
-  //     formData.append("requestBody", new Blob([JSON.stringify({
-  //         "memberId": Number(cookie.get("memberId")),
-  //         "postingContent": value,
-  //         "tagName": tags
-  //     })], { type: "application/json"}));
-
-  //     axios({
-  //         method: "patch",
-  //         url: "http://13.124.33.113:8080/posts/cookie.get("memberId")",
-  //         data: {
-  //        "postingId" : 1,
-  //        "postingContent" : "게시글 수정 test",
-  //        "tagName" : [ "스투키", "몬스테라" ]
-  //         }
-  //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
-
-  //         }).then(res => {
-  //             console.log(res);
-  //         })
-  //         .catch(e => {
-  //             //에러 처리
-  //         });
-  // };
-
-  return (
-    <Wrapper>
-      <CloseBtn handleEvent={handleEdit} />
-      <div className="preview">
-        <Uploader images={images} handleImg={handleImg} />
-        <ul>
-          {curPost.postingMedias.map((media, idx) => {
-            return (
-              <li>
-                <img src={media.mediaUrl} alt="img" />
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <StyledTextarea
-        value={value}
-        onChange={handleValue}
-        placeholder="수정할 거에용"
-      >
-        {value}
-      </StyledTextarea>
-      <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
-      <div>
-        <BlueBtn>수정하기</BlueBtn>
-        <BlueBtn onClick={handleEdit}>취소</BlueBtn>
-      </div>
-    </Wrapper>
-  );
-};
+    return (
+        <Wrapper>
+            <CloseBtn handleEvent={handleEdit}/>
+            <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
+            <div className="preview">
+                <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
+                fileInputs={fileInputs} />
+                <ul>
+                    {
+                        curPost.postingMedias.map((media, idx) => {
+                            return <li key={idx} className={preview ? "none" : null} onClick={handleDiv}>
+                                    <img src={media.mediaUrl} alt="img" />
+                                </li>
+                               
+                        })
+                    }
+                </ul>
+            </div>
+            <StyledTextarea value={value} onChange={handleValue} placeholder="수정할 거에용">{value}</StyledTextarea>
+            <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
+            <div>
+                <BlueBtn>수정하기</BlueBtn>
+                <BlueBtn onClick={handleEdit}>취소</BlueBtn>
+            </div>
+        </Wrapper>
+    )
+}
 
 export default EditPost;
