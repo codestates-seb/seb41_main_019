@@ -48,7 +48,7 @@ include::{snippets}/post-member-image/http-response.adoc[]
 .response-fields
 include::{snippets}/post-member-image/response-fields.adoc[]
 
-== 회원 정보 수정
+=== 회원 정보 수정
 .curl-request
 include::{snippets}/patch-member/curl-request.adoc[]
 
