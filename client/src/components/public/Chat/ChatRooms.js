@@ -1,5 +1,8 @@
 import styled from "styled-components";
+import Cookie from "../../../util/Cookie";
 import ChatRoom from "./ChatRoom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const StyledChatList = styled.div`
   max-height: 30%;
@@ -35,6 +38,19 @@ const StyledChatList = styled.div`
 `;
 
 const ChatRooms = ({ handleCurChat, chatLog, freinds }) => {
+  const [rooms, setRooms] = useState([]);
+  const cookie = new Cookie();
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/chatroom/${cookie.get("memberId")}`,
+      headers: { Authorization: cookie.get("authorization") }
+    }).then(res => {
+      console.log(res)
+    })
+  })
+
   return (
     <StyledChatList>
       <p>Chat List</p>

@@ -42,35 +42,10 @@ const StyledChat = styled.div`
 
 const Chat = () => {
   const [curChat, setCurChat] = useState(null);
-  const [rooms, setRooms] = useState([]);
-  const [freinds, setFreinds] = useState([]);
-  const cookie = new Cookie();
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://13.124.33.113:8080/chatroom/${cookie.get("memberId")}`,
-      headers: { Authorization: cookie.get("authorization") }
-    }).then(res => {
-      setRooms((res.data));  
-    })
-  }, [])
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
-      headers: { Authorization: cookie.get("authorization") }
-    }).then(res => {
-      setFreinds(res.data.data.followingList);  
-    })
-  }, [])
 
   const handleCurChat = (value) => {
     setCurChat(value);
   };
-
-  console.log(rooms, freinds);
 
   return (  
     <>
@@ -84,16 +59,14 @@ const Chat = () => {
             />
             <ChatRooms
               handleCurChat={handleCurChat}
-              freinds={freinds}
             />
           </>
         ) : (
           <>
             <ChatRooms
               handleCurChat={handleCurChat}
-              freinds={freinds}
             />
-            <Friends handleCurChat={handleCurChat} freinds={freinds} />
+            <Friends handleCurChat={handleCurChat} />
           </>
         )}
       </StyledChat>

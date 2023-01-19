@@ -56,7 +56,7 @@ const Friends = ({ handleCurChat }) => {
     <StyledFriends>
       <p>팔로우 목록</p>
       <ul>
-        {freinds
+        {freinds.length > 0
           ? freinds.map((friend, idx) => (
               <Friend friend={friend} key={idx} handleCurChat={handleCurChat} />
             ))

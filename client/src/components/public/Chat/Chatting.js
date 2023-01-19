@@ -100,8 +100,6 @@ const Chatting = ({ curChat, handleCurChat, chatLog }) => {
     return solted;
   };
 
-  soltChat();
-
   const handleSend = () => {
     send(1, 1, 2, message);
   }
