@@ -12,7 +12,7 @@ import Cookie from "../../util/Cookie";
 const Wrapper = styled.div`
     position: relative;
     width: 500px;
-    height: 730px;
+    height: 760px;
     padding-top: 25px;
     margin-bottom: 20px;
     border-top: 1px solid #DBDBDB;
@@ -31,7 +31,7 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 770px) {
         width: 460px;
-        height: 700px;
+        height: 750px;
     }
 `;
 
@@ -88,9 +88,9 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
 
     return (
         <Wrapper>
-            { menu ? <FeedMenu postingId={post.postingId} handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
+            { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
-                <img src={post.profileImage ? "" : defaultImg} alt="profileImg" />
+                <img src={post.profileImage ? post.profileImage : defaultImg} alt="profileImg" />
                 <div>
                     <span>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>

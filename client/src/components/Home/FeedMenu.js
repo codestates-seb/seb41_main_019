@@ -16,7 +16,6 @@ const Wrapper = styled.div`
     button {
         height: 100%;
         background-color: white;
-        opacity: 0.9;
         border: 0;
         border-bottom: 1px solid #dbdbdb;
         font-size: 14px;
@@ -28,7 +27,7 @@ const Wrapper = styled.div`
     }
 `;
 
-const FeedMenu = ({ handleDelete, handleMenu, handleEdit, postingId }) => {
+const FeedMenu = ({ handleDelete, handleMenu, handleEdit }) => {
     return (
         <Wrapper>
             <button 

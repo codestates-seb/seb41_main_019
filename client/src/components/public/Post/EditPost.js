@@ -30,21 +30,56 @@ const Wrapper= styled.div`
         margin: 0 0 0 auto;
     }
 
-    > div:nth-of-type(2) {
-        display: flex;
+    p {
+        margin: -20px 0px 0px 0px;
     }
 
-    ul {
+    .preview {
         display: flex;
-        list-style: none;
+        height: auto;
+        
+        p {
+            display: none;
+        }
 
-        img {
-        display: flex;
-        width: 150px; 
-        @media screen and (max-width: 1255px) {
-            width: 150px;
-            }    
-        }     
+        div {
+            width: 140px;
+            height: 140px;
+            margin: 0;
+            @media screen and (max-width: 755px) {
+                    width: 85px;
+                    height: 85px;
+            } 
+        }
+  
+
+        ul {
+            margin: 0px 0px 0px 10px;
+            height: 100%;
+            padding: 0;
+            display: flex;
+            list-style: none;
+
+            li {
+                height: 100%;
+            }
+
+            li img {
+                display: flex;
+                width: 140px;
+                height: 140px; 
+                margin-right: 10px;
+                cursor: pointer;
+                    @media screen and (max-width: 755px) {
+                        width: 85px;
+                        height: 85px;
+                    }    
+            }
+
+            .none {
+                display: none;
+            }
+        }
     }
 
     button:last-of-type{
@@ -81,6 +116,7 @@ const EditPost = ({ handleEdit, curPost }) => {
     const [files, setFiles] = useState([]);
     const [value, setValue] = useState("");
     const [tags, setTags] = useState([]);
+    const [preview, setPreview] = useState(false);
     const fileInputRef = useRef([]);
     const fileInputs = useRef(null);
     const cookie = new Cookie();
@@ -159,15 +195,24 @@ const EditPost = ({ handleEdit, curPost }) => {
     //         });
     // };
 
+    const handleDiv = () => {
+        setPreview(!preview);
+    }
+
     return (
         <Wrapper>
             <CloseBtn handleEvent={handleEdit}/>
+            <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
             <div className="preview">
-                <Uploader images={images} handleImg={handleImg} />
+                <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
+                fileInputs={fileInputs} />
                 <ul>
                     {
                         curPost.postingMedias.map((media, idx) => {
-                            return <li><img src={media.mediaUrl} alt="img" /></li>
+                            return <li key={idx} className={preview ? "none" : null} onClick={handleDiv}>
+                                    <img src={media.mediaUrl} alt="img" />
+                                </li>
+                               
                         })
                     }
                 </ul>
