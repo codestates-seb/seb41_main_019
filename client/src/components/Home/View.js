@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import Slider from "./Slider";
-import A from "../../assets/img/plants/1.jpg";
-import B from "../../assets/img/plants/알보1.png";
 import FeedInteraction from "./FeedInteraction";
 import Comments from "./Comments";
 import { useEffect } from "react";
 import CloseBtn from "../public/CloseBtn";
+
+import { exchangeTime } from "../../util/exchangeTime";
 
 const Wrapper = styled.div`
     display: flex;
@@ -33,8 +33,8 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 1024px) {
         width: 500px;
-        height: 600px;
-        top: 40%;
+        height: 400px;
+        top: 30%;
         flex-direction: column;
 
         p {
@@ -48,34 +48,30 @@ const Wrapper = styled.div`
 `;
 
 const StyledSlider = styled.div`
-    width: 55%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     background-color: black;
 
-    img {
-        width: 100%;
-
-        @media screen and (max-width: 1024px) {
-            width: 70%;
-            height: 100%;
+    @media screen and (min-width: 1024px) {
+        > div ul li div:first-child {
+            height: 900px;
         }
-    }
+    }   
 
-    @media screen and (max-width: 1255px) {
-        width: 100%;
-    }
-
-    @media screen and (max-width: 1024px) { 
-        align-items: center;
-    }
+    @media screen and (max-width: 1024px) {
+        > div ul li div:first-child {
+            height: 400px;
+        }
+    }   
 `
 
 const StyledInteraction = styled.div`
     width: 45%;
     display: flex;
     flex-direction: column;
+    background-color: white;
 
     > div:first-child {
         @media screen and (max-width: 1024px){
@@ -118,9 +114,7 @@ const StyledInteraction = styled.div`
 `;
 
 
-const View = ({ handleModal }) => {
-    const img = [ A ] ;
-
+const View = ({ handleModal, curPost }) => {
     useEffect(() => {
         document.getElementById("bg").addEventListener("click", () => {
             handleModal();
@@ -130,19 +124,18 @@ const View = ({ handleModal }) => {
     return (
             <Wrapper>
                 <StyledSlider>
-                    {  img.length > 1
-                        ? <Slider img={img} /> 
-                        : <img src={B} alt="img" />
+                    { curPost.postingMedias ?
+                        <Slider imgs={curPost.postingMedias} type={true} /> : null
                     }
                 </StyledSlider>
                 <StyledInteraction>
                     <div className="profile">
-                        <img src={A} alt="profileImg" />
-                        <span>홍길동</span>
-                        <span>7시간 전</span>
-                        <CloseBtn handleModal={handleModal} />
+                        <img src={curPost.profileImage} alt="profileImg" />
+                        <span>{curPost.userName}</span>
+                        <span>{curPost.modifiedAt ? exchangeTime(curPost) : ""}</span>
+                        <CloseBtn handleEvent={handleModal} />
                     </div>
-                    <FeedInteraction type={1} />
+                    <FeedInteraction post={curPost} type={1} />
                     <Comments />
                 </StyledInteraction>
             </Wrapper>
