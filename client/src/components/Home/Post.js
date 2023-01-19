@@ -85,7 +85,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
     const handleMenu = () => {
         setMenu(!menu);
     }
-    
+
     return (
         <Wrapper>
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
@@ -97,7 +97,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
                 </div>
                 <div className="icons">
                     <FiUserPlus />
-                    { post.memberId === cookie.get("memberId") ?
+                    { post.memberId === Number(cookie.get("memberId")) ?
                         <BiDotsVerticalRounded onClick={() => {
                             handleMenu(); 
                             handleCurPost(post);

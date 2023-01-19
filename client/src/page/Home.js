@@ -38,6 +38,8 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
         setEdit(!edit);
     };
 
+    console.log(curPost)
+
     return (
         <>
             { edit ? <EditPost curPost={curPost} handleEdit={handleEdit}/> : null }
