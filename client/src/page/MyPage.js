@@ -1,24 +1,37 @@
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 import { TiArrowSortedDown } from "react-icons/ti";
 import { TiArrowSortedUp } from "react-icons/ti";
 import { BsGrid3X3 } from "react-icons/bs";
 import { BsBookmark } from "react-icons/bs";
 
+import Cookie from "../util/Cookie";
 import MyPlants from "../components/MyPage/MyPlants";
 import UserInfo from "../components/MyPage/UserInfo";
 import Gallery from "../components/MyPage/Gallery";
+import AddPlant from "../components/MyPage/AddPlant";
 
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0px 300px 0px 270px;
-  width: 750px;
+  margin: 0 300px 0 270px;
+
+  > .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const StyledMyPlantFolder = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 500px;
   border-bottom: solid 1px #dbdbdb;
   p {
     display: flex;
@@ -51,11 +64,17 @@ const StyledChangeViewButton = styled.div`
   }
 `;
 
-const MyPage = ({ setIsCovered }) => {
+const MyPage = ({ isCovered, handleIsCovered }) => {
+  const cookie = new Cookie();
+  const jwt = cookie.get("authorization");
+  const decodedJWT = JSON.stringify(jwtDecode(jwt));
+
+  const [userInfo, setUserInfo] = useState(JSON.parse(decodedJWT));
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
   const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
   const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
+  const [isModalOpened, setIsModalOpened] = useState(false);
 
   const getGalleryData = async (url, view) => {
     try {
@@ -76,6 +95,11 @@ const MyPage = ({ setIsCovered }) => {
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleModal = () => {
+    handleIsCovered();
+    setIsModalOpened(!isModalOpened);
   };
 
   const handlePostingsClick = () => {
@@ -105,52 +129,53 @@ const MyPage = ({ setIsCovered }) => {
     }
   };
 
-  // MyPage 접속시 기본값으로 Postings 표시
-  // defaultProps로 해결해야하나?
-
   return (
-    <StyledContainer>
-      <UserInfo />
-      {isFolderOpened && isFolderOpened ? (
-        <>
-          <MyPlants
-            myPlantsData={myPlantsData}
-            handlePlantClick={handlePlantClick}
-          />
-          <StyledMyPlantFolder onClick={handleFolderClick}>
-            <Gallery galleryData={galleryData} currentView={currentView} />
-            <p>
-              My Plants 접기 <TiArrowSortedUp />
-            </p>
-          </StyledMyPlantFolder>
-        </>
-      ) : (
-        <>
-          <StyledMyPlantFolder>
-            <p onClick={handleFolderClick}>
-              My Plants 펼치기 <TiArrowSortedDown />
-            </p>
-            <StyledChangeViewContainer>
-              <StyledChangeViewButton
-                onClick={handlePostingsClick}
-                className={currentView === "postings" ? "selected" : ""}
-              >
-                <BsGrid3X3 />
-                <span>게시물</span>
-              </StyledChangeViewButton>
-              <StyledChangeViewButton
-                onClick={handleScrapsClick}
-                className={currentView === "scraps" ? "selected" : ""}
-              >
-                <BsBookmark />
-                <span>스크랩</span>
-              </StyledChangeViewButton>
-            </StyledChangeViewContainer>
-            <Gallery galleryData={galleryData} currentView={currentView} />
-          </StyledMyPlantFolder>
-        </>
-      )}
-    </StyledContainer>
+    <>
+      {isCovered && isModalOpened && <AddPlant handleModal={handleModal} />}
+      <StyledContainer>
+        <UserInfo userInfo={userInfo} jwt={jwt} />
+        {isFolderOpened ? (
+          <div className="container">
+            <MyPlants
+              myPlantsData={myPlantsData}
+              handlePlantClick={handlePlantClick}
+              handleModal={handleModal}
+            />
+            <StyledMyPlantFolder onClick={handleFolderClick}>
+              <Gallery galleryData={galleryData} currentView={currentView} />
+              <p>
+                My Plants 접기 <TiArrowSortedUp />
+              </p>
+            </StyledMyPlantFolder>
+          </div>
+        ) : (
+          <div className="container">
+            <StyledMyPlantFolder>
+              <p onClick={handleFolderClick}>
+                My Plants 펼치기 <TiArrowSortedDown />
+              </p>
+              <StyledChangeViewContainer>
+                <StyledChangeViewButton
+                  onClick={handlePostingsClick}
+                  className={currentView === "postings" ? "selected" : ""}
+                >
+                  <BsGrid3X3 />
+                  <span>게시물</span>
+                </StyledChangeViewButton>
+                <StyledChangeViewButton
+                  onClick={handleScrapsClick}
+                  className={currentView === "scraps" ? "selected" : ""}
+                >
+                  <BsBookmark />
+                  <span>스크랩</span>
+                </StyledChangeViewButton>
+              </StyledChangeViewContainer>
+              <Gallery galleryData={galleryData} currentView={currentView} />
+            </StyledMyPlantFolder>
+          </div>
+        )}
+      </StyledContainer>
+    </>
   );
 };
 

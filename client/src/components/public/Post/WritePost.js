@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Uploader from "./Uploader";
 import Tags from "./Tags";
 import CloseBtn from "../CloseBtn";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { BlueBtn } from "../BlueBtn";
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
@@ -27,7 +27,8 @@ const Wrapper= styled.div`
     box-shadow: 4px 4px 4px 1px rgba(0,0,0,0.3); 
 
     > div:first-child {
-        margin: 0 0 0 auto;
+        margin: 0 0 -30px auto;
+        
     }
 
     button:last-of-type{
@@ -58,22 +59,35 @@ const StyledTextarea = styled.textarea`
     }
 `;
 
-// 기능 추가: 사진 x클릭시 사진 삭제, 태그 줄 자동바꿈,
-const WritePost = ({ handleIsPosted }) => {
+// 기능 추가: 태그 줄 자동바꿈
+const WritePost = ({ handleIsPosted, handleChange }) => {
     const [images, setImages] = useState([]);
+    const [files, setFiles] = useState([]);
     const [value, setValue] = useState("");
     const [tags, setTags] = useState([]);
     const fileInputRef = useRef([]);
-    const tagRef = useRef();
+    const fileInputs = useRef(null);
     const cookie = new Cookie();
 
     const handleImg = (e) => {
-        const file = fileInputRef.current[images.length].files[0];
+        const file = e.target.files[0];
+        setFiles([...files, file]);
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
             setImages([...images, reader.result]);
         }
+    };
+
+    const deleteImg = (e) => {
+        const delIdx = e.target.id;
+        const newFiles = files.slice();
+        const newImgs = images.slice();
+        newFiles.splice(delIdx, 1)
+        newImgs.splice(delIdx, 1)
+        setFiles(newFiles);
+        setImages(newImgs);
+        fileInputs.current.childNodes[delIdx].remove();
     };
 
     const handleValue = (e) => {
@@ -85,56 +99,51 @@ const WritePost = ({ handleIsPosted }) => {
             setTags([...tags, e.target.value]);
             e.target.value = "";
         }
-        deleteTags(e);
     };
 
-    const deleteTags = (e,idx) => {
-        if(e.key === "Backspace") {
-            setTags(tags.slice(0, tags.length - 1));
+    const removeTags = (e) => {
+        const removeIdx = e.target.parentNode.parentNode.id;
+        if(removeIdx.length > 0) {
+            setTags(tags.filter((tag, idx) => idx !== Number(removeIdx)));
         }
     };
 
-    const removeTag = (idx) => {
-        // setTags([...tags.filter((tag) => tags.indexOf(tag) !== idx)]);
-
-
-    }
-
     const handleSubmit = () => {
         const formData = new FormData();
-        formData.append("data", {
-            "memberId": 1,
+
+        files.forEach((file, idx) => {
+            formData.append(`file${idx + 1}`, file);
+        });
+        formData.append("requestBody", new Blob([JSON.stringify({
+            "memberId": Number(cookie.get("memberId")),
             "postingContent": value,
             "tagName": tags
-        });
-        formData.append("file1", images[0]);
-        formData.append("file2", images[1]);
-        formData.append("file3", images[2]);
+        })], { type: "application/json"}));
 
         axios({
-            method: 'post',
-            url: "http://localhost:8080/posts",
+            method: "post",
+            url: "http://13.124.33.113:8080/posts",
             data: formData,
-            headers: { "Content-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
-            }).then(function (response) {
-                console.log('성공');
-            }).catch(function (error) {
-                console.log('전송 실패');
-        })
+            headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
+            }).then(res => {
+                handleChange();
+                handleIsPosted();
+            })
+            .catch(e => {
+                //에러 처리
+            });
     };
-
-    useEffect(() => {
-        document.getElementById("bg").addEventListener("click", () => {
-            handleIsPosted();
-        })
-    },[handleIsPosted])
 
     return (
         <Wrapper>
-            <CloseBtn handleModal={handleIsPosted}/>
-            <Uploader images={images} handleImg={handleImg} fileInputRef={fileInputRef} />
-            <StyledTextarea value={value} onChange={handleValue} placeholder="당신의 식물을 소개해주세요.">{value}</StyledTextarea>
-            <Tags tags={tags} addTags={addTags} removeTag={removeTag} tagRef={tagRef}/>
+            <CloseBtn handleEvent={handleIsPosted}/>
+            <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
+                fileInputs={fileInputs} />
+            <StyledTextarea value={value} onChange={handleValue}
+                placeholder="당신의 식물을 소개해주세요.">
+                    {value}
+            </StyledTextarea>
+            <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
             <div>
                 <BlueBtn onClick={handleSubmit}>작성</BlueBtn>
                 <BlueBtn onClick={handleIsPosted}>취소</BlueBtn>

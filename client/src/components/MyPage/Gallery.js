@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FcAnswers } from "react-icons/fc";
 
 const StyledContainer = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
 `;

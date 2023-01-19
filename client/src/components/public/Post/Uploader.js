@@ -1,128 +1,112 @@
 import styled from "styled-components";
 import { BsFillCameraFill } from "react-icons/bs";
-import { AiOutlineClose } from "react-icons/ai";
 
 const Wrapper = styled.div`
-    > p {
-        margin: 0px 0px 10px 0px;
-    }
-
-    > div:nth-of-type(1) {
-        display: flex;
-        flex-direction: row;
-
-    }
-
-    input {
-        display: none;
-    }
-
-    .photo {
-        width: 25%;
-    }
-
-    .img {
-        display: flex;
-        width: 25%;
-        
-    }
-`
-
-const StyledDiv = styled.div`
+  > p {
+    margin: 0px 0px 10px 0px;
+  }
+  > div:nth-of-type(1) {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #dbdbdb;
-    border-radius: 5px;
-    width: 150px;
-    height: 150px;
-    cursor: pointer;
+    flex-direction: row;
+  }
+  .photo {
+    width: 20%;
     margin-right: 10px;
-
-    :hover {
-        opacity: 0.7;
-
-        svg {
-            color: black;
-        }
+  }
+  .img {
+    display: flex;
+    width: 150px;
+    @media screen and (max-width: 1255px) {
+      width: 150px;
     }
-
-    img {
-        width: 100%;
-        height: 100%;
-    }
-
-    svg {
-        width: 50px;
-        height: 50px;
-        color: gray;
-        @media screen and (max-width: 770px) {
-            width: 20px;   
-        }
-    }
+  }
+  input {
+    display: none;
+  }
 `;
 
-const StyledCancel = styled.div`
-    width: 0;
-
+const StyledDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+  height: 140px;
+  width: 140px;
+  cursor: pointer;
+  :hover {
+    opacity: 0.7;
     svg {
-        cursor: pointer;
-        position: relative;
-        left: -27px;
-        background-color: white;
-
-        :hover {
-            scale: 1.2;
-        }
+      color: black;
     }
-`
+  }
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  svg {
+    width: 50px;
+    height: 50px;
+    color: gray;
+    @media screen and (max-width: 770px) {
+      width: 20px;
+    }
+  }
+  @media screen and (max-width: 770px) {
+    width: 100px;
+    height: 100px;
+  }
+`;
 
-const Uploader = ({ images, handleImg, fileInputRef }) => {
-   
-    const onFileInputClick = () => {
-        if(images.length < 3) {
-            fileInputRef.current[images.length].click();
-        }
-    };
+const StyledCancel = styled.button`
+  position: relative;
+  left: -19px;
+  width: 20px;
+  height: 20px;
+  background-color: white !important;
+  border: 0px;
+  cursor: pointer;
+`;
 
-    return (
-        <Wrapper>
-                <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
-                <div>
-                    <StyledDiv className="photo" onClick={onFileInputClick}>
-                        <BsFillCameraFill />
-                    </StyledDiv>
-                    { images.map((image, idx) => {
-                            return (
-                                <div className="img" key={idx}>
-                                    <StyledDiv>
-                                        <img src={image} alt="img" />
-                                    </StyledDiv>
-                                    <StyledCancel>
-                                        <AiOutlineClose />
-                                    </StyledCancel>
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-                <input 
-                    type="file"
-                    accept="image/*,audio/*,video/mp4"
-                    ref={(el) => fileInputRef.current[0] = el} 
-                    onChange={handleImg} />
-                <input 
-                    type="file"
-                    accept="image/*,audio/*,video/mp4"
-                    ref={(el) => fileInputRef.current[1] = el} 
-                    onChange={handleImg} />
-                <input 
-                    type="file"
-                    accept="image/*,audio/*,video/mp4"
-                    ref={(el) => fileInputRef.current[2] = el} 
-                    onChange={handleImg} />
-        </Wrapper>
-    )
+const Uploader = ({ images, handleImg, deleteImg, fileInputs }) => {
+  const onFileInputClick = () => {
+    fileInputs.current.childNodes.forEach((input) => {
+      if (input.files.length === 0) input.remove();
+    });
+
+    if (images.length < 3) {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*,audio/*,video/mp4";
+      input.onchange = handleImg;
+      fileInputs.current.append(input);
+      fileInputs.current.lastChild.click();
+    }
+  };
+
+  return (
+    <Wrapper>
+      <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
+      <div>
+        <StyledDiv className="photo" onClick={onFileInputClick}>
+          <BsFillCameraFill />
+        </StyledDiv>
+        {images.map((image, idx) => {
+          return (
+            <div className="img" key={idx}>
+              <StyledDiv>
+                <img src={image} alt="img" />
+              </StyledDiv>
+              <StyledCancel id={idx} onClick={deleteImg}>
+                x
+              </StyledCancel>
+            </div>
+          );
+        })}
+      </div>
+      <div ref={fileInputs}></div>
+    </Wrapper>
+  );
 };
 
 export default Uploader;

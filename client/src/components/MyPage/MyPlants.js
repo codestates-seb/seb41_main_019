@@ -6,11 +6,12 @@ import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { RiPlantLine } from "react-icons/ri";
 import { ReactComponent as Cookie } from "../../assets/svg/plus.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 500px;
   margin: 20px 0;
 `;
 
@@ -46,8 +47,8 @@ const StyledMyPlantsItem = styled.div`
     border: 4px solid #ffb100;
   }
   .image-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 70%;
     overflow: hidden;
     cursor: pointer;
@@ -85,13 +86,9 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({ myPlantsData, handlePlantClick }) => {
+const MyPlants = ({ myPlantsData, handlePlantClick, handleModal }) => {
   const [isPanelOpened, setIsPanelOpened] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState();
-
-  const handleAddPlantClick = () => {
-    // 식물 추가 로직
-  };
 
   const handleMoveButtonClick = (go) => {
     // 이동 버튼 클릭
@@ -109,9 +106,9 @@ const MyPlants = ({ myPlantsData, handlePlantClick }) => {
           <GrPrevious className="icon" />
         </div>
         <StyledListsContainer>
-          <StyledMyPlantsItem onClick={handleAddPlantClick}>
+          <StyledMyPlantsItem onClick={handleModal}>
             <div className="image-wrapper">
-              <Cookie />
+              <Cookie className="image" />
             </div>
             <p>반려식물 추가</p>
           </StyledMyPlantsItem>

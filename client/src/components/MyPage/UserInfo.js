@@ -1,12 +1,19 @@
 import styled from "styled-components";
+import axios from "axios";
+
 import { AiFillSetting } from "react-icons/ai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import defaultProfileImg from "../../assets/img/plants/defaultProfileImg.png";
 
 const StyledContainer = styled.div`
-  width: 750px;
   display: flex;
   margin-top: 20px;
   justify-content: center;
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
   > div {
     margin: 0 10px;
   }
@@ -15,6 +22,7 @@ const StyledUserImgWrapper = styled.div`
   width: 150px;
   height: 150px;
   border-radius: 70%;
+  border: solid 1px #dbdbdb;
   overflow: hidden;
   img {
     width: 100%;
@@ -25,7 +33,7 @@ const StyledUserImgWrapper = styled.div`
 const StyledInfoBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 320px;
   height: 150px;
   > div {
     height: 50px;
@@ -35,9 +43,6 @@ const StyledInfoBox = styled.div`
 const StyledUserName = styled.div`
   display: flex;
   justify-content: space-between;
-  span:first-child {
-    font-size: 20px;
-  }
   span {
     display: flex;
     align-items: center;
@@ -53,64 +58,76 @@ const StyledInfoItem = styled.div`
   width: 80px;
 `;
 
-// 더미데이터, 추후 API 완성시 GET 요청으로 받아올 것
-const dummyData = {
-  memberId: 10,
-  userName: "USER",
-  location: "Seoul",
-  profileImage:
-    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
-  profileText: "방어먹고싶다",
-  followingCount: 39,
-  followerCount: 123,
-};
+const UserInfo = ({ userInfo, jwt }) => {
+  const [postCount, setPostCount] = useState();
+  const {
+    memberId,
+    username,
+    profileImage,
+    profileText,
+    followingCount,
+    followerCount,
+  } = userInfo;
 
-const UserInfo = () => {
-  const [userInfo, setUserInfo] = useState(dummyData);
-  const { userName, profileImage, profileText, followingCount, followerCount } =
-    userInfo;
+  useEffect(() => {
+    getPostCount();
+  }, []);
 
-  const handleSettingClick = () => {
-    // 세팅 모달 활성화 로직
+  const getPostCount = async () => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,
+      headers: {
+        Authorization: jwt,
+      },
+    }).then((res) => {
+      const data = JSON.stringify(res.data);
+      const JSONdata = JSON.parse(data);
+      setPostCount(JSONdata.pageInfo.totalElements);
+    });
   };
 
   return (
     <>
       <StyledContainer>
         <StyledUserImgWrapper>
-          <img src={profileImage} alt="user profile image" />
+          <img
+            src={profileImage ? profileImage : defaultProfileImg}
+            alt="user profile"
+          />
         </StyledUserImgWrapper>
         <StyledInfoBox>
           <StyledUserName>
-            <span>{userName}</span>
-            <span onClick={handleSettingClick}>
-              <AiFillSetting />
-              설정
-            </span>
+            <span>{username}</span>
+            <a href="/setting">
+              <span>
+                <AiFillSetting />
+                설정
+              </span>
+            </a>
           </StyledUserName>
           <StyledUserInfoList>
             <a href="#">
               <StyledInfoItem>
                 <p>게시물</p>
-                {/* 게시물 숫자 데이터 API 협의하거나 게시물 GET 요청 후 데이터 length 사용 필요 */}
-                <p>10</p>
+                <p>{postCount}</p>
               </StyledInfoItem>
             </a>
             <a href="#">
               <StyledInfoItem>
                 <p>팔로워</p>
-                <p>{followerCount}</p>
+                <p>{followerCount ? followerCount : 0}</p>
               </StyledInfoItem>
             </a>
             <a href="#">
               <StyledInfoItem>
                 <p>팔로잉</p>
-                <p>{followingCount}</p>
+                <p>{followingCount ? followingCount : 0}</p>
               </StyledInfoItem>
             </a>
           </StyledUserInfoList>
           <div>
-            <p>{profileText}</p>
+            <p>{profileText ? profileText : "..."}</p>
           </div>
         </StyledInfoBox>
       </StyledContainer>
