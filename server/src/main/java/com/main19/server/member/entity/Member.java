@@ -60,10 +60,10 @@ public class Member {
 	private List<Scrap> scrapPostingList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "followedId")
-	private List<Follow> followeds = new ArrayList<>();
+	private List<Follow> followedList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "followingId")
-	private List<Follow> followings = new ArrayList<>();
+	private List<Follow> followingList = new ArrayList<>();
 
 //	@Builder
 //	public Member(Long memberId, String userName, String email, String profileImage, String profileText, String location, String password, List<String> roles, List<Posting> postings, List<Scrap> scrapPostingList, List<Follow> followeds, List<Follow> followings) {
