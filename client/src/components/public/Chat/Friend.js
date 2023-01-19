@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
+import axios from "axios";
+import Cookie from "../../../util/Cookie";
 
 const StyledFriend = styled.li`
   display: flex;
@@ -45,6 +47,20 @@ const StyledButton = styled.button`
 `;
 
 const Friend = ({ friend, handleCurChat, top }) => {
+  const cookie = new Cookie();
+  
+  const createRoom = () => {
+    axios({
+      method: "post",
+      url: `http://13.124.33.113:8080/chatroom`,
+      headers: { Authorization: new Cookie().get("authorization") },
+      data: {
+        receiverId: friend.followId,
+        senderId: cookie.get("memberId")
+      }
+    })
+  }
+
   return (
     <StyledFriend top={top}>
       <div>
@@ -60,7 +76,7 @@ const Friend = ({ friend, handleCurChat, top }) => {
       {top ? (
         <StyledButton onClick={() => handleCurChat(null)}>x</StyledButton>
       ) : (
-        <StyledButton onClick={() => handleCurChat(friend)}><IoChatbubbleEllipsesOutline /></StyledButton>
+        <StyledButton onClick={() => createRoom()}><IoChatbubbleEllipsesOutline /></StyledButton>
       )}
     </StyledFriend>
   );

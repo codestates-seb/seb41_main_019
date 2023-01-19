@@ -53,20 +53,13 @@ const Chat = () => {
         <Input label={"채팅"} />
         {curChat ? (
           <>
-            <Chatting
-              handleCurChat={handleCurChat}
-              curChat={curChat}
-            />
-            <ChatRooms
-              handleCurChat={handleCurChat}
-            />
+            <Chatting />
+            <ChatRooms />
           </>
         ) : (
           <>
-            <ChatRooms
-              handleCurChat={handleCurChat}
-            />
-            <Friends handleCurChat={handleCurChat} />
+            <ChatRooms />
+            <Friends />
           </>
         )}
       </StyledChat>

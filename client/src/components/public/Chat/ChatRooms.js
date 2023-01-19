@@ -37,7 +37,7 @@ const StyledChatList = styled.div`
   }
 `;
 
-const ChatRooms = ({ handleCurChat, chatLog, freinds }) => {
+const ChatRooms = () => {
   const [rooms, setRooms] = useState([]);
   const cookie = new Cookie();
 
@@ -47,21 +47,22 @@ const ChatRooms = ({ handleCurChat, chatLog, freinds }) => {
       url: `http://13.124.33.113:8080/chatroom/${cookie.get("memberId")}`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
-      console.log(res)
+      setRooms(res.data);
     })
-  })
+  }, [])
+  
+  console.log(rooms);
 
   return (
     <StyledChatList>
-      <p>Chat List</p>
+      <p>Chat List</p>  
       <ul>
-        {chatLog
-          ? chatLog.map((data, idx) => {
+        {rooms
+          ? rooms.map((room, idx) => {
               return (
                 <ChatRoom
                   key={idx}
-                  freind={freinds.filter((friend) => friend.id === data.to)}
-                  handleCurChat={handleCurChat}
+                  room={room}
                 />
               );
             })
