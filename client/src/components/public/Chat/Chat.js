@@ -41,16 +41,13 @@ const StyledChat = styled.div`
 `;
 
 const Chat = () => {
-  const [curChat, setCurChat] = useState(null);
-
-  const handleCurChat = (value) => {
-    setCurChat(value);
-  };
-
+  const [curChat, setCurChat] = useState(false);
+  
   return (  
     <>
       <StyledChat>
         <Input label={"채팅"} />
+        <button onClick={() => setCurChat(!curChat)}>x</button>
         {curChat ? (
           <>
             <Chatting />

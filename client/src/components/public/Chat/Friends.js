@@ -39,7 +39,7 @@ const StyledFriends = styled.div`
   }
 `;
 
-const Friends = ({ handleCurChat }) => {
+const Friends = () => {
   const [ freinds, setFriends ] = useState([]);
 
   useEffect(() => {
@@ -58,7 +58,7 @@ const Friends = ({ handleCurChat }) => {
       <ul>
         {freinds.length > 0
           ? freinds.map((friend, idx) => (
-              <Friend friend={friend} key={idx} handleCurChat={handleCurChat} />
+              <Friend friend={friend} key={idx} />
             ))
           : "현재 팔로우 중인 친구가 없습니다."}
       </ul>

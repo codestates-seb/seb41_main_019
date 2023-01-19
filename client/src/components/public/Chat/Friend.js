@@ -46,7 +46,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const Friend = ({ friend, handleCurChat, top }) => {
+const Friend = ({ friend, top }) => {
   const cookie = new Cookie();
   
   const createRoom = () => {
@@ -74,9 +74,11 @@ const Friend = ({ friend, handleCurChat, top }) => {
         <span>profile</span>
       </div>
       {top ? (
-        <StyledButton onClick={() => handleCurChat(null)}>x</StyledButton>
+        <StyledButton>x</StyledButton>
       ) : (
-        <StyledButton onClick={() => createRoom()}><IoChatbubbleEllipsesOutline /></StyledButton>
+        <StyledButton onClick={() => {
+          // createRoom()
+        }}><IoChatbubbleEllipsesOutline /></StyledButton>
       )}
     </StyledFriend>
   );

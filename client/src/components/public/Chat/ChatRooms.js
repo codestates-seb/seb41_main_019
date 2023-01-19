@@ -50,8 +50,6 @@ const ChatRooms = () => {
       setRooms(res.data);
     })
   }, [])
-  
-  console.log(rooms);
 
   return (
     <StyledChatList>

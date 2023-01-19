@@ -74,7 +74,7 @@ const ChatRoom = ({ room }) => {
         <span>{receiver.name}</span>
         <span>{receiver.text}</span>
       </div>  
-      <StyledButton onClick={() => console.log(1)}><IoChatbubbleEllipsesOutline /></StyledButton>
+      <StyledButton><IoChatbubbleEllipsesOutline /></StyledButton>
     </StyledFriend>
   );
 };
