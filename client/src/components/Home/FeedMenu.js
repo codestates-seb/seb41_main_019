@@ -28,7 +28,7 @@ const Wrapper = styled.div`
     }
 `;
 
-const FeedMenu = ({ handleDelete, handleMenu, handleEdit }) => {
+const FeedMenu = ({ handleDelete, handleMenu, handleEdit, postingId }) => {
     return (
         <Wrapper>
             <button 

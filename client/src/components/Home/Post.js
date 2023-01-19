@@ -88,7 +88,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
 
     return (
         <Wrapper>
-            { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
+            { menu ? <FeedMenu postingId={post.postingId} handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
                 <img src={post.profileImage ? "" : defaultImg} alt="profileImg" />
                 <div>
