@@ -18,7 +18,7 @@ import static javax.persistence.FetchType.EAGER;
 @AllArgsConstructor
 public class Member {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long memberId;
 
 	@Column(nullable = false)
@@ -64,20 +64,4 @@ public class Member {
 
 	@OneToMany(mappedBy = "followingId")
 	private List<Follow> followingList = new ArrayList<>();
-
-//	@Builder
-//	public Member(Long memberId, String userName, String email, String profileImage, String profileText, String location, String password, List<String> roles, List<Posting> postings, List<Scrap> scrapPostingList, List<Follow> followeds, List<Follow> followings) {
-//		this.memberId = memberId;
-//		this.userName = userName;
-//		this.email = email;
-//		this.profileImage = profileImage;
-//		this.profileText = profileText;
-//		this.location = location;
-//		this.password = password;
-//		this.roles = roles;
-//		this.postings = postings;
-//		this.scrapPostingList = scrapPostingList;
-//		this.followeds = followeds;
-//		this.followings = followings;
-//	}
 }
