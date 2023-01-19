@@ -66,8 +66,8 @@ public class MyPlantsService {
         return findVerifiedMyPlants(myPlantsId);
     }
 
-    public Page<MyPlants> findByMyPlants(int page, int size) {
-        return myPlantsRepository.findAll(PageRequest.of(page, size, Sort.by("myPlantsId").descending()));
+    public Page<MyPlants> findByMyPlants(int page, int size, long memberId) {
+        return myPlantsRepository.findByMember_MemberId(memberId,(PageRequest.of(page, size, Sort.by("myPlantsId").descending())));
     }
 
     public void deleteMyPlants(long myPlantsId, String token) {

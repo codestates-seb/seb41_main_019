@@ -48,6 +48,25 @@ include::{snippets}/post-member-image/http-response.adoc[]
 .response-fields
 include::{snippets}/post-member-image/response-fields.adoc[]
 
+=== 회원 정보 수정
+.curl-request
+include::{snippets}/patch-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-member/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-member/path-parameters.adoc[]
+
+.request-field
+include::{snippets}/patch-member/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-member/response-fields.adoc[]
+
 === 회원조회
 
 .curl-request
@@ -350,6 +369,47 @@ include::{snippets}/delete-scrap/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-scrap/http-response.adoc[]
 
+== follow
+
+=== follow 등록(신청)
+.curl-request
+include::{snippets}/post-follow/curl-request.adoc[]
+
+.http-response
+include::{snippets}/post-follow/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/post-follow/path-parameters.adoc[]
+
+.response-fields
+include::{snippets}/post-follow/response-fields.adoc[]
+
+=== following 삭제
+.curl-request
+include::{snippets}/delete-following/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-following/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-following/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-following/http-response.adoc[]
+
+=== follower(followed) 삭제
+.curl-request
+include::{snippets}/delete-followed/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-followed/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-followed/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-followed/http-response.adoc[]
+
 == MyPlants
 
 === 내 식물 등록
@@ -369,6 +429,22 @@ include::{snippets}/post-my-plants/http-response.adoc[]
 include::{snippets}/post-my-plants/response-fields.adoc[]
 
 === 내 식물 조회
+.curl-request
+include::{snippets}/get-my-plants/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-my-plants/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/get-my-plants/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-my-plants/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-my-plants/response-fields.adoc[]
+
+=== 내 식물 전체 조회
 .curl-request
 include::{snippets}/gets-my-plants/curl-request.adoc[]
 
@@ -449,6 +525,23 @@ include::{snippets}/get-gallery/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-gallery/response-fields.adoc[]
+
+=== 전체 갤러리 조회
+.curl-request
+include::{snippets}/gets-gallery/curl-request.adoc[]
+
+.http-request
+include::{snippets}/gets-gallery/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/gets-gallery/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/gets-gallery/http-response.adoc[]
+
+.response-fields
+include::{snippets}/gets-gallery/response-fields.adoc[]
+
 
 === 갤러리 삭제
 .curl-request
