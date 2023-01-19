@@ -21,7 +21,7 @@ public class Member {
 	@GeneratedValue
 	private Long memberId;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String userName;
 
 	@Column(unique = true)
