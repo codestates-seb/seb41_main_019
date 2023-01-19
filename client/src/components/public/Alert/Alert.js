@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { alertDatas } from "../../../assets/dummyData/alertData";
-import { Link } from "react-router-dom";
 
 const StyledAlertDiv = styled.div`
   display: flex;
