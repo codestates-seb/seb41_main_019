@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
     position: absolute;
-    top: 75px;
-    right: 1px;
+    top: 83px;
+    right: 0;
     display: flex;
     flex-direction: column;
     width: 100px;
@@ -16,6 +16,7 @@ const Wrapper = styled.div`
     button {
         height: 100%;
         background-color: white;
+        opacity: 0.4;
         border: 0;
         border-bottom: 1px solid #dbdbdb;
         font-size: 14px;
