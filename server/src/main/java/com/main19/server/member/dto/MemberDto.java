@@ -10,6 +10,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 
@@ -18,12 +20,20 @@ public class MemberDto {
 	@AllArgsConstructor
 	public static class Post {
 		@NotBlank
+		@Size(min = 3, max = 12, message = "아이디는 3자 이상 12자 이하여야 합니다.")
+		@Pattern(regexp = "^[a-zA-Z0-9]*$", message = "아이디는 영어, 숫자만 가능합니다.")
 		private String userName;
-//		@Email
+
+		@Pattern(regexp = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-z]+$", message = "이메일 형식이 아닙니다.")
 		private String email;
-		private String location; // todo 이거 프론트에서 받을건지 정하기
+
+		private String location;
+
 		private String profileText;
-		private String password; // todo password를 어떻게 받아올지 프론트와 논의
+
+		@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
+		message = "최소 8 자, 하나 이상의 문자, 하나의 숫자, 하나의 특수 문자")
+		private String password;
 	}
 
 	@Getter
