@@ -183,95 +183,67 @@ const EditPost = ({ handleEdit, curPost }) => {
             setTags(tags.filter((tag, idx) => idx !== Number(removeIdx)));
         }
     };
-  };
-
-  const deleteImg = (e) => {
-    const delIdx = e.target.id;
-    const newFiles = files.slice();
-    const newImgs = images.slice();
-    newFiles.splice(delIdx, 1);
-    newImgs.splice(delIdx, 1);
-    setFiles(newFiles);
-    setImages(newImgs);
-    fileInputs.current.childNodes[delIdx].remove();
-  };
-
-  useEffect(() => {
-    setValue(curPost.postingContent);
-    setTags(curPost.tags.map((tag) => tag.tagName));
-  }, []);
-
-  const handleValue = (e) => {
-    setValue(e.target.value);
-  };
-
-  const addTags = (e) => {
-    if (e.key === "Enter" && e.target.value.length > 0 && tags.length < 5) {
-      setTags([...tags, e.target.value]);
-      e.target.value = "";
-    }
-  };
-
-    // const handleSubmit = () => {
-    //     const formData = new FormData();
-
-    //     files.forEach((file, idx) => {
-    //         formData.append(`file${idx + 1}`, file);
-    //     });
-    //     formData.append("requestBody", new Blob([JSON.stringify({
-    //         "memberId": Number(cookie.get("memberId")),
-    //         "postingContent": value,
-    //         "tagName": tags
-    //     })], { type: "application/json"}));
-
-    //     axios({
-    //         method: "patch",
-    //         url: "http://13.124.33.113:8080/posts/cookie.get("memberId")",
-    //         data: {
-    //        "postingId" : 1,
-    //        "postingContent" : "게시글 수정 test",
-    //        "tagName" : [ "스투키", "몬스테라" ]
-    //         } 
-    //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
-    
-    //         }).then(res => {
-    //             console.log(res);
-    //         })
-    //         .catch(e => {
-    //             //에러 처리
-    //         });
-    // };
-
-    const handleDiv = () => {
-        setPreview(!preview);
-    }
-
-    return (
-        <Wrapper>
-            <CloseBtn handleEvent={handleEdit}/>
-            <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
-            <div className="preview">
-                <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
-                fileInputs={fileInputs} />
-                <ul>
-                    {
-                        curPost.postingMedias.map((media, idx) => {
-                            return <li key={idx} className={preview ? "none" : null} onClick={handleDiv}>
-                                    <img src={media.mediaUrl} alt="img" />
-                                </li>
-                               
-                        })
-                    }
-                </ul>
-            </div>
-            <StyledTextarea value={value} onChange={handleValue} placeholder="수정할 거에용">{value}</StyledTextarea>
-            <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
-            <div>
-                <BlueBtn>수정하기</BlueBtn>
-                <BlueBtn onClick={handleEdit}>취소</BlueBtn>
-            </div>
-        </Wrapper>
-    )
+  
+      // const handleSubmit = () => {
+      //     const formData = new FormData();
+  
+      //     files.forEach((file, idx) => {
+      //         formData.append(`file${idx + 1}`, file);
+      //     });
+      //     formData.append("requestBody", new Blob([JSON.stringify({
+      //         "memberId": Number(cookie.get("memberId")),
+      //         "postingContent": value,
+      //         "tagName": tags
+      //     })], { type: "application/json"}));
+  
+      //     axios({
+      //         method: "patch",
+      //         url: "http://13.124.33.113:8080/posts/cookie.get("memberId")",
+      //         data: {
+      //        "postingId" : 1,
+      //        "postingContent" : "게시글 수정 test",
+      //        "tagName" : [ "스투키", "몬스테라" ]
+      //         } 
+      //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
+      
+      //         }).then(res => {
+      //             console.log(res);
+      //         })
+      //         .catch(e => {
+      //             //에러 처리
+      //         });
+      // };
+  
+      const handleDiv = () => {
+          setPreview(!preview);
+      }
+  
+      return (
+          <Wrapper>
+              <CloseBtn handleEvent={handleEdit}/>
+              <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
+              <div className="preview">
+                  <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
+                  fileInputs={fileInputs} />
+                  <ul>
+                      {
+                          curPost.postingMedias.map((media, idx) => {
+                              return <li key={idx} className={preview ? "none" : null} onClick={handleDiv}>
+                                      <img src={media.mediaUrl} alt="img" />
+                                  </li>
+                                 
+                          })
+                      }
+                  </ul>
+              </div>
+              <StyledTextarea value={value} onChange={handleValue} placeholder="수정할 거에용">{value}</StyledTextarea>
+              <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
+              <div>
+                  <BlueBtn>수정하기</BlueBtn>
+                  <BlueBtn onClick={handleEdit}>취소</BlueBtn>
+              </div>
+          </Wrapper>
+      )
 }
 
 export default EditPost;
