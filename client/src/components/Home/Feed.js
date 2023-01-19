@@ -1,113 +1,78 @@
 import styled from "styled-components";
-import A from "../../assets/img/plants/1.jpg";
-import B from "../../assets/img/plants/알보1.png";
-import { FiUserPlus } from "react-icons/fi";
-import { BiDotsVerticalRounded } from "react-icons/bi";
-import Slider from "./Slider";
-import FeedInteraction from "./FeedInteraction";
-import FeedMenu from "./FeedMenu";
-import { useState } from "react";
+import Post from "./Post";
+import { ReactComponent as NoContent } from "../../assets/svg/monstera.svg";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Cookie from "../../util/Cookie";
 
-const Wrapper = styled.div`
-    position: relative;
-    width: 500px;
-    height: 730px;
-    padding-top: 25px;
-    margin-bottom: 20px;
-    border-top: 1px solid #DBDBDB;
+const Wrapper = styled.section`
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    img {
-        width: 100%;
-        height: 100%;
-        border-radius: 3px;
-    }
-
-    svg {
-        font-size: 25px;
-        color: #222426;
-        cursor: pointer;
-    }
-
-    @media screen and (max-width: 770px) {
-        width: 460px;
-        height: 700px;
-    }
-`;
-
-const StyledHeader = styled.div`
-    width: 100%;
+  .no-content {
     display: flex;
-    align-items: flex-end;
-    margin-bottom: 10px;
-
-    img {
-        width: 50px;
-        height: 50px;
-        border-radius: 45px;
-        margin-right: 10px;
-        cursor: pointer;
-    }
-
-    div {
-        display: flex;
-        flex-direction: column;
-    }
-
-    div > span:first-child{
-        color: #222426;
-        font-size: 16px;
-        font-weight: 500;
-        margin-bottom: 3px;
-        letter-spacing: 1px;
-    }
-
-    div > span:nth-child(2) {
-        font-size: 14px;
-        color: gray;
-        letter-spacing: 1px;
-    }
-
-    .icons {
-        flex-direction: row;
-        margin : 0px 0px 5px auto;
-    }
-
-    div > svg:first-child {
-        margin-right: 15px;
-    }
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 40%;
+    width: 300px;
+    height: 300px;
+    opacity: 0.3;
+  }
 `;
 
+const Feed = ({
+  handleModal,
+  handleDelete,
+  handleCurPost,
+  handleEdit,
+  change,
+}) => {
+  const [posts, setPosts] = useState([]);
+  const cookie = new Cookie();
 
-const Feed = ({ handleModal, handleDelete }) => {
-    const [menu, setMenu] = useState(false);
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "http://13.124.33.113:8080/posts?page=1&size=10",
+      headers: { Authorization: cookie.get("authorization") },
+    })
+      .then((res) => {
+        setPosts(res.data.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, [change]);
 
-    const handleMenu = () => {
-        setMenu(!menu);
-    }
-    
-    const img = [ A, B ];
-
-    return (
-        <Wrapper>
-            { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} /> : null }
-            <StyledHeader>
-                <img src={A} alt="img" />
-                <div>
-                    <span>홍길동</span>
-                    <span>7시간 전</span>
-                </div>
-                <div className="icons">
-                    <FiUserPlus />
-                    <BiDotsVerticalRounded onClick={handleMenu} />
-                </div>
-            </StyledHeader>
-            {  img.length > 1
-                ? <Slider img={img} /> 
-                : <img src={B} alt="img" />
-            }
-            <FeedInteraction setModal={handleModal} />
-        </Wrapper>
-    );
-}
+  return (
+    <Wrapper>
+      {posts.length < 1 ? (
+        <div className="no-content">
+          <NoContent />
+          <span>게시물이 없습니다.</span>
+        </div>
+      ) : (
+        posts.map((post, idx) => {
+          return (
+            <Post
+              post={post}
+              key={idx}
+              handleModal={handleModal}
+              handleCurPost={handleCurPost}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+            />
+          );
+        })
+      )}
+      <FeedInteraction setModal={handleModal} />
+    </Wrapper>
+  );
+};
 
 export default Feed;
