@@ -15,12 +15,12 @@ function App() {
   const [isPosted, setIsPosted] = useState(false);
   const [change, setChange] = useState(false);
 
-  const handleIsCovered = () => setIsCovered(!isCovered); 
+  const handleIsCovered = () => setIsCovered(!isCovered);
 
   const handleIsPosted = () => {
     setIsPosted(!isPosted);
     setIsCovered(!isCovered);
-  }
+  };
 
   const handleChange = () => setChange(!change);
 
@@ -30,21 +30,38 @@ function App() {
 
   return (
     <BrowserRouter>
-      { isCovered ? <Background isCovered={isCovered} /> : null }
-      { isLanded ? null : <SideBar setIsLanded={setIsLanded} handleIsPosted={handleIsPosted} /> }
-      { isPosted ? <WritePost handleIsPosted={handleIsPosted} handleChange={handleChange} />: null }
+      {isCovered ? <Background isCovered={isCovered} /> : null}
+      {isLanded ? null : (
+        <SideBar setIsLanded={setIsLanded} handleIsPosted={handleIsPosted} />
+      )}
+      {isPosted ? (
+        <WritePost
+          handleIsPosted={handleIsPosted}
+          handleChange={handleChange}
+        />
+      ) : null}
       <Routes>
         <Route
           path={isLanded ? null : "/"}
-          element={<Home handleIsCovered={handleIsCovered} change={change} handleChange={handleChange} />}
+          element={
+            <Home
+              handleIsCovered={handleIsCovered}
+              change={change}
+              handleChange={handleChange}
+            />
+          }
         />
         <Route
           path={isLanded ? null : "/mypage"}
-          element={<MyPage handleIsCovered={handleIsCovered} />}
+          element={
+            <MyPage handleIsCovered={handleIsCovered} isCovered={isCovered} />
+          }
         />
-        <Route path={isLanded ? "/" : null} element={<Landing setIsLanded={setIsLanded} isLanded={isLanded} />} />
-        <Route path={isLanded ? null :"/setting"} element={<Setting />}
+        <Route
+          path={isLanded ? "/" : null}
+          element={<Landing setIsLanded={setIsLanded} isLanded={isLanded} />}
         />
+        <Route path={isLanded ? null : "/setting"} element={<Setting />} />
       </Routes>
     </BrowserRouter>
   );
