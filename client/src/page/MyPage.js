@@ -142,6 +142,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
 
   const handleScrapsClick = () => {
     // 스크랩 조회
+    alert("구현 예정")
     // getGalleryData("http://localhost:4000/data", "scraps");
   };
 
