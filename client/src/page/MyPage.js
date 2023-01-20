@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { useEffect, useInsertionEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 
 import { TiArrowSortedDown } from "react-icons/ti";
 import { TiArrowSortedUp } from "react-icons/ti";
