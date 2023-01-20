@@ -1,13 +1,15 @@
 import styled from "styled-components";
 import { FiUserPlus } from "react-icons/fi";
+import { FaUserFriends } from "react-icons/fa";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
 import FeedMenu from "./FeedMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { exchangeTime } from "../../util/exchangeTime";
 import defaultImg from "../../assets/img/profile.jpg"
 import Cookie from "../../util/Cookie";
+import axios from "axios";
 
 const Wrapper = styled.div`
     position: relative;
@@ -73,18 +75,61 @@ const StyledHeader = styled.div`
         margin : 0px 0px 5px auto;
     }
 
+    /* follow icon */
     div > svg:first-child {
-        margin-right: 15px;
+       
     }
 `;
 
 const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) => {
     const [menu, setMenu] = useState(false);
+    const [follow, setFollow] = useState('');
     const cookie = new Cookie();
 
     const handleMenu = () => {
         setMenu(!menu);
-    }
+    };
+
+    const deleteFollow = () => {
+        axios({ 
+            method: "delete", 
+            url: `http://13.124.33.113:8080/members/4`,
+            headers: { Authorization: cookie.get("authorization") }
+        }).then(res => {
+            console.log(res);
+        })
+        .catch(e => {
+            console.log(e);
+        });
+    };
+
+    const addFollow = () => {
+        axios({
+            method: "post",
+            url: `http://13.124.33.113:8080/followings/4`,
+            headers: { Authorization: cookie.get("authorization") }
+            }).then(res => {
+                
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    };
+
+    useEffect(() => {
+        axios({
+            method: "get",
+            url: `http://13.124.33.113:8080/members/${post.memberId}`,
+            headers: { Authorization: cookie.get("authorization") }
+            }).then(res => {
+                setFollow(res.data.data.followedList);
+            })
+            .catch(e => {
+               console.log(e);
+            });
+    },[])
+
+    console.log(follow);
 
     return (
         <Wrapper>
@@ -96,13 +141,13 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
-                    <FiUserPlus />
+                    
                     { post.memberId === Number(cookie.get("memberId")) ?
                         <BiDotsVerticalRounded onClick={() => {
                             handleMenu(); 
                             handleCurPost(post);
                             }} />
-                        : null
+                        : follow.includes(cookie.get("memberId")) ? null : <FiUserPlus onClick={addFollow} />
                     }
                 </div>
             </StyledHeader>
