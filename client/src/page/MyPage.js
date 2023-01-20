@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useInsertionEffect, useState } from "react";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 
@@ -66,14 +66,48 @@ const StyledChangeViewButton = styled.div`
 
 const MyPage = ({ isCovered, handleIsCovered }) => {
   const cookie = new Cookie();
-  const jwt = cookie.get("authorization");
-  const decodedJWT = JSON.stringify(jwtDecode(jwt));
+  const jwt = cookie.get("authorization")
+  const memberId = Number(cookie.get("memberId"));
 
-  const [userInfo, setUserInfo] = useState(JSON.parse(decodedJWT));
+  const [userInfo, setUserInfo] = useState([]);
+  const [postCount, setPostCount] = useState();
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
   const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
   const [isModalOpened, setIsModalOpened] = useState(false);
+  
+  useEffect(() => {
+    getUserInfo()
+    getPostCount()
+  }, [])
+  
+  const getUserInfo = () => {
+    try {
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/members/${memberId}`,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        setUserInfo(res.data.data)
+      })
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const getPostCount = () => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,
+      headers: {
+        Authorization: jwt,
+      },
+    }).then((res) => {
+      setPostCount(res.data.pageInfo.totalElements);
+    });
+  };
 
   const getGalleryData = async (url, view) => {
     try {
@@ -115,7 +149,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     <>
       {isCovered && isModalOpened && <AddPlant jwt={jwt}  handleModal={handleModal} userInfo={userInfo} />}
       <StyledContainer>
-        <UserInfo userInfo={userInfo} jwt={jwt} />
+        <UserInfo userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened ? (
           <div className="container">
             <MyPlants

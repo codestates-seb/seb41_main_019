@@ -1,8 +1,6 @@
 import styled from "styled-components";
-import axios from "axios";
 
 import { AiFillSetting } from "react-icons/ai";
-import { useState, useEffect } from "react";
 import defaultProfileImg from "../../assets/img/plants/defaultProfileImg.png";
 
 const StyledContainer = styled.div`
@@ -58,34 +56,17 @@ const StyledInfoItem = styled.div`
   width: 80px;
 `;
 
-const UserInfo = ({ userInfo, jwt }) => {
-  const [postCount, setPostCount] = useState();
+const UserInfo = ({ userInfo, postCount }) => {
   const {
     memberId,
-    username,
+    userName,
+    email,
+    location,
     profileImage,
     profileText,
     followingCount,
     followerCount,
   } = userInfo;
-
-  useEffect(() => {
-    getPostCount();
-  }, []);
-
-  const getPostCount = () => {
-    axios({
-      method: "get",
-      url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,
-      headers: {
-        Authorization: jwt,
-      },
-    }).then((res) => {
-      const data = JSON.stringify(res.data);
-      const JSONdata = JSON.parse(data);
-      setPostCount(JSONdata.pageInfo.totalElements);
-    });
-  };
 
   return (
     <>
@@ -98,7 +79,7 @@ const UserInfo = ({ userInfo, jwt }) => {
         </StyledUserImgWrapper>
         <StyledInfoBox>
           <StyledUserName>
-            <span>{username}</span>
+            <span>{userName}</span>
             <a href="/setting">
               <span>
                 <AiFillSetting />
