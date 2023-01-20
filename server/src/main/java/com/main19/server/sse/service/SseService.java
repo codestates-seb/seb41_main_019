@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.main19.server.member.entity.Member;
@@ -83,7 +84,7 @@ public class SseService {
             }
         );
     }
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public void sendPosting(Member receiver, SseType sseType, Member sender, Posting posting) {
         Sse sse = createSsePosting(receiver, sseType, sender, posting);
         sseRepository.save(sse);
@@ -98,6 +99,7 @@ public class SseService {
         );
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void sendChatRoom(Member receiver, SseType sseType, Member sender) {
         Sse sse = createSse(receiver, sseType, sender);
         sse.setPosting(null);
