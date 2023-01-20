@@ -7,30 +7,12 @@ import { BlueBtn } from "../BlueBtn";
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
 
-const Wrapper = styled.div`
-  background-color: white;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  width: 800px;
-  height: auto;
-  border: 1px solid #dbdbdb;
-  border-radius: 5px;
-  margin: 0 auto;
-  padding: 50px;
-  color: gray;
-  z-index: 1000;
-  box-shadow: 4px 4px 4px 1px rgba(0, 0, 0, 0.3);
-
-  > div:first-child {
-    margin: 0 0 0 auto;
-  }
-
-  > div:nth-of-type(2) {
+const Wrapper= styled.div`
+    background-color: white;
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -99,34 +81,33 @@ const Wrapper = styled.div`
             }
         }
     }
-  }
 
-  button:last-of-type {
-    background-color: #d96848;
-  }
+    button:last-of-type{
+        background-color: #D96848;
+    }
 
-  @media screen and (max-width: 1255px) {
-    width: 700px;
-  }
+    @media screen and (max-width: 1255px) {
+        width: 700px;
+    }
 
-  @media screen and (max-width: 770px) {
-    width: 480px;
-  }
+    @media screen and (max-width: 770px) {
+        width: 480px;
+    }
 `;
 
 const StyledTextarea = styled.textarea`
-  width: 100%;
-  height: 200px;
-  line-height: 1;
-  resize: none;
-  padding: 10px 10px;
-  outline: none;
-  border: 1px solid #dbdbdb;
-  border-radius: 5px;
+    width: 100%;
+    height: 200px;
+    line-height: 1;
+    resize: none;
+    padding: 10px 10px;
+    outline: none;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
 
-  :focus {
-    box-shadow: 0 0 6px #5e8b7e;
-  }
+    :focus {
+        box-shadow: 0 0 6px #5e8b7e;
+    }
 `;
 
 // 기능 추가: 사진 x클릭시 사진 삭제, 태그 줄 자동바꿈,
@@ -183,67 +164,67 @@ const EditPost = ({ handleEdit, curPost }) => {
             setTags(tags.filter((tag, idx) => idx !== Number(removeIdx)));
         }
     };
-  
-      // const handleSubmit = () => {
-      //     const formData = new FormData();
-  
-      //     files.forEach((file, idx) => {
-      //         formData.append(`file${idx + 1}`, file);
-      //     });
-      //     formData.append("requestBody", new Blob([JSON.stringify({
-      //         "memberId": Number(cookie.get("memberId")),
-      //         "postingContent": value,
-      //         "tagName": tags
-      //     })], { type: "application/json"}));
-  
-      //     axios({
-      //         method: "patch",
-      //         url: "http://13.124.33.113:8080/posts/cookie.get("memberId")",
-      //         data: {
-      //        "postingId" : 1,
-      //        "postingContent" : "게시글 수정 test",
-      //        "tagName" : [ "스투키", "몬스테라" ]
-      //         } 
-      //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
-      
-      //         }).then(res => {
-      //             console.log(res);
-      //         })
-      //         .catch(e => {
-      //             //에러 처리
-      //         });
-      // };
-  
-      const handleDiv = () => {
-          setPreview(!preview);
-      }
-  
-      return (
-          <Wrapper>
-              <CloseBtn handleEvent={handleEdit}/>
-              <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
-              <div className="preview">
-                  <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
-                  fileInputs={fileInputs} />
-                  <ul>
-                      {
-                          curPost.postingMedias.map((media, idx) => {
-                              return <li key={idx} className={preview ? "none" : null} onClick={handleDiv}>
-                                      <img src={media.mediaUrl} alt="img" />
-                                  </li>
-                                 
-                          })
-                      }
-                  </ul>
-              </div>
-              <StyledTextarea value={value} onChange={handleValue} placeholder="수정할 거에용">{value}</StyledTextarea>
-              <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
-              <div>
-                  <BlueBtn>수정하기</BlueBtn>
-                  <BlueBtn onClick={handleEdit}>취소</BlueBtn>
-              </div>
-          </Wrapper>
-      )
+
+    // const handleSubmit = () => {
+    //     const formData = new FormData();
+
+    //     files.forEach((file, idx) => {
+    //         formData.append(`file${idx + 1}`, file);
+    //     });
+    //     formData.append("requestBody", new Blob([JSON.stringify({
+    //         "memberId": Number(cookie.get("memberId")),
+    //         "postingContent": value,
+    //         "tagName": tags
+    //     })], { type: "application/json"}));
+
+    //     axios({
+    //         method: "patch",
+    //         url: "http://13.124.33.113:8080/posts/cookie.get("memberId")",
+    //         data: {
+    //        "postingId" : 1,
+    //        "postingContent" : "게시글 수정 test",
+    //        "tagName" : [ "스투키", "몬스테라" ]
+    //         } 
+    //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
+    
+    //         }).then(res => {
+    //             console.log(res);
+    //         })
+    //         .catch(e => {
+    //             //에러 처리
+    //         });
+    // };
+
+    const handleDiv = () => {
+        setPreview(!preview);
+    }
+
+    return (
+        <Wrapper>
+            <CloseBtn handleEvent={handleEdit}/>
+            <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
+            <div className="preview">
+                <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
+                fileInputs={fileInputs} />
+                <ul>
+                    {
+                        curPost.postingMedias.map((media, idx) => {
+                            return <li key={idx} className={preview ? "none" : null} onClick={handleDiv}>
+                                    <img src={media.mediaUrl} alt="img" />
+                                </li>
+                               
+                        })
+                    }
+                </ul>
+            </div>
+            <StyledTextarea value={value} onChange={handleValue} placeholder="수정할 거에용">{value}</StyledTextarea>
+            <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
+            <div>
+                <BlueBtn>수정하기</BlueBtn>
+                <BlueBtn onClick={handleEdit}>취소</BlueBtn>
+            </div>
+        </Wrapper>
+    )
 }
 
 export default EditPost;
