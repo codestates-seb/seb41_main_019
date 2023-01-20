@@ -64,4 +64,8 @@ public class Sse {
         this.isRead = isRead;
         this.posting = posting;
     }
+
+    public long getReceiverId() {
+        return receiver.getMemberId();
+    }
 }

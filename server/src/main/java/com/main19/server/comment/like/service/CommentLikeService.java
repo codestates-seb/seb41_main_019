@@ -47,7 +47,7 @@ public class CommentLikeService {
 
         commentLike.setComment(comment);
 
-        if(comment.getMember().getMemberId() != tokenId) {
+        if(comment.getMemberId() != tokenId) {
             sseService.sendPosting(comment.getMember(), SseType.commentLike, memberService.findMember(memberId),comment.getPosting());
         }
 
@@ -64,7 +64,7 @@ public class CommentLikeService {
 
         CommentLike commentLike = findVerifiedCommentLike(commentLikeId);
 
-        commentLike.getComment().setLikeCount(commentLike.getComment().getLikeCount()-1);
+        commentLike.getComment().setLikeCount(commentLike.getCommentLikeCount()-1);
 
         commentLikeRepository.delete(commentLike);
 

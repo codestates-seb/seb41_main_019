@@ -157,7 +157,7 @@ public class SseService {
 
         long tokenId = jwtTokenizer.getMemberId(token);
 
-        if(findVerifiedSse(sseId).getReceiver().getMemberId() != tokenId) {
+        if(findVerifiedSse(sseId).getReceiverId() != tokenId) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

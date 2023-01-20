@@ -39,4 +39,7 @@ public class MyPlants {
     @OneToMany(mappedBy = "myPlants" , cascade = CascadeType.REMOVE)
     private List<Gallery> galleryList = new ArrayList<>();
 
+    public long getMemberId() {
+        return member.getMemberId();
+    }
 }
