@@ -17,6 +17,7 @@ import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.service.PostingService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -38,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class S3StorageService {
 	private final AmazonS3 s3Client;
 	private final MediaRepository mediaRepository;
@@ -70,9 +72,7 @@ public class S3StorageService {
 
 	public List<String> uploadMedia(List<MultipartFile> multipartFiles, long memberId ,String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (memberId != tokenId) {
+		if (memberId != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -102,16 +102,14 @@ public class S3StorageService {
 	public void removeAll(long postingId, String token) {
 		Posting posting = postingService.findPosting(postingId);
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (posting.getMember().getMemberId() != tokenId) {
+		if (posting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
 		List<Media> findMedias = posting.getPostingMedias();
 
 		for (Media fileMedia : findMedias) {
-			Media findMedia = findVerfiedMedia(fileMedia.getMediaId());
+			Media findMedia = findVerifiedMedia(fileMedia.getMediaId());
 			String fileName = (fileMedia.getMediaUrl()).substring(68);
 
 			if (!s3Client.doesObjectExist(bucket + "/posting/media", fileName)) {
@@ -124,9 +122,7 @@ public class S3StorageService {
 	public void remove(long mediaId, String token) {
 		Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (posting.getMember().getMemberId() != tokenId) {
+		if (posting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -134,8 +130,8 @@ public class S3StorageService {
 			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}
 
-		Media findmedia = findVerfiedMedia(mediaId);
-		String fileName = (findmedia.getMediaUrl()).substring(68);
+		Media findMedia = findVerifiedMedia(mediaId);
+		String fileName = (findMedia.getMediaUrl()).substring(68);
 
 		if (!s3Client.doesObjectExist(bucket + "/posting/media", fileName)) {
 			throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
@@ -143,7 +139,7 @@ public class S3StorageService {
 			s3Client.deleteObject(bucket + "/posting/media", fileName);
 		}
 
-		private Media findVerfiedMedia(long mediaId) {
+		private Media findVerifiedMedia(long mediaId) {
 			Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
 			Media findMedia =
 				optionalMedia.orElseThrow(() ->
@@ -223,11 +219,9 @@ public class S3StorageService {
 
 	public void removeGalleryImage(long galleryId, String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
 		Gallery findMyGallery = galleryService.findGallery(galleryId);
 
-		if (findMyGallery.getMyPlants().getMember().getMemberId() != tokenId) {
+		if (findMyGallery.getMyPlantsMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -242,11 +236,9 @@ public class S3StorageService {
 
 	public void removeAllGalleryImage(long myPlantsId,String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
 		MyPlants findMyPlants = myPlantsService.findMyPlants(myPlantsId);
 
-		if (findMyPlants.getMember().getMemberId() != tokenId) {
+		if (findMyPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 

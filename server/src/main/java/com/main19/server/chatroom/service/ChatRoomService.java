@@ -10,9 +10,11 @@ import com.main19.server.member.service.MemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -21,9 +23,7 @@ public class ChatRoomService {
 
     public ChatRoom createChatRoom(ChatRoom chatRoom, long receiverId, long senderId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (senderId != tokenId) {
+        if (senderId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -43,16 +43,16 @@ public class ChatRoomService {
         return chatRoomRepository.save(chatRoom);
     }
 
+    @Transactional(readOnly = true)
     public ChatRoom findChatRoom(long chatRoomId) {
 
         return chatRoomRepository.findById(chatRoomId);
     }
 
+    @Transactional(readOnly = true)
     public List<ChatRoom> findAllChatRoom(long memberId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (memberId != tokenId) {
+        if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

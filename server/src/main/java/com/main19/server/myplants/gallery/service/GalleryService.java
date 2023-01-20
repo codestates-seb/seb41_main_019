@@ -6,8 +6,6 @@ import com.main19.server.exception.ExceptionCode;
 import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.gallery.entity.Gallery;
 import com.main19.server.myplants.gallery.repository.GalleryRepository;
-import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.posting.entity.Media;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +13,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class GalleryService {
 
     private final JwtTokenizer jwtTokenizer;
@@ -25,10 +25,7 @@ public class GalleryService {
 
     public Gallery createGallery(Gallery gallery, MyPlants myPlants, String mediaPaths, String token) {
 
-
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (myPlants.getMemberId() != tokenId) {
+        if (myPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -38,14 +35,17 @@ public class GalleryService {
         return galleryRepository.save(gallery);
     }
 
+    @Transactional(readOnly = true)
     public Gallery findGallery(long galleryId) {
         return findVerifiedGallery(galleryId);
     }
 
+    @Transactional(readOnly = true)
     public List<Gallery> findByMyPlantsId(long myPlantsId) {
         return galleryRepository.findByMyPlants_MyPlantsId(myPlantsId);
     }
 
+    @Transactional(readOnly = true)
     public Page<Gallery> findByAllMyPlantsId(long myPlantsId, int page, int size) {
         return galleryRepository.findByMyPlants_MyPlantsId(myPlantsId, PageRequest.of(page, size, Sort.by("my_Plants_Id").descending()));
     }
@@ -53,14 +53,14 @@ public class GalleryService {
     public void deleteGallery(long galleryId, String token) {
 
         Gallery gallery = findVerifiedGallery(galleryId);
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if(gallery.getMyPlantsMemberId() != tokenId){
+        if(gallery.getMyPlantsMemberId() != jwtTokenizer.getMemberId(token)){
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
         galleryRepository.delete(gallery);
     }
 
+    @Transactional(readOnly = true)
     private Gallery findVerifiedGallery(long galleryId) {
         Optional<Gallery> optionalGallery = galleryRepository.findById(galleryId);
         Gallery findGallery =
