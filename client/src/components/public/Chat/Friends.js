@@ -1,5 +1,9 @@
+import axios from "axios";
+import { useEffect } from "react";
 import styled from "styled-components";
+import Cookie from "../../../util/Cookie";
 import Friend from "./Friend";
+import { useState } from "react";
 
 const StyledFriends = styled.div`
   max-height: 40%;
@@ -7,12 +11,15 @@ const StyledFriends = styled.div`
   ul {
     display: flex;
     flex-direction: column-reverse;
-    height: 85%;
     margin: 0px;
     padding: 0px;
     overflow: scroll;
     ::-webkit-scrollbar {
       display: none;
+    }
+
+    li: last-child {
+      margin: 0px;
     }
   }
 
@@ -32,16 +39,28 @@ const StyledFriends = styled.div`
   }
 `;
 
-const Friends = ({ handleCurChat, freinds }) => {
+const Friends = () => {
+  const [ freinds, setFriends ] = useState([]);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/members/  ${new Cookie().get("memberId")}`,
+      headers: { Authorization: new Cookie().get("authorization") }
+    }).then(res => {
+      setFriends(res.data.data.followingList);
+    })
+  }, [])
+
   return (
     <StyledFriends>
-      <p>Follow List</p>
+      <p>팔로우 목록</p>
       <ul>
-        {freinds
+        {freinds.length > 0
           ? freinds.map((friend, idx) => (
-              <Friend friend={friend} key={idx} handleCurChat={handleCurChat} />
+              <Friend friend={friend} key={idx} />
             ))
-          : "친구가 없슴다."}
+          : "현재 팔로우 중인 친구가 없습니다."}
       </ul>
     </StyledFriends>
   );

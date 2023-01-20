@@ -64,7 +64,6 @@ const DeleteModal = ({ handleDelete, postId, handleChange }) => {
     
 
     const DeletePost = () => {
-
             axios({
                 method: "delete",
                 url: `http://13.124.33.113:8080/posts/${postId}`,

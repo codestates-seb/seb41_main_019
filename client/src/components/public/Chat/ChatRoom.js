@@ -1,8 +1,11 @@
 import styled from "styled-components";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Cookie from "../../../util/Cookie";
 
 const StyledFriend = styled.li`
   display: flex;
-  ${({ top }) => (top ? null : "border-bottom: 1px solid #dbdbdb;")}
   margin: 0px 0px 10px 0px;
   padding: 0px 0px 5px 0px;
 
@@ -29,14 +32,36 @@ const StyledFriend = styled.li`
     }
 
     span:last-child {
+      font-size: 12px;
       color: black;
     }
   }
 `;
 
-const StyledButton = styled.button``;
+const StyledButton = styled.button`
+  border: 0px;
+  cursor: pointer;
 
-const ChatRoom = ({ handleCurChat, freind }) => {
+  svg {
+    font-size: 22px;
+  }
+`;
+
+const ChatRoom = ({ room }) => {
+  const [ receiver, setReceiver ] = useState([]);
+  const cookie = new Cookie();  
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/members/${room.receiverId}`,
+      headers: { Authorization: cookie.get("authorization") }
+    }).then(res => {
+      const data = res.data.data;
+      setReceiver({name: data.userName, text: data.profileText});
+    })
+  },[])
+
   return (
     <StyledFriend>
       <div>
@@ -46,10 +71,10 @@ const ChatRoom = ({ handleCurChat, freind }) => {
         ></img>
       </div>
       <div>
-        <span>임의</span>
-        <span>profile</span>
-      </div>
-      <StyledButton onClick={() => handleCurChat(freind)}>chat</StyledButton>
+        <span>{receiver.name}</span>
+        <span>{receiver.text}</span>
+      </div>  
+      <StyledButton><IoChatbubbleEllipsesOutline /></StyledButton>
     </StyledFriend>
   );
 };
