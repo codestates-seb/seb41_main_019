@@ -109,7 +109,7 @@ public class S3StorageService {
 		List<Media> findMedias = posting.getPostingMedias();
 
 		for (Media fileMedia : findMedias) {
-			Media findMedia = findVerfiedMedia(fileMedia.getMediaId());
+			Media findMedia = findVerifiedMedia(fileMedia.getMediaId());
 			String fileName = (fileMedia.getMediaUrl()).substring(68);
 
 			if (!s3Client.doesObjectExist(bucket + "/posting/media", fileName)) {
@@ -130,8 +130,8 @@ public class S3StorageService {
 			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}
 
-		Media findmedia = findVerfiedMedia(mediaId);
-		String fileName = (findmedia.getMediaUrl()).substring(68);
+		Media findMedia = findVerifiedMedia(mediaId);
+		String fileName = (findMedia.getMediaUrl()).substring(68);
 
 		if (!s3Client.doesObjectExist(bucket + "/posting/media", fileName)) {
 			throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
@@ -139,7 +139,7 @@ public class S3StorageService {
 			s3Client.deleteObject(bucket + "/posting/media", fileName);
 		}
 
-		private Media findVerfiedMedia(long mediaId) {
+		private Media findVerifiedMedia(long mediaId) {
 			Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
 			Media findMedia =
 				optionalMedia.orElseThrow(() ->

@@ -41,9 +41,8 @@ public class MemberService {
     public Member updateMember(Member member ,String token) {
         // todo 토큰 정보 확인해서 권한 검증후 수정 해야함
         // todo password 수정할지?
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (member.getMemberId() != tokenId) {
+        if (member.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
