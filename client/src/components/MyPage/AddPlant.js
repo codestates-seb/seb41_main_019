@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 import CloseBtn from "../public/CloseBtn";
 import { BlueBtn } from "../public/BlueBtn";
@@ -60,11 +61,11 @@ const StyledModalHeader = styled.div`
   }
 `;
 
-const AddPlant = ({ handleModal }) => {
-  const [textInput, setTextInput] = useState({
+const AddPlant = ({ handleModal, userInfo, jwt, getMyPlantsData }) => {
+  const [form, setForm] = useState({
     plantName: "",
-    plantType: "",
-    plantBirthday: "",
+    // plantType: "",
+    // plantBirthday: "",
   });
   useEffect(() => {
     document.getElementById("bg").addEventListener("click", () => {
@@ -72,19 +73,40 @@ const AddPlant = ({ handleModal }) => {
     });
   }, [handleModal]);
 
-  const { plantName, plantType, plantBirthday } = textInput;
-
-  useEffect(() => {
-    console.log(textInput);
-  }, [textInput]);
+  const { plantName, plantType, plantBirthday } = form
 
   const handleInputChange = (e) => {
-    setTextInput({ ...textInput, [e.target.name]: e.target.value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(JSON.stringify(textInput));
+    axios({
+      method: "post",
+      url: "http://13.124.33.113:8080/myplants",
+      headers: {
+        "Authorization" : jwt
+      },
+      data: {
+        "memberId" : userInfo.memberId,
+        "plantName" : plantName
+        // "plantType" : plantType
+        // "plantBirthday" : plantBirthday
+      }
+    }).then(res => {
+      handleModal();
+      axios({
+        method: "get",
+        url : `http://13.124.33.113:8080/myplants/${userInfo.memberId}`,
+        headers: {
+          "Authorization" : jwt
+        }
+      }).then(
+        (res) => {
+          getMyPlantsData();
+        }
+      )
+    })
   };
 
   return (
@@ -98,21 +120,24 @@ const AddPlant = ({ handleModal }) => {
           <input
             type="text"
             name="plantName"
-            placeholder="식물이름"
+            placeholder="반려식물의 이름을 입력하세요"
+            value={plantName}
             onChange={handleInputChange}
           />
-          <input
+          {/* <input
             type="text"
             name="plantType"
             placeholder="종류"
+            value={plantType}
             onChange={handleInputChange}
           />
           <input
             type="text"
             name="plantBirthday"
             placeholder="처음 만난 날"
+            value={plantBirthday}
             onChange={handleInputChange}
-          />
+          /> */}
           <div className="button-container">
             <BlueBtn type="submit">완료</BlueBtn>
             <BlueBtn onClick={handleModal}>취소</BlueBtn>

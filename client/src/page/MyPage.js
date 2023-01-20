@@ -72,7 +72,6 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const [userInfo, setUserInfo] = useState(JSON.parse(decodedJWT));
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
-  const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
   const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
   const [isModalOpened, setIsModalOpened] = useState(false);
 
@@ -87,16 +86,6 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     }
   };
 
-  const getMyPlantsData = async () => {
-    try {
-      const response = await axios.get("http://localhost:4000/data");
-      setMyPlantsData(response.data);
-      return response;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const handleModal = () => {
     handleIsCovered();
     setIsModalOpened(!isModalOpened);
@@ -104,7 +93,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
 
   const handlePostingsClick = () => {
     // 게시물 리스트 조회
-    getGalleryData("http://localhost:4000/data", "postings"); // 임시 제이슨 서버
+    getGalleryData("http://localhost:8080/myplants/", "postings"); // 임시 제이슨 서버
   };
 
   const handleScrapsClick = () => {
@@ -112,32 +101,25 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     getGalleryData("http://localhost:4000/data", "scraps");
   };
 
-  const handleMyPlantsActivate = () => {
-    getMyPlantsData();
-  };
-
   const handlePlantClick = (plantId) => {
     // 반려식물 클릭시 해당건 조회
     setCurrentView("plant");
-    setGalleryData(myPlantsData[plantId].plantImgs);
+    // setGalleryData(myPlantsData[plantId].plantImgs);
   };
 
   const handleFolderClick = () => {
     setIsFolderOpened(!isFolderOpened);
-    if (!isFolderOpened) {
-      handleMyPlantsActivate();
-    }
   };
 
   return (
     <>
-      {isCovered && isModalOpened && <AddPlant handleModal={handleModal} />}
+      {isCovered && isModalOpened && <AddPlant jwt={jwt}  handleModal={handleModal} userInfo={userInfo} />}
       <StyledContainer>
         <UserInfo userInfo={userInfo} jwt={jwt} />
         {isFolderOpened ? (
           <div className="container">
             <MyPlants
-              myPlantsData={myPlantsData}
+              userInfo={userInfo}
               handlePlantClick={handlePlantClick}
               handleModal={handleModal}
             />

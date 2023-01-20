@@ -6,7 +6,8 @@ import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { RiPlantLine } from "react-icons/ri";
 import { ReactComponent as Cookie } from "../../assets/svg/plus.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -86,14 +87,36 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({ myPlantsData, handlePlantClick, handleModal }) => {
+const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
+  const [myPlantsData, setMyPlantsData] = useState(); // My Plants 리스트 데이터
   const [isPanelOpened, setIsPanelOpened] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState();
 
+  const getMyPlantsData = () => {
+    try {
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/${userInfo.memberId}/myplants?page=1&size=10`,
+        headers: {
+          "Authorization" : jwt
+        },
+      })
+      .then(res => {
+        const strData = JSON.stringify(res.data)
+        console.log(strData)
+        setMyPlantsData(strData);
+      })
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
   const handleMoveButtonClick = (go) => {
     // 이동 버튼 클릭
     alert("구현 예정");
   };
+
+  getMyPlantsData();
   return (
     <StyledContainer>
       <StyledMyPlantsDashBoard>
@@ -116,9 +139,9 @@ const MyPlants = ({ myPlantsData, handlePlantClick, handleModal }) => {
             myPlantsData.map((el) => {
               return (
                 <StyledMyPlantsItem
-                  key={el.plantId}
+                  key={el.myPlantsId}
                   onClick={() => {
-                    handlePlantClick(el.plantId);
+                    handlePlantClick(el.myPlantsId);
                     setCurrentPlantData(el);
                     setIsPanelOpened(true);
                   }}
@@ -126,14 +149,14 @@ const MyPlants = ({ myPlantsData, handlePlantClick, handleModal }) => {
                   <div
                     className={
                       currentPlantData &&
-                      currentPlantData.plantId === el.plantId
+                      currentPlantData.plantId === el.myPlantsId
                         ? "selected image-wrapper"
                         : "image-wrapper"
                     }
                   >
                     <img
                       className="image"
-                      src={el.plantImgs[el.plantImgs.length - 1].imgUrl}
+                      src={el.galleryList[el.galleryList.length - 1]}
                       alt="each item"
                     />
                   </div>
