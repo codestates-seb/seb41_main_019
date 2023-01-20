@@ -81,9 +81,7 @@ public class CommentService {
 
     public void deleteComment(long commentId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (findComment(commentId).getMemberId() != tokenId) {
+        if (findComment(commentId).getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

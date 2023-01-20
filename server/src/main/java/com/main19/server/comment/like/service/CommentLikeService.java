@@ -56,9 +56,7 @@ public class CommentLikeService {
 
     public void deleteLike(long commentLikeId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (findVerifiedCommentLike(commentLikeId).getMember().getMemberId() != tokenId) {
+        if (findVerifiedCommentLike(commentLikeId).getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

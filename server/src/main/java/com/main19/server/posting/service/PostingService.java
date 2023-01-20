@@ -49,9 +49,7 @@ public class PostingService {
 
 	public Posting updatePosting(Posting posting, String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (posting.getMember().getMemberId() != tokenId) {
+		if (posting.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 

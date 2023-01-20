@@ -21,9 +21,7 @@ public class ChatRoomService {
 
     public ChatRoom createChatRoom(ChatRoom chatRoom, long receiverId, long senderId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (senderId != tokenId) {
+        if (senderId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -50,9 +48,7 @@ public class ChatRoomService {
 
     public List<ChatRoom> findAllChatRoom(long memberId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (memberId != tokenId) {
+        if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

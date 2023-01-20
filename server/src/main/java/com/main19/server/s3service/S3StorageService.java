@@ -70,9 +70,7 @@ public class S3StorageService {
 
 	public List<String> uploadMedia(List<MultipartFile> multipartFiles, long memberId ,String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (memberId != tokenId) {
+		if (memberId != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -102,9 +100,7 @@ public class S3StorageService {
 	public void removeAll(long postingId, String token) {
 		Posting posting = postingService.findPosting(postingId);
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (posting.getMember().getMemberId() != tokenId) {
+		if (posting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -124,9 +120,7 @@ public class S3StorageService {
 	public void remove(long mediaId, String token) {
 		Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (posting.getMember().getMemberId() != tokenId) {
+		if (posting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -223,11 +217,9 @@ public class S3StorageService {
 
 	public void removeGalleryImage(long galleryId, String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
 		Gallery findMyGallery = galleryService.findGallery(galleryId);
 
-		if (findMyGallery.getMyPlants().getMember().getMemberId() != tokenId) {
+		if (findMyGallery.getMyPlantsMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -242,11 +234,9 @@ public class S3StorageService {
 
 	public void removeAllGalleryImage(long myPlantsId,String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
 		MyPlants findMyPlants = myPlantsService.findMyPlants(myPlantsId);
 
-		if (findMyPlants.getMember().getMemberId() != tokenId) {
+		if (findMyPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 

@@ -26,9 +26,7 @@ public class MyPlantsService {
 
     public MyPlants createMyPlants(MyPlants myPlants, long memberId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (memberId != tokenId) {
+        if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -39,11 +37,10 @@ public class MyPlantsService {
 
     public MyPlants changeMyPlants(long myPlantsId , long galleryId, int changeNumber, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
         MyPlants findMyPlants = findVerifiedMyPlants(myPlantsId);
         Gallery findGallery = galleryService.findGallery(galleryId);
 
-        if (findMyPlants.getMember().getMemberId() != tokenId) {
+        if (findMyPlants.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -72,11 +69,9 @@ public class MyPlantsService {
 
     public void deleteMyPlants(long myPlantsId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
         MyPlants findMyPlants = findVerifiedMyPlants(myPlantsId);
 
-        if (findMyPlants.getMemberId() != tokenId) {
+        if (findMyPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

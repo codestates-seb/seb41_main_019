@@ -25,10 +25,7 @@ public class GalleryService {
 
     public Gallery createGallery(Gallery gallery, MyPlants myPlants, String mediaPaths, String token) {
 
-
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (myPlants.getMemberId() != tokenId) {
+        if (myPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -53,9 +50,8 @@ public class GalleryService {
     public void deleteGallery(long galleryId, String token) {
 
         Gallery gallery = findVerifiedGallery(galleryId);
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if(gallery.getMyPlantsMemberId() != tokenId){
+        if(gallery.getMyPlantsMemberId() != jwtTokenizer.getMemberId(token)){
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
         galleryRepository.delete(gallery);

@@ -29,9 +29,7 @@ public class PostingLikeService {
 
 	public PostingLike createPostingLike(PostingLike postingLike, long postingId, long memberId, String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (memberId != tokenId) {
+		if (memberId != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -49,7 +47,7 @@ public class PostingLikeService {
 
 		posting.createLikeCount();
 
-		if(posting.getMember().getMemberId() != tokenId) {
+		if(posting.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			sseService.sendPosting(posting.getMember(), SseType.postLike, member, posting);
 		}
 
@@ -58,9 +56,7 @@ public class PostingLikeService {
 
 	public void deletePostingLike(long postingLikeId, String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (findVerifiedPostingLike(postingLikeId).getMember().getMemberId() != tokenId) {
+		if (findVerifiedPostingLike(postingLikeId).getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 

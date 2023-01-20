@@ -37,4 +37,8 @@ public class PostingLike {
 			this.posting.getPostingLikes().add(this);
 		}
 	}
+
+	public long getMemberId() {
+		return member.getMemberId();
+	}
 }

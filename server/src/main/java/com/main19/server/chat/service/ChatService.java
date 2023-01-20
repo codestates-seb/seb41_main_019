@@ -36,10 +36,8 @@ public class ChatService {
 
     public List<Chat> findAllChat(long chatRoomId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (chatRoomService.findChatRoom(chatRoomId).getReceiverId() != tokenId
-            || chatRoomService.findChatRoom(chatRoomId).getSenderId() != tokenId) {
+        if (chatRoomService.findChatRoom(chatRoomId).getReceiverId() != jwtTokenizer.getMemberId(token)
+            || chatRoomService.findChatRoom(chatRoomId).getSenderId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

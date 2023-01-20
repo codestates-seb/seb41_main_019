@@ -132,9 +132,7 @@ public class SseService {
 
     public Sse updateSse(long sseId,String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if(findVerifiedSse(sseId).getReceiver().getMemberId() != tokenId) {
+        if(findVerifiedSse(sseId).getReceiver().getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -155,9 +153,7 @@ public class SseService {
 
     public void deleteSee(long sseId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if(findVerifiedSse(sseId).getReceiverId() != tokenId) {
+        if(findVerifiedSse(sseId).getReceiverId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
