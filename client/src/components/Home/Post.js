@@ -93,10 +93,11 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
     const deleteFollow = () => {
         axios({ 
             method: "delete", 
-            url: `http://13.124.33.113:8080/members/4`,
+            url: `http://13.124.33.113:8080/followings/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
         }).then(res => {
-            console.log(res);
+            console.log("성공!");
+            handleChange();
         })
         .catch(e => {
             console.log(e);
@@ -145,7 +146,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
                     {   
                         follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ||
                         post.memberId === Number(cookie.get("memberId")) ?
-                            null : <FiUserPlus onClick={addFollow} />
+                            <button onClick={deleteFollow}>팔로중임ㅋ</button> : <FiUserPlus onClick={addFollow} />
                     }
                     { post.memberId === Number(cookie.get("memberId")) ?
                         <BiDotsVerticalRounded onClick={() => {
