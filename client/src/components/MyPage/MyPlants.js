@@ -156,7 +156,7 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
                   >
                     <img
                       className="image"
-                      src={el ? el.galleryList[el.galleryList.length - 1] : defaultIcon}
+                      src={el.length ? el.galleryList[el.galleryList.length - 1] : defaultIcon}
                       alt="each item"
                     />
                   </div>
