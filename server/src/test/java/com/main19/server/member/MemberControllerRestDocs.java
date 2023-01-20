@@ -122,7 +122,7 @@ public class MemberControllerRestDocs {
                                         fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기소개"),
                                         fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅"),
                                         fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
-                                        fieldWithPath("data.followedList").type(JsonFieldType.ARRAY).description("팔로워 목록")
+                                        fieldWithPath("data.followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
 
                                 )
                         )
@@ -188,7 +188,7 @@ public class MemberControllerRestDocs {
                                                 fieldWithPath("profileText").type(JsonFieldType.STRING).description("자기 소개"),
                                                 fieldWithPath("scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩 포스팅"),
                                                 fieldWithPath("followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
-                                                fieldWithPath("followedList").type(JsonFieldType.ARRAY).description("팔로워 목록")
+                                                fieldWithPath("followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
                                         )
                                 )
 
@@ -252,7 +252,7 @@ public class MemberControllerRestDocs {
                                         fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기 소개"),
                                         fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩 포스팅"),
                                         fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
-                                        fieldWithPath("data.followedList").type(JsonFieldType.ARRAY).description("팔로워 목록")
+                                        fieldWithPath("data.followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
                                 )
                         )
                 ));
@@ -311,7 +311,7 @@ public class MemberControllerRestDocs {
                                         fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기소개"),
                                         fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅"),
                                         fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
-                                        fieldWithPath("data.followedList").type(JsonFieldType.ARRAY).description("팔로워 목록")
+                                        fieldWithPath("data.followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
                                 )
                         )
                 ));
