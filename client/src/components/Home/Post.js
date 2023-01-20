@@ -83,7 +83,7 @@ const StyledHeader = styled.div`
 
 const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) => {
     const [menu, setMenu] = useState(false);
-    const [follow, setFollow] = useState('');
+    const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
 
     const handleMenu = () => {
@@ -129,8 +129,6 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
             });
     },[])
 
-    console.log(follow);
-
     return (
         <Wrapper>
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
@@ -141,13 +139,17 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
-                    
+                    {   
+                        follow.filter(e => e.followedId === cookie.get("memberId")).length === 0 &&
+                        post.memberId === Number(cookie.get("memberId")) ?
+                            null : <FiUserPlus onClick={addFollow} />
+                    }
                     { post.memberId === Number(cookie.get("memberId")) ?
                         <BiDotsVerticalRounded onClick={() => {
                             handleMenu(); 
                             handleCurPost(post);
                             }} />
-                        : follow.includes(cookie.get("memberId")) ? null : <FiUserPlus onClick={addFollow} />
+                        : null
                     }
                 </div>
             </StyledHeader>
