@@ -8,15 +8,15 @@ public class FollowDto {
     @AllArgsConstructor
     public static class Response {
         private long followId;
-        private long followedId;
+        private long followerId;
         private long followingId;
     }
 
     @Getter
     @AllArgsConstructor
-    public static class FollowedResponse {
+    public static class FollowerResponse {
         private long followId;
-        private long followedId;
+        private long followerId;
     }
 
     @Getter
