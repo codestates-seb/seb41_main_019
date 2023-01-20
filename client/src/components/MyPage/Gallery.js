@@ -58,9 +58,9 @@ const Gallery = ({ galleryData, currentView }) => {
   // 그렇지 않을 경우 key prop 에러 발생
   return (
     <StyledContainer>
-      {galleryData.length ? (
+      {galleryData.data ? (
         <StyledMyPageGallery>
-          {galleryData.map((el) => {
+          {galleryData.data.map((el) => {
             if (currentView === "plant") {
               return (
                 <div className="image-wrapper" key={el.imgId}>
@@ -70,9 +70,7 @@ const Gallery = ({ galleryData, currentView }) => {
             } else {
               return (
                 <div className="image-wrapper" key={el.postingId}>
-                  <a href="#">
-                    <img className="image" src={el.imgUrl} alt="each item" />
-                  </a>
+                  <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
                 </div>
               );
             }

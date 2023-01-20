@@ -72,7 +72,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const [postCount, setPostCount] = useState();
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
-  const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
+  const [currentView, setCurrentView] = useState("postings"); // 현재 view(리스트)의 상태
   const [isModalOpened, setIsModalOpened] = useState(false);
   
   useEffect(() => {
@@ -97,26 +97,37 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   };
 
   const getPostCount = () => {
-    axios({
-      method: "get",
-      url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,
-      headers: {
-        Authorization: jwt,
-      },
-    }).then((res) => {
-      setPostCount(res.data.pageInfo.totalElements);
-    });
+    try {
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        setPostCount(res.data.pageInfo.totalElements);
+        setGalleryData(res.data)
+      });
+    } catch (err) {
+      console.error(err)
+    }
   };
 
-  const getGalleryData = async (url, view) => {
+  const getGalleryData = (url, view) => {
     try {
-      setCurrentView(view);
-      const response = await axios.get(url);
-      setGalleryData(response.data);
-      return response;
+      axios({
+        method: "get",
+        url: url,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        setCurrentView(view)
+        setGalleryData(res.data)
+      })
     } catch (err) {
-      console.error(err);
-    }
+        console.error(err);
+      }
   };
 
   const handleModal = () => {
@@ -126,12 +137,12 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
 
   const handlePostingsClick = () => {
     // 게시물 리스트 조회
-    getGalleryData("http://localhost:8080/myplants/", "postings"); // 임시 제이슨 서버
+    getGalleryData(`http://localhost:8080/posts/members/${memberId}?page=1&size=10`, "postings"); // 임시 제이슨 서버
   };
 
   const handleScrapsClick = () => {
     // 스크랩 조회
-    getGalleryData("http://localhost:4000/data", "scraps");
+    // getGalleryData("http://localhost:4000/data", "scraps");
   };
 
   const handlePlantClick = (plantId) => {
