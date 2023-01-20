@@ -73,7 +73,7 @@ const UserInfo = ({ userInfo, jwt }) => {
     getPostCount();
   }, []);
 
-  const getPostCount = async () => {
+  const getPostCount = () => {
     axios({
       method: "get",
       url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,

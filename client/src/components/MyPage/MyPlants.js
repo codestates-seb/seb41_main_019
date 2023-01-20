@@ -2,11 +2,12 @@ import styled from "styled-components";
 
 import MyPlantInfo from "./MyPlantInfo";
 
+import defaultIcon from "../../assets/img/plants/defaultPlantIcon.png"
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { RiPlantLine } from "react-icons/ri";
 import { ReactComponent as Cookie } from "../../assets/svg/plus.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const StyledContainer = styled.div`
@@ -101,22 +102,21 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
           "Authorization" : jwt
         },
       })
-      .then(res => {
-        const strData = JSON.stringify(res.data)
-        console.log(strData)
-        setMyPlantsData(strData);
-      })
+      .then((res) => {
+        setMyPlantsData(res.data.data)}
+      )
     } catch (err) {
       console.error(err);
     }
   };
   
+  useEffect(() => getMyPlantsData(), [])
+
   const handleMoveButtonClick = (go) => {
     // 이동 버튼 클릭
     alert("구현 예정");
   };
 
-  getMyPlantsData();
   return (
     <StyledContainer>
       <StyledMyPlantsDashBoard>
@@ -135,7 +135,7 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
             </div>
             <p>반려식물 추가</p>
           </StyledMyPlantsItem>
-          {myPlantsData.length ? (
+          {myPlantsData ? (
             myPlantsData.map((el) => {
               return (
                 <StyledMyPlantsItem
@@ -156,7 +156,7 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
                   >
                     <img
                       className="image"
-                      src={el.galleryList[el.galleryList.length - 1]}
+                      src={el ? el.galleryList[el.galleryList.length - 1] : defaultIcon}
                       alt="each item"
                     />
                   </div>
