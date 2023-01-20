@@ -17,6 +17,9 @@ public class FollowDto {
     public static class FollowerResponse {
         private long followId;
         private long followerId;
+        private String userName;
+        private String profileImage;
+        private String profileText;
     }
 
     @Getter
@@ -24,5 +27,8 @@ public class FollowDto {
     public static class FollowingResponse {
         private long followId;
         private long followingId;
+        private String userName;
+        private String profileImage;
+        private String profileText;
     }
 }

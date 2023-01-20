@@ -17,12 +17,21 @@ public interface MemberMapper {
 	MemberDto.Response memberToMemberResponse(Member member);
 
 	@Mapping(source = "posting.postingId", target = "postingId")
-	@Mapping(source = "member.memberId", target = "memberId")
+	@Mapping(source = "posting.member.userName", target = "userName")
+	@Mapping(source = "posting.member.profileImage", target = "profileImage")
+	@Mapping(source = "posting.postingContent", target = "postingContent")
+	@Mapping(source = "posting.postingMedias", target = "postingMedias")
 	ScrapResponseDto scrapToScrapResponseDto(Scrap scrap);
 
 	@Mapping(source = "followerId.memberId", target = "followingId")
+	@Mapping(source = "followerId.userName", target = "userName")
+	@Mapping(source = "followerId.profileImage", target = "profileImage")
+	@Mapping(source = "followerId.profileText", target = "profileText")
 	FollowDto.FollowingResponse followToFollowingResponseDto(Follow follow);
 
 	@Mapping(source = "followingId.memberId", target = "followerId")
+	@Mapping(source = "followingId.userName", target = "userName")
+	@Mapping(source = "followingId.profileImage", target = "profileImage")
+	@Mapping(source = "followingId.profileText", target = "profileText")
 	FollowDto.FollowerResponse followToFollowedResponseDto(Follow follow);
 }
