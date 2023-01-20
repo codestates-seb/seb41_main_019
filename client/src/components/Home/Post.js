@@ -81,7 +81,7 @@ const StyledHeader = styled.div`
     }
 `;
 
-const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) => {
+const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, handleChange, change }) => {
     const [menu, setMenu] = useState(false);
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
@@ -109,7 +109,8 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
             url: `http://13.124.33.113:8080/followings/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
-                
+                console.log("성공!");
+                handleChange();
             })
             .catch(e => {
                 console.log(e);
@@ -127,7 +128,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
             .catch(e => {
                console.log(e);
             });
-    },[])
+    }, [change])
 
     return (
         <Wrapper>
@@ -138,7 +139,9 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
                     <span>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
-                <div className="icons">
+                {   
+                    follow.length > 0 ?
+                    <div className="icons">
                     {   
                         follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ||
                         post.memberId === Number(cookie.get("memberId")) ?
@@ -151,7 +154,8 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
                             }} />
                         : null
                     }
-                </div>
+                    </div> : null
+                }
             </StyledHeader>
             { post.postingMedias.length > 0 ?
                 <Slider imgs={post.postingMedias} /> : null
