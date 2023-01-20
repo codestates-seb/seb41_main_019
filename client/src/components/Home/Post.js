@@ -106,7 +106,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
     const addFollow = () => {
         axios({
             method: "post",
-            url: `http://13.124.33.113:8080/followings/4`,
+            url: `http://13.124.33.113:8080/followings/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 
@@ -122,7 +122,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
             url: `http://13.124.33.113:8080/members/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
-                setFollow(res.data.data.followedList);
+                setFollow(res.data.data.followerList);
             })
             .catch(e => {
                console.log(e);
@@ -140,7 +140,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit }) =>
                 </div>
                 <div className="icons">
                     {   
-                        follow.filter(e => e.followedId === cookie.get("memberId")).length === 0 &&
+                        follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ||
                         post.memberId === Number(cookie.get("memberId")) ?
                             null : <FiUserPlus onClick={addFollow} />
                     }
