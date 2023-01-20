@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import B from "../../assets/img/plants/알보1.png";
+import axios from "axios";
+import Cookie from "../../util/Cookie";
+import { useState } from "react";
 
 const StyledComments = styled.div`
     height: 80%;
@@ -61,74 +64,51 @@ const StyledButton = styled.button`
     background-color: white;
 `;
 
-const Comments = () => {
+const Comments = ({ post }) => {
+    const [value, setValue] = useState("");
+    const cookie = new Cookie();
+
+    const addComment = () => {
+        axios({
+            method: "post",
+            url: `http://13.124.33.113:8080/comments/${post.postingId}`,
+            headers: { Authorization: cookie.get("authorization") },
+            data : {
+                "memberId" : cookie.get("memberId"),
+                "comment" : value
+                }
+            }).then(res => {
+                console.log(res);
+            })
+            .catch(e => {
+            console.log(e);
+            });
+    };
+
+    const handleValue = (e) => {
+        setValue(e.target.value);
+    }
+
     return (
         <>
             <StyledComments>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!fdfsdfdsfsdfsdfffffffffffffffffffffff ffffffffffffffffffffffffffffffffff</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
-                <div className="comment">
-                    <img src={B} alt="commentImg" />
-                    <span>user1</span>
-                    <span>안녕하세요!</span>
-                    <span>2023-1-13-10:30</span>
-                </div>
+                {
+                    post.comments ?
+                        post.comments.map((comment,idx) => {
+                            return (
+                                <li className="comment">
+                                    <img src={B} alt="commentImg" />
+                                    <span>user1</span>
+                                    <span>{comment.comment}</span>
+                                    <span>2023-1-13-10:30</span>
+                                </li>
+                            )
+                        }) : null
+                }
             </StyledComments>
             <StyledMyComments>
-                <StyledInput placeholder="Add a comment..."></StyledInput>
-                <StyledButton>Post</StyledButton>
+                <StyledInput value={value} onChange={handleValue} placeholder="Add a comment..."></StyledInput>
+                <StyledButton onClick={addComment}>Post</StyledButton>
             </StyledMyComments>
         </>
     )

@@ -136,7 +136,7 @@ const View = ({ handleModal, curPost }) => {
                         <CloseBtn handleEvent={handleModal} />
                     </div>
                     <FeedInteraction post={curPost} type={1} />
-                    <Comments />
+                    <Comments post={curPost} />
                 </StyledInteraction>
             </Wrapper>
     )
