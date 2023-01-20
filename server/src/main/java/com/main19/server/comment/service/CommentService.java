@@ -18,9 +18,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -69,11 +71,13 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional(readOnly = true)
     public Comment findComment(long commentId) {
 
         return findVerifiedComment(commentId);
     }
 
+    @Transactional(readOnly = true)
     public Page<Comment> findComments(int page, int size) {
         return commentRepository.findAll(PageRequest.of(page, size,
             Sort.by("commentId").descending()));
@@ -93,6 +97,7 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
+    @Transactional(readOnly = true)
     private Comment findVerifiedComment(long commentId){
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         Comment findComment = optionalComment.orElseThrow(()->new BusinessLogicException(

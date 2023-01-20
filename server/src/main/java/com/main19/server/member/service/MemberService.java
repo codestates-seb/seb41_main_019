@@ -89,23 +89,20 @@ public class MemberService {
         member.setProfileImage(null);
         memberRepository.save(member);
     }
-
+    @Transactional(readOnly = true)
     public boolean findMemberName(String search) {
         Member member = memberRepository.findByUserName(search);
-        if(member == null) {
-            return false;
-        }
-        return true;
+        return member != null;
     }
 
-
+    @Transactional(readOnly = true)
     private void verifiedByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
         }
     }
-
+    @Transactional(readOnly = true)
     private Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));

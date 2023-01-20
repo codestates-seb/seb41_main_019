@@ -21,11 +21,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.main19.server.member.entity.Member;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SseService {
 
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;

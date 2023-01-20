@@ -10,9 +10,11 @@ import com.main19.server.posting.tags.entity.Tag;
 import com.main19.server.posting.tags.repository.TagRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TagService {
 	private final TagRepository tagRepository ;
 
@@ -31,6 +33,7 @@ public class TagService {
 	// }
 
 	// 있는 태그인지 확인
+	@Transactional(readOnly = true)
 	public boolean findVerifiedTag(String tagName) {
 		Optional<Tag> optionalTag = tagRepository.findByTagName(tagName);
 		if (optionalTag.isPresent()) {
@@ -40,6 +43,7 @@ public class TagService {
 	}
 
 	// 없는 태그일 경우 tag
+	@Transactional(readOnly = true)
 	public Tag findTag(String tagName) {
 		Optional<Tag> optionalTag = tagRepository.findByTagName(tagName);
 		Tag findTag =

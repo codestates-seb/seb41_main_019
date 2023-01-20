@@ -17,6 +17,7 @@ import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.service.PostingService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -38,6 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class S3StorageService {
 	private final AmazonS3 s3Client;
 	private final MediaRepository mediaRepository;

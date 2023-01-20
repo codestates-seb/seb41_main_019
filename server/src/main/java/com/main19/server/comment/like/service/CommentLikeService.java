@@ -14,9 +14,11 @@ import com.main19.server.sse.service.SseService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CommentLikeService {
 
     private final CommentLikeRepository commentLikeRepository;
@@ -68,6 +70,7 @@ public class CommentLikeService {
 
     }
 
+    @Transactional(readOnly = true)
     private CommentLike findVerifiedCommentLike(long commentLikeId) {
         Optional<CommentLike> optionalCommentLike = commentLikeRepository.findById(commentLikeId);
         CommentLike findCommentLike =

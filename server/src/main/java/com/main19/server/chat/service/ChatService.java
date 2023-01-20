@@ -12,9 +12,11 @@ import com.main19.server.sse.service.SseService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatService {
 
     private final ChatRepository chatRepository;
@@ -34,6 +36,7 @@ public class ChatService {
         return chatRepository.save(chat);
     }
 
+    @Transactional(readOnly = true)
     public List<Chat> findAllChat(long chatRoomId, String token) {
 
         if (chatRoomService.findChatRoom(chatRoomId).getReceiverId() != jwtTokenizer.getMemberId(token)

@@ -17,9 +17,11 @@ import com.main19.server.posting.like.entity.PostingLike;
 import com.main19.server.posting.like.repository.PostingLikeRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostingLikeService {
 	private final PostingLikeRepository postingLikeRepository;
 	private final PostingService postingService;
@@ -67,6 +69,7 @@ public class PostingLikeService {
 
 	}
 
+	@Transactional(readOnly = true)
 	private PostingLike findVerifiedPostingLike(long postingLikeId) {
 		Optional<PostingLike> optionalPostingLike = postingLikeRepository.findById(postingLikeId);
 		PostingLike findPostingLike =
