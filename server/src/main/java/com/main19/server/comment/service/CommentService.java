@@ -44,7 +44,7 @@ public class CommentService {
         comment.setMember(member);
         posting.createCommentCount();
 
-        if(posting.getMember().getMemberId() != tokenId) {
+        if(posting.getMemberId() != tokenId) {
             sseService.sendPosting(posting.getMember(), SseType.comment, member, comment.getPosting());
         }
 
@@ -55,7 +55,7 @@ public class CommentService {
 
         long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (comments.getMember().getMemberId() != tokenId) {
+        if (comments.getMemberId() != tokenId) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -83,7 +83,7 @@ public class CommentService {
 
         long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (findComment(commentId).getMember().getMemberId() != tokenId) {
+        if (findComment(commentId).getMemberId() != tokenId) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

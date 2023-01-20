@@ -28,7 +28,7 @@ public class GalleryService {
 
         long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (myPlants.getMember().getMemberId() != tokenId) {
+        if (myPlants.getMemberId() != tokenId) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -55,7 +55,7 @@ public class GalleryService {
         Gallery gallery = findVerifiedGallery(galleryId);
         long tokenId = jwtTokenizer.getMemberId(token);
 
-        if(gallery.getMyPlants().getMember().getMemberId() != tokenId){
+        if(gallery.getMyPlantsMemberId() != tokenId){
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
         galleryRepository.delete(gallery);
