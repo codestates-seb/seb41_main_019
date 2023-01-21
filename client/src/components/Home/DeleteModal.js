@@ -61,7 +61,7 @@ const DeleteModal = ({ handleDelete, postId, handleChange }) => {
         })
     },[handleDelete])
 
-    
+   
 
     const DeletePost = () => {
             axios({
