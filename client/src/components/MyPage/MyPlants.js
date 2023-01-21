@@ -149,7 +149,7 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
                   <div
                     className={
                       currentPlantData &&
-                      currentPlantData.plantId === el.myPlantsId
+                      currentPlantData.myPlantsId === el.myPlantsId
                         ? "selected image-wrapper"
                         : "image-wrapper"
                     }
