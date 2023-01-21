@@ -78,13 +78,14 @@ public class PostingService {
 	}
 
 	public Posting updatePosting(PostingPatchDto requestBody, String token) {
-		Posting posting = mapper.postingPatchDtoToPosting(requestBody);
 
-		if (posting.getMemberId() != jwtTokenizer.getMemberId(token)) {
+		Posting posting = mapper.postingPatchDtoToPosting(requestBody);
+		Posting findPosting = findVerifiedPosting(posting.getPostingId());
+
+		if (findPosting.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		Posting findPosting = findVerifiedPosting(posting.getPostingId());
 		Posting updatePosting = beanUtils.copyNonNullProperties(posting, findPosting);
 
 		updatePosting.setModifiedAt(LocalDateTime.now());
@@ -93,7 +94,7 @@ public class PostingService {
 			tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
 			PostingTags postingTags = mapper.postingPatchDtoToPostingTag(requestBody);
 			String tagName = requestBody.getTagName().get(i);
-			postingTagsService.updatePostingTags(postingTags, posting.getPostingId(), tagName);
+			postingTagsService.updatePostingTags(postingTags, updatePosting, tagName);
 		}
 
 		return postingRepository.save(updatePosting);
@@ -122,7 +123,7 @@ public class PostingService {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		storageService.removeAll(postingId);
+		storageService.removeAll(findPosting);
 		postingRepository.delete(findPosting);
 	}
 
@@ -133,7 +134,7 @@ public class PostingService {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		// multipartFiles에 null인 것 제외하고 해야함.. 수정 필요
+		// todo multipartFiles에 null인 것 제외하고 해야함.. 수정 필요
 		if (findPosting.getPostingMedias().size() + multipartFiles.size() > 3) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}

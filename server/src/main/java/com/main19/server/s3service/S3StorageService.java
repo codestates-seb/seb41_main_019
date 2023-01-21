@@ -44,7 +44,6 @@ public class S3StorageService {
 	private final AmazonS3 s3Client;
 	private final MediaRepository mediaRepository;
 	private final MemberService memberService;
-	private final PostingService postingService;
 	private final GalleryService galleryService;
 	private final JwtTokenizer jwtTokenizer;
 	private final MyPlantsService myPlantsService;
@@ -95,9 +94,7 @@ public class S3StorageService {
 		return mediaUrlList;
 	}
 
-	public void removeAll(long postingId) {
-		Posting posting = postingService.findPosting(postingId);
-
+	public void removeAll(Posting posting) {
 		List<Media> findMedias = posting.getPostingMedias();
 
 		for (Media fileMedia : findMedias) {
