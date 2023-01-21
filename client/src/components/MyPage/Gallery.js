@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-import Post from "../Home/Post";
 import { FcAnswers } from "react-icons/fc";
 
 const StyledContainer = styled.div`
@@ -13,6 +12,7 @@ const StyledMyPageGallery = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  cursor: pointer;
 
   .image-wrapper {
     position: relative;
@@ -54,14 +54,14 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ galleryData, currentView }) => {
+const Gallery = ({ galleryData, currentView, handleModal }) => {
   // 반려식물들의 각 사진들의 imgId는 고유한 값이어야 함.
   // 그렇지 않을 경우 key prop 에러 발생
   return (
     <StyledContainer>
-      {galleryData.data ? (
+      {galleryData ? (
         <StyledMyPageGallery>
-          {galleryData.data.map((el) => {
+          {galleryData.map((el) => {
             if (currentView === "plant") {
               return (
                 <div className="image-wrapper" key={el.imgId}>
@@ -70,7 +70,7 @@ const Gallery = ({ galleryData, currentView }) => {
               );
             } else {
               return (
-                <div className="image-wrapper" key={el.postingId}>
+                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal("View", el.postingId)}>
                   <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
                 </div>
               );

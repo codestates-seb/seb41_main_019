@@ -12,6 +12,7 @@ import MyPlants from "../components/MyPage/MyPlants";
 import UserInfo from "../components/MyPage/UserInfo";
 import Gallery from "../components/MyPage/Gallery";
 import AddPlant from "../components/MyPage/AddPlant";
+import View from "../components/Home/View";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -74,10 +75,12 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
   const [currentView, setCurrentView] = useState("postings"); // 현재 view(리스트)의 상태
   const [isAddPlantOpened, setIsAddPlantOpened] = useState(false);
+  const [isViewOpened, setIsViewOpened] = useState(false);
+  const [curPost, setCurPost] = useState();
   
   useEffect(() => {
     getUserInfo()
-    getPostCount()
+    getMyPostings()
   }, [])
   
   const getUserInfo = () => {
@@ -96,7 +99,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     }
   };
 
-  const getPostCount = () => {
+  const getMyPostings = () => {
     try {
       axios({
         method: "get",
@@ -106,7 +109,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
         },
       }).then((res) => {
         setPostCount(res.data.pageInfo.totalElements);
-        setGalleryData(res.data)
+        setGalleryData(res.data.data)
       });
     } catch (err) {
       console.error(err)
@@ -130,15 +133,18 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
       }
   };
 
-  const handleModal = (modal) => {
-    handleIsCovered();
-    switch (modal) {
-      case "AddPlant":
-        setIsAddPlantOpened(!isAddPlantOpened);
-        break;
-      case "View":
-
+  const handleModal = (modal, postingId) => {
+    if(modal === "AddPlant") {
+      setIsAddPlantOpened(!isAddPlantOpened);
+    } else if(postingId) {
+      setCurPost(galleryData.filter((el) => 
+        el.postingId === postingId
+      )[0]) ;
+      setIsViewOpened(!isViewOpened);
+    } else {
+      setIsViewOpened(!isViewOpened);
     }
+    handleIsCovered();
   };
 
   const handlePostingsClick = () => {
@@ -164,6 +170,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
 
   return (
     <>
+      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost}/>}
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt}  handleModal={handleModal} userInfo={userInfo} />}
       <StyledContainer>
         <UserInfo userInfo={userInfo} postCount={postCount}/>
@@ -203,7 +210,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
                   <span>스크랩</span>
                 </StyledChangeViewButton>
               </StyledChangeViewContainer>
-              <Gallery galleryData={galleryData} currentView={currentView} />
+              <Gallery galleryData={galleryData} currentView={currentView} handleModal={handleModal}/>
             </StyledMyPlantFolder>
           </div>
         )}
