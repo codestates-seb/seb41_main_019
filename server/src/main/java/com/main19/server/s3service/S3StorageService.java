@@ -44,7 +44,6 @@ public class S3StorageService {
 	private final AmazonS3 s3Client;
 	private final MediaRepository mediaRepository;
 	private final MemberService memberService;
-	private final PostingService postingService;
 	private final GalleryService galleryService;
 	private final JwtTokenizer jwtTokenizer;
 	private final MyPlantsService myPlantsService;
@@ -70,11 +69,7 @@ public class S3StorageService {
 			.build();
 	}
 
-	public List<String> uploadMedia(List<MultipartFile> multipartFiles, long memberId ,String token) {
-
-		if (memberId != jwtTokenizer.getMemberId(token)) {
-			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		}
+	public List<String> uploadMedia(List<MultipartFile> multipartFiles) {
 
 		List<String> mediaUrlList = new ArrayList<>();
 
@@ -99,13 +94,7 @@ public class S3StorageService {
 		return mediaUrlList;
 	}
 
-	public void removeAll(long postingId, String token) {
-		Posting posting = postingService.findPosting(postingId);
-
-		if (posting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
-			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		}
-
+	public void removeAll(Posting posting) {
 		List<Media> findMedias = posting.getPostingMedias();
 
 		for (Media fileMedia : findMedias) {
@@ -119,17 +108,7 @@ public class S3StorageService {
 		}
 	}
 
-	public void remove(long mediaId, String token) {
-		Posting posting = postingService.findVerfiedMedia(mediaId).getPosting();
-
-		if (posting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
-			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
-		}
-
-		if (posting.getPostingMedias().stream().count() == 1) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
-		}
-
+	public void remove(long mediaId) {
 		Media findMedia = findVerifiedMedia(mediaId);
 		String fileName = (findMedia.getMediaUrl()).substring(68);
 
