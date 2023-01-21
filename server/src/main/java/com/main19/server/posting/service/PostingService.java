@@ -2,11 +2,19 @@ package com.main19.server.posting.service;
 
 import com.main19.server.auth.jwt.JwtTokenizer;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.service.MemberService;
+import com.main19.server.posting.dto.PostingPatchDto;
+import com.main19.server.posting.dto.PostingPostDto;
+import com.main19.server.posting.mapper.PostingMapper;
+import com.main19.server.posting.tags.entity.PostingTags;
+import com.main19.server.posting.tags.service.PostingTagsService;
+import com.main19.server.posting.tags.service.TagService;
+import com.main19.server.s3service.S3StorageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -22,6 +30,7 @@ import com.main19.server.utils.CustomBeanUtils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +39,22 @@ public class PostingService {
 	private final PostingRepository postingRepository;
 	private final MediaRepository mediaRepository;
 	private final MemberService memberService;
+	private final TagService tagService;
+	private final PostingTagsService postingTagsService;
+	private final S3StorageService storageService;
+	private final PostingMapper mapper;
 	private final CustomBeanUtils<Posting> beanUtils;
 	private final JwtTokenizer jwtTokenizer;
 
-	public Posting createPosting(Posting posting, long memberId ,List<String> mediaPaths) {
+	public Posting createPosting(PostingPostDto requestBody, long memberId, List<MultipartFile> multipartFiles, String token) {
+
+		if (memberId != jwtTokenizer.getMemberId(token)) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
+		List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
+
+		Posting posting = mapper.postingPostDtoToPosting(requestBody);
 
 		Member findMember = memberService.findMember(memberId);
 		posting.setMember(findMember);
@@ -46,10 +67,18 @@ public class PostingService {
 			posting.getPostingMedias().add(media);
 		}
 
+		for(int i = 0; i < requestBody.getTagName().size(); i++) {
+			tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
+			PostingTags postingTags = mapper.postingPostDtoToPostingTag(requestBody);
+			String tagName = requestBody.getTagName().get(i);
+			postingTagsService.createPostingTags(postingTags, posting, tagName);
+		}
+
 		return postingRepository.save(posting);
 	}
 
-	public Posting updatePosting(Posting posting, String token) {
+	public Posting updatePosting(PostingPatchDto requestBody, String token) {
+		Posting posting = mapper.postingPatchDtoToPosting(requestBody);
 
 		if (posting.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
@@ -59,6 +88,13 @@ public class PostingService {
 		Posting updatePosting = beanUtils.copyNonNullProperties(posting, findPosting);
 
 		updatePosting.setModifiedAt(LocalDateTime.now());
+
+		for (int i = 0; i < requestBody.getTagName().size(); i++) {
+			tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
+			PostingTags postingTags = mapper.postingPatchDtoToPostingTag(requestBody);
+			String tagName = requestBody.getTagName().get(i);
+			postingTagsService.updatePostingTags(postingTags, posting.getPostingId(), tagName);
+		}
 
 		return postingRepository.save(updatePosting);
 	}
@@ -71,7 +107,6 @@ public class PostingService {
 
 	@Transactional(readOnly = true)
 	public Page<Posting> findPostings(int page, int size) {
-		// 최신순 이외에도 정렬 어떻게 할지 고려해야 함
 		return postingRepository.findAll(PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
 
@@ -80,17 +115,30 @@ public class PostingService {
 		return postingRepository.findByMember_MemberId(memberId, PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
 
-	public void deletePosting(long postingId) {
+	public void deletePosting(long postingId, String token) {
 		Posting findPosting = findVerifiedPosting(postingId);
+
+		if (findPosting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
+		storageService.removeAll(postingId);
 		postingRepository.delete(findPosting);
 	}
 
-	public Posting addMedia(long postingId, List<String> mediaPaths) {
-
+	public Posting addMedia(long postingId, List<MultipartFile> multipartFiles, String token) {
 		Posting findPosting = findVerifiedPosting(postingId);
-		if (findPosting.getPostingMedias().size() + mediaPaths.size() > 3) {
+
+		if (findPosting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
+		// multipartFiles에 null인 것 제외하고 해야함.. 수정 필요
+		if (findPosting.getPostingMedias().size() + multipartFiles.size() > 3) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
 		}
+
+		List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
 		for (String mediaUrl: mediaPaths) {
 			Media media = new Media(mediaUrl, findPosting);
@@ -101,7 +149,19 @@ public class PostingService {
 		return findPosting;
 	}
 
-	public void deleteMedia(long mediaId) {
+	public void deleteMedia(long mediaId, String token) {
+		Posting posting = findVerfiedMedia(mediaId).getPosting();
+
+		if (posting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
+			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+		}
+
+		if (posting.getPostingMedias().stream().count() == 1) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
+		}
+
+		storageService.remove(mediaId);
+
 		Media findMedia = findVerfiedMedia(mediaId);
 		mediaRepository.delete(findMedia);
 	}
