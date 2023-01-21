@@ -11,12 +11,15 @@ import javax.persistence.ManyToOne;
 import com.main19.server.member.entity.Member;
 
 import com.main19.server.posting.entity.Posting;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class PostingLike {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
