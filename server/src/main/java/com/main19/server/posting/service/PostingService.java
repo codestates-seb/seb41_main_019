@@ -134,10 +134,7 @@ public class PostingService {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		// todo multipartFiles에 null인 것 제외하고 해야함.. 수정 필요
-		if (findPosting.getPostingMedias().size() + multipartFiles.size() > 3) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
-		}
+		countMedias(findPosting, multipartFiles);
 
 		List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
 
@@ -176,7 +173,6 @@ public class PostingService {
 		return findPosting;
 	}
 
-	// 첨부파일 삭제를 위해 추가
 	@Transactional(readOnly = true)
 	public Media findVerfiedMedia(long mediaId) {
 		Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
@@ -184,5 +180,17 @@ public class PostingService {
 			optionalMedia.orElseThrow(() ->
 				new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND));
 		return findMedia;
+	}
+
+	@Transactional(readOnly = true)
+	private void countMedias(Posting findPosting, List<MultipartFile> multipartFiles) {
+		int cntMultipartFiles = 0;
+		if (multipartFiles.get(1) == null) {
+			cntMultipartFiles = 1;
+		} else cntMultipartFiles = 2;
+
+		if (findPosting.getPostingMedias().size() + cntMultipartFiles > 3) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
+		}
 	}
 }
