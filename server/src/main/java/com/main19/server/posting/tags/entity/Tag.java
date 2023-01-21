@@ -5,12 +5,15 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Tag {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
