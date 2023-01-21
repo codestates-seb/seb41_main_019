@@ -29,7 +29,7 @@ function App() {
   }, [isCovered]);
 
   useEffect(() => {
-    console.log(change);
+    
   }, [change])
 
   return (
