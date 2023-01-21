@@ -11,4 +11,6 @@ public class MediaResponseDto {
 	private long mediaId;
 
 	private String mediaUrl;
+	private String thumbnailUrl;
+	private String format;
 }

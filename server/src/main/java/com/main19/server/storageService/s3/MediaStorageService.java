@@ -37,33 +37,55 @@ public class MediaStorageService extends S3StorageService {
 	private final MediaRepository mediaRepository;
 	private final FileSystemStorageService fileSystemStorageService;
 
-	public List<String> uploadMedia(List<MultipartFile> multipartFiles) {
+	public List<Media> uploadMedia(List<MultipartFile> multipartFiles, Posting posting) {
 
-		List<String> mediaUrlList = new ArrayList<>();
+		List<Media> mediaList = new ArrayList<>();
 
 		for (MultipartFile file : multipartFiles) {
 			if (file != null) {
+				Media media = new Media();
+				media.setPosting(posting);
+
 				if (file.getContentType().contains("video")) {
-					MultipartFile convertedFile = null;
+					media.setFormat("video");
 					try {
-						convertedFile = getMultipartFile(fileSystemStorageService.store(file));
-						String fileName = createFileName(convertedFile.getOriginalFilename());
-						ObjectMetadata objectMetadata = new ObjectMetadata();
-						objectMetadata.setContentLength(convertedFile.getSize());
-						objectMetadata.setContentType(convertedFile.getContentType());
+						List<File> fileList = fileSystemStorageService.store(file);
+						MultipartFile convertedFile = getMultipartFile(fileList.get(0));
+						String convertedFileName = createFileName(convertedFile.getOriginalFilename());
+						ObjectMetadata objectMetadata1 = new ObjectMetadata();
+						objectMetadata1.setContentLength(convertedFile.getSize());
+						objectMetadata1.setContentType(convertedFile.getContentType());
 
 						try (InputStream inputStream = convertedFile.getInputStream()) {
-							s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
+							s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", convertedFileName, inputStream, objectMetadata1)
 									.withCannedAcl(CannedAccessControlList.PublicRead));
-							mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
+							media.setMediaUrl(s3Client.getUrl(bucket + "/posting/media", convertedFileName).toString());
 
 						} catch (IOException e) {
 							throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
 						}
+
+						MultipartFile thumbnailFile = getMultipartFile(fileList.get(1));
+						String thumbnailFileName = createFileName(convertedFile.getOriginalFilename());
+						ObjectMetadata objectMetadata2 = new ObjectMetadata();
+						objectMetadata2.setContentLength(thumbnailFile.getSize());
+						objectMetadata2.setContentType(thumbnailFile.getContentType());
+
+						try (InputStream inputStream = thumbnailFile.getInputStream()) {
+							s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", thumbnailFileName, inputStream, objectMetadata2)
+									.withCannedAcl(CannedAccessControlList.PublicRead));
+							media.setThumbnailUrl(s3Client.getUrl(bucket + "/posting/media", thumbnailFileName).toString());
+
+						} catch (IOException e) {
+							throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
+						}
+
 					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
 				} else {
+					media.setFormat("image");
+
 					String fileName = createFileName(file.getOriginalFilename());
 					ObjectMetadata objectMetadata = new ObjectMetadata();
 					objectMetadata.setContentLength(file.getSize());
@@ -72,14 +94,16 @@ public class MediaStorageService extends S3StorageService {
 					try (InputStream inputStream = file.getInputStream()) {
 						s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
 								.withCannedAcl(CannedAccessControlList.PublicRead));
-						mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
+						media.setMediaUrl(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
 					} catch (IOException e) {
 						throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
 					}
 				}
+				mediaRepository.save(media);
+				mediaList.add(media);
 			}
 		}
-		return mediaUrlList;
+		return mediaList;
 	}
 
 

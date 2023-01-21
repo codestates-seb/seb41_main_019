@@ -51,8 +51,6 @@ public class PostingService {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
-
 		Posting posting = mapper.postingPostDtoToPosting(requestBody);
 
 		Member findMember = memberService.findMember(memberId);
@@ -60,7 +58,10 @@ public class PostingService {
 
 		posting.setCreatedAt(LocalDateTime.now());
 
-		saveMedias(mediaPaths, posting);
+		List<Media> mediaList = storageService.uploadMedia(multipartFiles, posting);
+		posting.setPostingMedias(mediaList);
+
+
 		createPostingTags(requestBody, posting);
 
 		return postingRepository.save(posting);
@@ -118,8 +119,8 @@ public class PostingService {
 		}
 
 		countMedias(findPosting, multipartFiles);
-		List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
-		saveMedias(mediaPaths, findPosting);
+		List<Media> mediaList = storageService.uploadMedia(multipartFiles, findPosting);
+		findPosting.setPostingMedias(mediaList);
 
 		return findPosting;
 	}
@@ -186,15 +187,6 @@ public class PostingService {
 			tagService.createTag(mapper.tagPostDtoToTag(tagName));
 			PostingTags postingTags = mapper.postingPatchDtoToPostingTag(requestBody);
 			postingTagsService.updatePostingTags(postingTags, updatePosting, tagName);
-		}
-	}
-
-	@Transactional(readOnly = true)
-	private void saveMedias(List<String> mediaPaths, Posting posting) {
-		for (String mediaUrl: mediaPaths) {
-			Media media = new Media(mediaUrl, posting);
-			mediaRepository.save(media);
-			posting.getPostingMedias().add(media);
 		}
 	}
 }

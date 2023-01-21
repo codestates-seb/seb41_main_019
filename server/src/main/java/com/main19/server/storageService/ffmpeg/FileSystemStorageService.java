@@ -14,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -21,7 +23,7 @@ import java.nio.file.StandardCopyOption;
 public class FileSystemStorageService {
     private final FFmpegService fFmpegService;
     private final Path rootLocation = Paths.get("C:/Users/hyein/Desktop/image"); // todo 서버 배포 시 "/home/ubuntu/main19/ffmpeg"로 변경
-    public File store(MultipartFile file) {
+    public List<File> store(MultipartFile file) {
         try {
             if (file.isEmpty()) {
                 throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
@@ -35,8 +37,10 @@ public class FileSystemStorageService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
-            File returnFile = new File(fFmpegService.export(file));
-            return returnFile;
+            List<File> returnFiles = new ArrayList<>();
+            returnFiles.add(new File(fFmpegService.export(file)));
+            returnFiles.add(new File(fFmpegService.exportThumbnail(file)));
+            return returnFiles;
         }
         catch (IOException e) {
             throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);

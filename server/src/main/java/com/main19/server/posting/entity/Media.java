@@ -11,9 +11,11 @@ import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Media {
 	@Id
@@ -22,16 +24,10 @@ public class Media {
 
 	private String mediaUrl;
 
+	private String thumbnailUrl;
+	private String format;
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) // posting이 삭제 될 때 이미지도 같이 삭제
 	@JoinColumn(name = "posting_id")
 	private Posting posting;
-
-	public void setPosting(Posting posting) {
-		this.posting = posting;
-	}
-
-	public Media(String mediaUrl, Posting posting) {
-		this.mediaUrl = mediaUrl;
-		this.posting = posting;
-	}
 }
