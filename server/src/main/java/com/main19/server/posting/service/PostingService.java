@@ -2,7 +2,6 @@ package com.main19.server.posting.service;
 
 import com.main19.server.auth.jwt.JwtTokenizer;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,18 +60,8 @@ public class PostingService {
 
 		posting.setCreatedAt(LocalDateTime.now());
 
-		for (String mediaUrl: mediaPaths) {
-			Media media = new Media(mediaUrl, posting);
-			mediaRepository.save(media);
-			posting.getPostingMedias().add(media);
-		}
-
-		for(int i = 0; i < requestBody.getTagName().size(); i++) {
-			tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
-			PostingTags postingTags = mapper.postingPostDtoToPostingTag(requestBody);
-			String tagName = requestBody.getTagName().get(i);
-			postingTagsService.createPostingTags(postingTags, posting, tagName);
-		}
+		saveMedias(mediaPaths, posting);
+		createPostingTags(requestBody, posting);
 
 		return postingRepository.save(posting);
 	}
@@ -89,13 +78,7 @@ public class PostingService {
 		Posting updatePosting = beanUtils.copyNonNullProperties(posting, findPosting);
 
 		updatePosting.setModifiedAt(LocalDateTime.now());
-
-		for (int i = 0; i < requestBody.getTagName().size(); i++) {
-			tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
-			PostingTags postingTags = mapper.postingPatchDtoToPostingTag(requestBody);
-			String tagName = requestBody.getTagName().get(i);
-			postingTagsService.updatePostingTags(postingTags, updatePosting, tagName);
-		}
+		updatePostingTags(requestBody, updatePosting);
 
 		return postingRepository.save(updatePosting);
 	}
@@ -135,14 +118,8 @@ public class PostingService {
 		}
 
 		countMedias(findPosting, multipartFiles);
-
 		List<String> mediaPaths = storageService.uploadMedia(multipartFiles);
-
-		for (String mediaUrl: mediaPaths) {
-			Media media = new Media(mediaUrl, findPosting);
-			mediaRepository.save(media);
-			findPosting.getPostingMedias().add(media);
-		}
+		saveMedias(mediaPaths, findPosting);
 
 		return findPosting;
 	}
@@ -191,6 +168,33 @@ public class PostingService {
 
 		if (findPosting.getPostingMedias().size() + cntMultipartFiles > 3) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
+		}
+	}
+
+	@Transactional(readOnly = true)
+	private void createPostingTags(PostingPostDto requestBody, Posting posting) {
+		for (String tagName : requestBody.getTagName()) {
+			tagService.createTag(mapper.tagPostDtoToTag(tagName));
+			PostingTags postingTags = mapper.postingPostDtoToPostingTag(requestBody);
+			postingTagsService.createPostingTags(postingTags, posting, tagName);
+		}
+	}
+
+	@Transactional(readOnly = true)
+	private void updatePostingTags(PostingPatchDto requestBody, Posting updatePosting) {
+		for (String tagName : requestBody.getTagName()) {
+			tagService.createTag(mapper.tagPostDtoToTag(tagName));
+			PostingTags postingTags = mapper.postingPatchDtoToPostingTag(requestBody);
+			postingTagsService.updatePostingTags(postingTags, updatePosting, tagName);
+		}
+	}
+
+	@Transactional(readOnly = true)
+	private void saveMedias(List<String> mediaPaths, Posting posting) {
+		for (String mediaUrl: mediaPaths) {
+			Media media = new Media(mediaUrl, posting);
+			mediaRepository.save(media);
+			posting.getPostingMedias().add(media);
 		}
 	}
 }
