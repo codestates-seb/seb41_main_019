@@ -20,7 +20,7 @@ import java.nio.file.StandardCopyOption;
 @RequiredArgsConstructor
 public class FileSystemStorageService {
     private final FFmpegService fFmpegService;
-    private final Path rootLocation = Paths.get("C:/Users/hyein/Desktop/image");
+    private final Path rootLocation = Paths.get("C:/Users/hyein/Desktop/image"); // todo 서버 배포 시 "/home/ubuntu/main19/ffmpeg"로 변경
     public File store(MultipartFile file) {
         try {
             if (file.isEmpty()) {
@@ -47,7 +47,7 @@ public class FileSystemStorageService {
     // todo 10분에 한번 씩으로 설정했는데 이건 추후에 논의하여 변경
     @Scheduled(fixedRate = 600000)
     public void delete() {
-        File folder = new File("C:/Users/hyein/Desktop/image");
+        File folder = new File("C:/Users/hyein/Desktop/image"); // todo 서버 배포 시 "/home/ubuntu/main19/ffmpeg"로 변경
         try {
                 File[] listFiles = folder.listFiles();
 

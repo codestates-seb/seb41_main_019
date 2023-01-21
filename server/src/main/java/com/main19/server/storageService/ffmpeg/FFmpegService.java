@@ -15,12 +15,12 @@ import java.io.IOException;
 public class FFmpegService {
     public String export(MultipartFile file) throws IOException {
 
-        FFmpeg ffmpeg = new FFmpeg("C:/Users/hyein/Desktop/ffmpeg-5.1.2-essentials_build/ffmpeg-5.1.2-essentials_build/bin/ffmpeg");
-        FFprobe ffprobe = new FFprobe("C:/Users/hyein/Desktop/ffmpeg-5.1.2-essentials_build/ffmpeg-5.1.2-essentials_build/bin/ffprobe");
+        FFmpeg ffmpeg = new FFmpeg("C:/Users/hyein/Desktop/ffmpeg-5.1.2-essentials_build/ffmpeg-5.1.2-essentials_build/bin/ffmpeg"); // todo 서버 배포 시 "/usr/bin/ffmpeg"로 변경
+        FFprobe ffprobe = new FFprobe("C:/Users/hyein/Desktop/ffmpeg-5.1.2-essentials_build/ffmpeg-5.1.2-essentials_build/bin/ffprobe"); // todo 서버 배포 시 "/usr/bin/ffprobe"로 변경
 
         String filename = file.getOriginalFilename();
 
-        String path = "C:/Users/hyein/Desktop/image/" + filename;
+        String path = "C:/Users/hyein/Desktop/image/" + filename; // todo 서버 배포 시 "/home/ubuntu/main19/ffmpeg/" 로 변경
         System.out.println(path);
         FFmpegBuilder builder = new FFmpegBuilder().setInput(path) // 파일경로
                 .overrideOutputFiles(true) // 오버라이드
@@ -36,6 +36,6 @@ public class FFmpegService {
 
         FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
         executor.createJob(builder).run();
-        return "C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + "converted.mp4";
+        return "C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + "converted.mp4"; // todo 서버 배포 시 "/home/ubuntu/main19/ffmpeg/" 로 변경
     }
 }
