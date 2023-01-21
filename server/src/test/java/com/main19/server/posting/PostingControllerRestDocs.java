@@ -12,11 +12,7 @@ import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.service.PostingService;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
-import com.main19.server.posting.tags.entity.PostingTags;
-import com.main19.server.posting.tags.entity.Tag;
-import com.main19.server.posting.tags.service.PostingTagsService;
-import com.main19.server.posting.tags.service.TagService;
-import com.main19.server.s3service.S3StorageService;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
