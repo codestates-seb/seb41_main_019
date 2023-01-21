@@ -31,7 +31,6 @@ public class PostingTagsService {
 	}
 
 	public PostingTags updatePostingTags(PostingTags postingTags, long postingId, String tagName) {
-		List<PostingTags> getPostingTags = findPostingTagsByPostingId(postingId);
 		postingTagsRepository.deletePostingTagsByPostingId(postingId);
 
 		Posting posting = postingService.findVerifiedPosting(postingId);
@@ -41,11 +40,5 @@ public class PostingTagsService {
 		postingTags.setTag(tag);
 
 		return postingTagsRepository.save(postingTags);
-	}
-
-	@Transactional(readOnly = true)
-	private List<PostingTags> findPostingTagsByPostingId(long postingId) {
-		List<PostingTags> getPostingTags = postingTagsRepository.findAllByPosting_PostingId(postingId);
-		return getPostingTags;
 	}
 }
