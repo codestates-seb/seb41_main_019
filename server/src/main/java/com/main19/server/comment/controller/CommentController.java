@@ -73,9 +73,9 @@ public class CommentController {
             HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity getComments(@Positive @RequestParam int page,
-        @Positive @RequestParam int size) {
+    @GetMapping("/{posting-id}")
+    public ResponseEntity getComments(@PathVariable("posting-id") @Positive long postingId,
+        @Positive @RequestParam int page, @Positive @RequestParam int size) {
 
         Page<Comment> pageComments = commentService.findComments(page - 1, size);
         List<Comment> response = pageComments.getContent();

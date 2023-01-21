@@ -8,6 +8,7 @@ import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class ChatRoomController {
 
     @PostMapping
     public ResponseEntity postChatRoom (@RequestHeader(name = "Authorization") String token,
-        @RequestBody ChatRoomDto.Post requestBody) {
+        @Valid @RequestBody ChatRoomDto.Post requestBody) {
 
         if(token == null) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);

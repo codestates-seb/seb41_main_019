@@ -10,6 +10,7 @@ import com.main19.server.myplants.gallery.service.GalleryService;
 import com.main19.server.myplants.service.MyPlantsService;
 import com.main19.server.s3service.S3StorageService;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,7 @@ public class GalleryController {
 
     @PostMapping(value = "/{myplants-id}/gallery" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postGallery(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
-        @RequestPart GalleryDto.Post requestBody, @RequestPart MultipartFile galleryImage) {
+        @Valid @RequestPart GalleryDto.Post requestBody, @RequestPart MultipartFile galleryImage) {
 
         String imagePath = storageService.uploadGalleryImage(galleryImage);
         Gallery gallery = galleryMapper.galleryDtoPostToGallery(requestBody);

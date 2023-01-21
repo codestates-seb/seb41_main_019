@@ -6,6 +6,7 @@ import com.main19.server.comment.like.entity.CommentLike;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class CommentDto {
     @NoArgsConstructor
     public static class Post {
 
+        @Positive
         private long memberId;
         @NotBlank
         private String comment;
