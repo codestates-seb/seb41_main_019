@@ -25,7 +25,7 @@ const Wrapper = styled.section`
     }
 `
 
-const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change }) => { 
+const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, handleChange }) => { 
     const [ posts, setPosts ] = useState([]);
     const cookie = new Cookie();
 
@@ -51,8 +51,8 @@ const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change }) 
                         <span>게시물이 없습니다.</span> 
                     </div>
                 : posts.map((post, idx) => {
-                    return (<Post post={post} key={idx} handleModal={handleModal}
-                            handleCurPost={handleCurPost} handleDelete={handleDelete} handleEdit={handleEdit} />)
+                    return (<Post post={post} key={idx} handleModal={handleModal} handleChange={handleChange} change={change}
+                                handleCurPost={handleCurPost} handleDelete={handleDelete} handleEdit={handleEdit} />)
                 })
             }
         </Wrapper>

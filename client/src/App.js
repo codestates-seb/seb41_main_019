@@ -28,6 +28,10 @@ function App() {
     document.body.style.overflow = isCovered ? "hidden" : "auto";
   }, [isCovered]);
 
+  useEffect(() => {
+    
+  }, [change])
+
   return (
     <BrowserRouter>
       {isCovered ? <Background isCovered={isCovered} /> : null}
