@@ -143,10 +143,11 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
                 {   
                     follow.length > 0 ?
                     <div className="icons">
-                    {   
-                        follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ||
-                        post.memberId === Number(cookie.get("memberId")) ?
-                            <button onClick={deleteFollow}>팔로중임ㅋ</button> : <FiUserPlus onClick={addFollow} />
+                    {
+                        post.memberId === Number(cookie.get("memberId")) ? null : 
+                          
+                            follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ?
+                            <FaUserFriends onClick={deleteFollow} /> : <FiUserPlus onClick={addFollow} />
                     }
                     { post.memberId === Number(cookie.get("memberId")) ?
                         <BiDotsVerticalRounded onClick={() => {
@@ -155,7 +156,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
                             }} />
                         : null
                     }
-                    </div> : null
+                    </div> : <div className="icons"><FiUserPlus onClick={addFollow} /></div>
                 }
             </StyledHeader>
             { post.postingMedias.length > 0 ?
