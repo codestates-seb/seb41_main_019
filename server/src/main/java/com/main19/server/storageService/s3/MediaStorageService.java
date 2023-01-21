@@ -56,6 +56,7 @@ public class MediaStorageService extends S3StorageService {
 							s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
 									.withCannedAcl(CannedAccessControlList.PublicRead));
 							mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
+
 						} catch (IOException e) {
 							throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
 						}
