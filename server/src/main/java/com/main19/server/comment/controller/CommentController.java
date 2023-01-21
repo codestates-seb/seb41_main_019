@@ -64,20 +64,20 @@ public class CommentController {
             HttpStatus.OK);
     }
 
-    @GetMapping("/{comment-id}")
-    public ResponseEntity getComment(@PathVariable("comment-id") @Positive long commentId) {
-
-        Comment response = commentService.findComment(commentId);
-
-        return new ResponseEntity<>(commentMapper.commentsToCommentsResponseDto(response),
-            HttpStatus.OK);
-    }
+//    @GetMapping("/{comment-id}")
+//    public ResponseEntity getComment(@PathVariable("comment-id") @Positive long commentId) {
+//
+//        Comment response = commentService.findComment(commentId);
+//
+//        return new ResponseEntity<>(commentMapper.commentsToCommentsResponseDto(response),
+//            HttpStatus.OK);
+//    }
 
     @GetMapping("/{posting-id}")
     public ResponseEntity getComments(@PathVariable("posting-id") @Positive long postingId,
         @Positive @RequestParam int page, @Positive @RequestParam int size) {
 
-        Page<Comment> pageComments = commentService.findComments(page - 1, size);
+        Page<Comment> pageComments = commentService.findComments(postingId,page - 1, size);
         List<Comment> response = pageComments.getContent();
 
         return new ResponseEntity<>(

@@ -74,8 +74,8 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Comment> findComments(int page, int size) {
-        return commentRepository.findAll(PageRequest.of(page, size,
+    public Page<Comment> findComments(long postingId, int page, int size) {
+        return commentRepository.findByPosting_PostingId(postingId,PageRequest.of(page, size,
             Sort.by("commentId").descending()));
     }
 
