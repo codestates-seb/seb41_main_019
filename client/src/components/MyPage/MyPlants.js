@@ -129,7 +129,7 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
           <GrPrevious className="icon" />
         </div>
         <StyledListsContainer>
-          <StyledMyPlantsItem onClick={handleModal}>
+          <StyledMyPlantsItem onClick={() => handleModal("AddPlant")}>
             <div className="image-wrapper">
               <Cookie className="image" />
             </div>

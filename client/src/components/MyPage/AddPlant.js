@@ -69,7 +69,7 @@ const AddPlant = ({ handleModal, userInfo, jwt, getMyPlantsData }) => {
   });
   useEffect(() => {
     document.getElementById("bg").addEventListener("click", () => {
-      handleModal();
+      handleModal("AddPlant");
     });
   }, [handleModal]);
 
@@ -94,7 +94,7 @@ const AddPlant = ({ handleModal, userInfo, jwt, getMyPlantsData }) => {
         // "plantBirthday" : plantBirthday
       }
     }).then(res => {
-      handleModal();
+      handleModal("AddPlant");
       axios({
         method: "get",
         url : `http://13.124.33.113:8080/myplants/${userInfo.memberId}`,
@@ -140,7 +140,7 @@ const AddPlant = ({ handleModal, userInfo, jwt, getMyPlantsData }) => {
           /> */}
           <div className="button-container">
             <BlueBtn type="submit">완료</BlueBtn>
-            <BlueBtn onClick={handleModal}>취소</BlueBtn>
+            <BlueBtn onClick={() => handleModal("AddPlant")}>취소</BlueBtn>
           </div>
         </form>
       </StyledContainer>

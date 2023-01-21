@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import Post from "../Home/Post";
 import { FcAnswers } from "react-icons/fc";
 
 const StyledContainer = styled.div`

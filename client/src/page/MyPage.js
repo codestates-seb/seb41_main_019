@@ -73,7 +73,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
   const [currentView, setCurrentView] = useState("postings"); // 현재 view(리스트)의 상태
-  const [isModalOpened, setIsModalOpened] = useState(false);
+  const [isAddPlantOpened, setIsAddPlantOpened] = useState(false);
   
   useEffect(() => {
     getUserInfo()
@@ -130,9 +130,15 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
       }
   };
 
-  const handleModal = () => {
+  const handleModal = (modal) => {
     handleIsCovered();
-    setIsModalOpened(!isModalOpened);
+    switch (modal) {
+      case "AddPlant":
+        setIsAddPlantOpened(!isAddPlantOpened);
+        break;
+      case "View":
+
+    }
   };
 
   const handlePostingsClick = () => {
@@ -158,7 +164,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
 
   return (
     <>
-      {isCovered && isModalOpened && <AddPlant jwt={jwt}  handleModal={handleModal} userInfo={userInfo} />}
+      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt}  handleModal={handleModal} userInfo={userInfo} />}
       <StyledContainer>
         <UserInfo userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened ? (
