@@ -293,6 +293,22 @@ include::{snippets}/patch-comment/http-response.adoc[]
 .response-fields
 include::{snippets}/patch-comment/response-fields.adoc[]
 
+=== 댓글 조회
+.curl-request
+include::{snippets}/gets-comments/curl-request.adoc[]
+
+.http-request
+include::{snippets}/gets-comments/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/gets-comments/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/gets-comments/http-response.adoc[]
+
+.response-fields
+include::{snippets}/gets-comments/response-fields.adoc[]
+
 === 댓글 삭제
 .curl-request
 include::{snippets}/delete-comment/curl-request.adoc[]

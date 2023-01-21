@@ -472,9 +472,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_댓글_등록">3.1. 댓글 등록</a></li>
 <li><a href="#_댓글_수정">3.2. 댓글 수정</a></li>
-<li><a href="#_댓글_삭제">3.3. 댓글 삭제</a></li>
-<li><a href="#_댓글_좋아요">3.4. 댓글 좋아요</a></li>
-<li><a href="#_댓글_좋아요_취소">3.5. 댓글 좋아요 취소</a></li>
+<li><a href="#_댓글_조회">3.3. 댓글 조회</a></li>
+<li><a href="#_댓글_삭제">3.4. 댓글 삭제</a></li>
+<li><a href="#_댓글_좋아요">3.5. 댓글 좋아요</a></li>
+<li><a href="#_댓글_좋아요_취소">3.6. 댓글 좋아요 취소</a></li>
 </ul>
 </li>
 <li><a href="#_scrap">4. Scrap</a>
@@ -1308,8 +1309,8 @@ Content-Length: 657
       "mediaId" : 2,
       "mediaUrl" : "imageUrl"
     } ],
-    "createdAt" : "2023-01-21T20:48:31.7164236",
-    "modifiedAt" : "2023-01-21T20:48:31.7164236",
+    "createdAt" : "2023-01-21T21:24:28.7710038",
+    "modifiedAt" : "2023-01-21T21:24:28.7710038",
     "tags" : [ {
       "tagName" : "스투키"
     }, {
@@ -1522,8 +1523,8 @@ Content-Length: 664
       "mediaId" : 2,
       "mediaUrl" : "imageUrl"
     } ],
-    "createdAt" : "2023-01-21T20:48:31.6124243",
-    "modifiedAt" : "2023-01-21T20:48:31.6124243",
+    "createdAt" : "2023-01-21T21:24:28.6780047",
+    "modifiedAt" : "2023-01-21T21:24:28.6780047",
     "tags" : [ {
       "tagName" : "스투키"
     }, {
@@ -2343,8 +2344,8 @@ Content-Length: 573
       "mediaId" : 2,
       "mediaUrl" : "imageUrl"
     } ],
-    "createdAt" : "2023-01-21T20:48:31.6714255",
-    "modifiedAt" : "2023-01-21T20:48:31.6714255",
+    "createdAt" : "2023-01-21T21:24:28.7340053",
+    "modifiedAt" : "2023-01-21T21:24:28.7340053",
     "tags" : [ ],
     "likeCount" : 0,
     "postingLikes" : [ ],
@@ -2640,8 +2641,8 @@ Content-Length: 333
     "comment" : "댓글 test",
     "likeCount" : 0,
     "commentLikeList" : [ ],
-    "createdAt" : "2023-01-21T20:48:28.5574246",
-    "modifiedAt" : "2023-01-21T20:48:28.5574246"
+    "createdAt" : "2023-01-21T21:24:25.0530039",
+    "modifiedAt" : "2023-01-21T21:24:25.0530039"
   }
 }</code></pre>
 </div>
@@ -2808,8 +2809,8 @@ Content-Length: 340
     "comment" : "댓글 수정 test",
     "likeCount" : 0,
     "commentLikeList" : [ ],
-    "createdAt" : "2023-01-21T20:48:28.6004224",
-    "modifiedAt" : "2023-01-21T20:48:28.6004224"
+    "createdAt" : "2023-01-21T21:24:25.1300058",
+    "modifiedAt" : "2023-01-21T21:24:25.1300058"
   }
 }</code></pre>
 </div>
@@ -2883,7 +2884,178 @@ Content-Length: 340
 </table>
 </div>
 <div class="sect2">
-<h3 id="_댓글_삭제">3.3. 댓글 삭제</h3>
+<h3 id="_댓글_조회">3.3. 댓글 조회</h3>
+<div class="listingblock">
+<div class="title">curl-request</div>
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">$ curl 'http://localhost:8080/comments/1?page=1&amp;size=10' -i -X GET \
+    -H 'Authorization: Bearer AccessToken' \
+    -H 'Accept: application/json'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">http-request</div>
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">GET /comments/1?page=1&amp;size=10 HTTP/1.1
+Authorization: Bearer AccessToken
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 35. /comments/{posting-id}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>posting-id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 식별자</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">http-response</div>
+<div class="content">
+<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 785
+
+{
+  "data" : [ {
+    "commentId" : 1,
+    "postingId" : 1,
+    "memberId" : 1,
+    "userName" : "머호",
+    "profileImage" : "profileImage",
+    "comment" : "안녕 난 머호1",
+    "likeCount" : 0,
+    "commentLikeList" : [ ],
+    "createdAt" : "2023-01-21T21:24:25.0880053",
+    "modifiedAt" : "2023-01-21T21:24:25.0880053"
+  }, {
+    "commentId" : 2,
+    "postingId" : 1,
+    "memberId" : 1,
+    "userName" : "머호",
+    "profileImage" : "profileImage",
+    "comment" : "안녕 난 머호2",
+    "likeCount" : 0,
+    "commentLikeList" : [ ],
+    "createdAt" : "2023-01-21T21:24:25.0880053",
+    "modifiedAt" : "2023-01-21T21:24:25.0880053"
+  } ],
+  "pageInfo" : {
+    "page" : 1,
+    "size" : 2,
+    "totalElements" : 2,
+    "totalPages" : 1
+  }
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 36. response-fields</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].commentId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].postingId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 식별자</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].userName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].profileImage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 프로필 이미지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].comment</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].likeCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">좋아요 개수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].commentLikeList</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 좋아요 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].createdAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최초 작성일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].modifiedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">최종 수정일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pageInfo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이징 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pageInfo.page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pageInfo.size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 사이즈</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pageInfo.totalElements</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">전체 데이터 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pageInfo.totalPages</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">전체 페이지 수</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_댓글_삭제">3.4. 댓글 삭제</h3>
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
@@ -2900,7 +3072,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 35. /comments/{comment-id}</caption>
+<caption class="title">Table 37. /comments/{comment-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2926,7 +3098,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_댓글_좋아요">3.4. 댓글 좋아요</h3>
+<h3 id="_댓글_좋아요">3.5. 댓글 좋아요</h3>
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
@@ -2957,7 +3129,7 @@ Host: localhost:8080
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 36. /comments/{comment-id}/likes</caption>
+<caption class="title">Table 38. /comments/{comment-id}/likes</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2992,7 +3164,7 @@ Content-Length: 91
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 37. response-fields</caption>
+<caption class="title">Table 39. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3025,7 +3197,7 @@ Content-Length: 91
 </table>
 </div>
 <div class="sect2">
-<h3 id="_댓글_좋아요_취소">3.5. 댓글 좋아요 취소</h3>
+<h3 id="_댓글_좋아요_취소">3.6. 댓글 좋아요 취소</h3>
 <div class="listingblock">
 <div class="title">curl-request</div>
 <div class="content">
@@ -3042,7 +3214,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 38. /comments/likes/{comment-likes-id}</caption>
+<caption class="title">Table 40. /comments/likes/{comment-likes-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3104,7 +3276,7 @@ Host: localhost:8080
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 39. /scraps/{posting-id}</caption>
+<caption class="title">Table 41. /scraps/{posting-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3123,7 +3295,7 @@ Host: localhost:8080
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 40. request-fields</caption>
+<caption class="title">Table 42. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3166,7 +3338,7 @@ Content-Length: 85
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 41. response-fields</caption>
+<caption class="title">Table 43. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3216,7 +3388,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 42. /scraps/{scrap-id}</caption>
+<caption class="title">Table 44. /scraps/{scrap-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3266,7 +3438,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 43. /followings/{member-id}</caption>
+<caption class="title">Table 45. /followings/{member-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3285,7 +3457,7 @@ Host: localhost:8080</code></pre>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 44. response-fields</caption>
+<caption class="title">Table 46. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3335,7 +3507,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 45. /followings/{member-id}</caption>
+<caption class="title">Table 47. /followings/{member-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3378,7 +3550,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 46. /followed/{member-id}</caption>
+<caption class="title">Table 48. /followed/{member-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3444,7 +3616,7 @@ Host: localhost:8080
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 47. request-fields</caption>
+<caption class="title">Table 49. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3499,7 +3671,7 @@ Content-Length: 166
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 48. response-fields</caption>
+<caption class="title">Table 50. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3559,7 +3731,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 49. /myplants/{myplants-id}</caption>
+<caption class="title">Table 51. /myplants/{myplants-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3596,7 +3768,7 @@ Content-Length: 166
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 50. response-fields</caption>
+<caption class="title">Table 52. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3686,7 +3858,7 @@ Content-Length: 427
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 51. response-fields</caption>
+<caption class="title">Table 53. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3771,7 +3943,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 52. /myplants/{myplants-id}</caption>
+<caption class="title">Table 54. /myplants/{myplants-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3837,7 +4009,7 @@ Content-Type: application/json
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 53. requestBody-field</caption>
+<caption class="title">Table 55. requestBody-field</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3859,7 +4031,7 @@ Content-Type: application/json
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 54. /myplants/{myplants-id}/gallery</caption>
+<caption class="title">Table 56. /myplants/{myplants-id}/gallery</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3890,13 +4062,13 @@ Content-Length: 189
     "galleryId" : 1,
     "content" : "안녕 난 머호",
     "plantImage" : "plantImage",
-    "createdAt" : "2023-01-21T20:48:29.7624245"
+    "createdAt" : "2023-01-21T21:24:26.8240056"
   }
 }</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 55. response-fields</caption>
+<caption class="title">Table 57. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3970,7 +4142,7 @@ Host: localhost:8080
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 56. /myplants/{myplants-id}</caption>
+<caption class="title">Table 58. /myplants/{myplants-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3989,7 +4161,7 @@ Host: localhost:8080
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 57. request-fields</caption>
+<caption class="title">Table 59. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4038,7 +4210,7 @@ Content-Length: 231
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 58. response-fields</caption>
+<caption class="title">Table 60. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4100,7 +4272,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 59. /myplants/gallery/{gallery-id}</caption>
+<caption class="title">Table 61. /myplants/gallery/{gallery-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4131,13 +4303,13 @@ Content-Length: 189
     "galleryId" : 1,
     "content" : "안녕 난 머호",
     "plantImage" : "plantImage",
-    "createdAt" : "2023-01-21T20:48:29.8054229"
+    "createdAt" : "2023-01-21T21:24:26.8590053"
   }
 }</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 60. response-fields</caption>
+<caption class="title">Table 62. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4197,7 +4369,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 61. /myplants/{myplants-id}/gallery</caption>
+<caption class="title">Table 63. /myplants/{myplants-id}/gallery</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4228,13 +4400,13 @@ Content-Length: 473
     "galleryId" : 1,
     "content" : "안녕 난 머호",
     "plantImage" : "plantImage",
-    "createdAt" : "2023-01-21T20:48:29.7334222"
+    "createdAt" : "2023-01-21T21:24:26.7970061"
   }, {
     "myPlantsId" : 1,
     "galleryId" : 1,
     "content" : "안녕 난 머호",
     "plantImage" : "plantImage",
-    "createdAt" : "2023-01-21T20:48:29.7334222"
+    "createdAt" : "2023-01-21T21:24:26.7970061"
   } ],
   "pageInfo" : {
     "page" : 1,
@@ -4246,7 +4418,7 @@ Content-Length: 473
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 62. response-fields</caption>
+<caption class="title">Table 64. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4331,7 +4503,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 63. /myplants/gallery/{gallery-id}</caption>
+<caption class="title">Table 65. /myplants/gallery/{gallery-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4409,7 +4581,7 @@ Content-Length: 89
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 64. response-fields</caption>
+<caption class="title">Table 66. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4461,7 +4633,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 65. /chatroom/{member-id}</caption>
+<caption class="title">Table 67. /chatroom/{member-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4498,7 +4670,7 @@ Content-Length: 134
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 66. response-fields</caption>
+<caption class="title">Table 68. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4550,7 +4722,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 67. /message/{member-id}</caption>
+<caption class="title">Table 69. /message/{member-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4589,7 +4761,7 @@ Content-Length: 211
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 68. response-fields</caption>
+<caption class="title">Table 70. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4651,7 +4823,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 69. /notification/{sse-id}</caption>
+<caption class="title">Table 71. /notification/{sse-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4690,7 +4862,7 @@ Content-Length: 197
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 70. response-fields</caption>
+<caption class="title">Table 72. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -4762,7 +4934,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 71. /notification/{member-id}</caption>
+<caption class="title">Table 73. /notification/{member-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4833,7 +5005,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 72. /notification/{sse-id}</caption>
+<caption class="title">Table 74. /notification/{sse-id}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4864,7 +5036,7 @@ Host: localhost:8080</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-01-20 13:55:43 +0900
+Last updated 2023-01-21 21:23:07 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
