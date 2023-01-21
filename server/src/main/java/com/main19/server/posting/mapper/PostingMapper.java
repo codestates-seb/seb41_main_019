@@ -7,6 +7,7 @@ import com.main19.server.comment.entity.Comment;
 import com.main19.server.comment.like.dto.CommentLikeGetResponseDto;
 import com.main19.server.comment.like.entity.CommentLike;
 import com.main19.server.posting.scrap.dto.ScrapDto;
+import com.main19.server.posting.scrap.dto.ScrapPostResponseDto;
 import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import com.main19.server.posting.scrap.entity.Scrap;
 import org.mapstruct.Mapper;
@@ -71,5 +72,5 @@ public interface PostingMapper {
 
 	@Mapping(source = "posting.postingId", target = "postingId")
 	@Mapping(source = "member.memberId", target = "memberId")
-	ScrapResponseDto scrapToScrapResponseDto(Scrap scrap);
+	ScrapPostResponseDto scrapToScrapResponseDto(Scrap scrap);
 }

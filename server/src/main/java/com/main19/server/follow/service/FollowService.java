@@ -10,9 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FollowService {
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
@@ -26,7 +28,7 @@ public class FollowService {
 
         Follow follow = new Follow();
         follow.setFollowingId(findFollowMember(followingMemberId));
-        follow.setFollowedId(findFollowMember(followedMemberId));
+        follow.setFollowerId(findFollowMember(followedMemberId));
 
         return followRepository.save(follow);
     }
@@ -41,21 +43,21 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
-
+    @Transactional(readOnly = true)
     private void verifiedFollow(long followingMemberId, long followedMemberId) {
         Follow findFollow = followRepository.findFollow(followingMemberId, followedMemberId);
         if (findFollow != null) {
             throw new BusinessLogicException(ExceptionCode.FOLLOW_ALREADY_EXIST);
         }
     }
-
+    @Transactional(readOnly = true)
     private Member findFollowMember(long followId) {
         Optional<Member> optionalFollow = memberRepository.findById(followId);
         Member member = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return member;
     }
 
-
+    @Transactional(readOnly = true)
     private Follow findExistFollow(long followingMemberId, long followedMemberId) {
         Optional<Follow> optionalFollow = followRepository.findFollowId(followingMemberId, followedMemberId);
         Follow follow = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));

@@ -21,9 +21,11 @@ import com.main19.server.posting.repository.PostingRepository;
 import com.main19.server.utils.CustomBeanUtils;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostingService {
 	private final PostingRepository postingRepository;
 	private final MediaRepository mediaRepository;
@@ -49,9 +51,7 @@ public class PostingService {
 
 	public Posting updatePosting(Posting posting, String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (posting.getMember().getMemberId() != tokenId) {
+		if (posting.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -63,16 +63,19 @@ public class PostingService {
 		return postingRepository.save(updatePosting);
 	}
 
+	@Transactional(readOnly = true)
 	public Posting findPosting(long postingId) {
 		Posting findPosting = findVerifiedPosting(postingId);
 		return findPosting;
 	}
 
+	@Transactional(readOnly = true)
 	public Page<Posting> findPostings(int page, int size) {
 		// 최신순 이외에도 정렬 어떻게 할지 고려해야 함
 		return postingRepository.findAll(PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
 
+	@Transactional(readOnly = true)
 	public Page<Posting> findPostingsByMemberId(long memberId, int page, int size) {
 		return postingRepository.findByMember_MemberId(memberId, PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
@@ -103,6 +106,7 @@ public class PostingService {
 		mediaRepository.delete(findMedia);
 	}
 
+	@Transactional(readOnly = true)
 	public Posting findVerifiedPosting(long postingId) {
 		Optional<Posting> optionalPosting = postingRepository.findById(postingId);
 		Posting findPosting =
@@ -112,6 +116,7 @@ public class PostingService {
 	}
 
 	// 첨부파일 삭제를 위해 추가
+	@Transactional(readOnly = true)
 	public Media findVerfiedMedia(long mediaId) {
 		Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
 		Media findMedia =

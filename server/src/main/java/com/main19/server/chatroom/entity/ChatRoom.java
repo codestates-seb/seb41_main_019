@@ -43,4 +43,12 @@ public class ChatRoom {
         this.receiver = receiver;
         this.sender = sender;
     }
+
+    public long getReceiverId() {
+        return receiver.getMemberId();
+    }
+
+    public long getSenderId() {
+        return sender.getMemberId();
+    }
 }

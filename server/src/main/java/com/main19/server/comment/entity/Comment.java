@@ -55,4 +55,8 @@ public class Comment {
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<CommentLike> commentLikeList = new ArrayList<>();
+
+    public long getMemberId() {
+        return member.getMemberId();
+    }
 }

@@ -14,9 +14,11 @@ import com.main19.server.sse.service.SseService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CommentLikeService {
 
     private final CommentLikeRepository commentLikeRepository;
@@ -47,7 +49,7 @@ public class CommentLikeService {
 
         commentLike.setComment(comment);
 
-        if(comment.getMember().getMemberId() != tokenId) {
+        if(comment.getMemberId() != tokenId) {
             sseService.sendPosting(comment.getMember(), SseType.commentLike, memberService.findMember(memberId),comment.getPosting());
         }
 
@@ -56,20 +58,19 @@ public class CommentLikeService {
 
     public void deleteLike(long commentLikeId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (findVerifiedCommentLike(commentLikeId).getMember().getMemberId() != tokenId) {
+        if (findVerifiedCommentLike(commentLikeId).getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
         CommentLike commentLike = findVerifiedCommentLike(commentLikeId);
 
-        commentLike.getComment().setLikeCount(commentLike.getComment().getLikeCount()-1);
+        commentLike.getComment().setLikeCount(commentLike.getCommentLikeCount()-1);
 
         commentLikeRepository.delete(commentLike);
 
     }
 
+    @Transactional(readOnly = true)
     private CommentLike findVerifiedCommentLike(long commentLikeId) {
         Optional<CommentLike> optionalCommentLike = commentLikeRepository.findById(commentLikeId);
         CommentLike findCommentLike =

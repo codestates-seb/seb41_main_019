@@ -34,4 +34,8 @@ public class Scrap {
             this.member.getScrapPostingList().add(this);
         }
     }
+
+    public long getMemberId() {
+        return member.getMemberId();
+    }
 }

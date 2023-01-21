@@ -59,8 +59,8 @@ public class Member {
 	@OneToMany(mappedBy = "member")
 	private List<Scrap> scrapPostingList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "followedId")
-	private List<Follow> followedList = new ArrayList<>();
+	@OneToMany(mappedBy = "followerId")
+	private List<Follow> followerList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "followingId")
 	private List<Follow> followingList = new ArrayList<>();

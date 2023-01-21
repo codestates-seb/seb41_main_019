@@ -15,9 +15,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ScrapService {
     private final ScrapRepository scrapRepository;
     private final PostingService postingService;
@@ -25,9 +27,8 @@ public class ScrapService {
     private final JwtTokenizer jwtTokenizer;
 
     public Scrap createScrap(Scrap scrap, long postingId, long memberId, String token) {
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if(memberId != tokenId) {
+        if(memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -47,17 +48,17 @@ public class ScrapService {
     }
 
     public void deleteScrap(long scrapId, String token) {
-        long tokenId = jwtTokenizer.getMemberId(token);
 
         Scrap findScrap = findVerifiedScrap(scrapId);
 
-        if (findScrap.getMember().getMemberId() != tokenId) {
+        if (findScrap.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
         scrapRepository.delete(findScrap);
     }
 
+    @Transactional(readOnly = true)
     private Scrap findVerifiedScrap(long scrapId) {
         Optional<Scrap> optionalScrap = scrapRepository.findById(scrapId);
         Scrap findScrap =

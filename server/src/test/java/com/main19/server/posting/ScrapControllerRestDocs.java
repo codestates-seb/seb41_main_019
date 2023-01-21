@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.scrap.controller.ScrapController;
 import com.main19.server.posting.scrap.dto.ScrapDto;
+import com.main19.server.posting.scrap.dto.ScrapPostResponseDto;
 import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import com.main19.server.posting.scrap.entity.Scrap;
 import com.main19.server.posting.scrap.service.ScrapService;
@@ -62,7 +63,7 @@ public class ScrapControllerRestDocs {
 
         String content = gson.toJson(scrap);
 
-        ScrapResponseDto response = new ScrapResponseDto(scrapId, postingId, memberId);
+        ScrapPostResponseDto response = new ScrapPostResponseDto(scrapId, postingId, memberId);
 
         given(mapper.scrapDtoToScrap(Mockito.any(ScrapDto.class))).willReturn(new Scrap());
         given(scrapService.createScrap(Mockito.any(Scrap.class), Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString())).willReturn(new Scrap());

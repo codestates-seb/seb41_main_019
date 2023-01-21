@@ -31,4 +31,12 @@ public class CommentLike {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public long getMemberId() {
+        return member.getMemberId();
+    }
+
+    public long getCommentLikeCount() {
+        return comment.getLikeCount();
+    }
 }

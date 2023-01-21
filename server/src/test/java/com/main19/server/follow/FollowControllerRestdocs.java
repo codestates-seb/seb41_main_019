@@ -54,8 +54,8 @@ public class FollowControllerRestdocs {
         // given
         long followId = 1L;
         long followingMemberId = 1L;
-        long followedMemberId = 2L;
-        FollowDto.Response response = new FollowDto.Response(followId, followedMemberId, followingMemberId);
+        long followerMemberId = 2L;
+        FollowDto.Response response = new FollowDto.Response(followId, followerMemberId, followingMemberId);
 
         // when
         given(followService.createFollow(Mockito.anyLong(), Mockito.anyLong())).willReturn(new Follow());
@@ -63,7 +63,7 @@ public class FollowControllerRestdocs {
 
         // then
         ResultActions actions = mockMvc.perform(
-                post("/followings/{member-id}", followedMemberId)
+                post("/followings/{member-id}", followerMemberId)
                         .header("Authorization", "Bearer AccessToken")
                         .accept(MediaType.APPLICATION_JSON)
         );
@@ -82,7 +82,7 @@ public class FollowControllerRestdocs {
                         ),
                         responseFields(
                                 fieldWithPath("data.followId").type(JsonFieldType.NUMBER).description("팔로우 식별자"),
-                                fieldWithPath("data.followedId").type(JsonFieldType.NUMBER).description("팔로워 식별자"),
+                                fieldWithPath("data.followerId").type(JsonFieldType.NUMBER).description("팔로워 식별자"),
                                 fieldWithPath("data.followingId").type(JsonFieldType.NUMBER).description("팔로잉 식별자")
                         )
                 ));
@@ -92,14 +92,14 @@ public class FollowControllerRestdocs {
     public void deleteFollowingTest() throws Exception {
         // given
         long followingMemberId = 1L;
-        long followedMemberId = 2L;
+        long followerMemberId = 2L;
 
         // when
-        doNothing().when(followService).deleteFollowing(followingMemberId, followedMemberId);
+        doNothing().when(followService).deleteFollowing(followingMemberId, followerMemberId);
 
         // then
         ResultActions actions = mockMvc.perform(
-                delete("/followings/{member-id}", followedMemberId)
+                delete("/followings/{member-id}", followerMemberId)
                         .header("Authorization", "Bearer AccessToken")
         );
 
@@ -117,10 +117,10 @@ public class FollowControllerRestdocs {
     public void deleteFollowedTest() throws Exception {
         // given
         long followingMemberId = 1L;
-        long followedMemberId = 2L;
+        long followerMemberId = 2L;
 
         // when
-        doNothing().when(followService).deleteFollowed(followingMemberId, followedMemberId);
+        doNothing().when(followService).deleteFollowed(followingMemberId, followerMemberId);
 
         // then
         ResultActions actions = mockMvc.perform(
