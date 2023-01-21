@@ -7,21 +7,14 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 
-import javax.annotation.PostConstruct;
-
 import com.main19.server.posting.entity.Posting;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -63,7 +56,6 @@ public class MediaStorageService extends S3StorageService {
 							s3Client.putObject(new PutObjectRequest(bucket + "/posting/media", fileName, inputStream, objectMetadata)
 									.withCannedAcl(CannedAccessControlList.PublicRead));
 							mediaUrlList.add(s3Client.getUrl(bucket + "/posting/media", fileName).toString());
-							(fileSystemStorageService.store(file)).delete();
 						} catch (IOException e) {
 							throw new BusinessLogicException(ExceptionCode.MEDIA_UPLOAD_ERROR);
 						}

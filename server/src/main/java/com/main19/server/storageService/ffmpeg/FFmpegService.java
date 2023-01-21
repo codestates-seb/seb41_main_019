@@ -1,4 +1,4 @@
-package com.main19.server.ffmpeg;
+package com.main19.server.storageService.ffmpeg;
 
 import lombok.RequiredArgsConstructor;
 import net.bramp.ffmpeg.FFmpeg;

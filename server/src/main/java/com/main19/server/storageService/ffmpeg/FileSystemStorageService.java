@@ -1,15 +1,11 @@
-package com.main19.server.ffmpeg;
+package com.main19.server.storageService.ffmpeg;
 
-import com.amazonaws.util.IOUtils;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -31,7 +27,6 @@ public class FileSystemStorageService {
             Path destinationFile = this.rootLocation.resolve(
                     Paths.get(file.getOriginalFilename())).normalize().toAbsolutePath();
             if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
-                // This is a security check
                 throw new BusinessLogicException(
                         ExceptionCode.MEDIA_NOT_FOUND);
             }
