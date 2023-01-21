@@ -16,14 +16,14 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class FFmpegService {
     public String export(MultipartFile file) throws IOException {
-        FFmpeg ffmpeg = new FFmpeg("C:/Users/hyein/Desktop/ffmpeg-5.1.2-essentials_build/ffmpeg-5.1.2-essentials_build/bin/ffmpeg"); // todo 서버 배포 시 "/usr/bin/ffmpeg"로 변경
-        FFprobe ffprobe = new FFprobe("C:/Users/hyein/Desktop/ffmpeg-5.1.2-essentials_build/ffmpeg-5.1.2-essentials_build/bin/ffprobe"); // todo 서버 배포 시 "/usr/bin/ffprobe"로 변경
+        FFmpeg ffmpeg = new FFmpeg("/usr/bin/ffmpeg");
+        FFprobe ffprobe = new FFprobe("/usr/bin/ffprobe");
 
         String filename = file.getOriginalFilename();
-        String path = "C:/Users/hyein/Desktop/image/" + filename; // todo 서버 배포 시 "/home/ubuntu/main19/ffmpeg/" 로 변경
+        String path = "/home/ubuntu/main19/ffmpeg/" + filename;
 
         FFmpegBuilder builder = new FFmpegBuilder().setInput(path) // 파일경로
-                .addOutput("C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + "converted.mp4") // 저장 경로 ( mov to mp4 )
+                .addOutput("/home/ubuntu/main19/ffmpeg/" + filename.substring(0, filename.lastIndexOf(".")) + "converted.mp4") // 저장 경로 ( mov to mp4 )
                 .setFormat("mp4") // 포맷 ( 확장자 )
                 .setVideoCodec("libx264") // 비디오 코덱
                 .disableSubtitle() // 서브타이틀 제거
@@ -35,26 +35,26 @@ public class FFmpegService {
 
         FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
         executor.createJob(builder).run();
-        return "C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + "converted.mp4"; // todo 서버 배포 시 "/home/ubuntu/main19/ffmpeg/" 로 변경
+        return "/home/ubuntu/main19/ffmpeg/" + filename.substring(0, filename.lastIndexOf(".")) + "converted.mp4";
     }
 
     public String exportThumbnail(MultipartFile file) throws IOException {
-        FFmpeg ffmpeg = new FFmpeg("C:/Users/hyein/Desktop/ffmpeg-5.1.2-essentials_build/ffmpeg-5.1.2-essentials_build/bin/ffmpeg"); // todo 서버 배포 시 "/usr/bin/ffmpeg"로 변경
-        FFprobe ffprobe = new FFprobe("C:/Users/hyein/Desktop/ffmpeg-5.1.2-essentials_build/ffmpeg-5.1.2-essentials_build/bin/ffprobe"); // todo 서버 배포 시 "/usr/bin/ffprobe"로 변경
+        FFmpeg ffmpeg = new FFmpeg("/usr/bin/ffmpeg");
+        FFprobe ffprobe = new FFprobe("/usr/bin/ffprobe");
 
         String filename = file.getOriginalFilename();
-        String path = "C:/Users/hyein/Desktop/image/" + filename; // todo 서버 배포 시 "/home/ubuntu/main19/ffmpeg/" 로 변경
+        String path = "C:/Users/hyein/Desktop/image/" + filename;
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(path)
-                .addOutput("C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + ".gif")// 저장 절대 경로(확장자 미 지정 시 예외 발생 - [NULL @ 000002cc1f9fa500] Unable to find a suitable output format for 'C:/Users/Desktop/test')
+                .addOutput("C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + ".gif")
                 .setFrames(1)
                 .setVideoFilter("select='gte(n\\,10)',scale=720:720")
                 .done();
 
-        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);		// FFmpeg 명령어 실행을 위한 FFmpegExecutor 객체 생성
-        executor.createJob(builder).run();									// one-pass encode
+        FFmpegExecutor executor = new FFmpegExecutor(ffmpeg, ffprobe);
+        executor.createJob(builder).run();
 
-        return "C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + ".gif";
+        return "/home/ubuntu/main19/ffmpeg/" + filename.substring(0, filename.lastIndexOf(".")) + ".gif";
     }
 }
