@@ -13,7 +13,7 @@ import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.tags.entity.PostingTags;
 import com.main19.server.posting.tags.service.PostingTagsService;
 import com.main19.server.posting.tags.service.TagService;
-import com.main19.server.s3service.S3StorageService;
+import com.main19.server.storageService.s3.MediaStorageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -40,7 +40,7 @@ public class PostingService {
 	private final MemberService memberService;
 	private final TagService tagService;
 	private final PostingTagsService postingTagsService;
-	private final S3StorageService storageService;
+	private final MediaStorageService storageService;
 	private final PostingMapper mapper;
 	private final CustomBeanUtils<Posting> beanUtils;
 	private final JwtTokenizer jwtTokenizer;
