@@ -137,9 +137,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     if(modal === "AddPlant") {
       setIsAddPlantOpened(!isAddPlantOpened);
     } else if(postingId) {
-      setCurPost(galleryData.filter((el) => 
-        el.postingId === postingId
-      )[0]) ;
+      setCurPost(galleryData.filter((el) => el.postingId === postingId)[0]) ;
       setIsViewOpened(!isViewOpened);
     } else {
       setIsViewOpened(!isViewOpened);

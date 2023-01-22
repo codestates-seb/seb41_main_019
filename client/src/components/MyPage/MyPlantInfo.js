@@ -112,7 +112,7 @@ const MyPlantInfo = ({ currentPlantData }) => {
           </div>
         </StyledPlantInfoBox>
       )}
-      {isUpdateMode && (
+      {isUpdateMode ? (
         <StyledButtonsContainer>
           <div className="wrapper">
             <StyledUpdateButtons>수정 완료</StyledUpdateButtons>
@@ -121,8 +121,9 @@ const MyPlantInfo = ({ currentPlantData }) => {
             </StyledUpdateButtons>
           </div>
         </StyledButtonsContainer>
+      ) : (
+          <MyPlantEdit handleUpdateMode={handleUpdateMode} />    
       )}
-      <MyPlantEdit handleUpdateMode={handleUpdateMode} />
     </StyledContainer>
   );
 };
