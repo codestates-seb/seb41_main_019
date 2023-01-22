@@ -30,7 +30,8 @@ import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.gallery.dto.GalleryDto;
 import com.main19.server.myplants.mapper.MyPlantsMapper;
 import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.s3service.S3StorageService;
+import com.main19.server.storageService.s3.GalleryStorageService;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,7 @@ public class MyPlantsControllerRestDocs {
     @MockBean
     private MyPlantsService myPlantsService;
     @MockBean
-    private S3StorageService storageService;
+    private GalleryStorageService storageService;
 
 
     @Test

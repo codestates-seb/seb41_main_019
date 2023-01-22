@@ -6,9 +6,8 @@ import javax.validation.constraints.Positive;
 import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.member.entity.Member;
-import com.main19.server.redis.RedisDao;
+import com.main19.server.storageService.s3.ProfileStorageService;
 import org.springframework.http.HttpHeaders;
-import com.main19.server.s3service.S3StorageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +19,7 @@ import com.main19.server.member.mapper.MemberMapper;
 import com.main19.server.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +30,7 @@ public class MemberController {
     private final MemberMapper mapper;
     private final MemberService memberService;
     private final JwtTokenizer jwtTokenizer;
-    private final S3StorageService storageService;
+    private final ProfileStorageService storageService;
 
     @PostMapping("/sign-up")
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {

@@ -88,8 +88,8 @@ public class PostingControllerRestDocs {
         MockMultipartFile file1 = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("file2", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList = new ArrayList<>();
         responseList.add(response1);
@@ -163,8 +163,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data.postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data.postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[].tagName").type(JsonFieldType.STRING).description("태그 이름"),
@@ -195,8 +197,8 @@ public class PostingControllerRestDocs {
         tags.add(tag1);
         tags.add(tag2);
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList = new ArrayList<>();
         responseList.add(response1);
@@ -267,8 +269,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data.postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data.postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[].tagName").type(JsonFieldType.STRING).description("태그 이름"),
@@ -285,8 +289,8 @@ public class PostingControllerRestDocs {
     public void getPostingTest() throws Exception {
         // given
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList = new ArrayList<>();
         responseList.add(response1);
@@ -348,8 +352,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data.postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data.postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -375,27 +381,27 @@ public class PostingControllerRestDocs {
         member2.setUserName("taebong98");
         member2.setProfileImage("image");
 
-        Media media1 = new Media("imageUrl", new Posting());
-        Media media2 = new Media("imageUrl", new Posting());
+        Media media1 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media2 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
         List<Media> mediaList1 = new ArrayList<>();
         mediaList1.add(media1);
         mediaList1.add(media2);
 
-        Media media3 = new Media("imageUrl", new Posting());
-        Media media4 = new Media("imageUrl", new Posting());
+        Media media3 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media4 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
         List<Media> mediaList2 = new ArrayList<>();
         mediaList2.add(media3);
         mediaList2.add(media4);
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList1 = new ArrayList<>();
         responseList1.add(response1);
         responseList1.add(response2);
 
-        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl");
-        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl");
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl", "", "image");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList2 = new ArrayList<>();
         responseList2.add(response3);
@@ -515,8 +521,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data[].postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -542,27 +550,27 @@ public class PostingControllerRestDocs {
         member.setUserName("gimhae_person");
         member.setProfileImage("image");
 
-        Media media1 = new Media("imageUrl", new Posting());
-        Media media2 = new Media("imageUrl", new Posting());
+        Media media1 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media2 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
         List<Media> mediaList1 = new ArrayList<>();
         mediaList1.add(media1);
         mediaList1.add(media2);
 
-        Media media3 = new Media("imageUrl", new Posting());
-        Media media4 = new Media("imageUrl", new Posting());
+        Media media3 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media4 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
         List<Media> mediaList2 = new ArrayList<>();
         mediaList2.add(media3);
         mediaList2.add(media4);
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList1 = new ArrayList<>();
         responseList1.add(response1);
         responseList1.add(response2);
 
-        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl");
-        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl");
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl", "", "image");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList2 = new ArrayList<>();
         responseList2.add(response3);
@@ -686,8 +694,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data[].postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -739,8 +749,9 @@ public class PostingControllerRestDocs {
         long postingId = 1L;
         long memberId = 1L;
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
+
 
         List<MediaResponseDto> responseList = new ArrayList<>();
         responseList.add(response1);
@@ -801,8 +812,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data.postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data.postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),

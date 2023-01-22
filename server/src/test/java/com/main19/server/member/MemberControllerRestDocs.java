@@ -7,7 +7,7 @@ import com.main19.server.member.dto.MemberDto;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.mapper.MemberMapper;
 import com.main19.server.member.service.MemberService;
-import com.main19.server.s3service.S3StorageService;
+import com.main19.server.storageService.s3.ProfileStorageService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +18,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +56,7 @@ public class MemberControllerRestDocs {
     @MockBean
     private JwtTokenizer jwtTokenizer;
     @MockBean
-    private S3StorageService storageService;
+    private ProfileStorageService storageService;
 
 
     @Test
