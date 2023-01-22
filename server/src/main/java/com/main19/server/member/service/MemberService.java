@@ -6,6 +6,7 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.repository.MemberRepository;
+import com.main19.server.redis.RedisDao;
 import com.main19.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +25,6 @@ public class MemberService {
     private final CustomAuthorityUtils authorityUtils;
     private final CustomBeanUtils<Member> beanUtils;
     private final JwtTokenizer jwtTokenizer;
-
 
     public Member createMember(Member member) {
         verifiedByEmail(member.getEmail());
