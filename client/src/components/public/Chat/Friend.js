@@ -40,6 +40,7 @@ const StyledFriend = styled.li`
 const StyledButton = styled.button`
   border: 0px;
   cursor: pointer;
+  background-color: white;
   
   svg {
     font-size: 22px;

@@ -8,12 +8,14 @@ import WritePost from "./components/public/Post/WritePost";
 import Background from "./components/public/Background";
 import { useEffect, useState } from "react";
 import Cookie from "./util/Cookie";
+import axios from "axios";
 
 function App() {
   const [isCovered, setIsCovered] = useState(false);
   const [isLanded, setIsLanded] = useState(!new Cookie().get("authorization"));
   const [isPosted, setIsPosted] = useState(false);
   const [change, setChange] = useState(false);
+  const cookie = new Cookie();
 
   const handleIsCovered = () => setIsCovered(!isCovered);
 
@@ -29,8 +31,18 @@ function App() {
   }, [isCovered]);
 
   useEffect(() => {
-    
-  }, [change])
+    if(isLanded || cookie.get("refresh")) {
+      axios({
+        method: "post",
+        url: "http://13.124.33.113:8080/members/reissue",
+        headers: { refresh : cookie.get("refresh") }
+      }).then((res) => {
+        console.log(res.date);
+      }).catch(e => {
+        console.log(e);
+      })
+    }
+  })
 
   return (
     <BrowserRouter>
