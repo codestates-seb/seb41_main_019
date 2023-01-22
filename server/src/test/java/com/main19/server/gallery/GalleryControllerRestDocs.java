@@ -27,7 +27,8 @@ import com.main19.server.myplants.gallery.entity.Gallery;
 import com.main19.server.myplants.gallery.mapper.GalleryMapper;
 import com.main19.server.myplants.gallery.service.GalleryService;
 import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.s3service.S3StorageService;
+import com.main19.server.storageService.s3.GalleryStorageService;
+
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class GalleryControllerRestDocs {
     @Autowired
     private Gson gson;
     @MockBean
-    private S3StorageService storageService;
+    private GalleryStorageService storageService;
     @MockBean
     private GalleryMapper galleryMapper;
     @MockBean

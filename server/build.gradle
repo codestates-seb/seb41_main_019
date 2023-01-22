@@ -51,6 +51,8 @@ dependencies {
     // 이미지 업로드 관련 라이브러리
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
 
+    implementation group: 'net.bramp.ffmpeg', name: 'ffmpeg', version: '0.6.2'
+
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     implementation 'com.google.code.gson:gson'
@@ -58,6 +60,9 @@ dependencies {
     asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.4'
 
     implementation "org.springframework.kafka:spring-kafka"
 
