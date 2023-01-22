@@ -51,8 +51,6 @@ const StyledButton = styled.button`
 
 const Friend = ({ friend, top }) => {
   const cookie = new Cookie();
-  
-  console.log(Number(cookie.get("memberId")), friend.followingId);
 
   const createRoom = () => {
     axios({

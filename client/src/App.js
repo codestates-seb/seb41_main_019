@@ -9,6 +9,7 @@ import Background from "./components/public/Background";
 import { useEffect, useState } from "react";
 import Cookie from "./util/Cookie";
 import axios from "axios";
+import { decode } from "./util/decode";
 
 function App() {
   const [isCovered, setIsCovered] = useState(false);
@@ -31,13 +32,21 @@ function App() {
   }, [isCovered]);
 
   useEffect(() => {
-    if(isLanded || cookie.get("refresh")) {
+    if(isLanded && cookie.get("refresh")) {
       axios({
         method: "post",
-        url: "http://13.124.33.113:8080/members/reissue",
+        url: "http://13.124.33.113:8080/members/reissues",
         headers: { refresh : cookie.get("refresh") }
       }).then((res) => {
-        console.log(res.date);
+            const date = new Date()
+            const user = decode(res.headers.authorization);
+
+            date.setMinutes(date.getMinutes() + 420);
+            cookie.set("authorization", res.headers.authorization, { expires: date });
+            cookie.set("memberId", user.memberId, { expires : date });
+            cookie.set("username", user.username, { expires : date });
+
+            setIsLanded(false);
       }).catch(e => {
         console.log(e);
       })
