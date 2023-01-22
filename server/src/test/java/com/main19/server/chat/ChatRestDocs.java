@@ -14,7 +14,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.main19.server.chat.controller.ChatController;
+
+import com.main19.server.chat.controller.KafkaController;
 import com.main19.server.chat.dto.ChatDto;
 import com.main19.server.chat.entitiy.Chat;
 import com.main19.server.chat.mapper.ChatMapper;
@@ -33,12 +34,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-@WebMvcTest(value = ChatController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(value = KafkaController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 public class ChatRestDocs {
@@ -52,7 +53,7 @@ public class ChatRestDocs {
     @MockBean
     private ChatRoomService chatRoomService;;
     @MockBean
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private KafkaTemplate kafkaTemplate;
 
     @Test
     public void GetChatTest() throws Exception {
