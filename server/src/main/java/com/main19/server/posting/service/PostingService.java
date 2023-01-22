@@ -126,7 +126,7 @@ public class PostingService {
 	}
 
 	public void deleteMedia(long mediaId, String token) {
-		Posting posting = findVerfiedMedia(mediaId).getPosting();
+		Posting posting = findVerifiedMedia(mediaId).getPosting();
 
 		if (posting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
@@ -138,7 +138,7 @@ public class PostingService {
 
 		storageService.remove(mediaId);
 
-		Media findMedia = findVerfiedMedia(mediaId);
+		Media findMedia = findVerifiedMedia(mediaId);
 		mediaRepository.delete(findMedia);
 	}
 
@@ -152,7 +152,7 @@ public class PostingService {
 	}
 
 	@Transactional(readOnly = true)
-	public Media findVerfiedMedia(long mediaId) {
+	public Media findVerifiedMedia(long mediaId) {
 		Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
 		Media findMedia =
 			optionalMedia.orElseThrow(() ->
