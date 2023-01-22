@@ -48,7 +48,6 @@ const Friends = () => {
       url: `http://13.124.33.113:8080/members/  ${new Cookie().get("memberId")}`,
       headers: { Authorization: new Cookie().get("authorization") }
     }).then(res => {
-      console.log(res.data.data);
       setFriends(res.data.data.followingList);
     })
   }, [])

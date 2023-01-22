@@ -46,7 +46,7 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
             <StyledMain>
                 <Recommends />
                 <Feed handleModal={handleModal} handleDelete={handleDelete} handleEdit={handleEdit}
-                    handleCurPost={handleCurPost} change={change} />
+                    handleCurPost={handleCurPost} change={change} handleChange={handleChange} />
             </StyledMain>
         </>
     )
