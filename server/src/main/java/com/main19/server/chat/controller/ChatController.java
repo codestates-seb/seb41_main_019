@@ -9,6 +9,7 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.service.MemberService;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class ChatController {
     private final ChatMapper chatMapper;
 
     @MessageMapping("/chat/{roomId}")
-    public void chat(@DestinationVariable long roomId, ChatDto.Post chatDto) throws Exception {
+    public void chat(@DestinationVariable long roomId, @Valid ChatDto.Post chatDto) throws Exception {
 
         if (chatRoomService.findChatRoom(roomId) == null) {
             throw new BusinessLogicException(ExceptionCode.CHATROOM_NOT_FOUND);

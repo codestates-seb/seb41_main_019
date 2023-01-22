@@ -8,6 +8,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -38,6 +39,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -215,6 +218,115 @@ public class CommentControllerRestDocs {
                     fieldWithPath("data.commentLikeList").type(JsonFieldType.ARRAY).description("좋아요 누른 사람"),
                     fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                     fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일")
+                )
+            ));
+    }
+
+    @Test
+    public void GetPostingCommentsTest() throws Exception {
+
+        long postingId = 1L;
+        long commentId1 = 1L;
+        long commentId2 = 2L;
+        long memberId = 1L;
+
+        Member member = new Member();
+        member.setMemberId(memberId);
+        member.setUserName("머호");
+        member.setProfileImage("profileImage");
+
+        Posting posting= new Posting();
+        posting.setPostingId(postingId);
+
+        Comment comment1 = new Comment(commentId1,"안녕 난 머호1",LocalDateTime.now(),LocalDateTime.now(),0L,posting,member,new ArrayList<>());
+        Comment comment2 = new Comment(commentId2,"안녕 난 머호2",LocalDateTime.now(),LocalDateTime.now(),0L,posting,member,new ArrayList<>());
+
+        Page<Comment> pageComments = new PageImpl<>(List.of(comment1, comment2));
+        List<Comment> listComments = List.of(comment1,comment2);
+
+        given(commentService.findComments(Mockito.anyLong(),Mockito.anyInt(),Mockito.anyInt()))
+            .willReturn(pageComments);
+
+        given(commentMapper.commentsToCommentsResponseDtos(Mockito.anyList())).willReturn(
+            List.of(
+                new CommentDto.Response(
+                    listComments.get(0).getCommentId(),
+                    listComments.get(0).getPosting().getPostingId(),
+                    listComments.get(0).getMember().getMemberId(),
+                    listComments.get(0).getMember().getUserName(),
+                    listComments.get(0).getMember().getProfileImage(),
+                    listComments.get(0).getComment(),
+                    listComments.get(0).getLikeCount(),
+                    new ArrayList<>(),
+                    listComments.get(0).getCreatedAt(),
+                    listComments.get(0).getModifiedAt()),
+                new CommentDto.Response(
+                    listComments.get(1).getCommentId(),
+                    listComments.get(1).getPosting().getPostingId(),
+                    listComments.get(1).getMember().getMemberId(),
+                    listComments.get(1).getMember().getUserName(),
+                    listComments.get(1).getMember().getProfileImage(),
+                    listComments.get(1).getComment(),
+                    listComments.get(1).getLikeCount(),
+                    new ArrayList<>(),
+                    listComments.get(0).getCreatedAt(),
+                    listComments.get(0).getModifiedAt())));
+
+        ResultActions actions =
+            mockMvc.perform(
+                get("/comments/{posting-id}", postingId)
+                    .param("page","1")
+                    .param("size","10")
+                    .header("Authorization", "Bearer AccessToken")
+                    .accept(MediaType.APPLICATION_JSON)
+            );
+
+        actions
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data[0].commentId").value(listComments.get(0).getCommentId()))
+            .andExpect(jsonPath("$.data[0].postingId").value(listComments.get(0).getPosting().getPostingId()))
+            .andExpect(jsonPath("$.data[0].memberId").value(listComments.get(0).getMember().getMemberId()))
+            .andExpect(jsonPath("$.data[0].userName").value(listComments.get(0).getMember().getUserName()))
+            .andExpect(jsonPath("$.data[0].profileImage").value(listComments.get(0).getMember().getProfileImage()))
+            .andExpect(jsonPath("$.data[0].comment").value(listComments.get(0).getComment()))
+            .andExpect(jsonPath("$.data[0].likeCount").value(listComments.get(0).getLikeCount()))
+            .andExpect(jsonPath("$.data[0].commentLikeList").value(listComments.get(0).getCommentLikeList()))
+            .andExpect(jsonPath("$.data[1].commentId").value(listComments.get(1).getCommentId()))
+            .andExpect(jsonPath("$.data[1].postingId").value(listComments.get(1).getPosting().getPostingId()))
+            .andExpect(jsonPath("$.data[1].memberId").value(listComments.get(1).getMember().getMemberId()))
+            .andExpect(jsonPath("$.data[1].userName").value(listComments.get(1).getMember().getUserName()))
+            .andExpect(jsonPath("$.data[1].profileImage").value(listComments.get(1).getMember().getProfileImage()))
+            .andExpect(jsonPath("$.data[1].comment").value(listComments.get(1).getComment()))
+            .andExpect(jsonPath("$.data[1].likeCount").value(listComments.get(1).getLikeCount()))
+            .andExpect(jsonPath("$.data[1].commentLikeList").value(listComments.get(1).getCommentLikeList()))
+
+
+            .andDo(document(
+                "gets-comments",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                ),
+                pathParameters(
+                    parameterWithName("posting-id").description("게시글 식별자")
+                ),
+                responseFields(
+                    fieldWithPath("data[].commentId").type(JsonFieldType.NUMBER).description("댓글 식별자"),
+                    fieldWithPath("data[].postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
+                    fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                    fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                    fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 프로필 이미지"),
+                    fieldWithPath("data[].comment").type(JsonFieldType.STRING).description("댓글 내용"),
+                    fieldWithPath("data[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 개수"),
+                    fieldWithPath("data[].commentLikeList").type(JsonFieldType.ARRAY).description("댓글 좋아요 리스트"),
+                    fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("최초 작성일"),
+                    fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
+                    fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
+                    fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                    fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                    fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
+                    fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
                 )
             ));
     }

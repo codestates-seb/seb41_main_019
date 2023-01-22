@@ -32,6 +32,12 @@ public class MyPlants {
     @Column(nullable = false)
     private String plantName;
 
+    @Column(nullable = false)
+    private String plantType;
+
+    @Column(nullable = false)
+    private String plantBirthDay;
+
     @ManyToOne
     @JoinColumn(name = "memberId")
     private Member member;
