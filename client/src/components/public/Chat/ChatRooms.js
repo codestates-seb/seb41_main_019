@@ -55,7 +55,7 @@ const ChatRooms = () => {
     <StyledChatList>
       <p>Chat List</p>  
       <ul>
-        {rooms
+        {rooms.length > 0
           ? rooms.map((room, idx) => {
               return (
                 <ChatRoom
