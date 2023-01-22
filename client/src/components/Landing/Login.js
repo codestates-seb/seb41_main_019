@@ -98,7 +98,7 @@ const Login = ({ setSelected, setIsLanded }) => {
             const date = new Date()
             const user = decode(res.headers.authorization);
 
-            date.setMinutes(date.getMinutes() + 1);
+            date.setMinutes(date.getMinutes() + 420);
             console.log(date.toGMTString())
             cookie.set("authorization", res.headers.authorization, { expires: date });
             cookie.set("memberId", user.memberId, { expires : date });

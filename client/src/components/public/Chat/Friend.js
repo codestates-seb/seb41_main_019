@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
+import { Profiler } from "react";
+import { RiContactsBookLine } from "react-icons/ri";
 
 const StyledFriend = styled.li`
   display: flex;
@@ -50,15 +52,21 @@ const StyledButton = styled.button`
 const Friend = ({ friend, top }) => {
   const cookie = new Cookie();
   
+  console.log(Number(cookie.get("memberId")), friend.followingId);
+
   const createRoom = () => {
     axios({
       method: "post",
       url: `http://13.124.33.113:8080/chatroom`,
-      headers: { Authorization: new Cookie().get("authorization") },
+      headers: { Authorization: cookie.get("a uthorization") },
       data: {
-        receiverId: friend.followId,
-        senderId: cookie.get("memberId")
+        receiverId: friend.followingId,
+        senderId: Number(cookie.get("memberId"))
       }
+    }).then((res) => {
+      console.log(res);
+    }).catch(e => {
+      console.log(e);
     })
   }
 
@@ -71,14 +79,14 @@ const Friend = ({ friend, top }) => {
         ></img>
       </div>
       <div>
-        <span>{friend.followId}</span>
-        <span>profile</span>
+        <span>{friend.userName}</span>
+        <span>{friend.profileText}</span>
       </div>
       {top ? (
         <StyledButton>x</StyledButton>
       ) : (
         <StyledButton onClick={() => {
-          // createRoom()
+          createRoom()
         }}><IoChatbubbleEllipsesOutline /></StyledButton>
       )}
     </StyledFriend>
