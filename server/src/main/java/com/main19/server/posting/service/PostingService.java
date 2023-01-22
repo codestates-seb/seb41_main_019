@@ -160,7 +160,7 @@ public class PostingService {
 		return findMedia;
 	}
 
-	@Transactional(readOnly = true)
+
 	private void countMedias(Posting findPosting, List<MultipartFile> multipartFiles) {
 		int cntMultipartFiles = 0;
 		if (multipartFiles.get(1) == null) {
@@ -172,7 +172,7 @@ public class PostingService {
 		}
 	}
 
-	@Transactional(readOnly = true)
+
 	private void createPostingTags(PostingPostDto requestBody, Posting posting) {
 		for (String tagName : requestBody.getTagName()) {
 			tagService.createTag(mapper.tagPostDtoToTag(tagName));
@@ -181,7 +181,7 @@ public class PostingService {
 		}
 	}
 
-	@Transactional(readOnly = true)
+
 	private void updatePostingTags(PostingPatchDto requestBody, Posting updatePosting) {
 		for (String tagName : requestBody.getTagName()) {
 			tagService.createTag(mapper.tagPostDtoToTag(tagName));

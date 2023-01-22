@@ -69,7 +69,6 @@ public class PostingLikeService {
 
 	}
 
-	@Transactional(readOnly = true)
 	private PostingLike findVerifiedPostingLike(long postingLikeId) {
 		Optional<PostingLike> optionalPostingLike = postingLikeRepository.findById(postingLikeId);
 		PostingLike findPostingLike =

@@ -58,7 +58,6 @@ public class ScrapService {
         scrapRepository.delete(findScrap);
     }
 
-    @Transactional(readOnly = true)
     private Scrap findVerifiedScrap(long scrapId) {
         Optional<Scrap> optionalScrap = scrapRepository.findById(scrapId);
         Scrap findScrap =
