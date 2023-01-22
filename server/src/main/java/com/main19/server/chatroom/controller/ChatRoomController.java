@@ -35,7 +35,7 @@ public class ChatRoomController {
         @Valid @RequestBody ChatRoomDto.Post requestBody) {
 
         if(token == null) {
-            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+            throw new BusinessLogicException(ExceptionCode.MEMBER_UNAUTHORIZED);
         }
 
         ChatRoom chatRoom = chatRoomMapper.chatRoomPostDtoToChatRoom(requestBody);
