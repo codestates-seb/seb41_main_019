@@ -93,7 +93,6 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    @Transactional(readOnly = true)
     private Comment findVerifiedComment(long commentId){
         Optional<Comment> optionalComment = commentRepository.findById(commentId);
         Comment findComment = optionalComment.orElseThrow(()->new BusinessLogicException(
