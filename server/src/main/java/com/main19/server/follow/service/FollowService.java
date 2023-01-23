@@ -43,21 +43,19 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
-    @Transactional(readOnly = true)
     private void verifiedFollow(long followingMemberId, long followedMemberId) {
         Follow findFollow = followRepository.findFollow(followingMemberId, followedMemberId);
         if (findFollow != null) {
             throw new BusinessLogicException(ExceptionCode.FOLLOW_ALREADY_EXIST);
         }
     }
-    @Transactional(readOnly = true)
+
     private Member findFollowMember(long followId) {
         Optional<Member> optionalFollow = memberRepository.findById(followId);
         Member member = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return member;
     }
 
-    @Transactional(readOnly = true)
     private Follow findExistFollow(long followingMemberId, long followedMemberId) {
         Optional<Follow> optionalFollow = followRepository.findFollowId(followingMemberId, followedMemberId);
         Follow follow = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
