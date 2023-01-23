@@ -14,8 +14,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -307,6 +306,10 @@ public class CommentControllerRestDocs {
                 getResponsePreProcessor(),
                 requestHeaders(
                     headerWithName("Authorization").description("Bearer AccessToken")
+                ),
+                requestParameters(
+                    parameterWithName("page").description("조회 할 페이지"),
+                    parameterWithName("size").description("조회 할 데이터 갯수")
                 ),
                 pathParameters(
                     parameterWithName("posting-id").description("게시글 식별자")

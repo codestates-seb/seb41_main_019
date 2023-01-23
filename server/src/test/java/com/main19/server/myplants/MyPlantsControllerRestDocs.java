@@ -14,8 +14,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -291,6 +290,10 @@ public class MyPlantsControllerRestDocs {
                 "gets-my-plants",
                 getRequestPreProcessor(),
                 getResponsePreProcessor(),
+                requestParameters(
+                        parameterWithName("page").description("조회 할 페이지"),
+                        parameterWithName("size").description("조회 할 데이터 갯수")
+                ),
                 responseFields(
                     fieldWithPath("data[].myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
                     fieldWithPath("data[].plantName").type(JsonFieldType.STRING).description("식물 이름"),

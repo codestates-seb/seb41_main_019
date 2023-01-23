@@ -11,9 +11,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -234,6 +232,10 @@ public class GalleryControllerRestDocs {
                 "gets-gallery",
                 getRequestPreProcessor(),
                 getResponsePreProcessor(),
+                requestParameters(
+                        parameterWithName("page").description("조회 할 페이지"),
+                        parameterWithName("size").description("조회 할 데이터 갯수")
+                ),
                 pathParameters(
                     parameterWithName("myplants-id").description("내 식물 식별자")
                 ),
