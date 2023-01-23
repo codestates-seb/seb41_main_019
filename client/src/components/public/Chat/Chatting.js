@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import Massage from "./Massage";
 import Friend from "./Friend";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect, subscribe, disConnect, send } from "../../../util/chat";
 import { chatLogData } from "../../../assets/dummyData/chatLogData"
+import axios from "axios";
+import Cookie from "../../../util/Cookie";
 
 const StyledChatLog = styled.div`
   display: flex;
@@ -78,9 +80,23 @@ const StyledInput = styled.div`
   }
 `;
 
-const Chatting = () => {
+const Chatting = ({ curChat }) => {
   const [ message, setMessage ] = useState("");
   const [ curLog, setCurLog ] = useState(15);
+  const [ log, setLog ] = useState(false);
+  const cookie = new Cookie();
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/message/${curChat.chatRoomId}?page=1&size=15`,
+      headers: { Authorization: cookie.get("authorization") }
+    }).then(res => {
+      console.log(curChat.chatRoomId, res.data);
+    }).catch(e => {
+      console.log(e);
+    })
+  }, [curChat, log])
 
   const soltChat = () => {
     const solted = [];
@@ -99,20 +115,18 @@ const Chatting = () => {
     return solted;
   };
 
-  const handleSend = () => {
-    send(1, 1, 2, message);
-  }
-
   soltChat();
+
+  const handleSend = () => {
+    send(curChat.chatRoomId, curChat.receiverId, curChat.senderId, message);
+  }
 
   return (
     <div className="chat-area">
       <button onClick={() => connect()}>ac</button>
       <button onClick={() => disConnect()}>de</button>
-      <button onClick={() => subscribe(1, (body) => {
-        const json = JSON.parse(body.body);
-        console.log(json, 1);
-      })}>sub</button>
+      <button onClick={() => subscribe(curChat.chatRoomId)}>sub</button>
+      <button onClick={() => setLog(!log)}>send</button>
       <div>
         {/* <Friend top /> */}
       </div>

@@ -2,8 +2,6 @@ import styled from "styled-components";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
-import { Profiler } from "react";
-import { RiContactsBookLine } from "react-icons/ri";
 
 const StyledFriend = styled.li`
   display: flex;
@@ -56,7 +54,7 @@ const Friend = ({ friend, top }) => {
     axios({
       method: "post",
       url: `http://13.124.33.113:8080/chatroom`,
-      headers: { Authorization: cookie.get("a uthorization") },
+      headers: { Authorization: cookie.get("authorization") },
       data: {
         receiverId: friend.followingId,
         senderId: Number(cookie.get("memberId"))

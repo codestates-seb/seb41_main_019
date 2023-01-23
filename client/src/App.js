@@ -51,7 +51,7 @@ function App() {
         console.log(e);
       })
     }
-  })
+  }, [isLanded])
 
   return (
     <BrowserRouter>

@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Input from "../Input";
 import ChatRooms from "./ChatRooms";
 import Chatting from "./Chatting";
 import Friends from "./Friends";
-import { useEffect } from "react";
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
-import { RiContactsBookLine } from "react-icons/ri";
 
 const StyledChat = styled.div`
   display: flex;
@@ -42,23 +40,32 @@ const StyledChat = styled.div`
 
 const Chat = () => {
   const [curChat, setCurChat] = useState(false);
+  const [rooms, setRooms] = useState([]);
+  const cookie = new Cookie();
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/chatroom/${cookie.get("memberId")}`,
+      headers: { Authorization: cookie.get("authorization") }
+    }).then(res => {
+      setRooms(res.data);
+    })
+  }, [])
   
   return (  
     <>
       <StyledChat>
         <Input label={"채팅"} />
         <button onClick={() => setCurChat(!curChat)}>x</button>
-        {curChat ? (
+        {
+          !curChat ? 
           <>
-            <Chatting />
-            <ChatRooms />
-          </>
-        ) : (
-          <>
-            <ChatRooms />
+            <ChatRooms rooms={rooms} setCurChat={setCurChat} />
             <Friends />
           </>
-        )}
+          : <Chatting curChat={curChat} />
+        }
       </StyledChat>
     </>
   );

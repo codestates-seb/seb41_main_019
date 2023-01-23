@@ -48,7 +48,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const ChatRoom = ({ room }) => {
+const ChatRoom = ({ room, setCurChat }) => {
   const [ receiver, setReceiver ] = useState([]);
   const cookie = new Cookie();  
 
@@ -75,7 +75,9 @@ const ChatRoom = ({ room }) => {
         <span>{receiver.name}</span>
         <span>{receiver.text}</span>
       </div>  
-      <StyledButton><IoChatbubbleEllipsesOutline /></StyledButton>
+      <StyledButton onClick={() => {
+        setCurChat(room);
+      }}><IoChatbubbleEllipsesOutline /></StyledButton>
     </StyledFriend>
   );
 };
