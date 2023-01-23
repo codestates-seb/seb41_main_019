@@ -14,24 +14,20 @@ export const connect = () => {
 
 export const subscribe = (curChat) => {
     client.subscribe(`/sub/chat/${curChat}`, (body) => {
-        console.log(body);
+        console.log(body.body);
     });
 }
 
 export const send = (curChat, receiverId, senderId, message) => {
-    const body = {
-        chatRoomId: curChat,
-        receiverId,
-        senderId,
-        chat: message
-    }
-
     client.publish({
         destination: `/pub/message`,
-        body: body
+        body: JSON.stringify({
+            chatRoomId: curChat,
+            receiverId,
+            senderId,
+            chat: message
+        })
     })
-
-    console.log(body);
 }
 
 export const disConnect = () => {

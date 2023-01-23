@@ -83,7 +83,7 @@ const StyledInput = styled.div`
 const Chatting = ({ curChat }) => {
   const [ message, setMessage ] = useState("");
   const [ curLog, setCurLog ] = useState(15);
-  const [ log, setLog ] = useState(false);
+  const [ temp, setTemp ] = useState(false);
   const cookie = new Cookie();
 
   useEffect(() => {
@@ -92,11 +92,11 @@ const Chatting = ({ curChat }) => {
       url: `http://13.124.33.113:8080/message/${curChat.chatRoomId}?page=1&size=15`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
-      console.log(curChat.chatRoomId, res.data);
+      console.log(curChat.chatRoomId, res);
     }).catch(e => {
       console.log(e);
     })
-  }, [curChat, log])
+  }, [curChat])
 
   const soltChat = () => {
     const solted = [];
@@ -117,6 +117,8 @@ const Chatting = ({ curChat }) => {
 
   soltChat();
 
+  console.log(curChat);
+
   const handleSend = () => {
     send(curChat.chatRoomId, curChat.receiverId, curChat.senderId, message);
   }
@@ -126,7 +128,7 @@ const Chatting = ({ curChat }) => {
       <button onClick={() => connect()}>ac</button>
       <button onClick={() => disConnect()}>de</button>
       <button onClick={() => subscribe(curChat.chatRoomId)}>sub</button>
-      <button onClick={() => setLog(!log)}>send</button>
+      <button onClick={() => setTemp(!temp)}>send</button>
       <div>
         {/* <Friend top /> */}
       </div>
