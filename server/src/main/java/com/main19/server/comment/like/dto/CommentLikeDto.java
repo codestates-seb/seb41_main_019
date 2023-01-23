@@ -16,8 +16,6 @@ public class CommentLikeDto {
 
         @Positive
         private long memberId;
-        @Positive
-        private long commentId;
 
     }
 

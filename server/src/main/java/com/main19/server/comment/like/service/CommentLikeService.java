@@ -27,7 +27,7 @@ public class CommentLikeService {
     private final SseService sseService;
     private final JwtTokenizer jwtTokenizer;
 
-    public CommentLike createLike(CommentLike commentLike, long commentId, long memberId, String token) {
+    public CommentLike createLike(long commentId, long memberId, String token) {
 
         long tokenId = jwtTokenizer.getMemberId(token);
 
@@ -40,6 +40,7 @@ public class CommentLikeService {
         if(findCommentLike != null) {
             throw new BusinessLogicException(ExceptionCode.COMMENT_LIKE_EXISTS);
         }
+        CommentLike commentLike = new CommentLike();
 
         commentLike.setMember(memberService.findMember(memberId));
 
