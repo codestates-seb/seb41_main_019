@@ -96,8 +96,25 @@ public class PostingService {
 	}
 
 	@Transactional(readOnly = true)
+	public Page<Posting> findPostingsByFollowing(int page, int size, String token) {
+		Member member = memberService.findMember(jwtTokenizer.getMemberId(token));
+		return  postingRepository.findByMember_FollowingList(member.getMemberId(), PageRequest.of(page, size, Sort.by("posting_id").descending()));
+	}
+
+	@Transactional(readOnly = true)
 	public Page<Posting> findPostingsByMemberId(long memberId, int page, int size) {
-		return postingRepository.findByMember_MemberId(memberId, PageRequest.of(page, size, Sort.by("postingId").descending()));
+		return postingRepository.findByMember_MemberId(memberId, PageRequest.of(page, size, Sort.by("posting_id").descending()));
+	}
+
+	@Transactional(readOnly = true)
+	public Page<Posting> sortPostingsByLikes(int page, int size) {
+		return postingRepository.findAll(PageRequest.of(page, size, Sort.by("likeCount").descending()));
+	}
+
+	@Transactional(readOnly = true)
+	public Page<Posting> sortFollowPostingsByLikes(int page, int size, String token) {
+		Member member = memberService.findMember(jwtTokenizer.getMemberId(token));
+		return postingRepository.findByMember_FollowingList(member.getMemberId(), PageRequest.of(page, size, Sort.by("like_count").descending()));
 	}
 
 	public void deletePosting(long postingId, String token) {
