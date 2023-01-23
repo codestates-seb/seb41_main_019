@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { FiUserPlus } from "react-icons/fi";
-import { FaUserFriends } from "react-icons/fa";
+import { AiOutlineUserAdd, AiOutlineUserDelete } from "react-icons/ai"
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
@@ -144,7 +143,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
                     follow.length > 0 ?
                         post.memberId === Number(cookie.get("memberId")) ? null : 
                             follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ?
-                            <FaUserFriends onClick={deleteFollow} /> : <FiUserPlus onClick={addFollow} />
+                            <AiOutlineUserDelete onClick={deleteFollow} /> : <AiOutlineUserAdd onClick={addFollow} />
                     : null
                 }
                 { post.memberId === Number(cookie.get("memberId")) ?
