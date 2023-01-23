@@ -33,8 +33,8 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 1024px) {
         width: 500px;
-        height: 400px;
-        top: 30%;
+        height: 600px;
+        top: 38%;
         flex-direction: column;
 
         p {
@@ -103,18 +103,18 @@ const StyledInteraction = styled.div`
         }
     }
 
+    @media screen and (max-width: 1255px) {
+        width: 100%;
+    }
+
     @media screen and (max-width: 1024px) {
         width: 100%;
         height: 80%;
     }
-
-    @media screen and (max-width: 1255px) {
-        width: 100%;
-    }
 `;
 
 
-const View = ({ handleModal, curPost }) => {
+const View = ({ handleModal, curPost, handleChange }) => {
     useEffect(() => {
         document.getElementById("bg").addEventListener("click", () => {
             handleModal();
@@ -136,7 +136,7 @@ const View = ({ handleModal, curPost }) => {
                         <CloseBtn handleEvent={handleModal} />
                     </div>
                     <FeedInteraction post={curPost} type={1} />
-                    <Comments />
+                    <Comments post={curPost} handleChange={handleChange} />
                 </StyledInteraction>
             </Wrapper>
     )

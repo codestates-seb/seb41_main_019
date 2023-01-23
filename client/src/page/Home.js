@@ -18,6 +18,7 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
     const [ edit, setEdit ] = useState(false);
     const [ deleteMenu, setDeleteMenu ] = useState(false);
     const [ curPost, setCurPost ] = useState(null);
+    const [ postId, setPostId ] = useState(null);
 
     const handleModal = () => {
         handleIsCovered();
@@ -41,12 +42,12 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
     return (
         <>
             { edit ? <EditPost curPost={curPost} handleEdit={handleEdit}/> : null }
-            { modal ? <View handleModal={handleModal} curPost={curPost} /> : null }
+            { modal ? <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} /> : null }
             { deleteMenu ? <DeleteModal postId={curPost.postingId} handleDelete={handleDelete} handleChange={handleChange} /> : null }
             <StyledMain>
                 <Recommends />
                 <Feed handleModal={handleModal} handleDelete={handleDelete} handleEdit={handleEdit}
-                    handleCurPost={handleCurPost} change={change} handleChange={handleChange} />
+                    handleCurPost={handleCurPost} change={change} setPostId={setPostId} postId={postId} handleChange={handleChange} />
             </StyledMain>
         </>
     )

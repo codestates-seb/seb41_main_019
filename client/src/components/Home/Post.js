@@ -81,7 +81,7 @@ const StyledHeader = styled.div`
     }
 `;
 
-const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, handleChange, change }) => {
+const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setPostId, handleChange, change }) => {
     const [menu, setMenu] = useState(false);
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
@@ -96,7 +96,6 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
             url: `http://13.124.33.113:8080/followings/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
         }).then(res => {
-            console.log("성공!");
             handleChange();
         })
         .catch(e => {
@@ -110,7 +109,6 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
             url: `http://13.124.33.113:8080/followings/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
-                console.log("성공!");
                 handleChange();
             })
             .catch(e => {
@@ -119,6 +117,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
     };
 
     useEffect(() => {
+        console.log(1);
         axios({
             method: "get",
             url: `http://13.124.33.113:8080/members/${post.memberId}`,
@@ -140,29 +139,27 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
                     <span>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
+                <div className="icons">
                 {   
                     follow.length > 0 ?
-                    <div className="icons">
-                    {
                         post.memberId === Number(cookie.get("memberId")) ? null : 
-                          
                             follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ?
                             <FaUserFriends onClick={deleteFollow} /> : <FiUserPlus onClick={addFollow} />
-                    }
-                    { post.memberId === Number(cookie.get("memberId")) ?
-                        <BiDotsVerticalRounded onClick={() => {
-                            handleMenu(); 
-                            handleCurPost(post);
-                            }} />
-                        : null
-                    }
-                    </div> : <div className="icons"><FiUserPlus onClick={addFollow} /></div>
+                    : null
                 }
+                { post.memberId === Number(cookie.get("memberId")) ?
+                    <BiDotsVerticalRounded onClick={() => {
+                        handleMenu(); 
+                        handleCurPost(post);
+                    }} />
+                    : null
+                }
+                </div>
             </StyledHeader>
             { post.postingMedias.length > 0 ?
                 <Slider imgs={post.postingMedias} /> : null
             }
-            <FeedInteraction post={post} setModal={handleModal} handleCurPost={handleCurPost} />
+            <FeedInteraction post={post} setModal={handleModal} handleCurPost={handleCurPost} setPostId={setPostId} />
         </Wrapper>
     );
 }

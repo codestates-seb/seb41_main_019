@@ -25,7 +25,7 @@ const Wrapper = styled.section`
     }
 `
 
-const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, handleChange }) => { 
+const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, setPostId, postId, handleChange }) => { 
     const [ posts, setPosts ] = useState([]);
     const cookie = new Cookie();
 
@@ -36,6 +36,8 @@ const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, ha
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 setPosts(res.data.data);
+                handleCurPost(...res.data.data.filter(post => post.postingId === postId));
+                // console.log(res.data.data.filter(post => post.postingId === postId)[0])
             })
             .catch(e => {
                console.log(e);
@@ -51,8 +53,8 @@ const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, ha
                         <span>게시물이 없습니다.</span> 
                     </div>
                 : posts.map((post, idx) => {
-                    return (<Post post={post} key={idx} handleModal={handleModal} handleChange={handleChange} change={change}
-                                handleCurPost={handleCurPost} handleDelete={handleDelete} handleEdit={handleEdit} />)
+                    return (<Post setPostId={setPostId} post={post} key={idx} handleModal={handleModal} handleChange={handleChange}
+                            handleCurPost={handleCurPost} handleDelete={handleDelete} handleEdit={handleEdit} change={change} />)
                 })
             }
         </Wrapper>
