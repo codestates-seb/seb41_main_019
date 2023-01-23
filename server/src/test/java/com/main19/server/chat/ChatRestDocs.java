@@ -86,7 +86,7 @@ public class ChatRestDocs {
         given(chatService.findAllChat(Mockito.anyLong(),Mockito.anyString(),Mockito.anyInt(),Mockito.anyInt()))
             .willReturn(chat);
 
-        given(chatMapper.pageChatToListChat(Mockito.any()));
+        given(chatMapper.pageChatToListChat(Mockito.any())).willReturn(list);
 
         given(chatMapper.chatToChatDtoResponse(Mockito.anyList())).willReturn(
             List.of(
