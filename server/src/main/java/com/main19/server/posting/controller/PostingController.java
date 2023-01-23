@@ -118,7 +118,7 @@ public class PostingController {
     }
 
     @GetMapping("/popular")
-    public ResponseEntity getPostingByLikes(@Positive @RequestParam int page,
+    public ResponseEntity getPostingSortByLikes(@Positive @RequestParam int page,
                                             @Positive @RequestParam int size) {
         Page<Posting> postings = postingService.sortPostingsByLikes(page - 1, size);
         List<Posting> content = postings.getContent();
@@ -128,7 +128,7 @@ public class PostingController {
     }
 
     @GetMapping("/follow/popular")
-    public ResponseEntity getFollowPostingsByLikes(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity getFollowPostingsSortByLikes(@RequestHeader(name = "Authorization") String token,
                                                    @Positive @RequestParam int page,
                                                    @Positive @RequestParam int size) {
         Page<Posting> postings = postingService.sortFollowPostingsByLikes(page - 1, size, token);
@@ -139,10 +139,10 @@ public class PostingController {
     }
 
     @GetMapping("/tags")
-    public ResponseEntity getPostingsByTag(@NotBlank @Length(min = 1, max = 15) @RequestParam String tagName,
+    public ResponseEntity getPostingsByTagName(@NotBlank @Length(min = 1, max = 15) @RequestParam String tagName,
                                            @Positive @RequestParam int page,
                                            @Positive @RequestParam int size) {
-        Page<Posting> postings = postingService.findPostingsByTag(page - 1, size, tagName);
+        Page<Posting> postings = postingService.findPostingsByTagName(page - 1, size, tagName);
         List<Posting> content = postings.getContent();
         return new ResponseEntity<>(
                 new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),

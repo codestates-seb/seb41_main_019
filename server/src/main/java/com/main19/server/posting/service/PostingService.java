@@ -118,7 +118,7 @@ public class PostingService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<Posting> findPostingsByTag(int page, int size, String tagName) {
+	public Page<Posting> findPostingsByTagName(int page, int size, String tagName) {
 		long tagId = tagService.findTag(tagName).getTagId();
 		return postingRepository.findPostingsByTags(tagId, PageRequest.of(page, size, Sort.by("posting_id").descending()));
 	}
