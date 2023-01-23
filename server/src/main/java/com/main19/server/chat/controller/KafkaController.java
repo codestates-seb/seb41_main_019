@@ -13,6 +13,7 @@ import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -20,6 +21,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -51,10 +53,11 @@ public class KafkaController {
 
     @GetMapping("/message/{room-id}")
     public ResponseEntity getAllChat(@RequestHeader(name = "Authorization") String token,
-        @PathVariable("room-id") @Positive long roomId) {
+        @PathVariable("room-id") @Positive long roomId, @RequestParam @Positive int page, @RequestParam @Positive int size) {
 
-        List<Chat> chat = chatService.findAllChat(roomId,token);
-        List<ChatDto.Response> response = chatMapper.chatToChatDtoResponse(chat);
+        Page<Chat> chat = chatService.findAllChat(roomId,token,page-1,size);
+        List<Chat> chatList = chatMapper.pageChatToListChat(chat);
+        List<ChatDto.Response> response = chatMapper.chatToChatDtoResponse(chatList);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

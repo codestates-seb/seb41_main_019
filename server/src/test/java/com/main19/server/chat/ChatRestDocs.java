@@ -32,6 +32,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -78,10 +80,13 @@ public class ChatRestDocs {
         Chat chat1 = new Chat(chatId1,member1,member2,chatRoom,"hi", createdAt);
         Chat chat2 = new Chat(chatId2,member1,member2,chatRoom,"hello", createdAt);
 
+        Page<Chat> chat = new PageImpl<>(List.of(chat1,chat2));
         List<Chat> list = List.of(chat1,chat2);
 
-        given(chatService.findAllChat(Mockito.anyLong(),Mockito.anyString()))
-            .willReturn(list);
+        given(chatService.findAllChat(Mockito.anyLong(),Mockito.anyString(),Mockito.anyInt(),Mockito.anyInt()))
+            .willReturn(chat);
+
+        given(chatMapper.pageChatToListChat(Mockito.any()));
 
         given(chatMapper.chatToChatDtoResponse(Mockito.anyList())).willReturn(
             List.of(
@@ -100,6 +105,8 @@ public class ChatRestDocs {
             mockMvc.perform(
                 get("/message/{member-id}", memberId1)
                     .header("Authorization", "Bearer AccessToken")
+                    .param("page","1")
+                    .param("size","10")
                     .accept(MediaType.APPLICATION_JSON)
             );
 

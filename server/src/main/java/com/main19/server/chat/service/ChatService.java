@@ -9,8 +9,10 @@ import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.service.MemberService;
 import com.main19.server.sse.entity.Sse.SseType;
 import com.main19.server.sse.service.SseService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,14 +39,14 @@ public class ChatService {
     }
 
     @Transactional(readOnly = true)
-    public List<Chat> findAllChat(long chatRoomId, String token) {
+    public Page<Chat> findAllChat(long chatRoomId, String token, int page, int size) {
 
         if (chatRoomService.findChatRoom(chatRoomId).getReceiverId() != jwtTokenizer.getMemberId(token)
-            || chatRoomService.findChatRoom(chatRoomId).getSenderId() != jwtTokenizer.getMemberId(token)) {
+            && chatRoomService.findChatRoom(chatRoomId).getSenderId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
-        return chatRepository.findAllByChatRoom_ChatRoomId(chatRoomId);
+        return chatRepository.findAllByChatRoom_ChatRoomId(chatRoomId, PageRequest.of(page, size, Sort.by("chatId").descending()));
     }
 
 
