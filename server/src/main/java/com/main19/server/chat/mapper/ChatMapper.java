@@ -5,11 +5,14 @@ import com.main19.server.chat.entitiy.Chat;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring")
 public interface ChatMapper {
 
     Chat chatPostDtoToChat(ChatDto.Post chatDto);
+
+    List<Chat> pageChatToListChat(Page<Chat> chat);
 
     List<ChatDto.Response> chatToChatDtoResponse(List<Chat> chat);
 
