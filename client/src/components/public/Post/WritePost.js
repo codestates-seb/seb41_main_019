@@ -65,7 +65,6 @@ const WritePost = ({ handleIsPosted, handleChange }) => {
     const [files, setFiles] = useState([]);
     const [value, setValue] = useState("");
     const [tags, setTags] = useState([]);
-    const fileInputRef = useRef([]);
     const fileInputs = useRef(null);
     const cookie = new Cookie();
 

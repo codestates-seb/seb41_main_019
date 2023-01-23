@@ -44,7 +44,7 @@ const StyledInteraction = styled.div`
     }
 `;
 
-const FeedInteraction = ({ setModal, type=null, post, handleCurPost }) => {
+const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId }) => {
     return (
         <StyledInteraction>
             <div className="interact">
@@ -65,6 +65,7 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost }) => {
             { type ? null
             : <span onClick={() => {
                 handleCurPost(post);
+                setPostId(post.postingId);
                 setModal(false);
             }} >댓글 보기 및 댓글쓰기</span>
             }
