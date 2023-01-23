@@ -99,27 +99,6 @@ public class JwtTokenizer {
         return memberId;
     }
 
-    public void deleteRtk(Member member) throws JwtException {
-        redisDao.deleteValue(member.getEmail());
-    }
-
-    public String findRefreshToken(Member member) {
-        if (redisDao.getValues(member.getEmail()) == null) {
-            throw new JwtException("bad accessToken");
-        }
-        return redisDao.getValues(member.getEmail());
-    }
-
-
-    public void verifySignature(String jws, String base64EncodedSecretKey) {
-        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
-
-    Jwts.parserBuilder()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(jws);
-    }
-
     public Date getTokenExpiration(int expirationMinutes) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, expirationMinutes);
@@ -166,14 +145,11 @@ public class JwtTokenizer {
 
 
     public String reissueAtk(Member member) throws JwtException {
-        String accessToken = delegateAccessToken(member);
-        return accessToken;
-    }
+        if (redisDao.getValues(member.getEmail()) == null) {
+            throw new JwtException("not found token");
+        }
 
-    public String reissueRfk(Member member) throws JwtException {
-        String refreshToken = delegateRefreshToken(member);
-        redisDao.setValues(member.getEmail(), refreshToken, Duration.ofMinutes(getRefreshTokenExpirationMinutes()));
-        return refreshToken;
+        return delegateAccessToken(member);
     }
 
     public void deleteToken(String email) throws JwtException {

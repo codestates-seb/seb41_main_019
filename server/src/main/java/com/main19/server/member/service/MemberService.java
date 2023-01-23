@@ -6,6 +6,7 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.repository.MemberRepository;
+import com.main19.server.redis.RedisDao;
 import com.main19.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +25,6 @@ public class MemberService {
     private final CustomAuthorityUtils authorityUtils;
     private final CustomBeanUtils<Member> beanUtils;
     private final JwtTokenizer jwtTokenizer;
-
 
     public Member createMember(Member member) {
         verifiedByEmail(member.getEmail());
@@ -94,14 +94,13 @@ public class MemberService {
         return member != null;
     }
 
-    @Transactional(readOnly = true)
     private void verifiedByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
         }
     }
-    @Transactional(readOnly = true)
+
     private Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));

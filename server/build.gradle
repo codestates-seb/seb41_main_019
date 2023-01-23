@@ -62,8 +62,14 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
     implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+
     implementation group: 'commons-io', name: 'commons-io', version: '2.4'
 
+    implementation "org.springframework.kafka:spring-kafka"
+
+    implementation "com.google.guava:guava:31.1-jre"
+
+    // mysql, security
 }
 
 tasks.named('test') {

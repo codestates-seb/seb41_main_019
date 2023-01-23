@@ -150,7 +150,7 @@ public class PostingService {
 	}
 
 	public void deleteMedia(long mediaId, String token) {
-		Posting posting = findVerfiedMedia(mediaId).getPosting();
+		Posting posting = findVerifiedMedia(mediaId).getPosting();
 
 		if (posting.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
@@ -162,7 +162,7 @@ public class PostingService {
 
 		storageService.remove(mediaId);
 
-		Media findMedia = findVerfiedMedia(mediaId);
+		Media findMedia = findVerifiedMedia(mediaId);
 		mediaRepository.delete(findMedia);
 	}
 
@@ -176,14 +176,13 @@ public class PostingService {
 	}
 
 	@Transactional(readOnly = true)
-	public Media findVerfiedMedia(long mediaId) {
+	public Media findVerifiedMedia(long mediaId) {
 		Optional<Media> optionalMedia = mediaRepository.findById(mediaId);
 		Media findMedia =
 			optionalMedia.orElseThrow(() ->
 				new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND));
 		return findMedia;
 	}
-
 
 	private void countMedias(Posting findPosting, List<MultipartFile> multipartFiles) {
 		int cntMultipartFiles = 0;
@@ -196,7 +195,6 @@ public class PostingService {
 		}
 	}
 
-
 	private void createPostingTags(PostingPostDto requestBody, Posting posting) {
 		for (String tagName : requestBody.getTagName()) {
 			tagService.createTag(mapper.tagPostDtoToTag(tagName));
@@ -204,7 +202,6 @@ public class PostingService {
 			postingTagsService.createPostingTags(postingTags, posting, tagName);
 		}
 	}
-
 
 	private void updatePostingTags(PostingPatchDto requestBody, Posting updatePosting) {
 		for (String tagName : requestBody.getTagName()) {

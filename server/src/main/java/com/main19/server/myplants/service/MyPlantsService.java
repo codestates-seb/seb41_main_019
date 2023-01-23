@@ -60,12 +60,10 @@ public class MyPlantsService {
         }
         return findMyPlants;
     }
-    @Transactional(readOnly = true)
     public MyPlants findMyPlants(long myPlantsId) {
         return findVerifiedMyPlants(myPlantsId);
     }
 
-    @Transactional(readOnly = true)
     public Page<MyPlants> findByMyPlants(int page, int size, long memberId) {
         return myPlantsRepository.findByMember_MemberId(memberId,(PageRequest.of(page, size, Sort.by("myPlantsId").descending())));
     }
@@ -80,7 +78,7 @@ public class MyPlantsService {
 
         myPlantsRepository.delete(findMyPlants);
     }
-    @Transactional(readOnly = true)
+
     private MyPlants findVerifiedMyPlants(long myPlantsId) {
         Optional<MyPlants> optionalMyPlants = myPlantsRepository.findById(myPlantsId);
         MyPlants findMyPlants =

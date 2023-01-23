@@ -14,16 +14,16 @@ import java.util.UUID;
 
 public class S3StorageService {
     @Value("${cloud.aws.credentials.accessKey}")
-    public String accessKey;
+    protected String accessKey;
 
     @Value("${cloud.aws.credentials.secretKey}")
-    public String secretKey;
+    protected String secretKey;
 
     @Value("${cloud.aws.s3.bucket}")
-    public String bucket;
+    protected String bucket;
 
     @Value("${cloud.aws.region.static}")
-    public String region;
+    protected String region;
 
     @PostConstruct
     public AmazonS3Client amazonS3Client() {

@@ -1293,7 +1293,7 @@ Content-Type: application/json
 <div class="content">
 <pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 657
+Content-Length: 776
 
 {
   "data" : {
@@ -1304,13 +1304,17 @@ Content-Length: 657
     "postingContent" : "게시글 test",
     "postingMedias" : [ {
       "mediaId" : 1,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "",
+      "format" : "image"
     }, {
       "mediaId" : 2,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "thumbnail",
+      "format" : "video"
     } ],
-    "createdAt" : "2023-01-21T21:24:28.7710038",
-    "modifiedAt" : "2023-01-21T21:24:28.7710038",
+    "createdAt" : "2023-01-23T01:31:49.8461221",
+    "modifiedAt" : "2023-01-23T01:31:49.8461221",
     "tags" : [ {
       "tagName" : "스투키"
     }, {
@@ -1368,12 +1372,22 @@ Content-Length: 657
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].mediaId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 식별자</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].mediaUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 주소</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].thumbnailUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 썸네일 이미지 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 형식</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.createdAt</code></p></td>
@@ -1507,7 +1521,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 664
+Content-Length: 783
 
 {
   "data" : {
@@ -1518,13 +1532,17 @@ Content-Length: 664
     "postingContent" : "게시글 수정 test",
     "postingMedias" : [ {
       "mediaId" : 1,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "",
+      "format" : "image"
     }, {
       "mediaId" : 2,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "thumbnail",
+      "format" : "video"
     } ],
-    "createdAt" : "2023-01-21T21:24:28.6780047",
-    "modifiedAt" : "2023-01-21T21:24:28.6780047",
+    "createdAt" : "2023-01-23T01:31:49.7221219",
+    "modifiedAt" : "2023-01-23T01:31:49.7221219",
     "tags" : [ {
       "tagName" : "스투키"
     }, {
@@ -1582,12 +1600,22 @@ Content-Length: 664
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].mediaId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 식별자</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].mediaUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 주소</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].thumbnailUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 썸네일 이미지 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 형식</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.createdAt</code></p></td>
@@ -1675,7 +1703,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 557
+Content-Length: 676
 
 {
   "data" : {
@@ -1686,10 +1714,14 @@ Content-Length: 557
     "postingContent" : "게시글 test",
     "postingMedias" : [ {
       "mediaId" : 1,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "",
+      "format" : "image"
     }, {
       "mediaId" : 2,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "thumbnail",
+      "format" : "video"
     } ],
     "createdAt" : "2023-01-01T23:59:59",
     "modifiedAt" : "2023-01-01T23:59:59",
@@ -1746,12 +1778,22 @@ Content-Length: 557
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].mediaId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 식별자</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].mediaUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 주소</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].thumbnailUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 썸네일 이미지 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.postingMedias[].format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 형식</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.createdAt</code></p></td>
@@ -1820,7 +1862,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1207
+Content-Length: 1445
 
 {
   "data" : [ {
@@ -1831,10 +1873,14 @@ Content-Length: 1207
     "postingContent" : "게시글 test1",
     "postingMedias" : [ {
       "mediaId" : 1,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "",
+      "format" : "image"
     }, {
       "mediaId" : 2,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "thumbnail",
+      "format" : "video"
     } ],
     "createdAt" : "2023-01-01T23:59:59",
     "modifiedAt" : "2023-01-01T23:59:59",
@@ -1852,10 +1898,14 @@ Content-Length: 1207
     "postingContent" : "게시글 test2",
     "postingMedias" : [ {
       "mediaId" : 3,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "",
+      "format" : "image"
     }, {
       "mediaId" : 4,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "thumbnail",
+      "format" : "video"
     } ],
     "createdAt" : "2023-01-01T23:59:59",
     "modifiedAt" : "2023-01-01T23:59:59",
@@ -1918,12 +1968,22 @@ Content-Length: 1207
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].postingMedias[].mediaId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 식별자</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].postingMedias[].mediaUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 주소</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].postingMedias[].thumbnailUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 썸네일 이미지 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].postingMedias[].format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 형식</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].createdAt</code></p></td>
@@ -2036,7 +2096,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1211
+Content-Length: 1449
 
 {
   "data" : [ {
@@ -2047,10 +2107,14 @@ Content-Length: 1211
     "postingContent" : "게시글 test1",
     "postingMedias" : [ {
       "mediaId" : 1,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "",
+      "format" : "image"
     }, {
       "mediaId" : 2,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "thumbnail",
+      "format" : "video"
     } ],
     "createdAt" : "2023-01-01T23:59:59",
     "modifiedAt" : "2023-01-01T23:59:59",
@@ -2068,10 +2132,14 @@ Content-Length: 1211
     "postingContent" : "게시글 test2",
     "postingMedias" : [ {
       "mediaId" : 3,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "",
+      "format" : "image"
     }, {
       "mediaId" : 4,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "thumbnail",
+      "format" : "video"
     } ],
     "createdAt" : "2023-01-01T23:59:59",
     "modifiedAt" : "2023-01-01T23:59:59",
@@ -2134,12 +2202,22 @@ Content-Length: 1211
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].postingMedias[].mediaId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 식별자</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 식별자</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].postingMedias[].mediaUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 주소</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].postingMedias[].thumbnailUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">동영상 썸네일 이미지 주소</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].postingMedias[].format</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첨부파일 형식</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data[].createdAt</code></p></td>
@@ -2328,7 +2406,7 @@ Content-Type: image/jpeg
 <div class="content">
 <pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 573
+Content-Length: 692
 
 {
   "data" : {
@@ -2339,13 +2417,17 @@ Content-Length: 573
     "postingContent" : "게시글 test",
     "postingMedias" : [ {
       "mediaId" : 1,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "",
+      "format" : "image"
     }, {
       "mediaId" : 2,
-      "mediaUrl" : "imageUrl"
+      "mediaUrl" : "imageUrl",
+      "thumbnailUrl" : "thumbnail",
+      "format" : "video"
     } ],
-    "createdAt" : "2023-01-21T21:24:28.7340053",
-    "modifiedAt" : "2023-01-21T21:24:28.7340053",
+    "createdAt" : "2023-01-23T01:31:49.7951215",
+    "modifiedAt" : "2023-01-23T01:31:49.7951215",
     "tags" : [ ],
     "likeCount" : 0,
     "postingLikes" : [ ],
@@ -2641,8 +2723,8 @@ Content-Length: 333
     "comment" : "댓글 test",
     "likeCount" : 0,
     "commentLikeList" : [ ],
-    "createdAt" : "2023-01-21T21:24:25.0530039",
-    "modifiedAt" : "2023-01-21T21:24:25.0530039"
+    "createdAt" : "2023-01-23T01:31:44.9281222",
+    "modifiedAt" : "2023-01-23T01:31:44.9281222"
   }
 }</code></pre>
 </div>
@@ -2809,8 +2891,8 @@ Content-Length: 340
     "comment" : "댓글 수정 test",
     "likeCount" : 0,
     "commentLikeList" : [ ],
-    "createdAt" : "2023-01-21T21:24:25.1300058",
-    "modifiedAt" : "2023-01-21T21:24:25.1300058"
+    "createdAt" : "2023-01-23T01:31:45.0011204",
+    "modifiedAt" : "2023-01-23T01:31:45.0011204"
   }
 }</code></pre>
 </div>
@@ -2938,8 +3020,8 @@ Content-Length: 785
     "comment" : "안녕 난 머호1",
     "likeCount" : 0,
     "commentLikeList" : [ ],
-    "createdAt" : "2023-01-21T21:24:25.0880053",
-    "modifiedAt" : "2023-01-21T21:24:25.0880053"
+    "createdAt" : "2023-01-23T01:31:44.9601218",
+    "modifiedAt" : "2023-01-23T01:31:44.9601218"
   }, {
     "commentId" : 2,
     "postingId" : 1,
@@ -2949,8 +3031,8 @@ Content-Length: 785
     "comment" : "안녕 난 머호2",
     "likeCount" : 0,
     "commentLikeList" : [ ],
-    "createdAt" : "2023-01-21T21:24:25.0880053",
-    "modifiedAt" : "2023-01-21T21:24:25.0880053"
+    "createdAt" : "2023-01-23T01:31:44.9601218",
+    "modifiedAt" : "2023-01-23T01:31:44.9601218"
   } ],
   "pageInfo" : {
     "page" : 1,
@@ -4062,7 +4144,7 @@ Content-Length: 189
     "galleryId" : 1,
     "content" : "안녕 난 머호",
     "plantImage" : "plantImage",
-    "createdAt" : "2023-01-21T21:24:26.8240056"
+    "createdAt" : "2023-01-23T01:31:47.0491217"
   }
 }</code></pre>
 </div>
@@ -4303,7 +4385,7 @@ Content-Length: 189
     "galleryId" : 1,
     "content" : "안녕 난 머호",
     "plantImage" : "plantImage",
-    "createdAt" : "2023-01-21T21:24:26.8590053"
+    "createdAt" : "2023-01-23T01:31:47.0891219"
   }
 }</code></pre>
 </div>
@@ -4400,13 +4482,13 @@ Content-Length: 473
     "galleryId" : 1,
     "content" : "안녕 난 머호",
     "plantImage" : "plantImage",
-    "createdAt" : "2023-01-21T21:24:26.7970061"
+    "createdAt" : "2023-01-23T01:31:47.0211219"
   }, {
     "myPlantsId" : 1,
     "galleryId" : 1,
     "content" : "안녕 난 머호",
     "plantImage" : "plantImage",
-    "createdAt" : "2023-01-21T21:24:26.7970061"
+    "createdAt" : "2023-01-23T01:31:47.0211219"
   } ],
   "pageInfo" : {
     "page" : 1,
