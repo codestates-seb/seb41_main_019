@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -93,11 +95,54 @@ public class PostingController {
             HttpStatus.OK);
     }
 
+    @GetMapping("/follow")
+    public ResponseEntity getPostingsByFollwingMember(@RequestHeader(name = "Authorization") String token,
+                                            @Positive @RequestParam int page,
+                                            @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.findPostingsByFollowing(page - 1, size, token);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
+                HttpStatus.OK);
+    }
+
     @GetMapping("/members/{member-id}")
     public ResponseEntity getPostingsByMember(@PathVariable("member-id") @Positive long memberId,
                                               @Positive @RequestParam int page,
                                               @Positive @RequestParam int size) {
         Page<Posting> postings = postingService.findPostingsByMemberId(memberId, page - 1, size);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity getPostingSortByLikes(@Positive @RequestParam int page,
+                                            @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.sortPostingsByLikes(page - 1, size);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/follow/popular")
+    public ResponseEntity getFollowPostingsSortByLikes(@RequestHeader(name = "Authorization") String token,
+                                                   @Positive @RequestParam int page,
+                                                   @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.sortFollowPostingsByLikes(page - 1, size, token);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/tags")
+    public ResponseEntity getPostingsByTagName(@NotBlank @Length(min = 1, max = 15) @RequestParam String tagName,
+                                           @Positive @RequestParam int page,
+                                           @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.findPostingsByTagName(page - 1, size, tagName);
         List<Posting> content = postings.getContent();
         return new ResponseEntity<>(
                 new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),

@@ -9,8 +9,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CommentLikeMapper {
-
-    CommentLike commentLikePostDtoToCommentLike(CommentLikeDto.Post requestBody);
     @Mapping(source = "member.memberId" , target = "memberId")
     @Mapping(source = "comment.commentId" , target = "commentId")
     CommentLikeDto.Response commentLikeToCommentLikeResponse(CommentLike commentLike);

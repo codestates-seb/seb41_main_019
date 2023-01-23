@@ -29,7 +29,7 @@ public class PostingLikeService {
 	private final JwtTokenizer jwtTokenizer;
 	private final SseService sseService;
 
-	public PostingLike createPostingLike(PostingLike postingLike, long postingId, long memberId, String token) {
+	public PostingLike createPostingLike(long postingId, long memberId, String token) {
 
 		if (memberId != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
@@ -43,6 +43,7 @@ public class PostingLikeService {
 
 		Posting posting = postingService.findVerifiedPosting(postingId);
 		Member member = memberService.findMember(memberId);
+		PostingLike postingLike= new PostingLike();
 
 		postingLike.setPosting(posting);
 		postingLike.setMember(member);
@@ -69,7 +70,6 @@ public class PostingLikeService {
 
 	}
 
-	@Transactional(readOnly = true)
 	private PostingLike findVerifiedPostingLike(long postingLikeId) {
 		Optional<PostingLike> optionalPostingLike = postingLikeRepository.findById(postingLikeId);
 		PostingLike findPostingLike =

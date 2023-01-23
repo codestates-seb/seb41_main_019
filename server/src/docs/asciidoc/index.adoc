@@ -155,16 +155,35 @@ include::{snippets}/get-single-posting/response-fields.adoc[]
 
 === 게시글 전체 조회
 .curl-request
-include::{snippets}/get-all-posting/curl-request.adoc[]
+include::{snippets}/get-all-postings/curl-request.adoc[]
 
 .http-request
-include::{snippets}/get-all-posting/http-request.adoc[]
+include::{snippets}/get-all-postings/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-all-postings/request-parameters.adoc[]
 
 .http-response
-include::{snippets}/get-all-posting/http-response.adoc[]
+include::{snippets}/get-all-postings/http-response.adoc[]
 
 .response-fields
-include::{snippets}/get-all-posting/response-fields.adoc[]
+include::{snippets}/get-all-postings/response-fields.adoc[]
+
+=== 팔로우 하는 회원들의 게시글 전체 조회
+.curl-request
+include::{snippets}/get-following-postings/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-following-postings/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-following-postings/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-following-postings/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-following-postings/response-fields.adoc[]
 
 === 특정 회원의 게시글 전체 조회
 .curl-request
@@ -172,6 +191,9 @@ include::{snippets}/get-postings-by-member/curl-request.adoc[]
 
 .http-request
 include::{snippets}/get-postings-by-member/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-postings-by-member/request-parameters.adoc[]
 
 .path-parameters
 include::{snippets}/get-postings-by-member/path-parameters.adoc[]
@@ -181,6 +203,54 @@ include::{snippets}/get-postings-by-member/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-postings-by-member/response-fields.adoc[]
+
+=== 게시글 좋아요 순 조회
+.curl-request
+include::{snippets}/get-postings-sorting-by-likes/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-postings-sorting-by-likes/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-postings-sorting-by-likes/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-postings-sorting-by-likes/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-postings-sorting-by-likes/response-fields.adoc[]
+
+=== 팔로우 하는 회원들의 게시글 좋아요 순 조회
+.curl-request
+include::{snippets}/get-following-postings-sorting-by-likes/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-following-postings-sorting-by-likes/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-following-postings-sorting-by-likes/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-following-postings-sorting-by-likes/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-following-postings-sorting-by-likes/response-fields.adoc[]
+
+=== 태그명으로 게시글 검색
+.curl-request
+include::{snippets}/search-postings-by-tagName/curl-request.adoc[]
+
+.http-request
+include::{snippets}/search-postings-by-tagName/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/search-postings-by-tagName/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/search-postings-by-tagName/http-response.adoc[]
+
+.response-fields
+include::{snippets}/search-postings-by-tagName/response-fields.adoc[]
 
 === 게시글 삭제
 .curl-request
@@ -299,6 +369,9 @@ include::{snippets}/gets-comments/curl-request.adoc[]
 
 .http-request
 include::{snippets}/gets-comments/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/gets-comments/request-parameters.adoc[]
 
 .path-parameters
 include::{snippets}/gets-comments/path-parameters.adoc[]
@@ -467,6 +540,9 @@ include::{snippets}/gets-my-plants/curl-request.adoc[]
 .http-request
 include::{snippets}/gets-my-plants/http-request.adoc[]
 
+.request-parameters
+include::{snippets}/gets-my-plants/request-parameters.adoc[]
+
 .http-response
 include::{snippets}/gets-my-plants/http-response.adoc[]
 
@@ -548,6 +624,9 @@ include::{snippets}/gets-gallery/curl-request.adoc[]
 
 .http-request
 include::{snippets}/gets-gallery/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/gets-gallery/request-parameters.adoc[]
 
 .path-parameters
 include::{snippets}/gets-gallery/path-parameters.adoc[]

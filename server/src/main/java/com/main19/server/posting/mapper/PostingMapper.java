@@ -37,10 +37,6 @@ public interface PostingMapper {
 
 	List<PostingResponseDto> postingsToPostingsResponseDto(List<Posting> postings);
 
-
-	// 좋아요 매퍼
-	PostingLike postingLikeDtoToPostingLike(PostingLikeDto requestBody);
-
 	@Mapping(source = "posting.postingId", target = "postingId")
 	@Mapping(source = "member.memberId", target = "memberId")
 	PostingLikeResponseDto postingLikeToPostingLikeResponseDto(PostingLike postingLike);
