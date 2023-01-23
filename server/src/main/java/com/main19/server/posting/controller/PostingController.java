@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -137,7 +139,7 @@ public class PostingController {
     }
 
     @GetMapping("/tags")
-    public ResponseEntity getPostingsByTag(@RequestParam String tagName,
+    public ResponseEntity getPostingsByTag(@NotBlank @Length(min = 1, max = 15) @RequestParam String tagName,
                                            @Positive @RequestParam int page,
                                            @Positive @RequestParam int size) {
         Page<Posting> postings = postingService.findPostingsByTag(page - 1, size, tagName);
