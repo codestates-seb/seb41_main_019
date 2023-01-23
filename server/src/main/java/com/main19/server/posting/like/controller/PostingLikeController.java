@@ -38,7 +38,6 @@ public class PostingLikeController {
         @PathVariable("posting-id") @Positive long postingId,
         @Valid @RequestBody PostingLikeDto requestBody) {
         PostingLike postingLike = postingLikeService.createPostingLike(
-            mapper.postingLikeDtoToPostingLike(requestBody),
             postingId, requestBody.getMemberId(),token);
         return new ResponseEntity<>(
             new SingleResponseDto<>(mapper.postingLikeToPostingLikeResponseDto(postingLike)),
