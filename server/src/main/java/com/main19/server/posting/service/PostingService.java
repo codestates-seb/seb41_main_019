@@ -117,6 +117,13 @@ public class PostingService {
 		return postingRepository.findByMember_FollowingList(member.getMemberId(), PageRequest.of(page, size, Sort.by("like_count").descending()));
 	}
 
+	@Transactional(readOnly = true)
+	public Page<Posting> findPostingsByTag(int page, int size, String tagName) {
+		long tagId = tagService.findTag(tagName).getTagId();
+		return postingRepository.findPostingsByTags(tagId, PageRequest.of(page, size, Sort.by("posting_id").descending()));
+	}
+
+
 	public void deletePosting(long postingId, String token) {
 		Posting findPosting = findVerifiedPosting(postingId);
 
