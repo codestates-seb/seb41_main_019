@@ -8,6 +8,7 @@ import { exchangeTime } from "../../util/exchangeTime";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 
 const StyledComments = styled.ul`
+    height: 100%;
     background-color: white;
     overflow: scroll;
     list-style: none;
