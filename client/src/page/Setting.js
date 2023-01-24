@@ -3,6 +3,7 @@ import EditProfile from "../components/Setting/EditProfile";
 import EditPw from "../components/Setting/EditPw";
 import DeleteAccount from "../components/Setting/DeleteAccount";
 import { useState } from "react";
+import Footer from "../components/public/Footer";
 
 const Wrapper = styled.div`
     display: flex;
@@ -65,7 +66,7 @@ const Setting = () => {
                 ? <EditProfile /> 
                 :  isClicked === 1 ? <EditPw /> : <DeleteAccount />
             }
-           
+            <Footer />
         </Wrapper>
     )
 };

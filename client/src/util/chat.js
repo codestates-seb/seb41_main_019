@@ -1,10 +1,9 @@
 import * as StompJs from '@stomp/stompjs';
-import { soltChat } from './soltChat';
 
 export const client = new StompJs.Client({
     brokerURL : "ws://13.124.33.113:8080/chat",
     debug : (e) => {
-        // console.log(e);
+        console.log(e);
     }
 })
 
@@ -12,7 +11,7 @@ export const connect = () => {
     client.activate()
 }
 
-export const subscribe = (curChat, log, setLog) => {
+export const subscribe = (curChat, setRes) => {
     client.subscribe(`/sub/chat/${curChat.chatRoomId}`, (body) => {
         const json = JSON.parse(body.body)
         const data = {
@@ -21,10 +20,8 @@ export const subscribe = (curChat, log, setLog) => {
             chat: json.chat,
             createdAt: json.createdAt.split(".")[0]
         }
-        
-        const [preLog] = log.slice();
-        preLog.push(data)
-        setLog(soltChat(preLog));
+
+        setRes(data);
     });
 }
 

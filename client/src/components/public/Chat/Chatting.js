@@ -6,6 +6,7 @@ import { connect, subscribe, disConnect, send } from "../../../util/chat";
 import Cookie from "../../../util/Cookie";
 import { useChat } from "./useChat";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
+import { soltChat } from "../../../util/soltChat";
 
 const StyledChatLog = styled.div`
   display: flex;
@@ -88,6 +89,7 @@ const StyledInput = styled.div`
 const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
   const [ message, setMessage ] = useState("");
   const [ log, setLog ] = useChat(curChat);
+  const [ res, setRes ] = useState(null);
   const ul = useRef(null);
   const cookie = new Cookie();
 
@@ -95,8 +97,9 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
     connect(curChat);
 
     setTimeout(() => {
-      ul.current.scrollIntoView({block: "end", behavior: "smooth"})
-    }, 100)
+      ul.current.scrollIntoView({block: "end", behavior: "smooth"});
+      subscribe(curChat, setRes);
+    }, 150)
 
     return () => {
       disConnect();
@@ -104,15 +107,22 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
   }, [])
 
   useEffect(() => {
-    if(log.length > 0) subscribe(curChat, log, setLog);
-  }, [log])
+    if(res) {
+      const [preLog] = log.slice();
+      preLog.push(res)
+      setLog(soltChat(preLog));
+      setTimeout(() => {
+        ul.current.scrollIntoView({block: "end", behavior: "smooth"})
+      }, 150)
+    }
+  }, [res])
 
   const handleSend = () => {
     send(curChat, Number(cookie.get("memberId")), message);
     setMessage("");
     setTimeout(() => {
       ul.current.scrollIntoView({block: "end", behavior: "smooth"})
-    }, 100)
+    }, 150)
   }
 
   return (
