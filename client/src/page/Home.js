@@ -22,7 +22,7 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
     const [ curPost, setCurPost ] = useState(null);
     const [ postId, setPostId ] = useState(null);
     const [ commentId, setCommentId ] = useState(null);
-
+ 
     const handleModal = () => {
         handleIsCovered();
         setModal(!modal);
@@ -54,7 +54,7 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
             { modal ? <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/> : null }
             { deleteMenu ? <DeleteModal postId={curPost.postingId} handleDelete={handleDelete} handleChange={handleChange} /> : null }
             <StyledMain>
-                <Recommends />
+                <Recommends change={change} />
                 <Feed handleModal={handleModal} handleDelete={handleDelete} handleEdit={handleEdit}
                     handleCurPost={handleCurPost} change={change} setPostId={setPostId} postId={postId} handleChange={handleChange} />
             </StyledMain>

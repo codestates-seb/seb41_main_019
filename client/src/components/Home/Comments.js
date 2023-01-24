@@ -8,14 +8,19 @@ import { exchangeTime } from "../../util/exchangeTime";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 
 const StyledComments = styled.ul`
-    height: 100%;
     background-color: white;
     overflow: scroll;
     list-style: none;
     padding: 0;
     margin: 0;
+    margin-bottom: 0px;
     ::-webkit-scrollbar {
         display: none;
+    }
+    li {
+        height: 50px;
+        width: 100%;
+        margin: 0px auto;
     }
 
     li span {
@@ -25,11 +30,10 @@ const StyledComments = styled.ul`
     .comment {
         display: flex;
         padding: 10px;
-        align-items: center;
     }
 
     img {
-        width: 8%;;
+        width: 8%;
         border-radius: 50px;
         cursor: pointer;
         margin-right: 10px;

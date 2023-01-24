@@ -9,7 +9,6 @@ import { exchangeTime } from "../../util/exchangeTime";
 import defaultImg from "../../assets/img/profile.jpg"
 import Cookie from "../../util/Cookie";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
     position: relative;
@@ -82,7 +81,6 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
     const [menu, setMenu] = useState(false);
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
-    const navigate = useNavigate();
 
     const handleMenu = () => {
         setMenu(!menu);
@@ -131,17 +129,17 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
         <Wrapper>
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
-                <img src={post.profileImage ? post.profileImage : defaultImg} onClick={() => navigate("/mypage")} alt="profileImg" />
+                <img src={post.profileImage ? post.profileImage : defaultImg} alt="profileImg" />
                 <div>
-                    <span onClick={() => navigate("/mypage")}>{post.userName}</span>
+                    <span>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
-                { follow.length > 0 ?
+                { follow.length >= 0 ?
                         post.memberId === Number(cookie.get("memberId")) ? null : 
                             follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ?
                             <AiOutlineUserDelete onClick={deleteFollow} /> : <AiOutlineUserAdd onClick={addFollow} />
-                    : <AiOutlineUserAdd onClick={addFollow} />
+                    : null
                 }
                 { post.memberId === Number(cookie.get("memberId")) ?
                     <BiDotsVerticalRounded onClick={() => {
