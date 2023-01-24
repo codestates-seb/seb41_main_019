@@ -2,6 +2,8 @@ import { useState } from "react";
 import styled from "styled-components"
 import { BlueBtn } from "../public/BlueBtn";
 import axios from 'axios';
+import Cookie from "../../util/Cookie";
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -23,7 +25,7 @@ const Wrapper = styled.div`
         align-items: center;
         gap: 30px;
 
-        .profileImg {
+        img {
             width: 50px;
             height: 50px;
             background-color: gray;
@@ -61,14 +63,17 @@ const Wrapper = styled.div`
     }
 `;
 
-const DeleteAccount = () => {
+const DeleteProfile = ({ name, img }) => {
     const [isChecked, setIsChecked] = useState(false);
+    const cookie = new Cookie();
+    const navigate = useNavigate();
 
     const handleDelete = () => {
         axios
-            .delete("http://localhost.com/",{})
+            .delete(`http://13.124.33.113:8080/members/${cookie.get("memberId")}`)
             .then((res) => {
                 alert('계정이 삭제되었습니다');
+                navigate('/');
             })
             .catch(() => {
                 console.log('삭제 요청 실패')
@@ -82,17 +87,17 @@ const DeleteAccount = () => {
     return (
         <Wrapper>
             <div>
-                <div className="profileImg"></div>
-                <span>user1</span>
+                <img src={img} alt="img" />
+                <span>{name}</span>
             </div>
             <p>게시하신 글이나 댓글은 자동으로 삭제되며, 사용하고 계신 아이디 <span>user1</span>는 탈퇴할 경우 복구가 불가능합니다.</p>
             <div className="check">
                 <input id="checkbox" type="checkbox" value={isChecked} onClick={handleBtn}/>
                 <label htmlFor="checkbox">안내 사항을 모두 확인하였으며, 이에 동의합니다.</label>
             </div>
-            <BlueBtn disabled={isChecked ? false : true}>계정 삭제</BlueBtn>
+            <BlueBtn disabled={isChecked ? false : true} onClick={handleDelete}>계정 삭제</BlueBtn>
         </Wrapper>
     )
 };
 
-export default DeleteAccount;
+export default DeleteProfile;
