@@ -25,16 +25,12 @@ public class KafkaConsumer {
     @KafkaListener(topics = "${kafka.topic}", groupId = "${kafka.id}")
     public void consume(ChatDto.Post chat) throws IOException {
         log.info("Consumed Message : " + chat.getChat());
-        HashMap<String, String> msg = new HashMap<>();
-        msg.put("chatRoomId",""+chat.getChatRoomId());
-        msg.put("senderId", ""+chat.getSenderId());
-        msg.put("receiverId", ""+chat.getReceiverId());
-        msg.put("chat", chat.getChat());
 
         Chat mappedChat = chatMapper.chatPostDtoToChat(chat);
         chatService.createChat(mappedChat, chat.getReceiverId(), chat.getSenderId(), chat.getChatRoomId());
+        ChatDto.Response response = chatMapper.chatToChatResponse(mappedChat);
 
         ObjectMapper mapper = new ObjectMapper();
-        template.convertAndSend("/sub/chat/" + chat.getChatRoomId(), mapper.writeValueAsString(msg));
+        template.convertAndSend("/sub/chat/" + chat.getChatRoomId(), response);
     }
 }

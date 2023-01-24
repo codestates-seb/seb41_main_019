@@ -91,11 +91,13 @@ public class ChatRestDocs {
         given(chatMapper.chatToChatDtoResponse(Mockito.anyList())).willReturn(
             List.of(
                 new ChatDto.Response(
+                    list.get(0).getChatRoom().getChatRoomId(),
                     list.get(0).getReceiver().getMemberId(),
                     list.get(0).getSender().getMemberId(),
                     list.get(0).getChat(),
                     list.get(0).getCreatedAt()),
                 new ChatDto.Response(
+                    list.get(1).getChatRoom().getChatRoomId(),
                     list.get(1).getReceiver().getMemberId(),
                     list.get(1).getSender().getMemberId(),
                     list.get(1).getChat(),
@@ -112,10 +114,12 @@ public class ChatRestDocs {
 
         actions
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[0].chatRoomId").value(list.get(0).getChatRoom().getChatRoomId()))
             .andExpect(jsonPath("$.[0].receiverId").value(list.get(0).getReceiver().getMemberId()))
-            .andExpect(jsonPath("$.[0].senderId").value(list.get(1).getSender().getMemberId()))
+            .andExpect(jsonPath("$.[0].senderId").value(list.get(0).getSender().getMemberId()))
             .andExpect(jsonPath("$.[0].chat").value(list.get(0).getChat()))
             .andExpect(jsonPath("$.[0].createdAt").value("2023-01-01T23:59:59"))
+            .andExpect(jsonPath("$.[1].chatRoomId").value(list.get(1).getChatRoom().getChatRoomId()))
             .andExpect(jsonPath("$.[1].receiverId").value(list.get(1).getReceiver().getMemberId()))
             .andExpect(jsonPath("$.[1].senderId").value(list.get(1).getSender().getMemberId()))
             .andExpect(jsonPath("$.[1].chat").value(list.get(1).getChat()))
@@ -131,6 +135,7 @@ public class ChatRestDocs {
                     parameterWithName("member-id").description("회원 식별자")
                 ),
                 responseFields(
+                    fieldWithPath("[0].chatRoomId").type(JsonFieldType.NUMBER).description("채팅방 식별자"),
                     fieldWithPath("[0].receiverId").type(JsonFieldType.NUMBER).description("회원 식별자"),
                     fieldWithPath("[0].senderId").type(JsonFieldType.NUMBER).description("회원 식별자"),
                     fieldWithPath("[0].chat").type(JsonFieldType.STRING).description("채팅 내용"),

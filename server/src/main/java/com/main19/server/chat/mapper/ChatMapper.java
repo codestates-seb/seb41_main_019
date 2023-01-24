@@ -18,5 +18,6 @@ public interface ChatMapper {
 
     @Mapping(source = "receiver.memberId" , target = "receiverId")
     @Mapping(source = "sender.memberId" , target = "senderId")
+    @Mapping(source = "chatRoom.chatRoomId" , target = "chatRoomId")
     ChatDto.Response chatToChatResponse(Chat chat);
 }

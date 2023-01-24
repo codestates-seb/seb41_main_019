@@ -46,7 +46,7 @@ public class ChatService {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
-        return chatRepository.findAllByChatRoom_ChatRoomId(chatRoomId, PageRequest.of(page, size, Sort.by("chatId").descending()));
+        return chatRepository.findAllByChatRoom_ChatRoomId(chatRoomId, PageRequest.of(page, size, Sort.by("chatId").ascending()));
     }
 
 
