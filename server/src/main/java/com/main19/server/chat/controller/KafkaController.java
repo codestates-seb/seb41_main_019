@@ -8,6 +8,7 @@ import com.main19.server.chat.service.ChatService;
 import com.main19.server.chatroom.service.ChatRoomService;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
+import java.util.Collections;
 import java.util.List;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +58,7 @@ public class KafkaController {
 
         Page<Chat> chat = chatService.findAllChat(roomId,token,page-1,size);
         List<Chat> chatList = chatMapper.pageChatToListChat(chat);
+        chatService.changeList(chatList);
         List<ChatDto.Response> response = chatMapper.chatToChatDtoResponse(chatList);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

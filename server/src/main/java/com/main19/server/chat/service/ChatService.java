@@ -9,6 +9,8 @@ import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.service.MemberService;
 import com.main19.server.sse.entity.Sse.SseType;
 import com.main19.server.sse.service.SseService;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,6 +49,17 @@ public class ChatService {
         }
 
         return chatRepository.findAllByChatRoom_ChatRoomId(chatRoomId, PageRequest.of(page, size, Sort.by("chatId").ascending()));
+    }
+
+    public List<Chat> changeList(List<Chat> chat) {
+
+        List<Chat> response = new ArrayList<>();
+
+        for(int i=0; i<chat.size(); i++) {
+            response.add(chat.get(chat.size()-1));
+        }
+
+        return response;
     }
 
 
