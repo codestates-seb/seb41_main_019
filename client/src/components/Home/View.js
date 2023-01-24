@@ -114,7 +114,7 @@ const StyledInteraction = styled.div`
 `;
 
 
-const View = ({ handleModal, curPost, handleChange }) => {
+const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommentId }) => {
     useEffect(() => {
         document.getElementById("bg").addEventListener("click", () => {
             handleModal();
@@ -136,7 +136,7 @@ const View = ({ handleModal, curPost, handleChange }) => {
                         <CloseBtn handleEvent={handleModal} />
                     </div>
                     <FeedInteraction post={curPost} type={1} />
-                    <Comments post={curPost} handleChange={handleChange} />
+                    <Comments post={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId} />
                 </StyledInteraction>
             </Wrapper>
     )

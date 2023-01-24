@@ -3,9 +3,9 @@ import axios from "axios";
 import Cookie from "../../util/Cookie";
 import { useState } from "react";
 import defaultImg from "../../assets/img/profile.jpg";
-import { BsPencilFill } from "react-icons/bs";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import CloseBtn from "../public/CloseBtn";
+import { exchangeTime } from "../../util/exchangeTime";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 
 const StyledComments = styled.ul`
     height: 100%;
@@ -35,23 +35,27 @@ const StyledComments = styled.ul`
         margin-right: 5px;
     }
 
-    li .commetContent {
+    .commentContent {
         display: flex;
         flex-direction: column;
         width: 80%;
+    }
 
-        span:last-of-type{
+    .commentContent:first-child {
+        overflow-wrap : anywhere;
+    }
+
+    .commentInteraction{
             margin-top: 5px;
             color: gray;
             font-size: 12px;
-        }
     }
 
     li .setting {
         display: flex;
 
         svg {
-            width: 10px;
+            width: 15px;
             height: 20px;
             cursor: pointer;
         }
@@ -92,12 +96,14 @@ const StyledButton = styled.button`
     width: 10%;
     height: 100%;
     border: 0px;
+    border-radius: 50px;
     background-color: white;
     color: #5E8B7E;
+    margin-left: 5px;
     cursor: pointer;
 `;
 
-const Comments = ({ post, handleChange }) => {
+const Comments = ({ post, handleChange, handleCommentMenu, setCommentId }) => {
     const [value, setValue] = useState("");
     const cookie = new Cookie();
 
@@ -119,42 +125,36 @@ const Comments = ({ post, handleChange }) => {
                 handleChange();
             })
             .catch(e => {
-                console.log(e);
             });
     };
 
-
-    const deleteComment = (commentId) => {
+    const likeComment = (commentId) => {
         axios({
-            method: "delete", 
-            url: `http://13.124.33.113:8080/comments/${commentId}`,
-            headers: { Authorization: cookie.get("authorization") }
-            }).then(res => {
-                console.log("댓글 삭제 성공");
-                handleChange();
-            })
-            .catch(e => {
-                console.log(e);
-            });
-    };
-
-    const updateComment = (commentId) => {
-        axios({
-            method: "patch",
-            url: `http://13.124.33.113:8080/comments/${commentId}`,
+            method: "post",
+            url: `http://13.124.33.113:8080/comments/${commentId}/likes`,
             headers: { Authorization: cookie.get("authorization") },
             data: {
-                "commentId" : commentId,
-                "comment" : "댓글 수정 test"
+                "memberId" : cookie.get("memberId"),
+                "commentId" : commentId
             }
         }).then(res => {
-            console.log("댓글 수정 성공");
             handleChange();
         }).catch(e => {
-            console.log(e);
         })
     }
 
+    const unLikeComment = (likeId) => {
+        axios({
+            method: "delete", 
+            url: `http://13.124.33.113:8080/comments/likes/${likeId}`,
+            headers: { Authorization: cookie.get("authorization") }
+            }).then(res => {
+                handleChange();
+            })
+            .catch(e => {
+            });
+    };
+    
     return (
         <>
             <StyledComments>
@@ -165,19 +165,30 @@ const Comments = ({ post, handleChange }) => {
                                 <li key={idx} className="comment">
                                     <img src={comment.profileImage === null ? defaultImg : comment.profileImage} alt="commentImg" />
                                     <span>{comment.userName}</span>
-                                    <div className="commetContent">
+                                    <div className="commentContent">
                                         <span>{comment.comment}</span>
-                                        <span>{comment.modifiedAt.replace('T', ' ')}</span>
+                                        <div>
+                                            <span className="commentInteraction">{exchangeTime(comment)}</span>
+                                            <span className="commentInteraction">•</span>
+                                            <span className="commentInteraction">좋아요 {comment.likeCount}개</span>
+                                        </div>
                                     </div>
-                                    { Number(cookie.get("memberId")) === comment.memberId ? 
-                                        <div className="setting">
-                                            <BsPencilFill onClick={() => updateComment(comment.commentId)}/>
-                                            <CloseBtn  handleEvent={() => deleteComment(comment.commentId)} />
-                                        </div>
-                                        : <div className="setting">
-                                            <AiOutlineHeart />
-                                        </div>
+                                    <div className="setting">
+                                    { Number(cookie.get("memberId")) === comment.memberId ?
+                                        <>
+                                            <BiDotsHorizontalRounded onClick={() => {
+                                                setCommentId(comment.commentId);
+                                                handleCommentMenu();
+                                            }} />
+                                        </> :
+                                        <>
+                                            { comment.commentLikeList.filter(like => like.memberId === Number(cookie.get("memberId"))).length > 0 ?
+                                                <AiFillHeart onClick={() => unLikeComment(comment.commentLikeList.filter(like => like.memberId === Number(cookie.get("memberId")))[0].commentLikeId)} />
+                                                : <AiOutlineHeart onClick={() => likeComment(comment.commentId)} />
+                                            }
+                                        </>
                                     }
+                                    </div>
                                 </li>
                             )
                         }) : null
