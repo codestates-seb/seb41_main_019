@@ -19,7 +19,7 @@ const StyledComments = styled.ul`
     }
 
     li span {
-        margin-right: 5px;
+        margin-right: 10px;
     }
 
     .comment {
@@ -32,7 +32,7 @@ const StyledComments = styled.ul`
         width: 8%;;
         border-radius: 50px;
         cursor: pointer;
-        margin-right: 5px;
+        margin-right: 10px;
     }
 
     .commentContent {
@@ -58,6 +58,10 @@ const StyledComments = styled.ul`
             width: 15px;
             height: 20px;
             cursor: pointer;
+            
+            :hover {
+            transform: scale(1.2);
+            }
         }
     }
 
@@ -66,11 +70,13 @@ const StyledComments = styled.ul`
         height: 200px;
         display: flex;
         flex-direction: column-reverse;
+        flex-flow: wrap;
     }
 `;
 
 const StyledMyComments = styled.div`
     height: 5%;
+    margin-bottom: 5px;
 
     @media screen and (max-width: 1024px) {
         height: 10%;

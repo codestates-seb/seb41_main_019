@@ -22,10 +22,6 @@ const Wrapper = styled.div`
         display: none;
     }
 
-    p, span, svg {
-        margin-left: 10px;
-    }
-
     @media screen and (max-width: 1255px) {
         width: 900px;
         height: 900px;
@@ -36,10 +32,6 @@ const Wrapper = styled.div`
         height: 600px;
         top: 38%;
         flex-direction: column;
-
-        p {
-            margin-left: 10px;
-        }
 
         svg {
             font-size: 20px;
@@ -88,18 +80,16 @@ const StyledInteraction = styled.div`
             width: 40px;
             height: 40px;
             border-radius: 50px;
-        }
-
-        > span {
-            margin: 0px 10px;
+            margin-right: 10px;
         }
 
         > span:nth-child(2){
             font-size: 20px;
+            margin-right: 10px;
         }
 
         > div {
-            margin : -5px 0px 0px auto;
+            margin : 5px 0px 0px auto;
         }
     }
 
@@ -112,7 +102,6 @@ const StyledInteraction = styled.div`
         height: 80%;
     }
 `;
-
 
 const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommentId }) => {
     useEffect(() => {
