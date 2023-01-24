@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { AiFillHeart } from "react-icons/ai";
 
 const StyledLi = styled.li`
     display: flex;
@@ -17,13 +18,23 @@ const StyledLi = styled.li`
         font-size: 12px;
         letter-spacing: 1px;
     }
+
+    span:last-of-type {
+        display: flex;
+        align-items: center;
+
+        svg {
+            fill: #F35369;
+        }
+    }
 `;
 
-const Recommend = ({ el }) => {
+const Recommend = ({ allPost }) => {
     return (
         <StyledLi>
-            <img src={el.img} alt="img" />
-            <span>{el.user_name}</span>
+            <img src={allPost.postingMedias[0].mediaUrl} alt="img" />
+            <span>{allPost.userName}</span>
+            <span><AiFillHeart />+{allPost.likeCount}</span>
         </StyledLi>
     )
 };

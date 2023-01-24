@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Recommend from "./Recommend";
-import { allPlants, followPlants } from "../../assets/dummyData/plantImage";
+import axios from "axios";
+import Cookie from "../../util/Cookie";
 
 const StyledSection = styled.section`
     width: 100%;
@@ -32,16 +33,52 @@ const StyledHeader = styled.header`
     }
 `;
 const StyledUl = styled.ul`
+     width: 500px;
     margin: 0px;
     padding: 0px;
     list-style: none;
     display: flex;
     color: #222426;
     gap: 10px;
+
+    @media screen and (max-width: 770px) {
+        width: 460px;
+    }
 `;
 
-const Recommends = () => {
-    const [ clickedBtn, setClickedBtn ] = useState(0);
+const Recommends = ({ change }) => {
+    const [ clickedBtn, setClickedBtn ] = useState(0); 
+    const [ allPosts, setAllPosts ] = useState("");
+    const [ followPosts, setFollowPosts ] = useState("");
+    const cookie = new Cookie();   
+
+    useEffect(() => {
+        axios({
+            method: "get",
+            url: `http://13.124.33.113:8080/posts/popular?page=1&size=10`,
+            headers: { Authorization: cookie.get("authorization") }
+            }).then(res => {
+                setAllPosts(res.data.data);
+            })
+            .catch(e => {
+            });
+    }, [change]);
+
+    useEffect(() => {
+        axios({
+            method: "get",
+            url: `http://13.124.33.113:8080/posts/follow/popular?page=1&size=10`,
+            headers: { Authorization: cookie.get("authorization") }
+            }).then(res => {
+                console.log('성공');
+                setFollowPosts(res.data.data);
+            })
+            .catch(e => {
+               console.log(e);
+            });
+    }, [change]);
+
+    console.log(followPosts);
 
     return (
         <StyledSection>
@@ -50,15 +87,13 @@ const Recommends = () => {
                 <button className={clickedBtn === 1 ? 'active' : null} onClick={(e) => setClickedBtn(1)}>Follow</button>
             </StyledHeader>        
             <StyledUl>
-            { clickedBtn === 0 
-                ? 
-                    allPlants.map((el,idx) => {
-                        return <Recommend key={idx} el={el} />;
+               { allPosts && clickedBtn === 0 ? 
+                    allPosts.filter((el, idx) => idx <= 4).map((allPost,idx) => {
+                        return (
+                            <Recommend key={idx} allPost={allPost} />
+                        );
                     })
-                : followPlants.map((el,idx) => {
-                    return <Recommend key={idx} el={el} />;
-                })
-            }
+            : null }
             </StyledUl>
         </StyledSection>
     )
