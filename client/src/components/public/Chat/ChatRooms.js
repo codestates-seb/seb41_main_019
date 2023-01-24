@@ -1,8 +1,5 @@
 import styled from "styled-components";
-import Cookie from "../../../util/Cookie";
 import ChatRoom from "./ChatRoom";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 const StyledChatList = styled.div`
   max-height: 30%;
@@ -21,14 +18,6 @@ const StyledChatList = styled.div`
     }
   }
 
-  > p::before {
-    content: "";
-    display: block;
-    width: 400px;
-    margin: 0px 0px 20px -20px;
-    border-top: 1px solid #dbdbdb;
-  }
-
   > p {
     margin: 0px;
     font-size: 18px;
@@ -37,30 +26,20 @@ const StyledChatList = styled.div`
   }
 `;
 
-const ChatRooms = () => {
-  const [rooms, setRooms] = useState([]);
-  const cookie = new Cookie();
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      url: `http://13.124.33.113:8080/chatroom/${cookie.get("memberId")}`,
-      headers: { Authorization: cookie.get("authorization") }
-    }).then(res => {
-      setRooms(res.data);
-    })
-  }, [])
-
+const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend }) => {
   return (
     <StyledChatList>
-      <p>Chat List</p>  
+      <p>채팅 목록</p>  
       <ul>
-        {rooms
+        {rooms.length > 0
           ? rooms.map((room, idx) => {
               return (
                 <ChatRoom
+                  friend={friends.filter(friend => friend.followingId === room.receiverId || friend.followingId === room.senderId)}
                   key={idx}
                   room={room}
+                  setCurChat={setCurChat}
+                  setCurFriend={setCurFriend}
                 />
               );
             })

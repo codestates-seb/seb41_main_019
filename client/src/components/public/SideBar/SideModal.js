@@ -67,7 +67,11 @@ const SideModal = ({ handleOpendModal, setIsLanded }) => {
             <AiOutlineClockCircle />
           </li>
           <li onClick={() => {
-            cookie.removeAll();
+            cookie.remove("memberId");
+            cookie.remove("list");
+            cookie.remove("username");
+            cookie.remove("refresh");
+            cookie.remove("authorization");
             navigate("/");
             setIsLanded(true);
           }}>

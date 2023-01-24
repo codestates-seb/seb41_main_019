@@ -152,7 +152,7 @@ const StyledHeader = styled.header`
   height: 60px;
   position: fixed;
   top: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #dbdbdb;
@@ -192,8 +192,8 @@ const StyledHeader = styled.header`
     padding: 10px 12px 10px 30px;
   }
 
-  @media screen and (min-width: 755px) {
-    display: none;
+  @media screen and (max-width: 770px) {
+    display: flex;
   }
 `;
 
@@ -214,10 +214,16 @@ const StyledExtend = styled.div`
   .active {
     width: 350px;
     border-right: 1px solid #DBDBDB; 
+
+    @media screen and (max-width: 755px) { 
+      height: 815px;
+      top: 60px;
+      left: 0px;
+    }
   }
 `
 
-const Sidebar = ({ handleIsPosted, setIsLanded }) => {
+const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
@@ -297,7 +303,7 @@ const Sidebar = ({ handleIsPosted, setIsLanded }) => {
           <Search />
         </div>
         <div className={isOpend === "Chat" ? "active" : null}>
-          <Chat />
+          <Chat change={change}/>
         </div>
         <div className={isOpend === "Alert" ? "active" : null}>
           <Alert />

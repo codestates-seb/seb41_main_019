@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { FiUserPlus } from "react-icons/fi";
-import { FaUserFriends } from "react-icons/fa";
+import { AiOutlineUserAdd, AiOutlineUserDelete } from "react-icons/ai"
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
@@ -10,11 +9,11 @@ import { exchangeTime } from "../../util/exchangeTime";
 import defaultImg from "../../assets/img/profile.jpg"
 import Cookie from "../../util/Cookie";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
     position: relative;
     width: 500px;
-    height: 760px;
     padding-top: 25px;
     margin-bottom: 20px;
     border-top: 1px solid #DBDBDB;
@@ -33,7 +32,6 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 770px) {
         width: 460px;
-        height: 750px;
     }
 `;
 
@@ -62,6 +60,7 @@ const StyledHeader = styled.div`
         font-weight: 500;
         margin-bottom: 3px;
         letter-spacing: 1px;
+        cursor: pointer;
     }
 
     div > span:nth-child(2) {
@@ -73,18 +72,17 @@ const StyledHeader = styled.div`
     .icons {
         flex-direction: row;
         margin : 0px 0px 5px auto;
-    }
-
-    /* follow icon */
-    div > svg:first-child {
-       
-    }
+        :hover {
+            transform: scale(1.2);
+        }
+    }  
 `;
 
-const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, handleChange, change }) => {
+const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setPostId, handleChange, change }) => {
     const [menu, setMenu] = useState(false);
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
+    const navigate = useNavigate();
 
     const handleMenu = () => {
         setMenu(!menu);
@@ -96,7 +94,6 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
             url: `http://13.124.33.113:8080/followings/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
         }).then(res => {
-            console.log("성공!");
             handleChange();
         })
         .catch(e => {
@@ -110,7 +107,6 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
             url: `http://13.124.33.113:8080/followings/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
-                console.log("성공!");
                 handleChange();
             })
             .catch(e => {
@@ -135,34 +131,31 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, hand
         <Wrapper>
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
-                <img src={post.profileImage ? post.profileImage : defaultImg} alt="profileImg" />
+                <img src={post.profileImage ? post.profileImage : defaultImg} onClick={() => navigate("/mypage")} alt="profileImg" />
                 <div>
-                    <span>{post.userName}</span>
+                    <span onClick={() => navigate("/mypage")}>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
-                {   
-                    follow.length > 0 ?
-                    <div className="icons">
-                    {
+                <div className="icons">
+                { follow.length > 0 ?
                         post.memberId === Number(cookie.get("memberId")) ? null : 
-                          
                             follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ?
-                            <FaUserFriends onClick={deleteFollow} /> : <FiUserPlus onClick={addFollow} />
-                    }
-                    { post.memberId === Number(cookie.get("memberId")) ?
-                        <BiDotsVerticalRounded onClick={() => {
-                            handleMenu(); 
-                            handleCurPost(post);
-                            }} />
-                        : null
-                    }
-                    </div> : <div className="icons"><FiUserPlus onClick={addFollow} /></div>
+                            <AiOutlineUserDelete onClick={deleteFollow} /> : <AiOutlineUserAdd onClick={addFollow} />
+                    : <AiOutlineUserAdd onClick={addFollow} />
                 }
+                { post.memberId === Number(cookie.get("memberId")) ?
+                    <BiDotsVerticalRounded onClick={() => {
+                        handleMenu(); 
+                        handleCurPost(post);
+                    }} />
+                    : null
+                }
+                </div>
             </StyledHeader>
             { post.postingMedias.length > 0 ?
                 <Slider imgs={post.postingMedias} /> : null
             }
-            <FeedInteraction post={post} setModal={handleModal} handleCurPost={handleCurPost} />
+            <FeedInteraction post={post} setModal={handleModal} handleCurPost={handleCurPost} setPostId={setPostId} handleChange={handleChange} />
         </Wrapper>
     );
 }

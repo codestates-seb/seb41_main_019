@@ -9,6 +9,16 @@ const StyledBackground = styled.div`
   background: rgba(0, 0, 0, 0.6);
   z-index: 999;
   display: block;
+  animation: modal-bg-show 0.3s;
+
+  @keyframes modal-bg-show {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 const Background = ({ isCovered }) => {
