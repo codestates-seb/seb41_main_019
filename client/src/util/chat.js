@@ -1,6 +1,4 @@
 import * as StompJs from '@stomp/stompjs';
-import { RiContactsBookLine } from 'react-icons/ri';
-import { soltChat } from './soltChat';
 
 export const client = new StompJs.Client({
     brokerURL : "ws://13.124.33.113:8080/chat",

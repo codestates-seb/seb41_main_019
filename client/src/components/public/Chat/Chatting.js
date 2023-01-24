@@ -111,6 +111,9 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
       const [preLog] = log.slice();
       preLog.push(res)
       setLog(soltChat(preLog));
+      setTimeout(() => {
+        ul.current.scrollIntoView({block: "end", behavior: "smooth"})
+      }, 150)
     }
   }, [res])
 
