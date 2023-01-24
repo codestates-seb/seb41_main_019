@@ -1,6 +1,7 @@
 package com.main19.server.chat.service;
 
 import com.main19.server.auth.jwt.JwtTokenizer;
+import com.main19.server.chat.dto.ChatDto;
 import com.main19.server.chat.entitiy.Chat;
 import com.main19.server.chat.repository.ChatRepository;
 import com.main19.server.chatroom.service.ChatRoomService;
@@ -51,12 +52,12 @@ public class ChatService {
         return chatRepository.findAllByChatRoom_ChatRoomId(chatRoomId, PageRequest.of(page, size, Sort.by("chatId").descending()));
     }
 
-    public List<Chat> changeList(List<Chat> chat) {
+    public List<ChatDto.Response> changeList(List<ChatDto.Response> chat) {
 
-        List<Chat> response = new ArrayList<>();
+        List<ChatDto.Response> response = new ArrayList<>();
 
         for(int i=0; i<chat.size(); i++) {
-            response.add(chat.get(chat.size()-1));
+            response.add(chat.get(chat.size()-i-1));
         }
 
         return response;
