@@ -5,7 +5,6 @@ import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.scrap.controller.ScrapController;
 import com.main19.server.posting.scrap.dto.ScrapDto;
 import com.main19.server.posting.scrap.dto.ScrapPostResponseDto;
-import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import com.main19.server.posting.scrap.entity.Scrap;
 import com.main19.server.posting.scrap.service.ScrapService;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
@@ -67,7 +65,7 @@ public class ScrapControllerRestDocs {
 
         given(mapper.scrapDtoToScrap(Mockito.any(ScrapDto.class))).willReturn(new Scrap());
         given(scrapService.createScrap(Mockito.any(Scrap.class), Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString())).willReturn(new Scrap());
-        given(mapper.scrapToScrapResponseDto(Mockito.any(Scrap.class))).willReturn(response);
+        given(mapper.scrapToScrapPostResponseDto(Mockito.any(Scrap.class))).willReturn(response);
 
         // when
         ResultActions actions = mockMvc.perform(

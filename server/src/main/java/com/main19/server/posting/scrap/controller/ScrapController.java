@@ -29,7 +29,7 @@ public class ScrapController {
                                        @RequestBody ScrapDto requestBody) {
         Scrap scrap = scrapService.createScrap(mapper.scrapDtoToScrap(requestBody), postingId, requestBody.getMemberId(), token);
 
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.scrapToScrapResponseDto(scrap)) , HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.scrapToScrapPostResponseDto(scrap)) , HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{scrap-id}")
