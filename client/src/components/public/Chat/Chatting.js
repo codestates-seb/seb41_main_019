@@ -22,7 +22,7 @@ const StyledChatLog = styled.div`
 `;
 
 const StyledChatting = styled.ul`
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   margin: 0px;
   padding: 0px;
@@ -94,6 +94,10 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
   useEffect(() => {
     connect(curChat);
 
+    setTimeout(() => {
+      ul.current.scrollIntoView({block: "end", behavior: "smooth"})
+    }, 100)
+
     return () => {
       disConnect();
     }
@@ -107,7 +111,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
     send(curChat, Number(cookie.get("memberId")), message);
     setMessage("");
     setTimeout(() => {
-      ul.current.scrollIntoView({block: "end"})
+      ul.current.scrollIntoView({block: "end", behavior: "smooth"})
     }, 100)
   }
 

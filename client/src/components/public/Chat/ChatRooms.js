@@ -1,8 +1,5 @@
 import styled from "styled-components";
-import Cookie from "../../../util/Cookie";
 import ChatRoom from "./ChatRoom";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 const StyledChatList = styled.div`
   max-height: 30%;
@@ -21,14 +18,6 @@ const StyledChatList = styled.div`
     }
   }
 
-  > p::before {
-    content: "";
-    display: block;
-    width: 400px;
-    margin: 0px 0px 20px -20px;
-    border-top: 1px solid #dbdbdb;
-  }
-
   > p {
     margin: 0px;
     font-size: 18px;
@@ -40,7 +29,7 @@ const StyledChatList = styled.div`
 const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend }) => {
   return (
     <StyledChatList>
-      <p>Chat List</p>  
+      <p>채팅 목록</p>  
       <ul>
         {rooms.length > 0
           ? rooms.map((room, idx) => {

@@ -21,8 +21,7 @@ export const subscribe = (curChat, log, setLog) => {
             chat: json.chat,
             createdAt: json.createdAt.split(".")[0]
         }
-
-        console.log(data);
+        
         const [preLog] = log.slice();
         preLog.push(data)
         setLog(soltChat(preLog));

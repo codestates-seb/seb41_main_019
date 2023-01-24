@@ -29,12 +29,12 @@ const StyledChat = styled.div`
     border-top: 1px solid #dbdbdb;
   }
 
-  > .chat-area::before {
-    content: "";
-    display: block;
-    width: 400px;
-    margin: 0px 0px 20px -20px;
-    border-top: 1px solid #dbdbdb;
+  > .chat-area::after {
+      content: "";
+      display: block;
+      width: 400px;
+      margin: 20px 0px 0px -20px;
+      border-top: 1px solid #dbdbdb;
   }
 `;
 
@@ -75,14 +75,19 @@ const Chat = ({ change }) => {
   return (  
     <>
       <StyledChat>
-        <Input label={"채팅"} />
+        {/* <Input label={"채팅"} /> */}
         {
           !curChat ? 
           <>
             <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} />
             <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} />
           </>
-          : <Chatting curChat={curChat} curFriend={curFriend} setCurChat={setCurChat} setCurFriend={setCurFriend} />
+          : 
+          <>
+            <Chatting curChat={curChat} curFriend={curFriend} setCurChat={setCurChat} setCurFriend={setCurFriend} />
+            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} />
+            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} />
+          </>
         }
       </StyledChat>
     </>
