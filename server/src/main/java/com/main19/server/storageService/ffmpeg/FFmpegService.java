@@ -43,7 +43,7 @@ public class FFmpegService {
         FFprobe ffprobe = new FFprobe("/usr/bin/ffprobe");
 
         String filename = file.getOriginalFilename();
-        String path = "C:/Users/hyein/Desktop/image/" + filename;
+        String path = "/home/ubuntu/main19/ffmpeg/" + filename;
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(path)
