@@ -169,7 +169,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   return (
     <>
       {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost}/>}
-      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt}  handleModal={handleModal} userInfo={userInfo} />}
+      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} setGalleryData={setGalleryData} handleModal={handleModal} userInfo={userInfo} />}
       <StyledContainer>
         <UserInfo userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened ? (
