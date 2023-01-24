@@ -1,6 +1,8 @@
+import axios from "axios";
 import { AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
 import { BsBookmarkPlus } from "react-icons/bs";
 import styled from "styled-components";
+import Cookie from "../../util/Cookie";
 
 const StyledInteraction = styled.div`
     background-color: white;
@@ -54,7 +56,21 @@ const StyledInteraction = styled.div`
     }
 `;
 
-const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId }) => {
+const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, handleChange }) => {
+    const cookie = new Cookie();
+
+    const handleLike = () => {
+        axios({
+            method: "post",
+            url: `http://13.124.33.113:8080/posts/${post.memberId}/likes`,
+            headers: { Authorization: cookie.get("authorization") }
+        }).then(res => {
+            handleChange();
+        }).catch(e => {
+            console.log(e);
+        })
+    }
+
     return (
         <StyledInteraction>
             <div className="interact">
