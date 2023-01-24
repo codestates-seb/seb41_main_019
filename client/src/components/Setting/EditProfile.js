@@ -1,9 +1,7 @@
 import styled from "styled-components";
 import { BlueBtn } from "../public/BlueBtn";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
-import defaultImg from "../../assets/img/profile.jpg"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -56,29 +54,8 @@ const Wrapper = styled.div`
     }
 `;
 
-const EditProfile = () => {
-    const [ name, setName ] = useState("");
-    const [ text, setText ] = useState("");
-    const [ location, setLocation] = useState("");
-    const [ img, setImg ] = useState(null);
+const EditProfile = ({ name, text, location, img, setName, setText, setLocation }) => {
     const cookie = new Cookie();
-
-    useEffect(() => {
-        axios({
-            method: "get",
-            url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
-            headers: { Authorization : cookie.get("authorization") }
-        }).then(res => {
-            const user = res.data.data;
-            console.log(user);
-            setName(user.userName);
-            setText(user.profileText);
-            setLocation(user.location);
-            user.profileImage ? setImg(user.profileImage) : setImg(defaultImg);
-        }).catch(e => {
-            console.log(e);
-        })
-    }, [])
 
     const editProfile = () => {
         axios({
