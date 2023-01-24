@@ -5,6 +5,7 @@
   "dependencies": {
     "@stomp/stompjs": "^6.1.2",
     "axios": "^1.2.2",
+    "event-source-polyfill": "^1.0.31",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-cookie": "^4.1.1",
