@@ -103,7 +103,7 @@ public class PostingService {
 
 	@Transactional(readOnly = true)
 	public Page<Posting> findPostingsByMemberId(long memberId, int page, int size) {
-		return postingRepository.findByMember_MemberId(memberId, PageRequest.of(page, size, Sort.by("posting_id").descending()));
+		return postingRepository.findByMember_MemberId(memberId, PageRequest.of(page, size, Sort.by("postingId").descending()));
 	}
 
 	@Transactional(readOnly = true)
