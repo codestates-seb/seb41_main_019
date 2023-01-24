@@ -17,6 +17,10 @@ import static javax.persistence.FetchType.EAGER;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
+	@Transient private final String DEFAULT_LOCATION = "...";
+	@Transient private final String DEFAULT_PROFILE_TEXT = "...";
+	@Transient private final String DEFAULT_PROFILE_IMAGE = "https://main19-bucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/fcb8c543-bae8-451a-a8e7-6467e2ef7f0c.PNG";
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long memberId;
@@ -64,4 +68,19 @@ public class Member {
 
 	@OneToMany(mappedBy = "followingId")
 	private List<Follow> followingList = new ArrayList<>();
+
+	@PrePersist
+	public void prePersist() {
+		if (this.location == null) {
+			this.location = DEFAULT_LOCATION;
+		}
+
+		if (this.profileImage == null) {
+			this.profileImage = DEFAULT_PROFILE_IMAGE;
+		}
+
+		if (this.profileText == null) {
+			this.profileText = DEFAULT_PROFILE_TEXT;
+		}
+	}
 }
