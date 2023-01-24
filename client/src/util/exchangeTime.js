@@ -32,11 +32,13 @@ export const exchangeTime = (post) => {
     const minute = parseInt(differ / 60 % 60);
     const second = differ % 60;
 
-    if(hour > 0) {
+    if(hour > 24) {
+        return `${parseInt(hour/24)}일 전`;
+    }else if(hour > 0) {
         return `${hour}시간 전`;
     } else if(minute > 0) {
         return `${minute}분 전`;
     } else {
-        return `몇 초 전`;
+        return `${second} 초 전`;
     }
 }

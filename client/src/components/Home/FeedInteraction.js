@@ -1,9 +1,12 @@
-import { AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
+import axios from "axios";
+import { AiOutlineHeart, AiFillHeart, AiOutlineShareAlt } from "react-icons/ai";
 import { BsBookmarkPlus } from "react-icons/bs";
 import styled from "styled-components";
+import Cookie from "../../util/Cookie";
 
 const StyledInteraction = styled.div`
     background-color: white;
+    padding: 5px;
 
     p {
         margin: 0;
@@ -23,7 +26,16 @@ const StyledInteraction = styled.div`
         font-size: 16px;
         margin-bottom: 10px;
         color: #222426;
-        
+    }
+
+    .content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        word-wrap: break-word;
+        display: -webkit-box;
+       -webkit-line-clamp: 3 ;
+        -webkit-box-orient: vertical;
     }
 
     .tags {
@@ -44,16 +56,49 @@ const StyledInteraction = styled.div`
     }
 `;
 
-const FeedInteraction = ({ setModal, type=null, post, handleCurPost }) => {
+const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, handleChange }) => {
+    const cookie = new Cookie();
+
+    const handleLike = () => {
+        axios({
+            method: "post",
+            url: `http://13.124.33.113:8080/posts/${post.postingId}/likes`,
+            headers: { Authorization: cookie.get("authorization") },
+            data : {
+                "memberId" : cookie.get("memberId")
+            }
+        }).then(res => {
+            handleChange();
+        }).catch(e => {
+        })
+    }
+
+    const handleUnlike = (like) => {
+        axios({
+            method: "delete",
+            url: `http://13.124.33.113:8080/posts/likes/${like}`,
+            headers: { Authorization: cookie.get("authorization") },
+        }).then(res => {
+            handleChange();
+        }).catch(e => {
+        })
+    }
+ 
+
     return (
         <StyledInteraction>
             <div className="interact">
-                <AiOutlineHeart />
+                {  post.postingLikes.filter((like) => like.memberId === Number(cookie.get("memberId"))).length > 0 ? 
+                    <AiFillHeart onClick={() => handleUnlike(post.postingLikes.filter((like) => like.memberId === Number(cookie.get("memberId")))[0].postingLikeId)} />
+                    : <AiOutlineHeart onClick={handleLike} />
+                }
                 <AiOutlineShareAlt />
                 <BsBookmarkPlus />
             </div>
             <p>좋아요 {post.likeCount}개</p>
-            <p>{post.postingContent}</p>
+            {   type === null ? <div className="content">{post.postingContent}</div>
+                : <div>{post.postingContent}</div>
+            }
             <div className="tags">
                 { post.tags ? 
                     post.tags.map((tag, idx) => {
@@ -65,8 +110,9 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost }) => {
             { type ? null
             : <span onClick={() => {
                 handleCurPost(post);
+                setPostId(post.postingId);
                 setModal(false);
-            }} >댓글 보기 및 댓글쓰기</span>
+            }} >{post.comments.length}개 댓글 보기 및 댓글쓰기</span>
             }
         </StyledInteraction>
     )
