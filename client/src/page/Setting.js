@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookie from "../util/Cookie";
 import defaultImg from "../assets/img/profile.jpg";
+import Footer from "../components/public/Footer";
 
 const Wrapper = styled.div`
     display: flex;
@@ -88,7 +89,7 @@ const Setting = () => {
                 setName={setName} setText={setText} setLocation={setLocation} /> 
                 :  <DeleteProfile name={name} img={img} />
             }
-           
+            <Footer />
         </Wrapper>
     )
 };
