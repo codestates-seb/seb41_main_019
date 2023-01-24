@@ -1,9 +1,11 @@
 import styled from "styled-components";
 
 const StyledMassage = styled.li`
+  display: inline-flex;
+  flex-direction: column;
   margin: 0px 0px 10px 0px;
 
-  span {
+  .msg {
     font-size : 12px;
     font-weight: 300;
     display: inline-block;
@@ -11,25 +13,21 @@ const StyledMassage = styled.li`
     background-color: gray;
     border-radius: 5px;
     padding: 10px;
+    overflow-wrap: anywhere;
   }
 
-  span:last-child {
-    margin 0px important;
-  }
-
-  p {
+  .time {
     margin : 0px;
     font-size : 11px;
     font-weight: 300;
   }
 `;
 
-const Massage = ({ data }) => {
-  const user = 0;
+const Massage = ({ msg, user }) => {
   return (
-    <StyledMassage className={user === data.send ? "send" : "to"}>
-      <span>{data.massage}</span>
-      <p>{data.time.split("-")[3]}</p>
+    <StyledMassage className={Number(user) === msg.senderId ? "sender" : "receiver"}>
+      <span className="msg">{msg.chat}</span>
+      <span className="time">{msg.createdAt.slice(-8)}</span>
     </StyledMassage>
   );
 };
