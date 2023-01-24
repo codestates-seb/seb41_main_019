@@ -102,6 +102,18 @@ public class ChatRestDocs {
                     list.get(1).getSender().getMemberId(),
                     list.get(1).getChat(),
                     list.get(1).getCreatedAt())));
+        given(chatService.changeList(Mockito.anyList())).willReturn(List.of(new ChatDto.Response(
+                        list.get(0).getChatRoom().getChatRoomId(),
+                        list.get(0).getReceiver().getMemberId(),
+                        list.get(0).getSender().getMemberId(),
+                        list.get(0).getChat(),
+                        list.get(0).getCreatedAt()),
+                new ChatDto.Response(
+                        list.get(1).getChatRoom().getChatRoomId(),
+                        list.get(1).getReceiver().getMemberId(),
+                        list.get(1).getSender().getMemberId(),
+                        list.get(1).getChat(),
+                        list.get(1).getCreatedAt())));
 
         ResultActions actions =
             mockMvc.perform(
