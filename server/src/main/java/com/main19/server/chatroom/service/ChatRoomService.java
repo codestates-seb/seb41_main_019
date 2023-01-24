@@ -27,11 +27,7 @@ public class ChatRoomService {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
-        if(chatRoomRepository.findSenderChatRoom(receiverId,senderId) != null) {
-            throw new BusinessLogicException(ExceptionCode.CHATROOM_EXISTS);
-        }
-
-        if(chatRoomRepository.findReceiverChatRoom(receiverId,senderId) != null) {
+        if(chatRoomRepository.findChatRoom(receiverId,senderId) != null) {
             throw new BusinessLogicException(ExceptionCode.CHATROOM_EXISTS);
         }
 
