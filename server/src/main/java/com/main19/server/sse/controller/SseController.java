@@ -31,9 +31,9 @@ public class SseController {
     private final SseMapper sseMapper;
 
     @GetMapping(value = "/notification/{id}", produces = "text/event-stream; charset=UTF-8")
-    public SseEmitter subscribe(@PathVariable Long id,
+    public SseEmitter subscribe(@RequestHeader(name = "Authorization") String token, @PathVariable Long id,
         @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
-        return sseService.subscribe(id, lastEventId);
+        return sseService.subscribe(id, lastEventId, token);
     }
 
     @PatchMapping("/notification/{sse-id}")
@@ -47,10 +47,10 @@ public class SseController {
     }
 
     @GetMapping("/notification/{member-id}")
-    public ResponseEntity getSse(@PathVariable("member-id") @Positive long memberId,
-        @PageableDefault(size = 10, sort = "sse_id", direction = Direction.ASC) Pageable pageable) {
+    public ResponseEntity getSse(@RequestHeader(name = "Authorization") String token, @PathVariable("member-id") @Positive long memberId,
+        @PageableDefault(size = 10, sort = "sse_id", direction = Direction.DESC) Pageable pageable) {
 
-        Page<Sse> pageSse = sseService.findSse(memberId,pageable);
+        Page<Sse> pageSse = sseService.findSse(memberId,pageable,token);
         List<Sse> response = pageSse.getContent();
 
         return new ResponseEntity<>(

@@ -38,7 +38,11 @@ public class SseService {
     private final SseMapper sseMapper;
     private final JwtTokenizer jwtTokenizer;
 
-    public SseEmitter subscribe(Long userId, String lastEventId) {
+    public SseEmitter subscribe(Long userId, String lastEventId, String token) {
+
+        if(userId != jwtTokenizer.getMemberId(token)) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
 
         String id = userId + "_" + System.currentTimeMillis();
 
@@ -147,7 +151,12 @@ public class SseService {
         return sse;
     }
 
-    public Page<Sse> findSse(long memberId, Pageable pageable) {
+    public Page<Sse> findSse(long memberId, Pageable pageable, String token) {
+
+        if(memberId != jwtTokenizer.getMemberId(token)) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         return sseRepository.findSse(memberId, pageable);
     }
 
