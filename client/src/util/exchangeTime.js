@@ -25,7 +25,7 @@ export const exchangeTime = (post) => {
     }).reduce((acc, cur) => acc + cur);
 
     // 일 차이 반영
-    const differ = nTime - pTime + day;
+    const differ = (nTime + 9 * 60 * 60) - pTime + day;
 
     // 최대 시간 차로 변환
     const hour = parseInt(differ / 60 / 60);
