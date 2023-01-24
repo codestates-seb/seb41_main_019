@@ -149,7 +149,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
             { post.postingMedias.length > 0 ?
                 <Slider imgs={post.postingMedias} /> : null
             }
-            <FeedInteraction post={post} setModal={handleModal} handleCurPost={handleCurPost} setPostId={setPostId} />
+            <FeedInteraction post={post} setModal={handleModal} handleCurPost={handleCurPost} setPostId={setPostId} handleChange={handleChange} />
         </Wrapper>
     );
 }

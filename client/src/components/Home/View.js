@@ -135,7 +135,7 @@ const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommen
                         <span>{curPost.modifiedAt ? exchangeTime(curPost) : ""}</span>
                         <CloseBtn handleEvent={handleModal} />
                     </div>
-                    <FeedInteraction post={curPost} type={1} />
+                    <FeedInteraction post={curPost} type={1} handleChange={handleChange} />
                     <Comments post={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId} />
                 </StyledInteraction>
             </Wrapper>
