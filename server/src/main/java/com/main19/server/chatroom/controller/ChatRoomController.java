@@ -34,10 +34,6 @@ public class ChatRoomController {
     public ResponseEntity postChatRoom (@RequestHeader(name = "Authorization") String token,
         @Valid @RequestBody ChatRoomDto.Post requestBody) {
 
-        if(token == null) {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_UNAUTHORIZED);
-        }
-
         ChatRoom chatRoom = chatRoomMapper.chatRoomPostDtoToChatRoom(requestBody);
         ChatRoom response = chatRoomService.createChatRoom(chatRoom, requestBody.getReceiverId(),
             requestBody.getSenderId(), token);
