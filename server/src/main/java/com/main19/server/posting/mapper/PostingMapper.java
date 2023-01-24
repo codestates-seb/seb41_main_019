@@ -13,7 +13,6 @@ import com.main19.server.posting.scrap.entity.Scrap;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.main19.server.posting.like.dto.PostingLikeDto;
 import com.main19.server.posting.like.dto.PostingLikeGetResponseDto;
 import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
@@ -68,5 +67,5 @@ public interface PostingMapper {
 
 	@Mapping(source = "posting.postingId", target = "postingId")
 	@Mapping(source = "member.memberId", target = "memberId")
-	ScrapPostResponseDto scrapToScrapResponseDto(Scrap scrap);
+	ScrapPostResponseDto scrapToScrapPostResponseDto(Scrap scrap);
 }
