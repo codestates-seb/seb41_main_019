@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import jwtDecode from "jwt-decode";
 
 import { TiArrowSortedDown } from "react-icons/ti";
 import { TiArrowSortedUp } from "react-icons/ti";
@@ -13,6 +12,7 @@ import MyPlants from "../components/MyPage/MyPlants";
 import UserInfo from "../components/MyPage/UserInfo";
 import Gallery from "../components/MyPage/Gallery";
 import AddPlant from "../components/MyPage/AddPlant";
+import View from "../components/Home/View";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -66,78 +66,116 @@ const StyledChangeViewButton = styled.div`
 
 const MyPage = ({ isCovered, handleIsCovered }) => {
   const cookie = new Cookie();
-  const jwt = cookie.get("authorization");
-  const decodedJWT = JSON.stringify(jwtDecode(jwt));
+  const jwt = cookie.get("authorization")
+  const memberId = Number(cookie.get("memberId"));
 
-  const [userInfo, setUserInfo] = useState(JSON.parse(decodedJWT));
+  const [userInfo, setUserInfo] = useState([]);
+  const [postCount, setPostCount] = useState();
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
-  const [myPlantsData, setMyPlantsData] = useState([]); // My Plants 리스트 데이터
-  const [currentView, setCurrentView] = useState(""); // 현재 view(리스트)의 상태
-  const [isModalOpened, setIsModalOpened] = useState(false);
-
-  const getGalleryData = async (url, view) => {
+  const [currentView, setCurrentView] = useState("postings"); // 현재 view(리스트)의 상태
+  const [isAddPlantOpened, setIsAddPlantOpened] = useState(false);
+  const [isViewOpened, setIsViewOpened] = useState(false);
+  const [curPost, setCurPost] = useState();
+  
+  useEffect(() => {
+    getUserInfo()
+    getMyPostings()
+  }, [])
+  
+  const getUserInfo = () => {
     try {
-      setCurrentView(view);
-      const response = await axios.get(url);
-      setGalleryData(response.data);
-      return response;
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/members/${memberId}`,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        setUserInfo(res.data.data)
+      })
     } catch (err) {
       console.error(err);
     }
   };
 
-  const getMyPlantsData = async () => {
+  const getMyPostings = () => {
     try {
-      const response = await axios.get("http://localhost:4000/data");
-      setMyPlantsData(response.data);
-      return response;
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        setPostCount(res.data.pageInfo.totalElements);
+        setGalleryData(res.data.data)
+      });
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
   };
 
-  const handleModal = () => {
+  const getGalleryData = (url, view) => {
+    try {
+      axios({
+        method: "get",
+        url: url,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        setCurrentView(view)
+        setGalleryData(res.data)
+      })
+    } catch (err) {
+        console.error(err);
+      }
+  };
+
+  const handleModal = (modal, postingId) => {
+    if(modal === "AddPlant") {
+      setIsAddPlantOpened(!isAddPlantOpened);
+    } else if(postingId) {
+      setCurPost(galleryData.filter((el) => el.postingId === postingId)[0]) ;
+      setIsViewOpened(!isViewOpened);
+    } else {
+      setIsViewOpened(!isViewOpened);
+    }
     handleIsCovered();
-    setIsModalOpened(!isModalOpened);
   };
 
   const handlePostingsClick = () => {
     // 게시물 리스트 조회
-    getGalleryData("http://localhost:4000/data", "postings"); // 임시 제이슨 서버
+    getGalleryData(`http://localhost:8080/posts/members/${memberId}?page=1&size=10`, "postings"); // 임시 제이슨 서버
   };
 
   const handleScrapsClick = () => {
     // 스크랩 조회
-    getGalleryData("http://localhost:4000/data", "scraps");
-  };
-
-  const handleMyPlantsActivate = () => {
-    getMyPlantsData();
+    alert("구현 예정")
+    // getGalleryData("http://localhost:4000/data", "scraps");
   };
 
   const handlePlantClick = (plantId) => {
     // 반려식물 클릭시 해당건 조회
     setCurrentView("plant");
-    setGalleryData(myPlantsData[plantId].plantImgs);
+    // setGalleryData(myPlantsData[plantId].plantImgs);
   };
 
   const handleFolderClick = () => {
     setIsFolderOpened(!isFolderOpened);
-    if (!isFolderOpened) {
-      handleMyPlantsActivate();
-    }
   };
 
   return (
     <>
-      {isCovered && isModalOpened && <AddPlant handleModal={handleModal} />}
+      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost}/>}
+      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt}  handleModal={handleModal} userInfo={userInfo} />}
       <StyledContainer>
-        <UserInfo userInfo={userInfo} jwt={jwt} />
+        <UserInfo userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened ? (
           <div className="container">
             <MyPlants
-              myPlantsData={myPlantsData}
+              userInfo={userInfo}
               handlePlantClick={handlePlantClick}
               handleModal={handleModal}
             />
@@ -170,7 +208,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
                   <span>스크랩</span>
                 </StyledChangeViewButton>
               </StyledChangeViewContainer>
-              <Gallery galleryData={galleryData} currentView={currentView} />
+              <Gallery galleryData={galleryData} currentView={currentView} handleModal={handleModal}/>
             </StyledMyPlantFolder>
           </div>
         )}

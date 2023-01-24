@@ -2,11 +2,13 @@ import styled from "styled-components";
 
 import MyPlantInfo from "./MyPlantInfo";
 
+import defaultIcon from "../../assets/img/plants/defaultPlantIcon.png"
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { RiPlantLine } from "react-icons/ri";
 import { ReactComponent as Cookie } from "../../assets/svg/plus.svg";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -86,14 +88,35 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({ myPlantsData, handlePlantClick, handleModal }) => {
+const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
+  const [myPlantsData, setMyPlantsData] = useState(); // My Plants 리스트 데이터
   const [isPanelOpened, setIsPanelOpened] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState();
+
+  const getMyPlantsData = () => {
+    try {
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/${userInfo.memberId}/myplants?page=1&size=10`,
+        headers: {
+          "Authorization" : jwt
+        },
+      })
+      .then((res) => {
+        setMyPlantsData(res.data.data)}
+      )
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
+  useEffect(() => getMyPlantsData(), [])
 
   const handleMoveButtonClick = (go) => {
     // 이동 버튼 클릭
     alert("구현 예정");
   };
+
   return (
     <StyledContainer>
       <StyledMyPlantsDashBoard>
@@ -106,19 +129,19 @@ const MyPlants = ({ myPlantsData, handlePlantClick, handleModal }) => {
           <GrPrevious className="icon" />
         </div>
         <StyledListsContainer>
-          <StyledMyPlantsItem onClick={handleModal}>
+          <StyledMyPlantsItem onClick={() => handleModal("AddPlant")}>
             <div className="image-wrapper">
               <Cookie className="image" />
             </div>
             <p>반려식물 추가</p>
           </StyledMyPlantsItem>
-          {myPlantsData.length ? (
+          {myPlantsData ? (
             myPlantsData.map((el) => {
               return (
                 <StyledMyPlantsItem
-                  key={el.plantId}
+                  key={el.myPlantsId}
                   onClick={() => {
-                    handlePlantClick(el.plantId);
+                    handlePlantClick(el.myPlantsId);
                     setCurrentPlantData(el);
                     setIsPanelOpened(true);
                   }}
@@ -126,14 +149,14 @@ const MyPlants = ({ myPlantsData, handlePlantClick, handleModal }) => {
                   <div
                     className={
                       currentPlantData &&
-                      currentPlantData.plantId === el.plantId
+                      currentPlantData.myPlantsId === el.myPlantsId
                         ? "selected image-wrapper"
                         : "image-wrapper"
                     }
                   >
                     <img
                       className="image"
-                      src={el.plantImgs[el.plantImgs.length - 1].imgUrl}
+                      src={el.length ? el.galleryList[el.galleryList.length - 1] : defaultIcon}
                       alt="each item"
                     />
                   </div>

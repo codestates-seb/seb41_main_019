@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { TbCameraPlus } from "react-icons/tb";
+
+import AddPlantImage from "./AddPlantImage";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -12,6 +15,10 @@ const StyledContainer = styled.div`
     margin: 20px 0;
     cursor: pointer;
   }
+  > p:nth-child(2) {
+    transform: translate(-50px, 25px);
+  }
+
   svg {
     width: 20px;
     height: 20px;
@@ -20,8 +27,8 @@ const StyledContainer = styled.div`
 
 const StyledMenuContainer = styled.div`
   position: absolute;
-  top: 40px;
-  right: 0;
+  top: 60px;
+  right: -100px;
   display: flex;
   flex-direction: column;
   width: 100px;
@@ -49,21 +56,30 @@ const StyledMenuItem = styled.div`
 `;
 
 const MyPlantEdit = ({ handleUpdateMode }) => {
+  const [isAddModalOn, setIsAddModalOn] = useState(false);
   const [isEditModalOn, setIsEditModalOn] = useState(false);
   const handleEditModal = () => {
     setIsEditModalOn(!isEditModalOn);
   };
 
+  const handleAddClick = () => {
+    setIsAddModalOn(!isAddModalOn);
+  };
   const handleUpdateClick = () => {};
   const handleDeleteClick = () => {};
   const handleDnDClick = () => {};
 
   return (
     <StyledContainer>
+      <p onClick={handleAddClick}>
+        <TbCameraPlus />
+        추가
+      </p>
       <p onClick={handleEditModal}>
         <BsThreeDotsVertical />
         편집
       </p>
+      {isAddModalOn && <AddPlantImage handleAddClick={handleAddClick}/>}
       {isEditModalOn && (
         <StyledMenuContainer>
           <StyledMenuItem onClick={handleUpdateMode}>식물 수정</StyledMenuItem>
