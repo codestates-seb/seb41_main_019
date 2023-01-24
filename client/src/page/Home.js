@@ -5,7 +5,7 @@ import View from "../components/Home/View";
 import { useState } from "react";
 import DeleteModal from "../components/Home/DeleteModal";
 import EditPost from "../components/public/Post/EditPost";
-import CommentMenu from "../components/Home/CommentMenu";
+import CommentModal from "../components/Home/CommentModal";
 
 const StyledMain = styled.main`
 
@@ -26,6 +26,7 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
     const handleModal = () => {
         handleIsCovered();
         setModal(!modal);
+        setCommentMenu(false);
     };
 
     const handleDelete = () => {
@@ -48,7 +49,7 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
 
     return (
         <>
-            { commentMenu ? <CommentMenu post={curPost} handleCommentMenu={handleCommentMenu} handleChange={handleChange} commentId={commentId} /> : null}
+            { commentMenu ? <CommentModal post={curPost} handleCommentMenu={handleCommentMenu} handleChange={handleChange} commentId={commentId} /> : null}
             { edit ? <EditPost curPost={curPost} handleEdit={handleEdit}/> : null }
             { modal ? <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/> : null }
             { deleteMenu ? <DeleteModal postId={curPost.postingId} handleDelete={handleDelete} handleChange={handleChange} /> : null }
