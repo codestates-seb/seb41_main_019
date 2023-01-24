@@ -2,9 +2,10 @@ import styled from "styled-components";
 import Massage from "./Massage";
 import Friend from "./Friend";
 import { useEffect, useState } from "react";
-import { connect, subscribe, disConnect, send } from "../../../util/chat";
+import { connect, subscribe, disConnect, send, client } from "../../../util/chat";
 import Cookie from "../../../util/Cookie";
 import { useChat } from "./useChat";
+import { Client } from "@stomp/stompjs";
 
 const StyledChatLog = styled.div`
   display: flex;
@@ -85,12 +86,16 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
   const cookie = new Cookie();
 
   useEffect(() => {
-    connect(curChat, log, setLog);
+    connect(curChat);
 
     return () => {
       disConnect();
     }
   }, [])
+
+  useEffect(() => {
+    if(log.length > 0) subscribe(curChat, log, setLog);
+  }, [log])
 
   const handleSend = () => {
     send(curChat, message);

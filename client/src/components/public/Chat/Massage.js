@@ -25,8 +25,10 @@ const StyledMassage = styled.li`
 `;
 
 const Massage = ({ msg, user }) => {
+  console.log(user);
+  console.log(msg);
   return (
-    <StyledMassage className={user === msg.receiverId ? "receiver" : "sender"}>
+    <StyledMassage className={Number(user) === msg.senderId ? "sender" : "receiver"}>
       <span>{msg.chat}</span>
       <p>{msg.createdAt.slice(-8)}</p>
     </StyledMassage>

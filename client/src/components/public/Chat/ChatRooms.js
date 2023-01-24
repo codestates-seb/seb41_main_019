@@ -46,7 +46,7 @@ const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend }) => {
           ? rooms.map((room, idx) => {
               return (
                 <ChatRoom
-                  friend={friends.filter(friend => friend.followingId === room.receiverId)}
+                  friend={friends.filter(friend => friend.followingId === room.receiverId || friend.followingId === room.senderId)}
                   key={idx}
                   room={room}
                   setCurChat={setCurChat}

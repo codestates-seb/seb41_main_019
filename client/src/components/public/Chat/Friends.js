@@ -47,7 +47,7 @@ const Friends = ({ setCurChat, friends, setCurFriend, rooms }) => {
         {friends.length > 0
           ? friends.map((friend, idx) => (
               <Friend friend={friend} key={idx} setCurChat={setCurChat} setCurFriend={setCurFriend}
-                room={rooms.filter(room => room.receiverId === friend.followingId)}/>
+                room={rooms.filter(room => room.receiverId === friend.followingId || room.senderId === friend.followingId)}/>
             ))
           : "현재 팔로우 중인 친구가 없습니다."}
       </ul>
