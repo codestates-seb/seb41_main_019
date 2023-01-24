@@ -1,16 +1,12 @@
 import axios from "axios";
-import { AiOutlineHeart, AiFillHeart, AiOutlineShareAlt } from "react-icons/ai";
-import { BsBookmarkPlus } from "react-icons/bs";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { BsBookmarkPlus, BsFillBookmarkDashFill } from "react-icons/bs";
 import styled from "styled-components";
 import Cookie from "../../util/Cookie";
 
 const StyledInteraction = styled.div`
     background-color: white;
-    padding: 5px;
-
-    p {
-        margin: 0;
-    }
+    padding: 10px;
 
     .interact {
         width: 100%;
@@ -19,6 +15,11 @@ const StyledInteraction = styled.div`
 
     div svg {
         margin-right: 15px;
+        cursor: pointer;
+        
+        :hover {
+            transform: scale(1.2);
+        }
     }
 
     p:nth-child(2) {
@@ -34,13 +35,14 @@ const StyledInteraction = styled.div`
         text-align: left;
         word-wrap: break-word;
         display: -webkit-box;
-       -webkit-line-clamp: 3 ;
+        -webkit-line-clamp: 3 ;
         -webkit-box-orient: vertical;
     }
 
     .tags {
         margin: 10px 0px 10px 0px;
         color: #007AC9;
+        word-wrap: break-word;
         cursor: pointer;
 
         span {
@@ -71,7 +73,7 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, 
             handleChange();
         }).catch(e => {
         })
-    }
+    };
 
     const handleUnlike = (like) => {
         axios({
@@ -82,8 +84,33 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, 
             handleChange();
         }).catch(e => {
         })
-    }
- 
+    };
+
+    const addScrap = () => {
+        axios({
+            method: "post",
+            url: `http://13.124.33.113:8080/scraps/${post.postingId}`,
+            headers: { Authorization: cookie.get("authorization") },
+            data : {
+                "postingId": post.postingId,
+                "memberId" : cookie.get("memberId")
+            }
+        }).then(res => {
+            handleChange();
+        }).catch(e => {
+        })
+    };
+
+    const deleteScrap = (scrap) => {
+        axios({
+            method: "delete",
+            url: `http://13.124.33.113:8080/scraps/${scrap}`,
+            headers: { Authorization: cookie.get("authorization") },
+        }).then(res => {
+            handleChange();
+        }).catch(e => {
+        })
+    };   
 
     return (
         <StyledInteraction>
@@ -92,8 +119,10 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, 
                     <AiFillHeart onClick={() => handleUnlike(post.postingLikes.filter((like) => like.memberId === Number(cookie.get("memberId")))[0].postingLikeId)} />
                     : <AiOutlineHeart onClick={handleLike} />
                 }
-                <AiOutlineShareAlt />
-                <BsBookmarkPlus />
+                {  post.scrapMemberList.filter((scrap) => scrap.memberId === Number(cookie.get("memberId"))).length > 0 ? 
+                    <BsFillBookmarkDashFill onClick={() => deleteScrap(post.scrapMemberList.filter((scrap) => scrap.memberId === Number(cookie.get("memberId")))[0].scrapId)} />
+                    : <BsBookmarkPlus onClick={addScrap} />
+                }
             </div>
             <p>좋아요 {post.likeCount}개</p>
             {   type === null ? <div className="content">{post.postingContent}</div>

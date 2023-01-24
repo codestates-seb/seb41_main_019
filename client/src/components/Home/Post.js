@@ -9,6 +9,7 @@ import { exchangeTime } from "../../util/exchangeTime";
 import defaultImg from "../../assets/img/profile.jpg"
 import Cookie from "../../util/Cookie";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
     position: relative;
@@ -59,6 +60,7 @@ const StyledHeader = styled.div`
         font-weight: 500;
         margin-bottom: 3px;
         letter-spacing: 1px;
+        cursor: pointer;
     }
 
     div > span:nth-child(2) {
@@ -70,6 +72,9 @@ const StyledHeader = styled.div`
     .icons {
         flex-direction: row;
         margin : 0px 0px 5px auto;
+        :hover {
+            transform: scale(1.2);
+        }
     }  
 `;
 
@@ -77,6 +82,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
     const [menu, setMenu] = useState(false);
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
+    const navigate = useNavigate();
 
     const handleMenu = () => {
         setMenu(!menu);
@@ -125,9 +131,9 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
         <Wrapper>
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
-                <img src={post.profileImage ? post.profileImage : defaultImg} alt="profileImg" />
+                <img src={post.profileImage ? post.profileImage : defaultImg} onClick={() => navigate("/mypage")} alt="profileImg" />
                 <div>
-                    <span>{post.userName}</span>
+                    <span onClick={() => navigate("/mypage")}>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
@@ -135,7 +141,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
                         post.memberId === Number(cookie.get("memberId")) ? null : 
                             follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ?
                             <AiOutlineUserDelete onClick={deleteFollow} /> : <AiOutlineUserAdd onClick={addFollow} />
-                    : null
+                    : <AiOutlineUserAdd onClick={addFollow} />
                 }
                 { post.memberId === Number(cookie.get("memberId")) ?
                     <BiDotsVerticalRounded onClick={() => {
