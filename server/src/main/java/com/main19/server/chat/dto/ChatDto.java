@@ -29,6 +29,7 @@ public class ChatDto {
     @AllArgsConstructor
     public static class Response {
 
+        private long chatRoomId;
         private long receiverId;
         private long senderId;
         private String chat;
