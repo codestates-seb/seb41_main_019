@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AiOutlineHeart, AiOutlineShareAlt } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart, AiOutlineShareAlt } from "react-icons/ai";
 import { BsBookmarkPlus } from "react-icons/bs";
 import styled from "styled-components";
 import Cookie from "../../util/Cookie";
@@ -62,19 +62,36 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, 
     const handleLike = () => {
         axios({
             method: "post",
-            url: `http://13.124.33.113:8080/posts/${post.memberId}/likes`,
-            headers: { Authorization: cookie.get("authorization") }
+            url: `http://13.124.33.113:8080/posts/${post.postingId}/likes`,
+            headers: { Authorization: cookie.get("authorization") },
+            data : {
+                "memberId" : cookie.get("memberId")
+            }
         }).then(res => {
             handleChange();
         }).catch(e => {
-            console.log(e);
         })
     }
+
+    const handleUnlike = (like) => {
+        axios({
+            method: "delete",
+            url: `http://13.124.33.113:8080/posts/likes/${like}`,
+            headers: { Authorization: cookie.get("authorization") },
+        }).then(res => {
+            handleChange();
+        }).catch(e => {
+        })
+    }
+ 
 
     return (
         <StyledInteraction>
             <div className="interact">
-                <AiOutlineHeart />
+                {  post.postingLikes.filter((like) => like.memberId === Number(cookie.get("memberId"))).length > 0 ? 
+                    <AiFillHeart onClick={() => handleUnlike(post.postingLikes.filter((like) => like.memberId === Number(cookie.get("memberId")))[0].postingLikeId)} />
+                    : <AiOutlineHeart onClick={handleLike} />
+                }
                 <AiOutlineShareAlt />
                 <BsBookmarkPlus />
             </div>
