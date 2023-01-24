@@ -1,4 +1,5 @@
 import * as StompJs from '@stomp/stompjs';
+import { RiContactsBookLine } from 'react-icons/ri';
 import { soltChat } from './soltChat';
 
 export const client = new StompJs.Client({
@@ -12,7 +13,7 @@ export const connect = () => {
     client.activate()
 }
 
-export const subscribe = (curChat, log, setLog) => {
+export const subscribe = (curChat, setRes) => {
     client.subscribe(`/sub/chat/${curChat.chatRoomId}`, (body) => {
         const json = JSON.parse(body.body)
         const data = {
@@ -21,14 +22,9 @@ export const subscribe = (curChat, log, setLog) => {
             chat: json.chat,
             createdAt: json.createdAt.split(".")[0]
         }
-        
-        const [preLog] = log.slice();
-        preLog.push(data);
-        console.log(preLog);
-        setLog(soltChat(preLog));
-    });
 
-    client.unsubscribe();
+        setRes(data);
+    });
 }
 
 export const send = (curChat, user, message) => {
