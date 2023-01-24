@@ -5,6 +5,7 @@ import DefaultInput from "./DefaultInput"
 import axios from "axios"
 import Cookie from "../../util/Cookie"
 import { decode } from "../../util/decode"
+import { RiContactsBookLine } from "react-icons/ri"
 
 const Wrapper = styled.div`
     position: absolute;
@@ -98,12 +99,12 @@ const Login = ({ setSelected, setIsLanded }) => {
             const date = new Date()
             const user = decode(res.headers.authorization);
 
-            date.setMinutes(date.getMinutes() + 420);
+            date.setMinutes(date.getMinutes() + 60);
             cookie.set("authorization", res.headers.authorization, { expires: date });
             cookie.set("memberId", user.memberId, { expires : date });
             cookie.set("username", user.username, { expires : date });
 
-            date.setMinutes(date.getMinutes() + 420);
+            date.setMinutes(date.getMinutes() + 60);
             cookie.set("refresh", res.headers.refresh, { expires: date });
 
             setIsLanded(false);

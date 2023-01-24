@@ -24,12 +24,11 @@ const StyledMassage = styled.li`
   }
 `;
 
-const Massage = ({ data }) => {
-  const user = 0;
+const Massage = ({ msg, user }) => {
   return (
-    <StyledMassage className={user === data.send ? "send" : "to"}>
-      <span>{data.massage}</span>
-      <p>{data.time.split("-")[3]}</p>
+    <StyledMassage className={user === msg.receiverId ? "receiver" : "sender"}>
+      <span>{msg.chat}</span>
+      <p>{msg.createdAt.slice(-8)}</p>
     </StyledMassage>
   );
 };

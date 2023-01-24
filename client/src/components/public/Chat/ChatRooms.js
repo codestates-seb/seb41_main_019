@@ -37,7 +37,7 @@ const StyledChatList = styled.div`
   }
 `;
 
-const ChatRooms = ({ rooms, setCurChat }) => {
+const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend }) => {
   return (
     <StyledChatList>
       <p>Chat List</p>  
@@ -46,9 +46,11 @@ const ChatRooms = ({ rooms, setCurChat }) => {
           ? rooms.map((room, idx) => {
               return (
                 <ChatRoom
+                  friend={friends.filter(friend => friend.followingId === room.receiverId)}
                   key={idx}
                   room={room}
                   setCurChat={setCurChat}
+                  setCurFriend={setCurFriend}
                 />
               );
             })

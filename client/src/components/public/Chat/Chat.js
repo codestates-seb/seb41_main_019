@@ -39,8 +39,10 @@ const StyledChat = styled.div`
 `;
 
 const Chat = () => {
-  const [curChat, setCurChat] = useState(false);
-  const [rooms, setRooms] = useState([]);
+  const [ curChat, setCurChat ] = useState(null);
+  const [ curFriend, setCurFriend ] = useState(null);
+  const [ rooms, setRooms ] = useState([]);
+  const [ friends, setFriends ] = useState([]);
   const cookie = new Cookie();
 
   useEffect(() => {
@@ -52,19 +54,33 @@ const Chat = () => {
       setRooms(res.data);
     })
   }, [])
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
+      headers: { Authorization: cookie.get("authorization") }
+    }).then(res => {
+      const following  = res.data.data.followingList;
+      const follower = res.data.data.followerList;
+
+      setFriends(following.filter((flwi) => {
+        return follower.find(flwe => flwe.followerId === flwi.followingId);
+      }))
+    })
+  }, [])
   
   return (  
     <>
       <StyledChat>
         <Input label={"채팅"} />
-        <button onClick={() => setCurChat(!curChat)}>x</button>
         {
           !curChat ? 
           <>
-            <ChatRooms rooms={rooms} setCurChat={setCurChat} />
-            <Friends />
+            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} />
+            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} />
           </>
-          : <Chatting curChat={curChat} />
+          : <Chatting curChat={curChat} curFriend={curFriend} setCurChat={setCurChat} setCurFriend={setCurFriend} />
         }
       </StyledChat>
     </>

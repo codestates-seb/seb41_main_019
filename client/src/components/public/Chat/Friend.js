@@ -2,20 +2,22 @@ import styled from "styled-components";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
+import { disConnect } from "../../../util/chat";
 
 const StyledFriend = styled.li`
   display: flex;
-  ${({ top }) => (top ? "border-bottom: 1px solid #dbdbdb;" : null)}
   padding: 0px 0px 5px 0px;
   margin: 0px 0px 10px 0px;
+  align-items: center;
+  
 
   div:nth-of-type(1) {
     width: 10%;
     margin: 0px 10px 0px 0px;
 
     img {
-      width: 100%;
-      height: 100%;
+      width: 24px;
+      height: 24px;
       border-radius: 30px;
     }
   }
@@ -47,23 +49,29 @@ const StyledButton = styled.button`
   }
 `;
 
-const Friend = ({ friend, top }) => {
+const Friend = ({ friend, top, setCurChat, setCurFriend, room }) => {
   const cookie = new Cookie();
 
   const createRoom = () => {
-    axios({
-      method: "post",
-      url: `http://13.124.33.113:8080/chatroom`,
-      headers: { Authorization: cookie.get("authorization") },
-      data: {
-        receiverId: friend.followingId,
-        senderId: Number(cookie.get("memberId"))
-      }
-    }).then((res) => {
-      console.log(res);
-    }).catch(e => {
-      console.log(e);
-    })
+    if(!room.length > 0) {
+      axios({
+        method: "post",
+        url: `http://13.124.33.113:8080/chatroom`,
+        headers: { Authorization: cookie.get("authorization") },
+        data: { 
+          receiverId: friend.followingId,
+          senderId: Number(cookie.get("memberId"))
+        }
+      }).then((res) => {
+        setCurFriend(friend);
+        setCurChat(res.data.data);
+      }).catch(e => {
+        console.log(e);
+      })
+    } else {
+      setCurFriend(friend);
+      setCurChat(...room);
+    }
   }
 
   return (
@@ -76,14 +84,18 @@ const Friend = ({ friend, top }) => {
       </div>
       <div>
         <span>{friend.userName}</span>
-        <span>{friend.profileText}</span>
+        {
+          top ? null : <span>{friend.profileText}</span>
+        }
       </div>
       {top ? (
-        <StyledButton>x</StyledButton>
-      ) : (
         <StyledButton onClick={() => {
-          createRoom()
-        }}><IoChatbubbleEllipsesOutline /></StyledButton>
+          // disConnect();
+          setCurFriend(null);
+          setCurChat(null);
+        }}>x</StyledButton>
+      ) : (
+        <StyledButton onClick={createRoom}><IoChatbubbleEllipsesOutline /></StyledButton>
       )}
     </StyledFriend>
   );
