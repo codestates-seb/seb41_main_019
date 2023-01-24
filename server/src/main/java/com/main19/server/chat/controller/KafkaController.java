@@ -58,9 +58,9 @@ public class KafkaController {
 
         Page<Chat> chat = chatService.findAllChat(roomId,token,page-1,size);
         List<Chat> chatList = chatMapper.pageChatToListChat(chat);
-        chatService.changeList(chatList);
         List<ChatDto.Response> response = chatMapper.chatToChatDtoResponse(chatList);
+        List<ChatDto.Response> responses = chatService.changeList(response);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 }
