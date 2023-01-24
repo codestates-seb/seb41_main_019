@@ -4,7 +4,7 @@ import { soltChat } from './soltChat';
 export const client = new StompJs.Client({
     brokerURL : "ws://13.124.33.113:8080/chat",
     debug : (e) => {
-        console.log(e);
+        // console.log(e);
     }
 })
 
@@ -13,28 +13,29 @@ export const connect = () => {
 }
 
 export const subscribe = (curChat, log, setLog) => {
-    console.log(log);
     client.subscribe(`/sub/chat/${curChat.chatRoomId}`, (body) => {
         const json = JSON.parse(body.body)
         const data = {
             receiverId: parseInt(json.receiverId),
             senderId: parseInt(json.senderId),
             chat: json.chat,
-            createdAt: new Date().toISOString().slice(0, -5)
+            createdAt: json.createdAt.split(".")[0]
         }
+
+        console.log(data);
         const [preLog] = log.slice();
         preLog.push(data)
         setLog(soltChat(preLog));
     });
 }
 
-export const send = (curChat, message) => {
+export const send = (curChat, user, message) => {
     client.publish({
         destination: `/pub/message`,
         body: JSON.stringify({
             chatRoomId: curChat.chatRoomId,
-            receiverId: curChat.receiverId,
-            senderId: curChat.senderId,
+            receiverId: curChat.senderId === user ? curChat.receiverId : curChat.senderId,
+            senderId: curChat.senderId === user ? curChat.senderId : user,
             chat: message
         })
     })

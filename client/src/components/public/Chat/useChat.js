@@ -13,6 +13,7 @@ export const useChat = (curChat) => {
           url: `http://13.124.33.113:8080/message/${curChat.chatRoomId}?page=1&size=15`,
           headers: { Authorization: cookie.get("authorization") }
         }).then(res => {
+          console.log(res.data);
           setLog(soltChat(res.data)); 
         }).catch(e => {
           console.log(e);

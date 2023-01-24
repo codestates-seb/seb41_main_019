@@ -217,7 +217,7 @@ const StyledExtend = styled.div`
   }
 `
 
-const Sidebar = ({ handleIsPosted, setIsLanded }) => {
+const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
@@ -297,7 +297,7 @@ const Sidebar = ({ handleIsPosted, setIsLanded }) => {
           <Search />
         </div>
         <div className={isOpend === "Chat" ? "active" : null}>
-          <Chat />
+          <Chat change={change}/>
         </div>
         <div className={isOpend === "Alert" ? "active" : null}>
           <Alert />

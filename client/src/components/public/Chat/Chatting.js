@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import Massage from "./Massage";
 import Friend from "./Friend";
-import { useEffect, useState } from "react";
-import { connect, subscribe, disConnect, send, client } from "../../../util/chat";
+import { useEffect, useRef, useState } from "react";
+import { connect, subscribe, disConnect, send } from "../../../util/chat";
 import Cookie from "../../../util/Cookie";
 import { useChat } from "./useChat";
-import { Client } from "@stomp/stompjs";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
 
 const StyledChatLog = styled.div`
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   width: 100%;
   height: 400px;
   margin: 0px 0px 20px 0px;
@@ -22,31 +22,28 @@ const StyledChatLog = styled.div`
 `;
 
 const StyledChatting = styled.ul`
+  display: inline-flex;
+  flex-direction: column;
   margin: 0px;
   padding: 0px;
   list-style: none;
 
   .receiver {
-    text-align: right;
-    span {
-      background-color: #d9d9d9;
-    }
+    align-items: flex-end;
 
-    p {
-      padding: 2px 0px 0px 3px;
+    .msg {
+      background-color: #d9d9d9;
+      text-align: right;
     }
   }
 
   .sender {
-    text-align: left;
+    align-items: flex-start;
 
-    span {
+    .msg {
       color: white;
       background-color: #5e8b7e;
-    }
-
-    p {
-      padding: 2px 3px 0px 0px;
+      text-align: left;
     }
   }
 `;
@@ -67,7 +64,7 @@ const StyledInput = styled.div`
   justify-content: space-between;
 
   input {
-    width: 80%;
+    width: 88%;
     border: 0px;
     background-color: #dbdbdb;
     border-radius: 10px;
@@ -78,11 +75,20 @@ const StyledInput = styled.div`
   input:focus {
     box-shadow: 0 0 6px #5e8b7e;
   }
+
+  button {
+    margin: 3px 0px 0px 0px;
+    padding: 0px;
+    border: 0px;
+    font-size: 22px;
+    cursor: pointer;
+  }
 `;
 
 const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
   const [ message, setMessage ] = useState("");
   const [ log, setLog ] = useChat(curChat);
+  const ul = useRef(null);
   const cookie = new Cookie();
 
   useEffect(() => {
@@ -98,7 +104,11 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
   }, [log])
 
   const handleSend = () => {
-    send(curChat, message);
+    send(curChat, Number(cookie.get("memberId")), message);
+    setMessage("");
+    setTimeout(() => {
+      ul.current.scrollIntoView({block: "end"})
+    }, 100)
   }
 
   return (
@@ -112,7 +122,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
             return (
               <div key={idx}>
                 <StyledDate>{dayMsg[0].createdAt.slice(0, -9)}</StyledDate>
-                <StyledChatting>
+                <StyledChatting ref={ul}>
                   {dayMsg.map((msg, idx) => (
                     <Massage msg={msg} key={idx} user={cookie.get("memberId")} />
                   ))}
@@ -124,7 +134,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
       </StyledChatLog>
       <StyledInput>
         <input type="text" placeholder="text.." value={message} onChange={(e) => setMessage(e.target.value)}></input>
-        <button onClick={handleSend}>Send</button>
+        <button onClick={handleSend}><IoChatbubbleEllipsesOutline /></button>
       </StyledInput>
     </div>
   );

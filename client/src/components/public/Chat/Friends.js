@@ -1,18 +1,13 @@
-import axios from "axios";
-import { useEffect } from "react";
 import styled from "styled-components";
-import Cookie from "../../../util/Cookie";
 import Friend from "./Friend";
-import { useState } from "react";
 
 const StyledFriends = styled.div`
   max-height: 40%;
 
   ul {
-    display: flex;
-    flex-direction: column-reverse;
     margin: 0px;
     padding: 0px;
+    list-style: none;
     overflow: scroll;
     ::-webkit-scrollbar {
       display: none;

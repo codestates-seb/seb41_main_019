@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
-import { disConnect } from "../../../util/chat";
 
 const StyledFriend = styled.li`
   display: flex;

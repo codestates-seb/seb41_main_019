@@ -57,7 +57,7 @@ function App() {
     <BrowserRouter>
       {isCovered ? <Background isCovered={isCovered} /> : null}
       {isLanded ? null : (
-        <SideBar setIsLanded={setIsLanded} handleIsPosted={handleIsPosted} />
+        <SideBar setIsLanded={setIsLanded} handleIsPosted={handleIsPosted} change={change} />
       )}
       {isPosted ? (
         <WritePost

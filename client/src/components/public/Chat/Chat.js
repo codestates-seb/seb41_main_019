@@ -38,7 +38,7 @@ const StyledChat = styled.div`
   }
 `;
 
-const Chat = () => {
+const Chat = ({ change }) => {
   const [ curChat, setCurChat ] = useState(null);
   const [ curFriend, setCurFriend ] = useState(null);
   const [ rooms, setRooms ] = useState([]);
@@ -53,7 +53,7 @@ const Chat = () => {
     }).then(res => {
       setRooms(res.data);
     })
-  }, [])
+  }, [change])
 
   useEffect(() => {
     axios({
@@ -61,14 +61,16 @@ const Chat = () => {
       url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
-      const following  = res.data.data.followingList;
-      const follower = res.data.data.followerList;
+      // const following  = res.data.data.followingList;
+      // const follower = res.data.data.followerList;
 
-      setFriends(following.filter((flwi) => {
-        return follower.find(flwe => flwe.followerId === flwi.followingId);
-      }))
+      // setFriends(following.filter((flwi) => {
+      //   return follower.find(flwe => flwe.followerId === flwi.followingId);
+      // }))
+
+      setFriends(res.data.data.followingList);
     })
-  }, [])
+  }, [change])
   
   return (  
     <>
