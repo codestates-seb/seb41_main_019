@@ -47,7 +47,7 @@ public class FFmpegService {
 
         FFmpegBuilder builder = new FFmpegBuilder()
                 .setInput(path)
-                .addOutput("C:/Users/hyein/Desktop/image/" + filename.substring(0, filename.lastIndexOf(".")) + ".gif")
+                .addOutput("/home/ubuntu/main19/ffmpeg/" + filename.substring(0, filename.lastIndexOf(".")) + ".gif")
                 .setFrames(1)
                 .setVideoFilter("select='gte(n\\,10)',scale=720:720")
                 .done();
