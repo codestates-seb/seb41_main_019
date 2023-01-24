@@ -96,7 +96,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
 
     setTimeout(() => {
       ul.current.scrollIntoView({block: "end", behavior: "smooth"})
-    }, 100)
+    }, 150)
 
     return () => {
       disConnect();
@@ -112,7 +112,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
     setMessage("");
     setTimeout(() => {
       ul.current.scrollIntoView({block: "end", behavior: "smooth"})
-    }, 100)
+    }, 150)
   }
 
   return (

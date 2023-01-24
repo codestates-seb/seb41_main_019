@@ -4,7 +4,7 @@ import { soltChat } from './soltChat';
 export const client = new StompJs.Client({
     brokerURL : "ws://13.124.33.113:8080/chat",
     debug : (e) => {
-        // console.log(e);
+        console.log(e);
     }
 })
 
@@ -23,9 +23,12 @@ export const subscribe = (curChat, log, setLog) => {
         }
         
         const [preLog] = log.slice();
-        preLog.push(data)
+        preLog.push(data);
+        console.log(preLog);
         setLog(soltChat(preLog));
     });
+
+    client.unsubscribe();
 }
 
 export const send = (curChat, user, message) => {

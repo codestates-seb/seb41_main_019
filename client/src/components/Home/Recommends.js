@@ -78,8 +78,6 @@ const Recommends = ({ change }) => {
             });
     }, [change]);
 
-    console.log(followPosts);
-
     return (
         <StyledSection>
             <StyledHeader>
