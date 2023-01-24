@@ -131,7 +131,7 @@ public class SseRestDocs {
 
         Page<Sse> page = new PageImpl<>(List.of(sse1, sse2));
 
-        given(sseService.findSse(Mockito.anyLong(),Mockito.any()))
+        given(sseService.findSse(Mockito.anyLong(),Mockito.any(),Mockito.anyString()))
             .willReturn(page);
 
         List<Sse> list = List.of(sse1,sse2);
