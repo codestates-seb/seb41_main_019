@@ -108,7 +108,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
 
   useEffect(() => {
     if(res) {
-      const [preLog] = log.slice();
+      const [preLog] = log.length > 0 ? log.slice() : [[]];
       preLog.push(res)
       setLog(soltChat(preLog));
       setTimeout(() => {
