@@ -97,7 +97,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
     connect(curChat);
 
     setTimeout(() => {
-      ul.current.scrollIntoView({block: "end", behavior: "smooth"});
+      if(ul.current) ul.current.scrollIntoView({block: "end", behavior: "smooth"});
       subscribe(curChat, setRes);
     }, 150)
 
