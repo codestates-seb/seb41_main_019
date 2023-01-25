@@ -64,20 +64,19 @@ const Recommends = ({ change }) => {
             });
     }, [change]);
 
-    // useEffect(() => {
-    //     axios({
-    //         method: "get",
-    //         url: `http://13.124.33.113:8080/posts/follow/popular?page=1&size=10`,
-    //         headers: { Authorization: cookie.get("authorization") }
-    //         }).then(res => {
-    //             console.log('성공');
-    //             setFollowPosts(res.data.data);
-    //         })
-    //         .catch(e => {
-    //            console.log(e);
-    //         });
-    // }, [change]);
-    
+    useEffect(() => {
+        axios({
+            method: "get",
+            url: `http://13.124.33.113:8080/posts/follow/popular?page=1&size=10`,
+            headers: { Authorization: cookie.get("authorization") }
+            }).then(res => {
+                setFollowPosts(res.data.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }, [change]);
+   
     return (
         <StyledSection>
             <StyledHeader>
@@ -88,10 +87,19 @@ const Recommends = ({ change }) => {
                { allPosts && clickedBtn === 0 ? 
                     allPosts.filter((el, idx) => idx <= 4).map((allPost,idx) => {
                         return (
-                            <Recommend key={idx} allPost={allPost} />
+                            <Recommend key={idx} allPost={allPost} clickedBtn={clickedBtn} />
                         );
                     })
-            : null }
+                   : null     
+                }
+                { followPosts && clickedBtn === 1 ? 
+                    followPosts.filter((el,idx) => idx <= 4).map((followPost,idx) => {
+                        return (
+                            <Recommend key={idx} followPost={followPost} clickedBtn={clickedBtn}/>
+                        );
+                    }) 
+                    : null
+                }
             </StyledUl>
         </StyledSection>
     )

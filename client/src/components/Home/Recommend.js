@@ -29,13 +29,26 @@ const StyledLi = styled.li`
     }
 `;
 
-const Recommend = ({ allPost }) => {
+const Recommend = ({ allPost, followPost }) => {
     return (
-        <StyledLi>
-            <img src={allPost.postingMedias[0].mediaUrl} alt="img" />
-            <span>{allPost.userName}</span>
-            <span><AiFillHeart />+{allPost.likeCount}</span>
-        </StyledLi>
+        <>
+            { allPost ? 
+                <StyledLi>
+                    <img src={allPost.postingMedias[0].mediaUrl} alt="img" />
+                    <span>{allPost.userName}</span>
+                    <span><AiFillHeart />+{allPost.likeCount}</span>
+                </StyledLi>
+                : null
+            } 
+            { followPost ? 
+                <StyledLi>
+                    <img src={followPost.postingMedias[0].mediaUrl} alt="img" />
+                    <span>{followPost.userName}</span>
+                    <span><AiFillHeart />+{followPost.likeCount}</span>
+                </StyledLi>
+                : null
+            }
+        </>
     )
 };
 
