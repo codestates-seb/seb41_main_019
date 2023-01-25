@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,5 +54,24 @@ public class ChatRoomController {
             chatRooms);
 
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{chatroom-id}")
+    public ResponseEntity patchChatRoom(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("chatroom-id") @Positive long chatRoomId, @Valid @RequestBody ChatRoomDto.Patch requestBody) {
+
+        ChatRoom chatRoom = chatRoomService.updateChatRoom(chatRoomId, requestBody.getMemberId(),token);
+        ChatRoomDto.Response response = chatRoomMapper.chatRoomToChatRoomResponseDto(chatRoom);
+
+        return new ResponseEntity(new SingleResponseDto<>(response),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{chatroom-id}")
+    public ResponseEntity deleteChatRoom(@RequestHeader(name = "Authorization") String token,
+        @PathVariable("chatroom-id") @Positive long chatRoomId) {
+
+        chatRoomService.deleteChatRoom(chatRoomId,token);
+
+        return ResponseEntity.noContent().build();
     }
 }

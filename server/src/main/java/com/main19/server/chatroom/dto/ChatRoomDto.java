@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class ChatRoomDto {
 
@@ -19,10 +20,22 @@ public class ChatRoomDto {
 
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Patch {
+
+        @Positive
+        private long memberId;
+
+    }
+
+    @Getter
+    @AllArgsConstructor
     public static class Response {
 
         private long chatRoomId;
         private long receiverId;
         private long senderId;
+        private Long leaveId;
+
     }
 }
