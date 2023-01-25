@@ -1475,7 +1475,8 @@ public class PostingControllerRestDocs {
                         ),
                         requestParts(
                                 RequestDocumentation.partWithName("file1").description("첨부파일1"),
-                                RequestDocumentation.partWithName("file2").optional().description("첨부파일2")
+                                RequestDocumentation.partWithName("file2").optional().description("첨부파일2"),
+                                RequestDocumentation.partWithName("file3").optional().description("첨부파일3")
                         ),
                         responseFields(
                                 fieldWithPath("data.postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),

@@ -161,11 +161,12 @@ public class PostingController {
     @PostMapping(value = "/{posting-id}/medias", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postMedia(@RequestHeader(name = "Authorization") String token,
                                     @PathVariable("posting-id") @Positive long postingId,
-                                    @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2) {
+                                    @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2, @RequestPart(required = false) MultipartFile file3) {
 
         List<MultipartFile> multipartFiles = new ArrayList<>();
         multipartFiles.add(file1);
         multipartFiles.add(file2);
+        multipartFiles.add(file3);
 
         Posting updatedPosting = postingService.addMedia(postingId, multipartFiles, token);
         return new ResponseEntity<>(
