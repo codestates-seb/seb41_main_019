@@ -34,7 +34,7 @@ public class Chat {
     @ManyToOne
     @JoinColumn(name = "chatRoomId")
     private ChatRoom chatRoom;
-    @Column(nullable = false)
+    @Column(nullable = false , columnDefinition = "Text")
     private String chat;
 
     @Column(nullable = false)

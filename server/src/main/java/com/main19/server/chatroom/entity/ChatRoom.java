@@ -5,6 +5,7 @@ import com.main19.server.member.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -38,6 +39,9 @@ public class ChatRoom {
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<Chat> chatList = new ArrayList<>();
+
+    @Column
+    private Long leaveId;
 
     public ChatRoom(Member receiver, Member sender) {
         this.receiver = receiver;

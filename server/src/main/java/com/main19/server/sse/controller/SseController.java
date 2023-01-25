@@ -30,7 +30,7 @@ public class SseController {
     private final SseService sseService;
     private final SseMapper sseMapper;
 
-    @GetMapping(value = "/notification/{id}", produces = "text/event-stream; charset=UTF-8")
+    @GetMapping(value = "/notification/subscribe/{id}", produces = "text/event-stream; charset=UTF-8")
     public SseEmitter subscribe(@RequestHeader(name = "Authorization") String token, @PathVariable Long id,
         @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId) {
         return sseService.subscribe(id, lastEventId, token);
