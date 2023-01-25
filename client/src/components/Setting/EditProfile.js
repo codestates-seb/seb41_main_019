@@ -107,7 +107,7 @@ const EditProfile = ({ name, text, location, img, setName, setText, setLocation,
                 <div>
                     <span>{name}</span>
                     <label htmlFor="file">프로필 사진 바꾸기</label>
-                    <input onChange={updateImg} id="file" type="file" />
+                    <input onChange={updateImg} id="file" type="file" hidden />
                 </div>
             </div>
             <div>
