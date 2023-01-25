@@ -86,7 +86,7 @@ function App() {
           path={isLanded ? "/" : null}
           element={<Landing setIsLanded={setIsLanded} isLanded={isLanded} />}
         />
-        <Route path={isLanded ? null : "/setting"} element={<Setting />} />
+        <Route path={isLanded ? null : "/setting"} element={<Setting setIsLanded={setIsLanded} />} />
       </Routes>
     </BrowserRouter>
   );
