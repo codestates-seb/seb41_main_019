@@ -61,13 +61,6 @@ const Chat = ({ change }) => {
       url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
-      // const following  = res.data.data.followingList;
-      // const follower = res.data.data.followerList;
-
-      // setFriends(following.filter((flwi) => {
-      //   return follower.find(flwe => flwe.followerId === flwi.followingId);
-      // }))
-
       setFriends(res.data.data.followingList);
     })
   }, [change])

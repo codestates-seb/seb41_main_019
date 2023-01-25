@@ -48,22 +48,28 @@ const StyledButton = styled.button`
 
 const ChatRoom = ({ room, setCurChat, friend, setCurFriend }) => {
   return (
-    <StyledFriend>
-      <div>
-        <img
-          src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg"
-          alt="img"
-        ></img>
-      </div>
-      <div>
-        <span>{friend.length > 0 ? friend[0].userName : null}</span>
-        <span>{friend.length > 0 ? friend[0].profileText : null}</span>
-      </div>  
-      <StyledButton onClick={() => {
-        setCurFriend(...friend);
-        setCurChat(room);
-      }}><IoChatbubbleEllipsesOutline /></StyledButton>
-    </StyledFriend>
+    <>
+    {
+      // 탈퇴한 이용자에 대한 chatRoom 임시처리
+      friend.length > 0 ?
+        <StyledFriend>
+          <div>
+            <img
+              src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg"
+              alt="img"
+            ></img>
+          </div>
+          <div>
+            <span>{friend.length > 0 ? friend[0].userName : null}</span>
+            <span>{friend.length > 0 ? friend[0].profileText : null}</span>
+          </div>  
+          <StyledButton onClick={() => {
+            setCurFriend(...friend);
+            setCurChat(room);
+          }}><IoChatbubbleEllipsesOutline /></StyledButton>
+        </StyledFriend> : null
+    }
+    </>
   );
 };
 
