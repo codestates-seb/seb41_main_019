@@ -94,20 +94,16 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
   const [currentPlantData, setCurrentPlantData] = useState();
 
   const getMyPlantsData = () => {
-    try {
-      axios({
-        method: "get",
-        url: `http://13.124.33.113:8080/${userInfo.memberId}/myplants?page=1&size=10`,
-        headers: {
-          "Authorization" : jwt
-        },
-      })
-      .then((res) => {
-        setMyPlantsData(res.data.data)}
-      )
-    } catch (err) {
-      console.error(err);
-    }
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/${userInfo.memberId}/myplants?page=1&size=10`,
+      headers: {
+        "Authorization" : jwt
+      },
+    })
+    .then((res) => {
+      setMyPlantsData(res.data.data)}
+    ).catch((err) => console.error(err))
   };
   
   useEffect(() => getMyPlantsData(), [])

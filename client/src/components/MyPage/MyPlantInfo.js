@@ -69,8 +69,7 @@ const MyPlantInfo = ({ currentPlantData }) => {
     setIsUpdateMode(!isUpdateMode);
   };
 
-  const { plantName, plantType } = currentPlantData;
-  const adoptedAt = currentPlantData.adopted_at;
+  const { plantName, plantType, plantBirthDay } = currentPlantData;
   return (
     <StyledContainer>
       {isUpdateMode ? (
@@ -88,7 +87,7 @@ const MyPlantInfo = ({ currentPlantData }) => {
             </span>
             <span>
               <BsCalendar3 />
-              <input value={adoptedAt} />
+              <input value={plantBirthDay} />
             </span>
           </div>
         </StyledPlantInfoBox>
@@ -107,7 +106,7 @@ const MyPlantInfo = ({ currentPlantData }) => {
             </span>
             <span>
               <BsCalendar3 />
-              {adoptedAt}
+              {plantBirthDay}
             </span>
           </div>
         </StyledPlantInfoBox>
