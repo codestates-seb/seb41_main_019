@@ -34,15 +34,16 @@ const StyledFriends = styled.div`
   }
 `;
 
-const Friends = ({ setCurChat, friends, setCurFriend, rooms }) => {
+const Friends = ({ setCurChat, friends, setCurFriend, rooms, setChatChange, chatChange }) => {
   return (
     <StyledFriends>
       <p>팔로우 목록</p>
       <ul>
         {friends.length > 0
           ? friends.map((friend, idx) => (
-              <Friend friend={friend} key={idx} setCurChat={setCurChat} setCurFriend={setCurFriend}
-                room={rooms.filter(room => room.receiverId === friend.followingId || room.senderId === friend.followingId)}/>
+              <Friend friend={friend} key={idx} setCurChat={setCurChat} setCurFriend={setCurFriend} setChatChange={setChatChange}
+                room={rooms.filter(room => room.receiverId === friend.followingId || room.senderId === friend.followingId)}
+                chatChange={chatChange} />
             ))
           : "현재 팔로우 중인 친구가 없습니다."}
       </ul>

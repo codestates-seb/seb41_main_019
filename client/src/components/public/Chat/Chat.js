@@ -43,7 +43,12 @@ const Chat = ({ change }) => {
   const [ curFriend, setCurFriend ] = useState(null);
   const [ rooms, setRooms ] = useState([]);
   const [ friends, setFriends ] = useState([]);
+  const [ chatChange, setChatChange] = useState(false);
   const cookie = new Cookie();
+
+  useEffect(() => {
+    console.log(chatChange)
+  }, [chatChange])
 
   useEffect(() => {
     axios({
@@ -53,7 +58,7 @@ const Chat = ({ change }) => {
     }).then(res => {
       setRooms(res.data);
     })
-  }, [change])
+  }, [change, chatChange])
 
   useEffect(() => {
     axios({
@@ -63,7 +68,7 @@ const Chat = ({ change }) => {
     }).then(res => {
       setFriends(res.data.data.followingList);
     })
-  }, [change])
+  }, [change, chatChange])
   
   return (  
     <>
@@ -73,13 +78,15 @@ const Chat = ({ change }) => {
           !curChat ? 
           <>
             <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} />
-            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} />
+            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} 
+              chatChange={chatChange} setChatChange={setChatChange}/>
           </>
           : 
           <>
             <Chatting curChat={curChat} curFriend={curFriend} setCurChat={setCurChat} setCurFriend={setCurFriend} />
             <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} />
-            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} />
+            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} 
+              chatChange={chatChange} setChatChange={setChatChange}/>
           </>
         }
       </StyledChat>

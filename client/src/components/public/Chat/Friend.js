@@ -48,7 +48,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const Friend = ({ friend, top, setCurChat, setCurFriend, room }) => {
+const Friend = ({ friend, top, setCurChat, setCurFriend, room, setChatChange, chatChange }) => {
   const cookie = new Cookie();
 
   const createRoom = () => {
@@ -64,6 +64,7 @@ const Friend = ({ friend, top, setCurChat, setCurFriend, room }) => {
       }).then((res) => {
         setCurFriend(friend);
         setCurChat(res.data.data);
+        setChatChange(!chatChange);
       }).catch(e => {
         console.log(e);
       })
