@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Uploader from "./Uploader";
 import Tags from "./Tags";
 import CloseBtn from "../CloseBtn";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { BlueBtn } from "../BlueBtn";
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
@@ -27,59 +27,8 @@ const Wrapper= styled.div`
     box-shadow: 4px 4px 4px 1px rgba(0,0,0,0.3); 
 
     > div:first-child {
-        margin: 0 0 0 auto;
-    }
-
-    p {
-        margin: -20px 0px 0px 0px;
-    }
-
-    .preview {
-        display: flex;
-        height: auto;
+        margin: 0 0 -30px auto;
         
-        p {
-            display: none;
-        }
-
-        div {
-            width: 140px;
-            height: 140px;
-            margin: 0;
-            @media screen and (max-width: 755px) {
-                    width: 85px;
-                    height: 85px;
-            } 
-        }
-  
-
-        ul {
-            margin: 0px 0px 0px 10px;
-            height: 100%;
-            padding: 0;
-            display: flex;
-            list-style: none;
-
-            li {
-                height: 100%;
-            }
-
-            li img {
-                display: flex;
-                width: 140px;
-                height: 140px; 
-                margin-right: 10px;
-                cursor: pointer;
-                    @media screen and (max-width: 755px) {
-                        width: 85px;
-                        height: 85px;
-                    }    
-            }
-
-            .none {
-                display: none;
-            }
-        }
     }
 
     button:last-of-type{
@@ -110,16 +59,17 @@ const StyledTextarea = styled.textarea`
     }
 `;
 
-// 기능 추가: 사진 x클릭시 사진 삭제, 태그 줄 자동바꿈,
+// 기능 추가: 태그 줄 자동바꿈
 const EditPost = ({ handleEdit, curPost }) => {
-    const [images, setImages] = useState([]);
-    const [files, setFiles] = useState([]);
-    const [value, setValue] = useState("");
-    const [tags, setTags] = useState([]);
-    const [preview, setPreview] = useState(false);
-    const fileInputRef = useRef([]);
+    const [images, setImages] = useState(curPost.postingMedias);
+    const [files, setFiles] = useState(curPost.postingMedias);
+    const [value, setValue] = useState(curPost.postingContent);
+    const [tags, setTags] = useState(curPost.tags);
+    const [deleted, setDeleted] = useState([]);
     const fileInputs = useRef(null);
     const cookie = new Cookie();
+
+    console.log(curPost);
 
     const handleImg = (e) => {
         const file = e.target.files[0];
@@ -127,25 +77,21 @@ const EditPost = ({ handleEdit, curPost }) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
-            setImages([...images, reader.result]);
+            setImages([...images, {mediaId: -1, mediaUrl: reader.result}]);
         }
     };
 
     const deleteImg = (e) => {
         const delIdx = e.target.id;
-        const newFiles = files.slice();
-        const newImgs = images.slice();
-        newFiles.splice(delIdx, 1)
-        newImgs.splice(delIdx, 1)
-        setFiles(newFiles);
-        setImages(newImgs);
-        fileInputs.current.childNodes[delIdx].remove();
+        if(files[delIdx].mediaId > 0) {
+            setDeleted([...deleted, files[delIdx].mediaId]);
+        }
+        setFiles(files.filter((file, idx) => idx !== Number(delIdx)));
+        setImages(images.filter((img, idx) => idx !== Number(delIdx)));
+        if(images[delIdx].mediaId < 0) {
+            fileInputs.current.childNodes[delIdx].remove();
+        }   
     };
-
-    useEffect(() => {
-        setValue(curPost.postingContent);
-        setTags(curPost.tags.map(tag => tag.tagName))
-    },[])
 
     const handleValue = (e) => {
         setValue(e.target.value);
@@ -153,7 +99,7 @@ const EditPost = ({ handleEdit, curPost }) => {
 
     const addTags = (e) => {
         if(e.key === "Enter" && e.target.value.length > 0 && tags.length < 5) {
-            setTags([...tags, e.target.value]);
+            setTags([...tags, {tagName: e.target.value}]);
             e.target.value = "";
         }
     };
@@ -165,62 +111,71 @@ const EditPost = ({ handleEdit, curPost }) => {
         }
     };
 
-    // const handleSubmit = () => {
-    //     const formData = new FormData();
+    const handleSubmit = (e) => {
+        // 삭제된 이미지를 제거한다.
+        if(deleted.length > 0) {
+            deleted.forEach((id) => {
+                axios({
+                    method: "delete",
+                    url: `http://13.124.33.113:8080/posts/medias/${id}`,
+                    headers: { Authorization: cookie.get("authorization") }
+                }).then(res => {
+                    console.log(res);
+                }).catch(e => {
+                    console.log(e);
+                })
+            })
+        }
 
-    //     files.forEach((file, idx) => {
-    //         formData.append(`file${idx + 1}`, file);
-    //     });
-    //     formData.append("requestBody", new Blob([JSON.stringify({
-    //         "memberId": Number(cookie.get("memberId")),
-    //         "postingContent": value,
-    //         "tagName": tags
-    //     })], { type: "application/json"}));
+        // 새로운 이미지를 추가한다.
+        const newFiles = files.filter(file => file.name);
+        if(newFiles.length > 0) {
+            let formData = new FormData();
+            newFiles.forEach((file, idx) => {
+                formData.append(`file${idx + 1}`, file);
+            })
 
-    //     axios({
-    //         method: "patch",
-    //         url: "http://13.124.33.113:8080/posts/cookie.get("memberId")",
-    //         data: {
-    //        "postingId" : 1,
-    //        "postingContent" : "게시글 수정 test",
-    //        "tagName" : [ "스투키", "몬스테라" ]
-    //         } 
-    //         headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
-    
-    //         }).then(res => {
-    //             console.log(res);
-    //         })
-    //         .catch(e => {
-    //             //에러 처리
-    //         });
-    // };
+            axios({
+                method: "post",
+                url: `http://13.124.33.113:8080/posts/${curPost.postingId}/medias`,
+                data: formData,
+                headers: { Authorization: cookie.get("authorization") }
+            }).then(res => {
+                console.log(res);
+            }).catch(e => {
+                console.log(e);
+            })
+        }
 
-    const handleDiv = () => {
-        setPreview(!preview);
-    }
+        // 게시글의 변경점을 추가한다.
+        axios({
+            method: "patch",
+            url: `http://13.124.33.113:8080/posts/${curPost.postingId}`,
+            data: JSON.stringify({
+                postingId: curPost.postingId,
+                postingContent: value,
+                tagName: tags.map(tag => tag.tagName)
+            }),
+            headers: { Authorization: cookie.get("authorization") }
+        }).then(res => {
+            console.log(res);
+        }).catch(e => {
+            console.log(e);
+        })
+    };
 
     return (
         <Wrapper>
             <CloseBtn handleEvent={handleEdit}/>
-            <p>사진이나 동영상을 등록해 주세요.(3장까지 가능합니다)</p>
-            <div className="preview">
-                <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
-                fileInputs={fileInputs} />
-                <ul>
-                    {
-                        curPost.postingMedias.map((media, idx) => {
-                            return <li key={idx} className={preview ? "none" : null} onClick={handleDiv}>
-                                    <img src={media.mediaUrl} alt="img" />
-                                </li>
-                               
-                        })
-                    }
-                </ul>
-            </div>
-            <StyledTextarea value={value} onChange={handleValue} placeholder="수정할 거에용">{value}</StyledTextarea>
-            <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
+            <Uploader images={images} handleImg={handleImg} deleteImg={deleteImg} 
+                fileInputs={fileInputs} edit/>
+            <StyledTextarea value={value} onChange={handleValue}
+                placeholder="당신의 식물을 소개해주세요.">
+                    {value}
+            </StyledTextarea>
+            <Tags tags={tags} addTags={addTags} removeTags={removeTags} edit/>
             <div>
-                <BlueBtn>수정하기</BlueBtn>
+                <BlueBtn onClick={handleSubmit}>작성</BlueBtn>
                 <BlueBtn onClick={handleEdit}>취소</BlueBtn>
             </div>
         </Wrapper>

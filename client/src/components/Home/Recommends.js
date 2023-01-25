@@ -70,7 +70,6 @@ const Recommends = ({ change }) => {
             url: `http://13.124.33.113:8080/posts/follow/popular?page=1&size=10`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
-                console.log('성공');
                 setFollowPosts(res.data.data);
             })
             .catch(e => {
