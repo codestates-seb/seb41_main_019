@@ -36,6 +36,9 @@ const Wrapper = styled.div`
     p {
         margin: 0px 100px;
         line-height: 1.5;
+        @media screen and (max-width: 770px) {
+            width: 90%;
+        }
     }
 
     .check {
@@ -63,26 +66,34 @@ const Wrapper = styled.div`
     }
 `;
 
-const DeleteProfile = ({ name, img }) => {
+const DeleteProfile = ({ name, img, setIsLanded }) => {
     const [isChecked, setIsChecked] = useState(false);
     const cookie = new Cookie();
     const navigate = useNavigate();
 
-    const handleDelete = () => {
-        axios
-            .delete(`http://13.124.33.113:8080/members/${cookie.get("memberId")}`)
-            .then((res) => {
-                alert('계정이 삭제되었습니다');
-                navigate('/');
-            })
-            .catch(() => {
-                console.log('삭제 요청 실패')
-            })
-    }
+    const deleteMember = () => {
+        axios({
+            method: "delete",
+            url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
+            headers: { Authorization : cookie.get("authorization") }
+        }).then(res => {
+            alert('계정이 삭제되었습니다.');
+            cookie.remove("memberId");
+            cookie.remove("list");
+            cookie.remove("username");
+            cookie.remove("refresh");
+            cookie.remove("authorization");
+            navigate("/");
+            setIsLanded(true);
+        })
+        .catch(e => {
+           console.log(e);
+        });
+    };
 
     const handleBtn = () => {
         setIsChecked(!isChecked);
-    } 
+    };
 
     return (
         <Wrapper>
@@ -90,12 +101,12 @@ const DeleteProfile = ({ name, img }) => {
                 <img src={img} alt="img" />
                 <span>{name}</span>
             </div>
-            <p>게시하신 글이나 댓글은 자동으로 삭제되며, 사용하고 계신 아이디 <span>user1</span>는 탈퇴할 경우 복구가 불가능합니다.</p>
+            <p>게시하신 글이나 댓글은 자동으로 삭제되며, 사용하고 계신 아이디 <span>{name}</span>는 탈퇴할 경우 복구가 불가능합니다.</p>
             <div className="check">
                 <input id="checkbox" type="checkbox" value={isChecked} onClick={handleBtn}/>
                 <label htmlFor="checkbox">안내 사항을 모두 확인하였으며, 이에 동의합니다.</label>
             </div>
-            <BlueBtn disabled={isChecked ? false : true} onClick={handleDelete}>계정 삭제</BlueBtn>
+            <BlueBtn disabled={isChecked ? false : true} onClick={deleteMember}>계정 삭제</BlueBtn>
         </Wrapper>
     )
 };

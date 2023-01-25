@@ -9,13 +9,12 @@ import Footer from "../components/public/Footer";
 
 const Wrapper = styled.div`
     display: flex;
-    height: 80%;
+    height: 600px;
     width: 900px;
     position: fixed;
-    top:50%;
+    top:43%;
     left:50%;
     transform:translate(-50%, -50%);
- 
     border: 1px solid #dbdbdb;
 
     input, textarea {
@@ -32,6 +31,16 @@ const Wrapper = styled.div`
 
     input {
         height: 30px;
+
+        @media screen and (max-width: 770px) {
+            width: 300px;
+        }
+    }
+
+    @media screen and (max-width: 770px) {
+        top:50%;
+        width: 550px;
+        border: 0;
     }
 `;
 
@@ -53,7 +62,7 @@ const StyledMenu = styled.div`
     }
 `
 
-const Setting = () => {
+const Setting = ({ setIsLanded }) => {
     const [ isClicked, setIsClicked ] = useState(0);
     const [ name, setName ] = useState("");
     const [ text, setText ] = useState("");
@@ -68,7 +77,6 @@ const Setting = () => {
             headers: { Authorization : cookie.get("authorization") }
         }).then(res => {
             const user = res.data.data;
-            console.log(user);
             setName(user.userName);
             setText(user.profileText);
             setLocation(user.location);
@@ -79,18 +87,20 @@ const Setting = () => {
     }, [])
 
     return (
-        <Wrapper>
-            <StyledMenu>
-                <p className={isClicked === 0 ? "active" : null} onClick={() => setIsClicked(0)}>프로필 편집</p>
-                <p className={isClicked === 1 ? "active" : null} onClick={() => setIsClicked(1)}>계정 탈퇴</p>
-            </StyledMenu>
-            { isClicked === 0 
-                ? <EditProfile name={name} text={text} location={location} img={img} 
-                setName={setName} setText={setText} setLocation={setLocation} /> 
-                :  <DeleteProfile name={name} img={img} />
-            }
+        <>
+            <Wrapper>
+                <StyledMenu>
+                    <p className={isClicked === 0 ? "active" : null} onClick={() => setIsClicked(0)}>프로필 편집</p>
+                    <p className={isClicked === 1 ? "active" : null} onClick={() => setIsClicked(1)}>계정 탈퇴</p>
+                </StyledMenu>
+                { isClicked === 0 
+                    ? <EditProfile name={name} text={text} location={location} img={img} 
+                    setName={setName} setText={setText} setLocation={setLocation} setImg={setImg} /> 
+                    :  <DeleteProfile name={name} img={img} setIsLanded={setIsLanded}/>
+                }
+            </Wrapper>
             <Footer />
-        </Wrapper>
+        </>
     )
 };
 

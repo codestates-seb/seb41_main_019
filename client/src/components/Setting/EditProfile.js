@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { BlueBtn } from "../public/BlueBtn";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
+import { useEffect, useState } from "react";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -9,7 +10,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 30px;
-    margin-top: 50px;
+    margin: 30px 0px 0px 10px;
 
     div {
         display: flex;
@@ -54,7 +55,8 @@ const Wrapper = styled.div`
     }
 `;
 
-const EditProfile = ({ name, text, location, img, setName, setText, setLocation }) => {
+const EditProfile = ({ name, text, location, img, setName, setText, setLocation, setImg }) => {
+    const [ file, setFile ] = useState(null);
     const cookie = new Cookie();
 
     const editProfile = () => {
@@ -72,7 +74,29 @@ const EditProfile = ({ name, text, location, img, setName, setText, setLocation 
         }).catch(e => {
             console.log(e);
         })
-    }
+    };
+
+    const updateImg = (e) => {
+        setFile(e.target.files[0]);
+    };
+
+    useEffect(() => {
+        if(file) {
+            const formData = new FormData();
+            formData.append("profileImage", file);
+
+            axios({
+                method: "post",
+                url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}/profileimage`,
+                data: formData,
+                headers: { "Content-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
+            }).then(res => {
+                setImg(res.data.profileImage);
+            }).catch(e => {
+                console.log(e);
+            });
+        }
+    }, [file])
 
     return (
         <Wrapper>
@@ -82,8 +106,8 @@ const EditProfile = ({ name, text, location, img, setName, setText, setLocation 
                 </div>
                 <div>
                     <span>{name}</span>
-                    <label htmlFor="profileImg">프로필 사진 바꾸기</label>
-                    <input id="profileImg" type="file" hidden />
+                    <label htmlFor="file">프로필 사진 바꾸기</label>
+                    <input onChange={updateImg} id="file" type="file" />
                 </div>
             </div>
             <div>
