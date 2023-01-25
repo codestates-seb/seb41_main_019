@@ -69,14 +69,14 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
 
-  const [userInfo, setUserInfo] = useState([]);
-  const [postCount, setPostCount] = useState();
+  const [userInfo, setUserInfo] = useState([]); // 유저정보 (UserInfo.js로 props)
+  const [postCount, setPostCount] = useState(); // 게시물 숫자 (setState는 UserInfo.js에서 핸들링)
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
-  const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
-  const [currentView, setCurrentView] = useState("postings"); // 현재 view(리스트)의 상태
-  const [isAddPlantOpened, setIsAddPlantOpened] = useState(false);
-  const [isViewOpened, setIsViewOpened] = useState(false);
-  const [curPost, setCurPost] = useState();
+  const [galleryData, setGalleryData] = useState([]); // 관심사 분리를 위하여 Gallery.js로 이관됨. handleModal 변경 후 삭제 예정
+  const [currentView, setCurrentView] = useState("postings"); // 현재 view (Gallery.js를 조건부 렌더링하기 위한 상태)
+  const [isAddPlantOpened, setIsAddPlantOpened] = useState(false); // AddPlant.js 모달 조건부 렌더링하기 위한 상태
+  const [isViewOpened, setIsViewOpened] = useState(false); // Gallery.js에서 map 함수의 요소 클릭 했을 때 모달(View.js) 렌더링 
+  const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
   
   useEffect(() => {
     getUserInfo()
