@@ -41,7 +41,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(value = PostingLikeController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriHost = "http://ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class PostingLikeControllerRestDocs {
 
     @Autowired
