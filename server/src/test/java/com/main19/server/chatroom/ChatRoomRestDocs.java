@@ -3,10 +3,13 @@ package com.main19.server.chatroom;
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
 import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -19,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.google.gson.Gson;
 import com.main19.server.chatroom.controller.ChatRoomController;
 import com.main19.server.chatroom.dto.ChatRoomDto;
+import com.main19.server.chatroom.dto.ChatRoomDto.Patch;
 import com.main19.server.chatroom.entity.ChatRoom;
 import com.main19.server.chatroom.mapper.ChatRoomMapper;
 import com.main19.server.chatroom.service.ChatRoomService;
@@ -66,7 +70,8 @@ public class ChatRoomRestDocs {
             new ChatRoomDto.Response(
                 chatRoomId,
                 memberId1,
-                memberId2);
+                memberId2,
+                null);
 
         given(chatRoomMapper.chatRoomPostDtoToChatRoom(Mockito.any(ChatRoomDto.Post.class)))
             .willReturn(new ChatRoom());
@@ -107,7 +112,65 @@ public class ChatRoomRestDocs {
                 responseFields(
                     fieldWithPath("data.chatRoomId").type(JsonFieldType.NUMBER).description("채팅방 식별자"),
                     fieldWithPath("data.receiverId").type(JsonFieldType.NUMBER).description("회원 식별자"),
-                    fieldWithPath("data.senderId").type(JsonFieldType.NUMBER).description("회원 식별자")
+                    fieldWithPath("data.senderId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                    fieldWithPath("data.leaveId").type(JsonFieldType.NULL).description("회원 식별자")
+                )
+            ));
+    }
+
+    @Test
+    public void PatchChatRoomTest() throws Exception {
+
+        long chatRoomId = 1L;
+        long memberId1 = 1L;
+        long memberId2 = 2L;
+
+        ChatRoomDto.Patch patch = new Patch(memberId1);
+
+        String content = gson.toJson(patch);
+
+        ChatRoomDto.Response response =
+            new ChatRoomDto.Response(
+                chatRoomId,
+                memberId1,
+                memberId2,
+                memberId1);
+
+        given(chatRoomService.updateChatRoom(Mockito.anyLong(),Mockito.anyLong(),Mockito.anyString())).willReturn(new ChatRoom());
+        given(chatRoomMapper.chatRoomToChatRoomResponseDto(Mockito.any())).willReturn(response);
+
+        ResultActions actions =
+            mockMvc.perform(
+                patch("/chatroom/{chatroom-id}",chatRoomId)
+                    .header("Authorization", "Bearer AccessToken")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+        actions
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.leaveId").value(patch.getMemberId()))
+            .andDo(document(
+                "patch-chat-room",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                ),
+                pathParameters(
+                    parameterWithName("chatroom-id").description("채팅방 식별자")
+                ),
+                requestFields(
+                    List.of(
+                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자")
+                    )
+                ),
+                responseFields(
+                    fieldWithPath("data.chatRoomId").type(JsonFieldType.NUMBER).description("채팅방 식별자"),
+                    fieldWithPath("data.receiverId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                    fieldWithPath("data.senderId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                    fieldWithPath("data.leaveId").type(JsonFieldType.NUMBER).description("회원 식별자")
                 )
             ));
     }
@@ -146,11 +209,13 @@ public class ChatRoomRestDocs {
                 new ChatRoomDto.Response(
                     list.get(0).getChatRoomId(),
                     list.get(0).getReceiver().getMemberId(),
-                    list.get(0).getSender().getMemberId()),
+                    list.get(0).getSender().getMemberId(),
+                    list.get(0).getLeaveId()),
                 new ChatRoomDto.Response(
                     list.get(1).getChatRoomId(),
                     list.get(1).getReceiver().getMemberId(),
-                    list.get(1).getSender().getMemberId())));
+                    list.get(1).getSender().getMemberId(),
+                    list.get(1).getLeaveId())));
 
         ResultActions actions =
             mockMvc.perform(
@@ -164,9 +229,11 @@ public class ChatRoomRestDocs {
             .andExpect(jsonPath("$.[0].chatRoomId").value(list.get(0).getChatRoomId()))
             .andExpect(jsonPath("$.[0].receiverId").value(list.get(0).getReceiver().getMemberId()))
             .andExpect(jsonPath("$.[0].senderId").value(list.get(0).getSender().getMemberId()))
+            .andExpect(jsonPath("$.[0].leaveId").value(list.get(0).getLeaveId()))
             .andExpect(jsonPath("$.[1].chatRoomId").value(list.get(1).getChatRoomId()))
             .andExpect(jsonPath("$.[1].receiverId").value(list.get(1).getReceiver().getMemberId()))
             .andExpect(jsonPath("$.[1].senderId").value(list.get(1).getSender().getMemberId()))
+            .andExpect(jsonPath("$.[1].leaveId").value(list.get(1).getLeaveId()))
             .andDo(document(
                 "get-chat-room",
                 getRequestPreProcessor(),
@@ -180,8 +247,37 @@ public class ChatRoomRestDocs {
                 responseFields(
                     fieldWithPath("[0].chatRoomId").type(JsonFieldType.NUMBER).description("채팅방 식별자"),
                     fieldWithPath("[0].receiverId").type(JsonFieldType.NUMBER).description("회원 식별자"),
-                    fieldWithPath("[0].senderId").type(JsonFieldType.NUMBER).description("회원 식별자")
+                    fieldWithPath("[0].senderId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                    fieldWithPath("[0].leaveId").type(JsonFieldType.NULL).description("회원 식별자")
                 )
             ));
+    }
+
+    @Test
+    public void deleteChatRoomTest() throws Exception {
+
+        long chatRoomId = 1L;
+
+        doNothing().when(chatRoomService).deleteChatRoom(Mockito.anyLong(),Mockito.anyString());
+
+        ResultActions actions =
+            mockMvc.perform(
+                delete("/chatroom/{chatroom-id}", chatRoomId)
+                    .header("Authorization", "Bearer AccessToken")
+            );
+
+        actions.andExpect(status().isNoContent())
+            .andDo(
+                document(
+                    "delete-chat-room",
+                    getRequestPreProcessor(),
+                    getResponsePreProcessor(),
+                    pathParameters(parameterWithName("chatroom-id").description("채팅방 식별자")
+                    ),
+                    requestHeaders(
+                        headerWithName("Authorization").description("Bearer (accessToken)")
+                    )
+                )
+            );
     }
 }
