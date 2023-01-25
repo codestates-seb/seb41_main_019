@@ -78,6 +78,8 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const [isViewOpened, setIsViewOpened] = useState(false); // Gallery.js에서 map 함수의 요소 클릭 했을 때 모달(View.js) 렌더링 
   const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
   
+  useEffect(() => console.log(curPost), [curPost])
+
   useEffect(() => {
     getUserInfo()
   }, [])
@@ -95,15 +97,16 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
       console.error(err))
   };
 
-  const handleModal = (modal, postingId) => {
+  const handleModal = (modal, postingData) => {
     if(modal === "AddPlant") {
-      setIsAddPlantOpened(!isAddPlantOpened);
-    } else if(postingId) {
-      setCurPost(galleryData.filter((el) => el.postingId === postingId)[0]) ;
-      setIsViewOpened(!isViewOpened);
-    } else {
-      setIsViewOpened(!isViewOpened);
+      // setIsAddPlantOpened(!isAddPlantOpened);
+    } else if(modal === "postings") {
+      setCurPost(postingData);
+      console.log(postingData)
+    } else if(modal === "scraps") {
+
     }
+    setIsViewOpened(!isViewOpened);
     handleIsCovered();
   };
 

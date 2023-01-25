@@ -88,12 +88,10 @@ const UserInfo = ({ userInfo, postCount }) => {
             </a>
           </StyledUserName>
           <StyledUserInfoList>
-            <a href="#">
               <StyledInfoItem>
                 <p>게시물</p>
                 <p>{postCount}</p>
               </StyledInfoItem>
-            </a>
             <a href="#">
               <StyledInfoItem>
                 <p>팔로워</p>

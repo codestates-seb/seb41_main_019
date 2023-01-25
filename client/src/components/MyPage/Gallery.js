@@ -61,6 +61,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
+
   const [galleryData, setGalleryData] = useState([])
   
   const getGalleryData = (view) => {
@@ -98,12 +99,18 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount }) => {
                   <img className="image" src={el.imgUrl} alt="each item" />
                 </div>
               );
-            } else {
+            } else if (currentView === "postings") {
               return (
-                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal("View", el.postingId)}>
+                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal("postings", el)}>
                   <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
                 </div>
               );
+            } else if (currentView === "scraps") {
+              return (
+                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal("scraps", el)}>
+                  <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                </div>
+              )
             }
           })}
         </StyledMyPageGallery>
