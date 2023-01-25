@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { AiFillHeart } from "react-icons/ai";
+import { useState } from "react";
 
 const StyledLi = styled.li`
     display: flex;
@@ -29,13 +30,18 @@ const StyledLi = styled.li`
     }
 `;
 
-const Recommend = ({ allPost }) => {
+const Recommend = ({ post, handleModal, setCurPost }) => {
     return (
-        <StyledLi>
-            <img src={allPost.postingMedias[0].mediaUrl} alt="img" />
-            <span>{allPost.userName}</span>
-            <span><AiFillHeart />+{allPost.likeCount}</span>
-        </StyledLi>
+        <>
+            <StyledLi>
+                <img src={post.postingMedias[0].mediaUrl} alt="img" onClick={() => {
+                    setCurPost(post);
+                    handleModal(true);
+                }} />
+                <span>{post.userName}</span>
+                <span><AiFillHeart />+{post.likeCount}</span>
+            </StyledLi>
+        </>
     )
 };
 
