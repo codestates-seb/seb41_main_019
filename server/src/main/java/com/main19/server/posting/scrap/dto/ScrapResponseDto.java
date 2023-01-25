@@ -1,5 +1,6 @@
 package com.main19.server.posting.scrap.dto;
 
+import com.main19.server.posting.dto.MediaResponseDto;
 import com.main19.server.posting.entity.Media;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,5 +17,5 @@ public class ScrapResponseDto {
     private String userName;
     private String profileImage;
     private String postingContent;
-    private List<Media> postingMedias;
+    private List<MediaResponseDto> postingMedias;
 }
