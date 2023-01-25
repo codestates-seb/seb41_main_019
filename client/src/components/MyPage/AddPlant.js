@@ -74,12 +74,16 @@ const StyledModalHeader = styled.div`
   }
 `;
 
-const AddPlant = ({ handleModal, userInfo, jwt, setGalleryData }) => {
+const AddPlant = ({ handleModal, userInfo, jwt }) => {
+  const nowDate = new Date();
+  const today = nowDate.toISOString().substring(0,10)
+
   const [form, setForm] = useState({
     plantName: "",
     plantType: "",
     plantBirthday: "",
   });
+
   useEffect(() => {
     document.getElementById("bg").addEventListener("click", () => {
       handleModal("AddPlant");
@@ -104,7 +108,7 @@ const AddPlant = ({ handleModal, userInfo, jwt, setGalleryData }) => {
         "memberId" : userInfo.memberId,
         "plantName" : plantName,
         "plantType" : plantType,
-        "plantBirthDay" : plantBirthday
+        "plantBirthDay" : plantBirthday.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')
       }
     }).then(res => {
       handleModal("AddPlant")
@@ -125,6 +129,7 @@ const AddPlant = ({ handleModal, userInfo, jwt, setGalleryData }) => {
         <form onSubmit={handleSubmit}>
           <label htmlFor="plantName">반려식물 이름</label>
           <input
+            required
             id="plantName"
             type="text"
             name="plantName"
@@ -133,6 +138,7 @@ const AddPlant = ({ handleModal, userInfo, jwt, setGalleryData }) => {
           />
           <label htmlFor="plantType">종류</label>
           <input
+            required
             id="plantType"
             type="text"
             name="plantType"
@@ -141,9 +147,11 @@ const AddPlant = ({ handleModal, userInfo, jwt, setGalleryData }) => {
           /> 
           <label htmlFor="plantBirthday">데려온 날짜</label>
           <input
+            required
             id="plantBirthday"
-            type="text"
+            type="date"
             name="plantBirthday"
+            max={today}
             value={plantBirthday}
             onChange={handleInputChange}
           />
