@@ -29,7 +29,8 @@ public enum ExceptionCode {
 	NOTIFICATION_NOT_FOUND(404, "Notification Not Found"),
 	MYPLANTS_NOT_FOUND(404, "My Plants Not Found"),
 	GALLERY_NOT_FOUND(404, "Gallery Not Found"),
-	CONVERSION_FAILED(404, "File conversion failed");
+	CONVERSION_FAILED(404, "File conversion failed"),
+	CHATROOM_NOT_DELETE(409, "ChatRoom Not Delete");
 
 
 	@Getter

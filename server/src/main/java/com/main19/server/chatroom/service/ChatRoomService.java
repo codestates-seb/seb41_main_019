@@ -39,6 +39,40 @@ public class ChatRoomService {
         return chatRoomRepository.save(chatRoom);
     }
 
+    public ChatRoom updateChatRoom(long chatRoomId, long memberId, String token) {
+
+        if (memberId != jwtTokenizer.getMemberId(token)) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        ChatRoom chatRoom = findChatRoom(chatRoomId);
+
+        if(chatRoom.getLeaveId() == null) {
+            chatRoom.setLeaveId(memberId);
+        }
+        else {
+            chatRoom.setLeaveId(null);
+        }
+
+        return chatRoomRepository.save(chatRoom);
+    }
+
+    public void deleteChatRoom(long chatRoomId, String token) {
+
+        ChatRoom chatRoom = findChatRoom(chatRoomId);
+
+        if (chatRoom.getSenderId() != jwtTokenizer.getMemberId(token) && chatRoom.getReceiverId() != jwtTokenizer.getMemberId(token)) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        if(chatRoom.getLeaveId() == null) {
+            throw new BusinessLogicException(ExceptionCode.CHATROOM_NOT_DELETE);
+        }
+
+        chatRoomRepository.delete(chatRoom);
+
+    }
+
     @Transactional(readOnly = true)
     public ChatRoom findChatRoom(long chatRoomId) {
 
