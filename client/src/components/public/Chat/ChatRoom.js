@@ -42,7 +42,12 @@ const StyledButton = styled.button`
   background-color: white;
   
   svg {
+    color: #808080;
     font-size: 22px;
+
+    :hover { 
+      color: black;
+    }
   }
 `;
 

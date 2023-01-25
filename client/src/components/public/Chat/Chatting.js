@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { connect, subscribe, disConnect, send } from "../../../util/chat";
 import Cookie from "../../../util/Cookie";
 import { useChat } from "./useChat";
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
+import { MdSend } from "react-icons/md"
 import { soltChat } from "../../../util/soltChat";
 
 const StyledChatLog = styled.div`
@@ -83,6 +83,11 @@ const StyledInput = styled.div`
     border: 0px;
     font-size: 22px;
     cursor: pointer;
+    color: #808080;
+
+    :hover {
+      color: black;
+    }
   }
 `;
 
@@ -90,6 +95,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
   const [ message, setMessage ] = useState("");
   const [ log, setLog ] = useChat(curChat);
   const [ res, setRes ] = useState(null);
+  const input = useRef(null);
   const ul = useRef(null);
   const cookie = new Cookie();
 
@@ -100,6 +106,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
       if(ul.current) ul.current.scrollIntoView({block: "end", behavior: "smooth"});
       subscribe(curChat, setRes);
     }, 150)
+    input.current.focus();
 
     return () => {
       disConnect();
@@ -108,7 +115,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
 
   useEffect(() => {
     if(res) {
-      const [preLog] = log.length > 0 ? log.slice() : [[]];
+      const preLog = log.reduce((acc, cur) => [...acc, ...cur]);
       preLog.push(res)
       setLog(soltChat(preLog));
       setTimeout(() => {
@@ -123,6 +130,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
     setTimeout(() => {
       ul.current.scrollIntoView({block: "end", behavior: "smooth"})
     }, 150)
+    input.current.focus();
   }
 
   return (
@@ -147,8 +155,9 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
         }
       </StyledChatLog>
       <StyledInput>
-        <input type="text" placeholder="text.." value={message} onChange={(e) => setMessage(e.target.value)}></input>
-        <button onClick={handleSend}><IoChatbubbleEllipsesOutline /></button>
+        <input type="text" placeholder="text.." value={message} ref={input}
+          onChange={(e) => setMessage(e.target.value)}></input>
+        <button onClick={handleSend}><MdSend /></button>
       </StyledInput>
     </div>
   );
