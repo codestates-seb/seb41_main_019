@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { alertDatas } from "../../../assets/dummyData/alertData";
+import Cookie from "../../../util/Cookie";
+import { EventSourcePolyfill } from 'event-source-polyfill';
 
 const StyledAlertDiv = styled.div`
   display: flex;
@@ -56,6 +58,39 @@ const StyledAlert = styled.li`
 
 const Alert = () => {
   const [alertLog, setAlertLog] = useState({});
+  const cookie = new Cookie();
+  let EventSource = EventSourcePolyfill;
+
+  // useEffect(() => {
+  //   const url = `http://13.124.33.113:8080/notification/${cookie.get("memberId")}`
+
+  //   const eventSource = new EventSource(url, {
+  //     headers: { "Authorization": cookie.get("authorization")},
+  //     withCredentials: true,
+  //     heartbeatTimeout: 120000
+  //   })
+
+  //   eventSource.onmessage = res => {
+  //     console.logg(res);
+  //   }
+    
+  //   eventSource.onopen = res => {
+  //     console.log("성공", res);
+  //   }
+    
+  //   eventSource.onerror = e => {
+  //     console.log(e);
+  //     eventSource.close();
+  //   }
+
+  //   console.log(eventSource.url);
+  //   console.log(eventSource.CONNECTING);
+
+  //   return () => {
+  //     console.log("종료");
+  //     eventSource.close();
+  //   }
+  // }, [])
 
   const soltAlert = () => {
     const solted = {

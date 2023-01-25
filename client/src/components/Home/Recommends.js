@@ -77,9 +77,7 @@ const Recommends = ({ change }) => {
     //            console.log(e);
     //         });
     // }, [change]);
-
-    // console.log(followPosts);
-
+    
     return (
         <StyledSection>
             <StyledHeader>

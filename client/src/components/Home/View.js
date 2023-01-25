@@ -64,6 +64,7 @@ const StyledInteraction = styled.div`
     display: flex;
     flex-direction: column;
     background-color: white;
+    border-left: 1px solid #DBDBDB;
 
     > div:first-child {
         @media screen and (max-width: 1024px){
