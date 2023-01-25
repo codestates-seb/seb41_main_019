@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Cookie from "../../util/Cookie";
 
 import { FcAnswers } from "react-icons/fc";
 
@@ -54,16 +57,43 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ galleryData, currentView, handleModal }) => {
-  // 반려식물들의 각 사진들의 imgId는 고유한 값이어야 함.
-  // 그렇지 않을 경우 key prop 에러 발생
+const Gallery = ({ currentView, handleModal, userInfo, setPostCount }) => {
+  const cookie = new Cookie();
+  const jwt = cookie.get("authorization")
+  const memberId = Number(cookie.get("memberId"));
+  const [galleryData, setGalleryData] = useState([])
+  
+  const getGalleryData = (view) => {
+    if(view === 'postings') {
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=10`,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        setGalleryData(res.data.data)
+        setPostCount(res.data.pageInfo.totalElements)
+      }).catch ((err) => {
+        console.error(err);
+      })
+    } else if (view === 'scraps') {
+      setGalleryData(userInfo.scrapPostingList)
+    } else if (view === 'plant') {
+      setGalleryData([])
+    }
+  }
+
+  useEffect(() => {
+    getGalleryData(currentView)
+  }, [currentView])
   return (
     <StyledContainer>
       {galleryData ? (
         <StyledMyPageGallery>
           {galleryData.map((el) => {
             if (currentView === "plant") {
-              return (
+              return (           
                 <div className="image-wrapper" key={el.imgId}>
                   <img className="image" src={el.imgUrl} alt="each item" />
                 </div>

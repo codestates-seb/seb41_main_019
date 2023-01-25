@@ -80,11 +80,9 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   
   useEffect(() => {
     getUserInfo()
-    getMyPostings()
   }, [])
   
   const getUserInfo = () => {
-    try {
       axios({
         method: "get",
         url: `http://13.124.33.113:8080/members/${memberId}`,
@@ -93,44 +91,8 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
         },
       }).then((res) => {
         setUserInfo(res.data.data)
-      })
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const getMyPostings = () => {
-    try {
-      axios({
-        method: "get",
-        url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,
-        headers: {
-          Authorization: jwt,
-        },
-      }).then((res) => {
-        setPostCount(res.data.pageInfo.totalElements);
-        setGalleryData(res.data.data)
-      });
-    } catch (err) {
-      console.error(err)
-    }
-  };
-
-  const getGalleryData = (url, view) => {
-    try {
-      axios({
-        method: "get",
-        url: url,
-        headers: {
-          Authorization: jwt,
-        },
-      }).then((res) => {
-        setCurrentView(view)
-        setGalleryData(res.data)
-      })
-    } catch (err) {
-        console.error(err);
-      }
+      }).catch ((err) => 
+      console.error(err))
   };
 
   const handleModal = (modal, postingId) => {
@@ -145,21 +107,9 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     handleIsCovered();
   };
 
-  const handlePostingsClick = () => {
-    // 게시물 리스트 조회
-    getGalleryData(`http://localhost:8080/posts/members/${memberId}?page=1&size=10`, "postings"); // 임시 제이슨 서버
-  };
-
-  const handleScrapsClick = () => {
-    // 스크랩 조회
-    alert("구현 예정")
-    // getGalleryData("http://localhost:4000/data", "scraps");
-  };
-
   const handlePlantClick = (plantId) => {
     // 반려식물 클릭시 해당건 조회
     setCurrentView("plant");
-    // setGalleryData(myPlantsData[plantId].plantImgs);
   };
 
   const handleFolderClick = () => {
@@ -180,7 +130,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
               handleModal={handleModal}
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
-              <Gallery galleryData={galleryData} currentView={currentView} />
+              <Gallery currentView={currentView} userInfo={userInfo} setPostCount={setPostCount} />
               <p>
                 My Plants 접기 <TiArrowSortedUp />
               </p>
@@ -194,21 +144,21 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
               </p>
               <StyledChangeViewContainer>
                 <StyledChangeViewButton
-                  onClick={handlePostingsClick}
+                  onClick={() => setCurrentView("postings")}
                   className={currentView === "postings" ? "selected" : ""}
                 >
                   <BsGrid3X3 />
                   <span>게시물</span>
                 </StyledChangeViewButton>
                 <StyledChangeViewButton
-                  onClick={handleScrapsClick}
+                  onClick={() => setCurrentView("scraps")}
                   className={currentView === "scraps" ? "selected" : ""}
                 >
                   <BsBookmark />
                   <span>스크랩</span>
                 </StyledChangeViewButton>
               </StyledChangeViewContainer>
-              <Gallery galleryData={galleryData} currentView={currentView} handleModal={handleModal}/>
+              <Gallery setPostCount={setPostCount} currentView={currentView} handleModal={handleModal} userInfo={userInfo}/>
             </StyledMyPlantFolder>
           </div>
         )}
