@@ -16,9 +16,9 @@ import java.util.List;
 public interface PostingRepository extends JpaRepository<Posting, Long> {
     Page<Posting> findByMember_MemberId(long memberId, Pageable pageable);
 
-    @Query(value = "SELECT * FROM POSTING AS POST LEFT JOIN MEMBER AS MEMBER LEFT JOIN FOLLOW AS FOLLOW WHERE POST.MEMBER_ID = FOLLOW.FOLLOWER_MEMBER_ID AND MEMBER.MEMBER_ID = FOLLOW.FOLLOWING_MEMBER_ID AND FOLLOW.FOLLOWING_MEMBER_ID = :num", nativeQuery = true)
+    @Query(value = "SELECT * FROM POSTING LEFT JOIN FOLLOW ON POSTING.MEMBER_ID = FOLLOW.FOLLOWER_MEMBER_ID LEFT JOIN MEMBER ON MEMBER.MEMBER_ID = FOLLOW.FOLLOWING_MEMBER_ID WHERE FOLLOW.FOLLOWING_MEMBER_ID = :num", nativeQuery = true)
     Page<Posting> findByMember_FollowingList(@Param("num") long memberId, Pageable pageable);
 
-    @Query(value = "SELECT * FROM POSTING AS POST LEFT JOIN POSTING_TAGS AS PT LEFT JOIN TAG AS TAG WHERE PT.POSTING_ID = POST.POSTING_ID AND PT.TAG_ID = TAG.TAG_ID AND TAG.TAG_ID = :num", nativeQuery = true)
+    @Query(value = "SELECT * FROM POSTING AS POST LEFT JOIN POSTING_TAGS AS PT on PT.POSTING_ID = POST.POSTING_ID LEFT JOIN TAG AS TAG on PT.TAG_ID = TAG.TAG_ID WHERE TAG.TAG_ID = :num", nativeQuery = true)
     Page<Posting> findPostingsByTags(@Param("num")long tagId, Pageable pageable);
 }
