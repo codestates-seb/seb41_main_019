@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { AiFillSetting, AiOutlineClockCircle, AiOutlinePoweroff, } from "react-icons/ai";
+import { AiFillSetting, AiOutlinePoweroff, } from "react-icons/ai";
 import { BsFillJournalBookmarkFill } from "react-icons/bs";
 import { useNavigate } from 'react-router-dom';
 import Cookie from "../../../util/Cookie"
@@ -13,6 +13,7 @@ const StyledModal = styled.div`
   left: 5px;
   bottom: 25px;
   width: 210px;
+  height:110px;
   border-radius: 3px;
   border: 1px solid #dbdbdb;
   color: #222426;
@@ -40,7 +41,10 @@ const StyledModal = styled.div`
   }
 
   @media screen and (max-width: 770px) {
-    display: none;
+    display: flex;
+    position: fixed;
+    top: 60px;
+    left: 110px;
   }
 `;
 
@@ -51,20 +55,18 @@ const SideModal = ({ handleOpendModal, setIsLanded }) => {
   return (
       <StyledModal>
         <ul>
-          <li>
-            <span onClick={() => {
+          <li onClick={() => {
               navigate("/setting")
               handleOpendModal();
-            }}>설정</span>
+            }}>
+            <span>설정</span>
             <AiFillSetting />
           </li>
-          <li>
+          <li onClick={() => {
+            navigate("/mypage")
+          }}>
             <span>스크랩</span>
             <BsFillJournalBookmarkFill />
-          </li>
-          <li>
-            <span>내 활동</span>
-            <AiOutlineClockCircle />
           </li>
           <li onClick={() => {
             cookie.remove("memberId");
