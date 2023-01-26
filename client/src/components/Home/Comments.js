@@ -8,6 +8,9 @@ import { exchangeTime } from "../../util/exchangeTime";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 
 const StyledComments = styled.ul`
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
     height: 100%;
     background-color: white;
     overflow: scroll;
@@ -19,22 +22,25 @@ const StyledComments = styled.ul`
         display: none;
     }
     li {
-        height: 50px;
-        width: 100%;
-        margin: 0px auto;
-    }
+        margin-bottom: 5px;
 
-    li span {
-        margin-right: 10px;
+        > span:first-of-type {
+            display: flex;
+
+            width: 95px;
+            margin-right: 5px;
+        }
     }
 
     .comment {
         display: flex;
-        padding: 10px;
+        align-items: center;
+        padding: 0px 10px;
     }
 
     img {
-        width: 8%;
+        width: 40px;
+        height: 40px;
         border-radius: 50px;
         cursor: pointer;
         margin-right: 10px;
@@ -44,16 +50,19 @@ const StyledComments = styled.ul`
         display: flex;
         flex-direction: column;
         width: 80%;
-    }
-
-    .commentContent:first-child {
-        overflow-wrap : anywhere;
+        
+        span {
+            overflow-wrap: break-word;
+            max-width: 360px;
+        }
     }
 
     .commentInteraction{
-            margin-top: 5px;
-            color: gray;
-            font-size: 12px;
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+        color: gray;
+        font-size: 12px;
     }
 
     li .setting {
@@ -76,12 +85,17 @@ const StyledComments = styled.ul`
         display: flex;
         flex-direction: column-reverse;
         flex-flow: wrap;
+
+        .commentContent {
+            width: 300px;
+        }
     }
 `;
 
 const StyledMyComments = styled.div`
     height: 5%;
     margin-bottom: 5px;
+    border-top: 1px solid #dbdbdb;
 
     @media screen and (max-width: 1024px) {
         height: 10%;
@@ -95,8 +109,8 @@ const StyledInput = styled.input`
     border: 1px solid #5e8b7e;
     border-radius: 30px;
     font-size: 15px;
-    padding: 0px 5px 0px 10px;
-    margin: 0px 0px 10px 10px;
+    padding: 0px 10px;
+    margin: 5px 0px 10px 10px;
     
         :focus { 
             box-shadow: 0 0 6px #5e8b7e;
@@ -178,10 +192,10 @@ const Comments = ({ post, handleChange, handleCommentMenu, setCommentId }) => {
                                     <span>{comment.userName}</span>
                                     <div className="commentContent">
                                         <span>{comment.comment}</span>
-                                        <div>
-                                            <span className="commentInteraction">{exchangeTime(comment)}</span>
-                                            <span className="commentInteraction">•</span>
-                                            <span className="commentInteraction">좋아요 {comment.likeCount}개</span>
+                                        <div className="commentInteraction">
+                                            <span>{exchangeTime(comment)}</span>
+                                            <span>•</span>
+                                            <span>좋아요 {comment.likeCount}개</span>
                                         </div>
                                     </div>
                                     <div className="setting">
