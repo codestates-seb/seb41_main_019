@@ -113,7 +113,7 @@ const EditPost = ({ handleEdit, curPost }) => {
 
     const handleSubmit = (e) => {
         // 삭제된 이미지를 제거한다.
-        if(deleted.length > 0) {
+        if(deleted.length > 0 && files.length > 1) {
             deleted.forEach((id) => {
                 axios({
                     method: "delete",
@@ -147,12 +147,17 @@ const EditPost = ({ handleEdit, curPost }) => {
             })
         }
 
+        console.log(JSON.stringify({
+            postingId: curPost.postingId,
+            postingContent: value,
+            tagName: tags.map(tag => tag.tagName)
+        }));
+
         // 게시글의 변경점을 추가한다.
         axios({
             method: "patch",
             url: `http://13.124.33.113:8080/posts/${curPost.postingId}`,
             data: JSON.stringify({
-                postingId: curPost.postingId,
                 postingContent: value,
                 tagName: tags.map(tag => tag.tagName)
             }),
