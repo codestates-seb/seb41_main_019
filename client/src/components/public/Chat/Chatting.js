@@ -115,8 +115,9 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
 
   useEffect(() => {
     if(res) {
-      const preLog = log.reduce((acc, cur) => [...acc, ...cur]);
+      const preLog = log.length > 0 ? log.reduce((acc, cur) => [...acc, ...cur]) : log;
       preLog.push(res)
+      console.log(preLog);
       setLog(soltChat(preLog));
       setTimeout(() => {
         ul.current.scrollIntoView({block: "end", behavior: "smooth"})

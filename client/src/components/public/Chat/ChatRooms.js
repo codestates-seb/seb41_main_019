@@ -25,7 +25,7 @@ const StyledChatList = styled.div`
   }
 `;
 
-const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend, curChat }) => {
+const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend, curChat, setChatChange }) => {
   return (
     <StyledChatList curChat={curChat}>
       <p>채팅 목록</p>  
@@ -35,10 +35,11 @@ const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend, curChat }) => {
               return (
                 <ChatRoom
                   friend={friends.filter(friend => friend.followingId === room.receiverId || friend.followingId === room.senderId)[0]}
-                  key={idx}
+                  key={idx} 
                   room={room}
                   setCurChat={setCurChat}
                   setCurFriend={setCurFriend}
+                  setChatChange={setChatChange}
                 />
               );
             })

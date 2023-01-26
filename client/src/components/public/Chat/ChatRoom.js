@@ -64,7 +64,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const ChatRoom = ({ room, setCurChat, friend, setCurFriend }) => {
+const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange }) => {
   const cookie = new Cookie();
 
   const deleteChat = () => {
@@ -76,14 +76,24 @@ const ChatRoom = ({ room, setCurChat, friend, setCurFriend }) => {
         url: `http://13.124.33.113:8080/chatroom/${room.chatRoomId}`,
         headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
         data: JSON.stringify({
-          "leaveId": cookie.get("memberId")
+          "memberId": cookie.get("memberId")
         })
+      }).then(res => {
+        setChatChange(true);
+      }).catch(e => {
+        console.log(e);
       })
-    }
-
-    //leaveId 확인, 상대방이 채팅방을 떠났을 경우 해당 챗룸 삭제
-    if(room.leaveId !== cookie.get("memberId")) {
-      
+    }else if(room.leaveId !== Number(cookie.get("memberId"))) {
+      //leaveId 확인, 상대방이 채팅방을 떠났을 경우 해당 챗룸 삭제
+      axios({
+        method: "delete",
+        url: `http://13.124.33.113:8080/chatroom/${room.chatRoomId}`,
+        headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
+      }).then(res => {
+        setChatChange(true);
+      }).catch(e => {
+        console.log(e);
+      })
     }
   }
 
