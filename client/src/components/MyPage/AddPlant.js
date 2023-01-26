@@ -26,6 +26,19 @@ const StyledContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    > label {
+      font-size: 14px;
+      color: gray;
+      position: relative;
+      top: 53px;
+      padding: 0px 0px 0px 6px;
+      cursor: text;
+      transition: top 0.2s ease;
+    }
+    :focus-within label{
+      top: 20px;
+    }
+
     > input {
       width: 400px;
       height: 30px;
@@ -61,12 +74,16 @@ const StyledModalHeader = styled.div`
   }
 `;
 
-const AddPlant = ({ handleModal, userInfo, jwt, getMyPlantsData }) => {
+const AddPlant = ({ handleModal, userInfo, jwt }) => {
+  const nowDate = new Date();
+  const today = nowDate.toISOString().substring(0,10)
+
   const [form, setForm] = useState({
     plantName: "",
-    // plantType: "",
-    // plantBirthday: "",
+    plantType: "",
+    plantBirthday: "",
   });
+
   useEffect(() => {
     document.getElementById("bg").addEventListener("click", () => {
       handleModal("AddPlant");
@@ -89,24 +106,17 @@ const AddPlant = ({ handleModal, userInfo, jwt, getMyPlantsData }) => {
       },
       data: {
         "memberId" : userInfo.memberId,
-        "plantName" : plantName
-        // "plantType" : plantType
-        // "plantBirthday" : plantBirthday
+        "plantName" : plantName,
+        "plantType" : plantType,
+        "plantBirthDay" : plantBirthday.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')
       }
     }).then(res => {
-      handleModal("AddPlant");
-      axios({
-        method: "get",
-        url : `http://13.124.33.113:8080/myplants/${userInfo.memberId}`,
-        headers: {
-          "Authorization" : jwt
-        }
-      }).then(
-        (res) => {
-          getMyPlantsData();
-        }
-      )
-    })
+      handleModal("AddPlant")
+    }).catch(
+      e => {
+        console.error(e)
+      }
+    )
   };
 
   return (
@@ -117,27 +127,34 @@ const AddPlant = ({ handleModal, userInfo, jwt, getMyPlantsData }) => {
           <p>반려식물 등록하기</p>
         </StyledModalHeader>
         <form onSubmit={handleSubmit}>
+          <label htmlFor="plantName">반려식물 이름</label>
           <input
+            required
+            id="plantName"
             type="text"
             name="plantName"
-            placeholder="반려식물의 이름을 입력하세요"
             value={plantName}
             onChange={handleInputChange}
           />
-          {/* <input
+          <label htmlFor="plantType">종류</label>
+          <input
+            required
+            id="plantType"
             type="text"
             name="plantType"
-            placeholder="종류"
             value={plantType}
             onChange={handleInputChange}
-          />
+          /> 
+          <label htmlFor="plantBirthday">데려온 날짜</label>
           <input
-            type="text"
+            required
+            id="plantBirthday"
+            type="date"
             name="plantBirthday"
-            placeholder="처음 만난 날"
+            max={today}
             value={plantBirthday}
             onChange={handleInputChange}
-          /> */}
+          />
           <div className="button-container">
             <BlueBtn type="submit">완료</BlueBtn>
             <BlueBtn onClick={() => handleModal("AddPlant")}>취소</BlueBtn>

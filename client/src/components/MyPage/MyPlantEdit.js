@@ -55,7 +55,7 @@ const StyledMenuItem = styled.div`
   }
 `;
 
-const MyPlantEdit = ({ handleUpdateMode }) => {
+const MyPlantEdit = ({ handleUpdateMode, currentPlantData }) => {
   const [isAddModalOn, setIsAddModalOn] = useState(false);
   const [isEditModalOn, setIsEditModalOn] = useState(false);
   const handleEditModal = () => {
@@ -79,7 +79,7 @@ const MyPlantEdit = ({ handleUpdateMode }) => {
         <BsThreeDotsVertical />
         편집
       </p>
-      {isAddModalOn && <AddPlantImage handleAddClick={handleAddClick}/>}
+      {isAddModalOn && <AddPlantImage handleAddClick={handleAddClick} currentPlantId={currentPlantData.myPlantsId}/>}
       {isEditModalOn && (
         <StyledMenuContainer>
           <StyledMenuItem onClick={handleUpdateMode}>식물 수정</StyledMenuItem>

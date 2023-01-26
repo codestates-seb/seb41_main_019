@@ -64,8 +64,8 @@ const UserInfo = ({ userInfo, postCount }) => {
     location,
     profileImage,
     profileText,
-    followingCount,
-    followerCount,
+    followingList,
+    followerList,
   } = userInfo;
 
   return (
@@ -88,22 +88,20 @@ const UserInfo = ({ userInfo, postCount }) => {
             </a>
           </StyledUserName>
           <StyledUserInfoList>
-            <a href="#">
               <StyledInfoItem>
                 <p>게시물</p>
                 <p>{postCount}</p>
               </StyledInfoItem>
-            </a>
             <a href="#">
               <StyledInfoItem>
                 <p>팔로워</p>
-                <p>{followerCount ? followerCount : 0}</p>
+                <p>{followerList ? followerList.length : 0}</p>
               </StyledInfoItem>
             </a>
             <a href="#">
               <StyledInfoItem>
                 <p>팔로잉</p>
-                <p>{followingCount ? followingCount : 0}</p>
+                <p>{followingList ? followingList.length : 0}</p>
               </StyledInfoItem>
             </a>
           </StyledUserInfoList>

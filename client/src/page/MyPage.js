@@ -69,22 +69,26 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
 
-  const [userInfo, setUserInfo] = useState([]);
-  const [postCount, setPostCount] = useState();
-  const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
-  const [galleryData, setGalleryData] = useState([]); // Gallery.js로 props 주는 데이터
-  const [currentView, setCurrentView] = useState("postings"); // 현재 view(리스트)의 상태
-  const [isAddPlantOpened, setIsAddPlantOpened] = useState(false);
-  const [isViewOpened, setIsViewOpened] = useState(false);
-  const [curPost, setCurPost] = useState();
+  // 데이터 상태관리
+  const [userInfo, setUserInfo] = useState([]); // 유저정보 (UserInfo.js로 props)
+  const [postCount, setPostCount] = useState(); // 게시물 숫자 (setState는 UserInfo.js에서 핸들링)
+  const [galleryData, setGalleryData] = useState([]); // 관심사 분리를 위하여 Gallery.js로 이관됨. handleModal 변경 후 삭제 예정
+  const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
+  const [commentId, setCommentId] = useState(null);
+  const [commentMenu, setCommentMenu] = useState(false);
+  const [currentPlantData, setCurrentPlantData] = useState(null);
   
+  // 모달 등 상태관리
+  const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
+  const [currentView, setCurrentView] = useState("postings"); // 현재 view (Gallery.js를 조건부 렌더링하기 위한 상태)
+  const [isAddPlantOpened, setIsAddPlantOpened] = useState(false); // AddPlant.js 모달 조건부 렌더링하기 위한 상태
+  const [isViewOpened, setIsViewOpened] = useState(false); // Gallery.js에서 map 함수의 요소 클릭 했을 때 모달(View.js) 렌더링 
+
   useEffect(() => {
     getUserInfo()
-    getMyPostings()
   }, [])
   
   const getUserInfo = () => {
-    try {
       axios({
         method: "get",
         url: `http://13.124.33.113:8080/members/${memberId}`,
@@ -93,94 +97,52 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
         },
       }).then((res) => {
         setUserInfo(res.data.data)
-      })
-    } catch (err) {
-      console.error(err);
-    }
+      }).catch ((err) => 
+      console.error(err))
   };
 
-  const getMyPostings = () => {
-    try {
-      axios({
-        method: "get",
-        url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=20`,
-        headers: {
-          Authorization: jwt,
-        },
-      }).then((res) => {
-        setPostCount(res.data.pageInfo.totalElements);
-        setGalleryData(res.data.data)
-      });
-    } catch (err) {
-      console.error(err)
-    }
-  };
-
-  const getGalleryData = (url, view) => {
-    try {
-      axios({
-        method: "get",
-        url: url,
-        headers: {
-          Authorization: jwt,
-        },
-      }).then((res) => {
-        setCurrentView(view)
-        setGalleryData(res.data)
-      })
-    } catch (err) {
-        console.error(err);
-      }
-  };
-
-  const handleModal = (modal, postingId) => {
+  const handleModal = (modal, postingData) => {
     if(modal === "AddPlant") {
-      setIsAddPlantOpened(!isAddPlantOpened);
-    } else if(postingId) {
-      setCurPost(galleryData.filter((el) => el.postingId === postingId)[0]) ;
-      setIsViewOpened(!isViewOpened);
-    } else {
-      setIsViewOpened(!isViewOpened);
+      // setIsAddPlantOpened(!isAddPlantOpened);
+    } else if(modal === "postings") {
+      setCurPost(postingData);
+    } else if(modal === "scraps") {
+      setCurPost(postingData)
     }
+    setIsViewOpened(!isViewOpened);
     handleIsCovered();
-  };
-
-  const handlePostingsClick = () => {
-    // 게시물 리스트 조회
-    getGalleryData(`http://localhost:8080/posts/members/${memberId}?page=1&size=10`, "postings"); // 임시 제이슨 서버
-  };
-
-  const handleScrapsClick = () => {
-    // 스크랩 조회
-    alert("구현 예정")
-    // getGalleryData("http://localhost:4000/data", "scraps");
   };
 
   const handlePlantClick = (plantId) => {
     // 반려식물 클릭시 해당건 조회
     setCurrentView("plant");
-    // setGalleryData(myPlantsData[plantId].plantImgs);
   };
 
   const handleFolderClick = () => {
     setIsFolderOpened(!isFolderOpened);
   };
 
+  const handleCommentMenu = () => {
+    setCommentMenu(!commentMenu);
+  }
+
   return (
     <>
-      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost}/>}
-      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt}  handleModal={handleModal} userInfo={userInfo} />}
+      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
+      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} setGalleryData={setGalleryData} handleModal={handleModal} userInfo={userInfo} />}
       <StyledContainer>
         <UserInfo userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened ? (
           <div className="container">
             <MyPlants
+              currentPlantData={currentPlantData}
+              setCurrentPlantData={setCurrentPlantData}
               userInfo={userInfo}
               handlePlantClick={handlePlantClick}
               handleModal={handleModal}
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
-              <Gallery galleryData={galleryData} currentView={currentView} />
+              <Gallery setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} />
               <p>
                 My Plants 접기 <TiArrowSortedUp />
               </p>
@@ -194,21 +156,21 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
               </p>
               <StyledChangeViewContainer>
                 <StyledChangeViewButton
-                  onClick={handlePostingsClick}
+                  onClick={() => setCurrentView("postings")}
                   className={currentView === "postings" ? "selected" : ""}
                 >
                   <BsGrid3X3 />
                   <span>게시물</span>
                 </StyledChangeViewButton>
                 <StyledChangeViewButton
-                  onClick={handleScrapsClick}
+                  onClick={() => setCurrentView("scraps")}
                   className={currentView === "scraps" ? "selected" : ""}
                 >
                   <BsBookmark />
                   <span>스크랩</span>
                 </StyledChangeViewButton>
               </StyledChangeViewContainer>
-              <Gallery galleryData={galleryData} currentView={currentView} handleModal={handleModal}/>
+              <Gallery setPostCount={setPostCount} currentView={currentView} handleModal={handleModal} userInfo={userInfo}/>
             </StyledMyPlantFolder>
           </div>
         )}

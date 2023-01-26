@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Cookie from "../../util/Cookie";
 
 import { FcAnswers } from "react-icons/fc";
 
@@ -54,26 +57,85 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ galleryData, currentView, handleModal }) => {
-  // 반려식물들의 각 사진들의 imgId는 고유한 값이어야 함.
-  // 그렇지 않을 경우 key prop 에러 발생
+const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlantData }) => {
+  const cookie = new Cookie();
+  const jwt = cookie.get("authorization")
+  const memberId = Number(cookie.get("memberId"));
+
+  const [galleryData, setGalleryData] = useState([])
+  
+  const getGalleryData = (view) => {
+    if(view === 'postings') {
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=10`,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        setGalleryData(res.data.data)
+        setPostCount(res.data.pageInfo.totalElements)
+      }).catch ((err) => {
+        console.error(err);
+      })
+    } else if (view === 'scraps') {
+      setGalleryData(userInfo.scrapPostingList)
+    } else if (view === 'plant') {
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/myplants/${currentPlantData.myPlantsId}/gallery?page=1&size=10`,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        console.log(res.data.data)
+        setGalleryData(res.data.data)
+      }).catch ((err) => {
+        console.error(err);
+      })
+    }
+  }
+
+  const setViewData = (postingId) => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/posts/${postingId}`,
+      headers: {
+        Authorization: jwt,
+      },
+    }).then((res) => {
+      handleModal("scraps", res.data.data)
+    }).catch ((err) => {
+      console.error(err);
+    })
+  }
+
+  useEffect(() => {
+    getGalleryData(currentView)
+  }, [currentView])
   return (
     <StyledContainer>
-      {galleryData ? (
+      {galleryData.length !== 0 ? (
         <StyledMyPageGallery>
           {galleryData.map((el) => {
             if (currentView === "plant") {
-              return (
-                <div className="image-wrapper" key={el.imgId}>
-                  <img className="image" src={el.imgUrl} alt="each item" />
+              return (           
+                <div className="image-wrapper" key={el.galleryId}>
+                  <img className="image" src={el.plantImage} alt="each item" />
                 </div>
               );
-            } else {
+            } else if (currentView === "postings") {
               return (
-                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal("View", el.postingId)}>
+                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal("postings", el)}>
                   <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
                 </div>
               );
+            } else if (currentView === "scraps") {
+              return (
+                <div className="image-wrapper" key={el.postingId} onClick={() => setViewData(el.postingId)}>
+                  <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                </div>
+              )
             }
           })}
         </StyledMyPageGallery>
