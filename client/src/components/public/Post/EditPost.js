@@ -60,7 +60,7 @@ const StyledTextarea = styled.textarea`
 `;
 
 // 기능 추가: 태그 줄 자동바꿈
-const EditPost = ({ handleEdit, curPost }) => {
+const EditPost = ({ handleEdit, curPost, handleChange, change }) => {
     const [images, setImages] = useState(curPost.postingMedias);
     const [files, setFiles] = useState(curPost.postingMedias);
     const [value, setValue] = useState(curPost.postingContent);
@@ -68,8 +68,6 @@ const EditPost = ({ handleEdit, curPost }) => {
     const [deleted, setDeleted] = useState([]);
     const fileInputs = useRef(null);
     const cookie = new Cookie();
-
-    console.log(curPost);
 
     const handleImg = (e) => {
         const file = e.target.files[0];
@@ -113,14 +111,13 @@ const EditPost = ({ handleEdit, curPost }) => {
 
     const handleSubmit = (e) => {
         // 삭제된 이미지를 제거한다.
-        if(deleted.length > 0 && files.length > 1) {
+        if(deleted.length > 0 && files.length > 0) {
             deleted.forEach((id) => {
                 axios({
                     method: "delete",
                     url: `http://13.124.33.113:8080/posts/medias/${id}`,
                     headers: { Authorization: cookie.get("authorization") }
                 }).then(res => {
-                    console.log(res);
                 }).catch(e => {
                     console.log(e);
                 })
@@ -141,17 +138,10 @@ const EditPost = ({ handleEdit, curPost }) => {
                 data: formData,
                 headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
-                console.log(res);
             }).catch(e => {
                 console.log(e);
             })
         }
-
-        console.log(JSON.stringify({
-            postingId: curPost.postingId,
-            postingContent: value,
-            tagName: tags.map(tag => tag.tagName)
-        }));
 
         // 게시글의 변경점을 추가한다.
         axios({
@@ -161,12 +151,14 @@ const EditPost = ({ handleEdit, curPost }) => {
                 postingContent: value,
                 tagName: tags.map(tag => tag.tagName)
             }),
-            headers: { Authorization: cookie.get("authorization") }
+            headers: { Authorization: cookie.get("authorization"), "Content-Type": "application/json" }
         }).then(res => {
-            console.log(res);
         }).catch(e => {
             console.log(e);
         })
+
+        handleEdit(false);
+        handleChange(!change);
     };
 
     return (
