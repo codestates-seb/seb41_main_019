@@ -58,7 +58,7 @@ public class FollowControllerRestdocs {
         FollowDto.Response response = new FollowDto.Response(followId, followerMemberId, followingMemberId);
 
         // when
-        given(followService.createFollow(Mockito.anyLong(), Mockito.anyLong())).willReturn(new Follow());
+        given(followService.createFollow(Mockito.anyString(), Mockito.anyLong())).willReturn(new Follow());
         given(mapper.followToFollowResponseDto(Mockito.any(Follow.class))).willReturn(response);
 
         // then
