@@ -1,5 +1,6 @@
 package com.main19.server.follow.service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.follow.entity.Follow;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class FollowService {
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
+    private final JwtTokenizer jwtTokenizer;
 
     public Follow createFollow(long followingMemberId, long followedMemberId) {
         if (followedMemberId == followingMemberId) {
@@ -33,8 +35,15 @@ public class FollowService {
         return followRepository.save(follow);
     }
 
-    public void deleteFollowing(long followingMemberId, long followedMemberId) {
-        Follow follow = findExistFollow(followingMemberId, followedMemberId);
+    public void deleteFollowing(String token, long followId) {
+        long memberId = jwtTokenizer.getMemberId(token);
+        Optional<Follow> optionalFollow = followRepository.findById(followId);
+        Follow follow = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
+
+        if (memberId != follow.getFollowingMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         followRepository.delete(follow);
     }
 
