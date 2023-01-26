@@ -69,15 +69,21 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
 
+  // 데이터 상태관리
   const [userInfo, setUserInfo] = useState([]); // 유저정보 (UserInfo.js로 props)
   const [postCount, setPostCount] = useState(); // 게시물 숫자 (setState는 UserInfo.js에서 핸들링)
-  const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [galleryData, setGalleryData] = useState([]); // 관심사 분리를 위하여 Gallery.js로 이관됨. handleModal 변경 후 삭제 예정
+  const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
+  const [postId, setPostId] = useState(null);
+  const [commentId, setCommentId] = useState(null);
+  const [commentMenu, setCommentMenu] = useState(false);
+  
+  // 모달 등 상태관리
+  const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [currentView, setCurrentView] = useState("postings"); // 현재 view (Gallery.js를 조건부 렌더링하기 위한 상태)
   const [isAddPlantOpened, setIsAddPlantOpened] = useState(false); // AddPlant.js 모달 조건부 렌더링하기 위한 상태
   const [isViewOpened, setIsViewOpened] = useState(false); // Gallery.js에서 map 함수의 요소 클릭 했을 때 모달(View.js) 렌더링 
-  const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
-  
+
   useEffect(() => console.log(curPost), [curPost])
 
   useEffect(() => {
@@ -119,9 +125,13 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
     setIsFolderOpened(!isFolderOpened);
   };
 
+  const handleCommentMenu = () => {
+    setCommentMenu(!commentMenu);
+  }
+
   return (
     <>
-      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost}/>}
+      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} setGalleryData={setGalleryData} handleModal={handleModal} userInfo={userInfo} />}
       <StyledContainer>
         <UserInfo userInfo={userInfo} postCount={postCount}/>
@@ -133,7 +143,7 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
               handleModal={handleModal}
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
-              <Gallery currentView={currentView} userInfo={userInfo} setPostCount={setPostCount} />
+              <Gallery setPostCount={setPostCount} currentView={currentView} userInfo={userInfo}  />
               <p>
                 My Plants 접기 <TiArrowSortedUp />
               </p>
