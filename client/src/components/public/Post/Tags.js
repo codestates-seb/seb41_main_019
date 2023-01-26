@@ -54,14 +54,14 @@ const Wrapper = styled.div`
     }
 `;
 
-const Tags = ({ tags, addTags, removeTags }) => {
+const Tags = ({ tags, addTags, removeTags, edit }) => {
     return (
         <Wrapper>
             <input onKeyUp={addTags} placeholder="# 키워드"></input>
             <ul>
                 {
-                    tags.map((tags,idx) => {
-                        return <li key={idx} id={idx}>{tags}<CloseBtn handleEvent={removeTags} /></li>
+                    tags.map((tag,idx) => {
+                        return <li key={idx} id={idx}>{edit ? tag.tagName : tag}<CloseBtn handleEvent={removeTags} /></li>
                     })
                 }
             </ul>

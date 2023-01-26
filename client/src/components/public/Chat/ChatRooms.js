@@ -2,9 +2,8 @@ import styled from "styled-components";
 import ChatRoom from "./ChatRoom";
 
 const StyledChatList = styled.div`
-  max-height: 30%;
-
   ul {
+    ${({curChat}) => curChat ? "max-height: 125px;" : null}
     margin: 0px;
     padding: 0px;
     list-style: none;
@@ -24,22 +23,28 @@ const StyledChatList = styled.div`
     font-weight: 600;
     margin: 0px 0px 10px 0px;
   }
+
+  .deleted {
+    display: none;
+  }
 `;
 
-const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend }) => {
+const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend, curChat, setChatChange, chatChange }) => {
   return (
-    <StyledChatList>
+    <StyledChatList curChat={curChat}>
       <p>채팅 목록</p>  
       <ul>
         {rooms.length > 0
           ? rooms.map((room, idx) => {
               return (
                 <ChatRoom
-                  friend={friends.filter(friend => friend.followingId === room.receiverId || friend.followingId === room.senderId)}
-                  key={idx}
+                  friend={friends.filter(friend => friend.followingId === room.receiverId || friend.followingId === room.senderId)[0]}
+                  key={idx} 
                   room={room}
                   setCurChat={setCurChat}
                   setCurFriend={setCurFriend}
+                  setChatChange={setChatChange}
+                  chatChange={chatChange}
                 />
               );
             })

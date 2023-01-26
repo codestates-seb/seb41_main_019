@@ -25,7 +25,7 @@ const Wrapper = styled.div`
     }
 
     input {
-        display: none;
+        
     }
 `
 
@@ -77,12 +77,8 @@ const StyledCancel = styled.button`
     cursor: pointer;
 `
 
-const Uploader = ({ images, handleImg, deleteImg, fileInputs }) => {
+const Uploader = ({ images, handleImg, deleteImg, fileInputs, edit }) => {
     const onFileInputClick = () => {
-        fileInputs.current.childNodes.forEach(input => {
-            if(input.files.length === 0) input.remove();
-        });
-        
         if(images.length < 3) {
             const input = document.createElement("input");
             input.type = "file";
@@ -104,7 +100,7 @@ const Uploader = ({ images, handleImg, deleteImg, fileInputs }) => {
                             return (
                                 <div className="img" key={idx}>
                                     <StyledDiv>
-                                        <img src={image} alt="img" />
+                                        <img src={edit ? image.mediaUrl : image} alt="img" />
                                     </StyledDiv>
                                     <StyledCancel id={idx} onClick={deleteImg}>x</StyledCancel>
                                 </div>
@@ -113,6 +109,10 @@ const Uploader = ({ images, handleImg, deleteImg, fileInputs }) => {
                     }
                 </div>
                 <div ref={fileInputs}>
+                    {
+                        edit ?
+                            images.map((el, idx) => el.mediaId > 0 ? <input type="file" key={idx}></input> : null) : null
+                    }
                 </div>
         </Wrapper>
     )

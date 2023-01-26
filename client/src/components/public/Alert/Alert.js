@@ -62,33 +62,25 @@ const Alert = () => {
   let EventSource = EventSourcePolyfill;
 
   // useEffect(() => {
-  //   const url = `http://13.124.33.113:8080/notification/${cookie.get("memberId")}`
+  //   const url = `http://13.124.33.113:8080/notification/subscribe/${cookie.get("memberId")}`
 
-  //   const eventSource = new EventSource(url, {
+  //   const ess = new EventSource(url, {
   //     headers: { "Authorization": cookie.get("authorization")},
-  //     withCredentials: true,
-  //     heartbeatTimeout: 120000
   //   })
 
-  //   eventSource.onmessage = res => {
-  //     console.logg(res);
-  //   }
-    
-  //   eventSource.onopen = res => {
-  //     console.log("성공", res);
-  //   }
-    
-  //   eventSource.onerror = e => {
-  //     console.log(e);
-  //     eventSource.close();
-  //   }
+  //   ess.addEventListener("connect", (res) => {
+  //     console.log(res);
+  //   })
 
-  //   console.log(eventSource.url);
-  //   console.log(eventSource.CONNECTING);
+  //   ess.addEventListener("sse", res => {
+  //     console.log(res);
+  //   })
+
+  //   ess.addEventListener()
 
   //   return () => {
   //     console.log("종료");
-  //     eventSource.close();
+  //     ess.close();
   //   }
   // }, [])
 

@@ -88,15 +88,14 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
         setMenu(!menu);
     };
 
-    const deleteFollow = () => {
+    const deleteFollow = (id) => {
         axios({ 
             method: "delete", 
-            url: `http://13.124.33.113:8080/followings/${post.memberId}`,
+            url: `http://13.124.33.113:8080/followings/${id}`,
             headers: { Authorization: cookie.get("authorization") }
         }).then(res => {
             handleChange();
-        })
-        .catch(e => {
+        }).catch(e => {
             console.log(e);
         });
     };
@@ -139,7 +138,8 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
                 { follow.length >= 0 ?
                         post.memberId === Number(cookie.get("memberId")) ? null : 
                             follow.filter(e => e.followerId === Number(cookie.get("memberId"))).length > 0 ?
-                            <AiOutlineUserDelete onClick={deleteFollow} /> : <AiOutlineUserAdd onClick={addFollow} />
+                            <AiOutlineUserDelete onClick={() => deleteFollow(follow.filter(e => e.followerId === Number(cookie.get("memberId")))[0].followId)} />
+                            : <AiOutlineUserAdd onClick={addFollow} />
                     : null
                 }
                 { post.memberId === Number(cookie.get("memberId")) ?
