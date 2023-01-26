@@ -25,4 +25,12 @@ public class Follow {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "following_member_id")
     private Member followingId;
+
+    public long getFollowingMemberId() {
+        return followingId.getMemberId();
+    }
+
+    public long getFollowerMemberId() {
+        return followerId.getMemberId();
+    }
 }
