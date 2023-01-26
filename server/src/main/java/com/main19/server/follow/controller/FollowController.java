@@ -36,12 +36,6 @@ public class FollowController {
     @DeleteMapping("/followings/{member-id}")
     public ResponseEntity deleteFollowing(@PathVariable("member-id") @Positive long followId,
                                        @RequestHeader(name = "Authorization") String token) {
-        // 팔로잉 한 사람이 팔로잉 취소 (내가 팔로우하고 있는 member 삭제)
-        // 계정주인: followingId, 삭제할상대: followerId
-        // follow 식별자를 받는다
-        // 식별자에서 followingId를 찾고 token의 memberId가 맞는지 검증한다.
-        // 아니면 예외 던지기
-
         followService.deleteFollowing(token, followId);
         return ResponseEntity.noContent().build();
     }
