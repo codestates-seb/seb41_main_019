@@ -1,5 +1,7 @@
 package com.main19.server.member.controller;
 
+import com.main19.server.dto.MultiResponseDto;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
@@ -7,6 +9,7 @@ import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.dto.SingleResponseDto;
 import com.main19.server.member.entity.Member;
 import com.main19.server.storageService.s3.ProfileStorageService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -105,7 +108,12 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity findMemberName(@RequestParam String name) {
-        return new ResponseEntity(new SingleResponseDto<>(memberService.findMemberName(name)),HttpStatus.OK);
+    public ResponseEntity findMemberName(@RequestParam String search , @RequestParam @Positive int page , @RequestParam @Positive int size) {
+
+        Page<Member> memberPage = memberService.findUserName(search,page-1,size);
+        List<Member> memberList = mapper.memberPageToMemberList(memberPage);
+        List<MemberDto.Response> response = mapper.memberDtoResponseList(memberList);
+
+        return new ResponseEntity(new MultiResponseDto<>(response,memberPage),HttpStatus.OK);
     }
 }
