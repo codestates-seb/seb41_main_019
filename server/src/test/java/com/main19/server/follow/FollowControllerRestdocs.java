@@ -99,7 +99,7 @@ public class FollowControllerRestdocs {
 
         // then
         ResultActions actions = mockMvc.perform(
-                delete("/followings/{member-id}", followId)
+                delete("/followings/{follow-id}", followId)
                         .header("Authorization", "Bearer AccessToken")
         );
 
