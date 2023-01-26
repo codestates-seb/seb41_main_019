@@ -67,10 +67,11 @@ public class PostingService {
 		return postingRepository.save(posting);
 	}
 
-	public Posting updatePosting(PostingPatchDto requestBody, String token) {
+	public Posting updatePosting(long postingId, PostingPatchDto requestBody, String token) {
 
 		Posting posting = mapper.postingPatchDtoToPosting(requestBody);
-		Posting findPosting = findVerifiedPosting(posting.getPostingId());
+		posting.setPostingId(postingId);
+		Posting findPosting = findVerifiedPosting(postingId);
 
 		if (findPosting.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
@@ -79,7 +80,8 @@ public class PostingService {
 		Posting updatePosting = beanUtils.copyNonNullProperties(posting, findPosting);
 
 		updatePosting.setModifiedAt(LocalDateTime.now());
-		updatePostingTags(requestBody, updatePosting);
+
+		if(requestBody.getTagName() != null) updatePostingTags(requestBody, updatePosting);
 
 		return postingRepository.save(updatePosting);
 	}
@@ -156,10 +158,6 @@ public class PostingService {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		if (posting.getPostingMedias().stream().count() == 1) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
-		}
-
 		storageService.remove(mediaId);
 
 		Media findMedia = findVerifiedMedia(mediaId);
@@ -187,8 +185,11 @@ public class PostingService {
 	private void countMedias(Posting findPosting, List<MultipartFile> multipartFiles) {
 		int cntMultipartFiles = 0;
 		if (multipartFiles.get(1) == null) {
-			cntMultipartFiles = 1;
-		} else cntMultipartFiles = 2;
+			cntMultipartFiles = 2;
+			if (multipartFiles.get(2) == null) {
+				cntMultipartFiles = 1;
+			}
+		} else cntMultipartFiles = 3;
 
 		if (findPosting.getPostingMedias().size() + cntMultipartFiles > 3) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
