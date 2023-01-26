@@ -158,10 +158,6 @@ public class PostingService {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
-		if (posting.getPostingMedias().stream().count() == 1) {
-			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
-		}
-
 		storageService.remove(mediaId);
 
 		Media findMedia = findVerifiedMedia(mediaId);
