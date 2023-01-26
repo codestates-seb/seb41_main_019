@@ -21,7 +21,8 @@ public class FollowService {
     private final MemberRepository memberRepository;
     private final JwtTokenizer jwtTokenizer;
 
-    public Follow createFollow(long followingMemberId, long followedMemberId) {
+    public Follow createFollow(String token, long followedMemberId) {
+        long followingMemberId = jwtTokenizer.getMemberId(token);
         if (followedMemberId == followingMemberId) {
             throw new BusinessLogicException(ExceptionCode.SAME_MEMBER);
         }

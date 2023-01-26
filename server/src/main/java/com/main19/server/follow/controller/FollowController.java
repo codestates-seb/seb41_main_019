@@ -17,7 +17,6 @@ import javax.validation.constraints.Positive;
 @RequiredArgsConstructor
 @RestController
 public class FollowController {
-    private final JwtTokenizer jwtTokenizer;
     private final FollowMapper mapper;
     private final FollowService followService;
 
@@ -25,8 +24,7 @@ public class FollowController {
     public ResponseEntity postFollow(@PathVariable("member-id") @Positive long followedMemberId,
                                      @RequestHeader(name = "Authorization") String token) {
 
-        long followingMemberId = jwtTokenizer.getMemberId(token);
-        Follow follow = followService.createFollow(followingMemberId, followedMemberId);
+        Follow follow = followService.createFollow(token, followedMemberId);
 
         return new ResponseEntity(
                 new SingleResponseDto(mapper.followToFollowResponseDto(follow)), HttpStatus.CREATED
