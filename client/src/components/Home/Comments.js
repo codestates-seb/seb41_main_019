@@ -26,7 +26,6 @@ const StyledComments = styled.ul`
 
         > span:first-of-type {
             display: flex;
-
             width: 95px;
             margin-right: 5px;
         }
@@ -34,22 +33,27 @@ const StyledComments = styled.ul`
 
     .comment {
         display: flex;
-        align-items: center;
+        height: 38px;
         padding: 0px 10px;
+
+        > span:first-of-type {
+            display: flex;
+            justify-content: center;
+        }
     }
 
     img {
-        width: 40px;
-        height: 40px;
+        width: 24px;
+        height: 24px;
         border-radius: 50px;
         cursor: pointer;
-        margin-right: 10px;
+        margin-right: 5px;
     }
 
     .commentContent {
         display: flex;
         flex-direction: column;
-        width: 80%;
+        width: 70%;
         
         span {
             overflow-wrap: break-word;
@@ -80,21 +84,17 @@ const StyledComments = styled.ul`
     }
 
     @media screen and (max-width: 1024px) {
-        overflow: auto;
         height: 200px;
-        display: flex;
-        flex-direction: column-reverse;
-        flex-flow: wrap;
 
         .commentContent {
-            width: 300px;
+            width: 330px;
         }
     }
 `;
 
 const StyledMyComments = styled.div`
     height: 5%;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     border-top: 1px solid #dbdbdb;
 
     @media screen and (max-width: 1024px) {
@@ -104,13 +104,13 @@ const StyledMyComments = styled.div`
 
 const StyledInput = styled.input`
     width: 85%;
-    height: 90%;
+    height: 80%;
     outline: none;
     border: 1px solid #5e8b7e;
     border-radius: 30px;
     font-size: 15px;
     padding: 0px 10px;
-    margin: 5px 0px 10px 10px;
+    margin: 10px 0px 10px 10px;
     
         :focus { 
             box-shadow: 0 0 6px #5e8b7e;

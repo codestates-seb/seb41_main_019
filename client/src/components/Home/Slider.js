@@ -32,7 +32,6 @@ const Wrapper = styled.div`
             position: absolute;
             top: 50%;
             width: 100%;
-            
 
             .hidden {
                 visibility: hidden;
