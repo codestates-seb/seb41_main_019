@@ -75,7 +75,7 @@ const Recommends = ({ change, handleModal, setCurPost }) => {
                 setPosts(res.data.data);
             }).catch(e => {});
     }, [change, clickedBtn]);
-   
+
     return (
         <StyledSection>
             <StyledHeader>

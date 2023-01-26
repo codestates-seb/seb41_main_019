@@ -68,7 +68,6 @@ const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange, chatC
   const cookie = new Cookie();
 
   const deleteChat = () => {
-    console.log(room.leaveId);
     //leaveId null 인 경우 추가
     if(!room.leaveId) {
       axios({

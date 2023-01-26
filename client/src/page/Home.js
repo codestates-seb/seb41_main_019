@@ -50,7 +50,7 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
     return (
         <>
             { commentMenu ? <CommentModal post={curPost} handleCommentMenu={handleCommentMenu} handleChange={handleChange} commentId={commentId} /> : null}
-            { edit ? <EditPost curPost={curPost} handleEdit={handleEdit}/> : null }
+            { edit ? <EditPost curPost={curPost} handleEdit={handleEdit} handleChange={handleChange} change={change} /> : null }
             { modal ? <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/> : null }
             { deleteMenu ? <DeleteModal postId={curPost.postingId} handleDelete={handleDelete} handleChange={handleChange} /> : null }
             <StyledMain>

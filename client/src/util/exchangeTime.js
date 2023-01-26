@@ -1,7 +1,7 @@
 export const exchangeTime = (post) => {
     //일 차이 계산
     const nDay = new Date().toISOString().slice(0, 10).split("-")[2];
-    const pDay = post.modifiedAt.slice(0, 10).split("-")[2];
+    const pDay = post.createdAt.slice(0, 10).split("-")[2];
 
     const day = (nDay - pDay) * 24 * 60 * 60;
 
@@ -15,7 +15,7 @@ export const exchangeTime = (post) => {
         }
     }).reduce((acc, cur) => acc + cur);
 
-    const pTime = post.modifiedAt.slice(11, 19).split(":").map((el, idx) => {
+    const pTime = post.createdAt.slice(11, 19).split(":").map((el, idx) => {
         switch(idx) {
             case 0 : return Number(el) * 60 * 60;
             case 1 : return Number(el) * 60;
