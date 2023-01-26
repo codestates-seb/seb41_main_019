@@ -67,10 +67,11 @@ public class PostingService {
 		return postingRepository.save(posting);
 	}
 
-	public Posting updatePosting(PostingPatchDto requestBody, String token) {
+	public Posting updatePosting(long postingId, PostingPatchDto requestBody, String token) {
 
 		Posting posting = mapper.postingPatchDtoToPosting(requestBody);
-		Posting findPosting = findVerifiedPosting(posting.getPostingId());
+		posting.setPostingId(postingId);
+		Posting findPosting = findVerifiedPosting(postingId);
 
 		if (findPosting.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
@@ -79,7 +80,8 @@ public class PostingService {
 		Posting updatePosting = beanUtils.copyNonNullProperties(posting, findPosting);
 
 		updatePosting.setModifiedAt(LocalDateTime.now());
-		updatePostingTags(requestBody, updatePosting);
+
+		if(requestBody.getTagName() != null) updatePostingTags(requestBody, updatePosting);
 
 		return postingRepository.save(updatePosting);
 	}

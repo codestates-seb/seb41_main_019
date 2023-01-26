@@ -68,8 +68,7 @@ public class PostingController {
     public ResponseEntity updatePosting(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId,
         @Valid @RequestBody PostingPatchDto requestBody) {
-        requestBody.setPostingId(postingId);
-        Posting updatedposting = postingService.updatePosting(requestBody, token);
+        Posting updatedposting = postingService.updatePosting(postingId ,requestBody, token);
 
         return new ResponseEntity<>(
             new SingleResponseDto<>(mapper.postingToPostingResponseDto(updatedposting)),
