@@ -84,6 +84,22 @@ include::{snippets}/get-member/http-response.adoc[]
 .response-fields
 include::{snippets}/get-member/response-fields.adoc[]
 
+=== 회원 닉네임으로 검색
+.curl-request
+include::{snippets}/get-search-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-search-member/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-search-member/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-search-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-search-member/response-fields.adoc[]
+
 === 회원삭제
 .curl-request
 include::{snippets}/delete-member/curl-request.adoc[]

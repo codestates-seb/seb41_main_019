@@ -4,17 +4,22 @@ import com.main19.server.follow.dto.FollowDto;
 import com.main19.server.follow.entity.Follow;
 import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import com.main19.server.posting.scrap.entity.Scrap;
+import java.util.List;
 import org.mapstruct.Mapper;
 
 import com.main19.server.member.dto.MemberDto;
 import com.main19.server.member.entity.Member;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
 	Member memberPostToMember(MemberDto.Post requestBody);
 	Member memberPatchToMember(MemberDto.Patch requestBody);
 	MemberDto.Response memberToMemberResponse(Member member);
+	List<Member> memberPageToMemberList(Page<Member> member);
+	List<MemberDto.Response> memberDtoResponseList(List<Member> member);
+
 
 	@Mapping(source = "posting.postingId", target = "postingId")
 	@Mapping(source = "posting.member.userName", target = "userName")

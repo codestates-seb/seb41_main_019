@@ -9,6 +9,9 @@ import com.main19.server.member.repository.MemberRepository;
 import com.main19.server.redis.RedisDao;
 import com.main19.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +95,11 @@ public class MemberService {
     public boolean findMemberName(String search) {
         Member member = memberRepository.findByUserName(search);
         return member != null;
+    }
+
+    public Page<Member> findUserName(String search , int page , int size) {
+        Page<Member> member = memberRepository.findByUserNameContaining(search, PageRequest.of(page, size, Sort.by("memberId").descending()));
+        return member;
     }
 
     private void verifiedByEmail(String email) {

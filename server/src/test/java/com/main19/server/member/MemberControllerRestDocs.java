@@ -2,8 +2,10 @@ package com.main19.server.member;
 
 import com.google.gson.Gson;
 import com.main19.server.auth.jwt.JwtTokenizer;
+import com.main19.server.comment.entity.Comment;
 import com.main19.server.member.controller.MemberController;
 import com.main19.server.member.dto.MemberDto;
+import com.main19.server.member.dto.MemberDto.Response;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.mapper.MemberMapper;
 import com.main19.server.member.service.MemberService;
@@ -15,6 +17,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -315,6 +319,104 @@ public class MemberControllerRestDocs {
                 ));
     }
 
+    @Test
+    public void searchMemberTest() throws Exception {
+
+        long memberId1 = 1L;
+        long memberId2 = 2L;
+
+        Member member1 = new Member();
+        member1.setMemberId(memberId1);
+        member1.setUserName("머호");
+        member1.setEmail("oheadnah@gmail.com");
+        member1.setLocation("코드스테이츠");
+        member1.setProfileImage("profileImage.jpeg");
+        member1.setProfileText("자기소개");
+
+        Member member2 = new Member();
+        member2.setMemberId(memberId2);
+        member2.setUserName("머호2");
+        member2.setEmail("oheadnah2@gmail.com");
+        member2.setLocation("코드스테이츠");
+        member2.setProfileImage("profileImage.jpeg");
+        member2.setProfileText("자기소개");
+
+
+        Page<Member> pageMember = new PageImpl<>(List.of(member1, member2));
+        List<Member> listMember = List.of(member1,member2);
+
+        given(memberService.findUserName(Mockito.anyString(),Mockito.anyInt(),Mockito.anyInt())).willReturn(pageMember);
+        given(mapper.memberPageToMemberList(pageMember)).willReturn(listMember);
+        given(mapper.memberDtoResponseList(listMember)).willReturn(
+            List.of(
+                new Response(
+                    listMember.get(0).getMemberId(),
+                    listMember.get(0).getUserName(),
+                    listMember.get(0).getEmail(),
+                    listMember.get(0).getLocation(),
+                    listMember.get(0).getProfileImage(),
+                    listMember.get(0).getProfileText(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>()),
+                new Response(
+                    listMember.get(1).getMemberId(),
+                    listMember.get(1).getUserName(),
+                    listMember.get(1).getEmail(),
+                    listMember.get(1).getLocation(),
+                    listMember.get(1).getProfileImage(),
+                    listMember.get(1).getProfileText(),
+                    new ArrayList<>(),
+                    new ArrayList<>(),
+                    new ArrayList<>())
+            )
+        );
+
+        ResultActions resultActions = mockMvc.perform(
+            get("/members")
+                .param("search","머")
+                .param("page", "1")
+                .param("size","10")
+                .header("Authorization", "Bear AccessToken")
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        resultActions.andExpect(status().isOk())
+            .andExpect(jsonPath("$.data[0].memberId").value(listMember.get(0).getMemberId()))
+            .andExpect(jsonPath("$.data[0].userName").value(listMember.get(0).getUserName()))
+            .andExpect(jsonPath("$.data[0].email").value(listMember.get(0).getEmail()))
+            .andExpect(jsonPath("$.data[0].location").value(listMember.get(0).getLocation()))
+            .andExpect(jsonPath("$.data[0].profileImage").value(listMember.get(0).getProfileImage()))
+            .andExpect(jsonPath("$.data[0].profileText").value(listMember.get(0).getProfileText()))
+            .andDo(document("get-search-member",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestParameters(
+                    parameterWithName("page").description("조회할 페이지 번호"),
+                    parameterWithName("size").description("조회할 데이터 개수"),
+                    parameterWithName("search").description("조회할 단어")
+                ),
+                requestHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                ),
+                responseFields(
+                    fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                    fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                    fieldWithPath("data[].email").type(JsonFieldType.STRING).description("회원 이메일"),
+                    fieldWithPath("data[].location").type(JsonFieldType.STRING).description("소속"),
+                    fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("프로필사진"),
+                    fieldWithPath("data[].profileText").type(JsonFieldType.STRING).description("자기소개"),
+                    fieldWithPath("data[].scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅"),
+                    fieldWithPath("data[].followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
+                    fieldWithPath("data[].followerList").type(JsonFieldType.ARRAY).description("팔로워 목록"),
+                    fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
+                    fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                    fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                    fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
+                    fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                )
+            ));
+    }
 
     @Test
     public void deleteMemberTest() throws Exception {
