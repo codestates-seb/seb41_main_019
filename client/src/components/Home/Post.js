@@ -78,7 +78,7 @@ const StyledHeader = styled.div`
     }  
 `;
 
-const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setPostId, handleChange, change }) => {
+const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setPostId, handleChange, change, checkPost }) => {
     const [menu, setMenu] = useState(false);
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
@@ -125,7 +125,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
     }, [change])
 
     return (
-        <Wrapper>
+        <Wrapper ref={checkPost && checkPost}>
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
                 <img src={post.profileImage ? post.profileImage : defaultImg} 

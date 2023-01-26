@@ -55,7 +55,7 @@ const Home = ({ handleIsCovered, change, handleChange }) => {
             { deleteMenu ? <DeleteModal postId={curPost.postingId} handleDelete={handleDelete} handleChange={handleChange} /> : null }
             <StyledMain>
                 <Recommends change={change} handleModal={handleModal} setCurPost={setCurPost} />
-                <Feed handleModal={handleModal} handleDelete={handleDelete} handleEdit={handleEdit}
+                <Feed handleModal={handleModal} handleDelete={handleDelete} handleEdit={handleEdit} curPost={curPost}
                     handleCurPost={handleCurPost} change={change} setPostId={setPostId} postId={postId} handleChange={handleChange} />
             </StyledMain>
         </>
