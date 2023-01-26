@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import Post from "./Post";
 import { ReactComponent as NoContent } from "../../assets/svg/monstera.svg";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
+import useScroll from "../../hooks/useScroll";
 
 const Wrapper = styled.section`
     position: relative;
@@ -25,24 +26,36 @@ const Wrapper = styled.section`
     }
 `
 
-const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, setPostId, postId, handleChange }) => { 
+const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, setPostId, postId, handleChange, curPost }) => { 
     const [ posts, setPosts ] = useState([]);
+    const [ page, setPage ] = useState(1);
+    const [ observe, unObserve ] = useScroll(handlePage);
+    const checkPost = useRef(null);
     const cookie = new Cookie();
 
     useEffect(() => {
         axios({
             method: "get",
-            url: "http://13.124.33.113:8080/posts?page=1&size=10",
+            url: `http://13.124.33.113:8080/posts?page=${page}&size=10`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
-                setPosts(res.data.data);
-                handleCurPost(...res.data.data.filter(post => post.postingId === postId));
+                setPosts([...posts, ...res.data.data]);
+                if(curPost) handleCurPost(...res.data.data.filter(post => post.postingId === postId));
+                setTimeout(() => {
+                    observe(checkPost.current, posts);
+                }, 150)
                 // console.log(res.data.data.filter(post => post.postingId === postId)[0])
             })
             .catch(e => {
                console.log(e);
             });
-    }, [change])
+    }, [change, page])
+
+
+    function handlePage() {
+        setPage(page + 1);
+        unObserve(checkPost.current);
+    }
   
     return (
         <Wrapper>
@@ -54,7 +67,8 @@ const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, se
                     </div>
                 : posts.map((post, idx) => {
                     return (<Post setPostId={setPostId} post={post} key={idx} handleModal={handleModal} handleChange={handleChange}
-                            handleCurPost={handleCurPost} handleDelete={handleDelete} handleEdit={handleEdit} change={change} />)
+                            handleCurPost={handleCurPost} handleDelete={handleDelete} handleEdit={handleEdit} change={change} 
+                            checkPost={idx === posts.length - 3 ? checkPost : null}/>)
                 })
             }
         </Wrapper>
