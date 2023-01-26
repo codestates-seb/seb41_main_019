@@ -1,4 +1,4 @@
-import { AiOutlineClose } from "react-icons/ai";
+import { VscClose } from "react-icons/vsc";
 import styled from "styled-components";
 
 const StyledBtn = styled.div`
@@ -13,7 +13,7 @@ const StyledBtn = styled.div`
 const CloseBtn = ({ handleEvent }) => {
     return (
         <StyledBtn>
-            <AiOutlineClose onClick={handleEvent} />
+            <VscClose onClick={handleEvent} />
         </StyledBtn>
     )
 };
