@@ -3,6 +3,7 @@ import { BlueBtn } from "../public/BlueBtn";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -58,6 +59,7 @@ const Wrapper = styled.div`
 const EditProfile = ({ name, text, location, img, setName, setText, setLocation, setImg }) => {
     const [ file, setFile ] = useState(null);
     const cookie = new Cookie();
+    const navigate = useNavigate();
 
     const editProfile = () => {
         axios({
@@ -70,7 +72,7 @@ const EditProfile = ({ name, text, location, img, setName, setText, setLocation,
                 location: location
             }
         }).then(res => {
-            console.log(res);
+            navigate("/mypage");
         }).catch(e => {
             console.log(e);
         })
