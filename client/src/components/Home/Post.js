@@ -9,6 +9,7 @@ import { exchangeTime } from "../../util/exchangeTime";
 import defaultImg from "../../assets/img/profile.jpg"
 import Cookie from "../../util/Cookie";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
     position: relative;
@@ -81,6 +82,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
     const [menu, setMenu] = useState(false);
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
+    const navigate = useNavigate();
 
     const handleMenu = () => {
         setMenu(!menu);
@@ -106,8 +108,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 handleChange();
-            })
-            .catch(e => {
+            }).catch(e => {
                 console.log(e);
             });
     };
@@ -119,8 +120,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 setFollow(res.data.data.followerList);
-            })
-            .catch(e => {
+            }).catch(e => {
                console.log(e);
             });
     }, [change])
@@ -129,7 +129,8 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
         <Wrapper>
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
-                <img src={post.profileImage ? post.profileImage : defaultImg} alt="profileImg" />
+                <img src={post.profileImage ? post.profileImage : defaultImg} 
+                onClick={() => navigate("/mypage", { memberId : post.memberId })} alt="profileImg" />
                 <div>
                     <span>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
