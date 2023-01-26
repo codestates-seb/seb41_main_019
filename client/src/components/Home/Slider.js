@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { BsFillArrowLeftCircleFill } from "react-icons/bs";
-import { BsFillArrowRightCircleFill } from "react-icons/bs";
+import { IoIosArrowDropleft } from "react-icons/io";
+import { IoIosArrowDropright } from "react-icons/io";
 
 const Wrapper = styled.div`
     ul {
@@ -32,16 +32,14 @@ const Wrapper = styled.div`
             position: absolute;
             top: 50%;
             width: 100%;
-            
 
             .hidden {
                 visibility: hidden;
             }
 
             svg {
-                color: rgba(999, 999, 999, 0.9);
+                fill: #ADADAD;
                 margin: 0px 10px 0px 10px;
-                box-shadow: 0px 0px 5px #DBDBDB;
                 border-radius: 30px;
             }
         }
@@ -66,8 +64,8 @@ const Slider = ({ imgs }) => {
                                 </div>
                                 { imgs.length > 1 ?
                                     <div className="arrow">
-                                        <BsFillArrowLeftCircleFill onClick={() => setCur(cur - 1)} className={`pre ${cur === 0 ? "hidden" : null}`} />
-                                        <BsFillArrowRightCircleFill onClick={() => setCur(cur + 1)} className={`next ${cur === imgs.length - 1 ? "hidden" : null}`} />
+                                        <IoIosArrowDropleft onClick={() => setCur(cur - 1)} className={`pre ${cur === 0 ? "hidden" : null}`} />
+                                        <IoIosArrowDropright onClick={() => setCur(cur + 1)} className={`next ${cur === imgs.length - 1 ? "hidden" : null}`} />
                                     </div> 
                                     : null
                                 }

@@ -60,7 +60,7 @@ const StyledSlider = styled.div`
 `
 
 const StyledInteraction = styled.div`
-    width: 45%;
+    width: 65%;
     display: flex;
     flex-direction: column;
     background-color: white;
@@ -68,12 +68,12 @@ const StyledInteraction = styled.div`
 
     > div:first-child {
         @media screen and (max-width: 1024px){
-            padding: 5px;
+            padding: 10px;
         }
     }
 
     .profile {
-        padding: 5px;
+        padding: 10px;
         display: flex;
         align-items: center;
 
@@ -85,8 +85,12 @@ const StyledInteraction = styled.div`
         }
 
         > span:nth-child(2){
-            font-size: 20px;
+            font-size: 18px;
             margin-right: 10px;
+        }
+
+        > span:last-of-type {
+            font-size: 13px;
         }
 
         > div {
