@@ -47,10 +47,6 @@ const Chat = ({ change }) => {
   const cookie = new Cookie();
 
   useEffect(() => {
-    console.log(chatChange)
-  }, [chatChange])
-
-  useEffect(() => {
     axios({
       method: "get",
       url: `http://13.124.33.113:8080/chatroom/${cookie.get("memberId")}`,
@@ -77,16 +73,16 @@ const Chat = ({ change }) => {
         {
           !curChat ? 
           <>
-            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} />
+            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} curChat={curChat} />
             <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} 
-              chatChange={chatChange} setChatChange={setChatChange}/>
+              chatChange={chatChange} setChatChange={setChatChange} curChat={curChat} />
           </>
           : 
           <>
             <Chatting curChat={curChat} curFriend={curFriend} setCurChat={setCurChat} setCurFriend={setCurFriend} />
-            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} />
+            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} curChat={curChat} />
             <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} 
-              chatChange={chatChange} setChatChange={setChatChange}/>
+              chatChange={chatChange} setChatChange={setChatChange} curChat={curChat} />
           </>
         }
       </StyledChat>

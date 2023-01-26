@@ -2,9 +2,8 @@ import styled from "styled-components";
 import Friend from "./Friend";
 
 const StyledFriends = styled.div`
-  max-height: 40%;
-
   ul {
+    ${({curChat}) => curChat ? "max-height: 125px;" : null}
     margin: 0px;
     padding: 0px;
     list-style: none;
@@ -34,9 +33,9 @@ const StyledFriends = styled.div`
   }
 `;
 
-const Friends = ({ setCurChat, friends, setCurFriend, rooms, setChatChange, chatChange }) => {
+const Friends = ({ setCurChat, friends, setCurFriend, rooms, setChatChange, chatChange, curChat }) => {
   return (
-    <StyledFriends>
+    <StyledFriends curChat={curChat}>
       <p>팔로우 목록</p>
       <ul>
         {friends.length > 0

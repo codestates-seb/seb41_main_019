@@ -1,14 +1,16 @@
 import styled from "styled-components";
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
+import { AiOutlineUserDelete } from "react-icons/ai"
+import { MdOutlineKeyboardArrowLeft } from "react-icons/md"
 import axios from "axios";
 import Cookie from "../../../util/Cookie";
+import { follow } from "../../../util/follow";
 
 const StyledFriend = styled.li`
   display: flex;
-  padding: 0px 0px 5px 0px;
+  padding: 3px 5px 2px 5px;
   margin: 0px 0px 10px 0px;
   align-items: center;
-  
+  cursor: ${({ top }) => !top ? "pointer" : null};
 
   div:nth-of-type(1) {
     width: 10%;
@@ -33,8 +35,22 @@ const StyledFriend = styled.li`
     }
 
     span:last-child {
+      font-size: 12px;
       color: black;
     }
+  }
+
+  :hover {
+    ${({ top }) => !top ? "background-color: #DBDBDB;" : null}
+    ${({ top }) => !top ? "border-radius: 3px;" : null}
+  }
+
+  :hover button {
+    ${({ top }) => !top ? "background-color: #DBDBDB;" : null}
+  }
+
+  .top {
+    margin-right: -20px;
   }
 `;
 
@@ -48,7 +64,7 @@ const StyledButton = styled.button`
     color: #808080;
 
     :hover {
-      color: black;
+      color: #D96846;
     }
   }
 `;
@@ -80,10 +96,13 @@ const Friend = ({ friend, top, setCurChat, setCurFriend, room, setChatChange, ch
   }
 
   return (
-    <StyledFriend top={top}>
+    <StyledFriend top={top} onClick={(e) => {
+        e.stopPropagation();
+        if(!top) createRoom()
+      }}>
       <div>
         <img
-          src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg"
+          src={friend.profileImage}
           alt="img"
         ></img>
       </div>
@@ -94,13 +113,19 @@ const Friend = ({ friend, top, setCurChat, setCurFriend, room, setChatChange, ch
         }
       </div>
       {top ? (
-        <StyledButton onClick={() => {
-          // disConnect();
+        <StyledButton className="top" onClick={() => {
           setCurFriend(null);
           setCurChat(null);
-        }}>x</StyledButton>
+        }}>
+          <MdOutlineKeyboardArrowLeft />
+        </StyledButton>
       ) : (
-        <StyledButton onClick={createRoom}><IoChatbubbleEllipsesOutline /></StyledButton>
+        <StyledButton onClick={(e) => {
+          e.stopPropagation();
+          follow(false, friend.followingId, setChatChange)
+        }}>
+          <AiOutlineUserDelete />
+        </StyledButton>
       )}
     </StyledFriend>
   );

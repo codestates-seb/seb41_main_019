@@ -1,11 +1,15 @@
-import styled from "styled-components";
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
+import styled from "styled-components"; 
+import { MdDoDisturbOn } from "react-icons/md"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Cookie from "../../../util/Cookie";
 
 const StyledFriend = styled.li`
   display: flex;
   margin: 0px 0px 10px 0px;
-  padding: 0px 0px 5px 0px;
+  padding: 3px 5px 2px 5px;
   align-items: center;
+  cursor: pointer;
 
   div:nth-of-type(1) {
     width: 10%;
@@ -34,6 +38,15 @@ const StyledFriend = styled.li`
       color: black;
     }
   }
+
+  :hover {
+    background-color: #DBDBDB;
+    border-radius: 3px;
+  }
+
+  :hover button {
+    background-color: #DBDBDB;
+  }
 `;
 
 const StyledButton = styled.button`
@@ -46,32 +59,33 @@ const StyledButton = styled.button`
     font-size: 22px;
 
     :hover { 
-      color: black;
+      color: #D96846;
     }
   }
 `;
 
 const ChatRoom = ({ room, setCurChat, friend, setCurFriend }) => {
+  console.log(friend)
   return (
     <>
-    {
-      // 탈퇴한 이용자에 대한 chatRoom 임시처리
-      friend.length > 0 ?
-        <StyledFriend>
+    { friend ?
+        <StyledFriend onClick={() => {
+          setCurFriend(friend);
+          setCurChat(room);
+        }}>
           <div>
             <img
-              src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg"
+              src={friend.profileImage}
               alt="img"
             ></img>
           </div>
           <div>
-            <span>{friend.length > 0 ? friend[0].userName : null}</span>
-            <span>{friend.length > 0 ? friend[0].profileText : null}</span>
+            <span>{friend.userName}</span>
+            <span>{friend.profileText}</span>
           </div>  
-          <StyledButton onClick={() => {
-            setCurFriend(...friend);
-            setCurChat(room);
-          }}><IoChatbubbleEllipsesOutline /></StyledButton>
+          <StyledButton>
+            <MdDoDisturbOn />
+          </StyledButton>
         </StyledFriend> : null
     }
     </>
