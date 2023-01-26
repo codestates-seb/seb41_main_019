@@ -84,8 +84,6 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const [isAddPlantOpened, setIsAddPlantOpened] = useState(false); // AddPlant.js 모달 조건부 렌더링하기 위한 상태
   const [isViewOpened, setIsViewOpened] = useState(false); // Gallery.js에서 map 함수의 요소 클릭 했을 때 모달(View.js) 렌더링 
 
-  useEffect(() => console.log(curPost), [curPost])
-
   useEffect(() => {
     getUserInfo()
   }, [])
@@ -108,9 +106,8 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
       // setIsAddPlantOpened(!isAddPlantOpened);
     } else if(modal === "postings") {
       setCurPost(postingData);
-      console.log(postingData)
     } else if(modal === "scraps") {
-
+      setCurPost(postingData)
     }
     setIsViewOpened(!isViewOpened);
     handleIsCovered();

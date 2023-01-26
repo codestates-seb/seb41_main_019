@@ -85,6 +85,20 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount }) => {
     }
   }
 
+  const setViewData = (postingId) => {
+    axios({
+      method: "get",
+      url: `http://13.124.33.113:8080/posts/${postingId}`,
+      headers: {
+        Authorization: jwt,
+      },
+    }).then((res) => {
+      handleModal("scraps", res.data.data)
+    }).catch ((err) => {
+      console.error(err);
+    })
+  }
+
   useEffect(() => {
     getGalleryData(currentView)
   }, [currentView])
@@ -107,7 +121,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount }) => {
               );
             } else if (currentView === "scraps") {
               return (
-                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal("scraps", el)}>
+                <div className="image-wrapper" key={el.postingId} onClick={() => setViewData(el.postingId)}>
                   <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
                 </div>
               )
