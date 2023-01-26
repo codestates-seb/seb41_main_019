@@ -188,7 +188,7 @@ public class PostingControllerRestDocs {
         tagName.add("스투키");
         tagName.add("몬스테라");
 
-        PostingPatchDto patch = new PostingPatchDto(postingId, postingContent, tagName);
+        PostingPatchDto patch = new PostingPatchDto(postingContent, tagName);
 
         PostingTagsResponseDto tag1 = new PostingTagsResponseDto("스투키");
         PostingTagsResponseDto tag2 = new PostingTagsResponseDto("몬스테라");
@@ -227,7 +227,7 @@ public class PostingControllerRestDocs {
                         new ArrayList<>()
                 );
 
-        given(postingService.updatePosting(Mockito.any(PostingPatchDto.class), Mockito.anyString())).willReturn(new Posting());
+        given(postingService.updatePosting(Mockito.anyLong(), Mockito.any(PostingPatchDto.class), Mockito.anyString())).willReturn(new Posting());
         given(mapper.postingToPostingResponseDto(Mockito.any(Posting.class))).willReturn(response);
 
         // when
@@ -243,7 +243,6 @@ public class PostingControllerRestDocs {
         // then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.postingId").value(patch.getPostingId()))
                 .andExpect(jsonPath("$.data.postingContent").value(patch.getPostingContent()))
                 .andExpect(jsonPath("$.data.tags[0].tagName").value(patch.getTagName().get(0)))
                 .andExpect(jsonPath("$.data.tags[1].tagName").value(patch.getTagName().get(1)))
@@ -258,8 +257,7 @@ public class PostingControllerRestDocs {
                                 parameterWithName("posting-id").description("게시글 식별자")
                         ),
                         requestFields(
-                                List.of(fieldWithPath("postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
-                                        fieldWithPath("postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                List.of(fieldWithPath("postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
                                         fieldWithPath("tagName").type(JsonFieldType.ARRAY).description("태그 이름")
                                 )
                         ),
