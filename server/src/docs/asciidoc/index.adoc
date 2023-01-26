@@ -458,9 +458,9 @@ include::{snippets}/delete-scrap/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-scrap/http-response.adoc[]
 
-== follow
+== Follow
 
-=== follow 등록(신청)
+=== 팔로우 등록(신청)
 .curl-request
 include::{snippets}/post-follow/curl-request.adoc[]
 
@@ -473,7 +473,7 @@ include::{snippets}/post-follow/path-parameters.adoc[]
 .response-fields
 include::{snippets}/post-follow/response-fields.adoc[]
 
-=== following 삭제
+=== 팔로잉 삭제
 .curl-request
 include::{snippets}/delete-following/curl-request.adoc[]
 
@@ -486,7 +486,7 @@ include::{snippets}/delete-following/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-following/http-response.adoc[]
 
-=== follower(followed) 삭제
+=== 팔로워 삭제
 .curl-request
 include::{snippets}/delete-followed/curl-request.adoc[]
 
@@ -715,7 +715,7 @@ include::{snippets}/patch-chat-room/http-response.adoc[]
 .response-fields
 include::{snippets}/patch-chat-room/response-fields.adoc[]
 
-=== 채팅 내역 조회
+=== 채팅방 삭제
 .curl-request
 include::{snippets}/delete-chat-room/curl-request.adoc[]
 
