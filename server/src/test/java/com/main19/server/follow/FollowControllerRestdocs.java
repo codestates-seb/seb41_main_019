@@ -108,7 +108,7 @@ public class FollowControllerRestdocs {
                         "delete-following",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        pathParameters(parameterWithName("member-id").description("팔로우 식별자")),
+                        pathParameters(parameterWithName("follow-id").description("팔로우 식별자")),
                         requestHeaders(headerWithName("Authorization").description("Bearer AccessToken"))
                 ));
     }
@@ -116,15 +116,15 @@ public class FollowControllerRestdocs {
     @Test
     public void deleteFollowedTest() throws Exception {
         // given
-        long followingMemberId = 1L;
-        long followerMemberId = 2L;
+        String token = "AccessToken";
+        long followId = 1L;
 
         // when
-        doNothing().when(followService).deleteFollowed(followingMemberId, followerMemberId);
+        doNothing().when(followService).deleteFollowed(token, followId);
 
         // then
         ResultActions actions = mockMvc.perform(
-                delete("/followed/{member-id}", followingMemberId)
+                delete("/followed/{follow-id}", followId)
                         .header("Authorization", "Bearer AccessToken")
         );
 
@@ -133,7 +133,7 @@ public class FollowControllerRestdocs {
                         "delete-followed",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        pathParameters(parameterWithName("member-id").description("나를 팔로우하는 유저의 식별자")),
+                        pathParameters(parameterWithName("follow-id").description("팔로우 식별자")),
                         requestHeaders(headerWithName("Authorization").description("Bearer AccessToken"))
                 ));
     }
