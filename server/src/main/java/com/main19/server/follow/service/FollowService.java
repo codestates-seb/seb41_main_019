@@ -47,8 +47,15 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
-    public void deleteFollowed(long followingMemberId, long followedMemberId) {
-        Follow follow = findExistFollow(followedMemberId, followingMemberId);
+    public void deleteFollowed(String token, long followId) {
+        long memberId = jwtTokenizer.getMemberId(token);
+        Optional<Follow> optionalFollow = followRepository.findById(followId);
+        Follow follow = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
+
+        if (memberId != follow.getFollowerMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         followRepository.delete(follow);
     }
 

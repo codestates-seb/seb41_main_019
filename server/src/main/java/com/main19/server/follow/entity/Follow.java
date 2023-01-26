@@ -29,4 +29,8 @@ public class Follow {
     public long getFollowingMemberId() {
         return followingId.getMemberId();
     }
+
+    public long getFollowerMemberId() {
+        return followerId.getMemberId();
+    }
 }
