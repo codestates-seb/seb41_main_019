@@ -185,8 +185,11 @@ public class PostingService {
 	private void countMedias(Posting findPosting, List<MultipartFile> multipartFiles) {
 		int cntMultipartFiles = 0;
 		if (multipartFiles.get(1) == null) {
-			cntMultipartFiles = 1;
-		} else cntMultipartFiles = 2;
+			cntMultipartFiles = 2;
+			if (multipartFiles.get(2) == null) {
+				cntMultipartFiles = 1;
+			}
+		} else cntMultipartFiles = 3;
 
 		if (findPosting.getPostingMedias().size() + cntMultipartFiles > 3) {
 			throw new BusinessLogicException(ExceptionCode.POSTING_MEDIA_ERROR);
