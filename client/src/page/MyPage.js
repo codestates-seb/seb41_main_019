@@ -74,9 +74,9 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   const [postCount, setPostCount] = useState(); // 게시물 숫자 (setState는 UserInfo.js에서 핸들링)
   const [galleryData, setGalleryData] = useState([]); // 관심사 분리를 위하여 Gallery.js로 이관됨. handleModal 변경 후 삭제 예정
   const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
-  const [postId, setPostId] = useState(null);
   const [commentId, setCommentId] = useState(null);
   const [commentMenu, setCommentMenu] = useState(false);
+  const [currentPlantData, setCurrentPlantData] = useState(null);
   
   // 모달 등 상태관리
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
@@ -135,12 +135,14 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
         {isFolderOpened ? (
           <div className="container">
             <MyPlants
+              currentPlantData={currentPlantData}
+              setCurrentPlantData={setCurrentPlantData}
               userInfo={userInfo}
               handlePlantClick={handlePlantClick}
               handleModal={handleModal}
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
-              <Gallery setPostCount={setPostCount} currentView={currentView} userInfo={userInfo}  />
+              <Gallery setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} />
               <p>
                 My Plants 접기 <TiArrowSortedUp />
               </p>

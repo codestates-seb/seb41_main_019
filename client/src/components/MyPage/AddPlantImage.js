@@ -2,6 +2,11 @@ import styled from "styled-components"
 
 import { BsFillCameraFill } from "react-icons/bs";
 import { BlueBtn } from "../public/BlueBtn"
+import { useRef } from "react";
+import { useCallback } from "react";
+import axios from "axios";
+import Cookie from "../../util/Cookie";
+import { useState } from "react";
 
 const StyledContainer = styled.div`
     display: flex;
@@ -14,10 +19,22 @@ const StyledContainer = styled.div`
     border-radius: 5px;
     box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.3);
     width: 220px;
-    height: 240px;
-    top: 40px;
-    right: -220px;
+    height: 340px;
+    top: -200px;
+    right: -300px;
     padding: 20px;
+
+    > p {
+        display: flex;
+        width: 140px;
+        font-size: 0.9em;
+        margin: 5px;
+    }
+    > input {
+        width: 140px;
+        margin-bottom: 20px;
+    }
+
     .button-container {
         display: flex;
         width: 220px;
@@ -30,13 +47,20 @@ const StyledContainer = styled.div`
 
 const StyledInputWrapper = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     border: 1px solid #dbdbdb;
     border-radius: 5px;
     height: 140px;
     width: 140px;
+    margin-bottom: 10px;
     cursor: pointer;
+
+    > input {
+        display: none;
+    }
+
 
     :hover {
         opacity: 0.7;
@@ -66,14 +90,70 @@ const StyledInputWrapper = styled.div`
     }
 `;
 
-const AddPlantImage = ({handleAddClick}) => {
+const AddPlantImage = ({handleAddClick, currentPlantId}) => {
+    const cookie = new Cookie();
+    const jwt = cookie.get("authorization")
+
+    const inputRef = useRef(null);
+    const [imageInput, setImageInput] = useState(null);
+    const [contentInput, setContentInput] = useState("");
+    const [form, setForm] = useState(null);
+
+    const onSetFormData = useCallback((e) => {
+        if (!e.target.files) {
+            return;
+        }
+        const reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0])
+        reader.onloadend = () => {
+            setImageInput(reader.result)
+        }
+        const formData = new FormData();
+        formData.append('galleryImage', e.target.files[0]);
+        formData.append('requestBody', new Blob([JSON.stringify({
+            "content": contentInput
+        })], { type: "application/json"}));
+        setForm(formData)
+    }, [])
+
+    const onSubmit = () => {
+        axios({
+            method: "post",
+            url: `http://13.124.33.113:8080/myplants/${currentPlantId}/gallery`,
+            data: form,
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: jwt,
+            },
+          }).then((res) => {
+            console.log(res.data)
+          }).catch ((err) => {
+            console.error(err);
+          })
+    }
+    
+    const onContentInputChange = (e) => {
+        setContentInput(e.target.value)
+    }
+
+    const onImgInputBtnClick = useCallback(() => {
+        if (!inputRef.current) {
+            return;
+        }
+        inputRef.current.click();
+    }, []);
+
     return (
         <StyledContainer>
-            <StyledInputWrapper>
-                <BsFillCameraFill />
+            <p>이미지 업로드</p>
+            <StyledInputWrapper onClick={onImgInputBtnClick}>
+                {imageInput ? <img src={imageInput} alt="img" /> : <BsFillCameraFill />}
+                <input ref={inputRef} type="file" accept="image/*" onChange={onSetFormData} />
             </StyledInputWrapper>
+            <p>코멘트</p>
+            <input pattern=".{0, 20}" required title="최소 0글자, 최대 20글자 입력하세요." type="text" onChange={onContentInputChange}/>
             <div className="button-container">
-                <BlueBtn type="submit">완료</BlueBtn>
+                <BlueBtn onClick={onSubmit}>완료</BlueBtn>
                 <BlueBtn onClick={handleAddClick}>취소</BlueBtn>
             </div>
         </StyledContainer>

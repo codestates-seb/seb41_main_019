@@ -121,7 +121,7 @@ const MyPlantInfo = ({ currentPlantData }) => {
           </div>
         </StyledButtonsContainer>
       ) : (
-          <MyPlantEdit handleUpdateMode={handleUpdateMode} />    
+          <MyPlantEdit handleUpdateMode={handleUpdateMode} currentPlantData={currentPlantData}/>    
       )}
     </StyledContainer>
   );

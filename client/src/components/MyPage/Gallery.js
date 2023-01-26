@@ -57,7 +57,7 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ currentView, handleModal, userInfo, setPostCount }) => {
+const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlantData }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
@@ -81,7 +81,18 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount }) => {
     } else if (view === 'scraps') {
       setGalleryData(userInfo.scrapPostingList)
     } else if (view === 'plant') {
-      setGalleryData([])
+      axios({
+        method: "get",
+        url: `http://13.124.33.113:8080/myplants/${currentPlantData.myPlantsId}/gallery?page=1&size=10`,
+        headers: {
+          Authorization: jwt,
+        },
+      }).then((res) => {
+        console.log(res.data.data)
+        setGalleryData(res.data.data)
+      }).catch ((err) => {
+        console.error(err);
+      })
     }
   }
 
@@ -104,13 +115,13 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount }) => {
   }, [currentView])
   return (
     <StyledContainer>
-      {galleryData ? (
+      {galleryData.length !== 0 ? (
         <StyledMyPageGallery>
           {galleryData.map((el) => {
             if (currentView === "plant") {
               return (           
-                <div className="image-wrapper" key={el.imgId}>
-                  <img className="image" src={el.imgUrl} alt="each item" />
+                <div className="image-wrapper" key={el.galleryId}>
+                  <img className="image" src={el.plantImage} alt="each item" />
                 </div>
               );
             } else if (currentView === "postings") {

@@ -88,10 +88,9 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt }) => {
-  const [myPlantsData, setMyPlantsData] = useState(); // My Plants 리스트 데이터
+const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt, currentPlantData, setCurrentPlantData }) => {
+  const [myPlantsData, setMyPlantsData] = useState(null); // My Plants 리스트 데이터
   const [isPanelOpened, setIsPanelOpened] = useState(false);
-  const [currentPlantData, setCurrentPlantData] = useState();
 
   const getMyPlantsData = () => {
     axios({
