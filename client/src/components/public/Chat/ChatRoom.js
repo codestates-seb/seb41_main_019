@@ -70,6 +70,17 @@ const ChatRoom = ({ room, setCurChat, friend, setCurFriend }) => {
   const deleteChat = () => {
     console.log(room.leaveId);
     //leaveId null 인 경우 추가
+    if(!room.leaveId) {
+      axios({
+        method: "patch",
+        url: `http://13.124.33.113:8080/chatroom/${room.chatRoomId}`,
+        headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
+        data: JSON.stringify({
+          "leaveId": cookie.get("memberId")
+        })
+      })
+    }
+
     //leaveId 확인, 상대방이 채팅방을 떠났을 경우 해당 챗룸 삭제
     if(room.leaveId !== cookie.get("memberId")) {
       
