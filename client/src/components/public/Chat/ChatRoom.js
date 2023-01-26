@@ -65,7 +65,17 @@ const StyledButton = styled.button`
 `;
 
 const ChatRoom = ({ room, setCurChat, friend, setCurFriend }) => {
-  console.log(friend)
+  const cookie = new Cookie();
+
+  const deleteChat = () => {
+    console.log(room.leaveId);
+    //leaveId null 인 경우 추가
+    //leaveId 확인, 상대방이 채팅방을 떠났을 경우 해당 챗룸 삭제
+    if(room.leaveId !== cookie.get("memberId")) {
+      
+    }
+  }
+
   return (
     <>
     { friend ?
@@ -83,7 +93,10 @@ const ChatRoom = ({ room, setCurChat, friend, setCurFriend }) => {
             <span>{friend.userName}</span>
             <span>{friend.profileText}</span>
           </div>  
-          <StyledButton>
+          <StyledButton onClick={(e) => {
+            e.stopPropagation();
+            deleteChat();
+          }}>
             <MdDoDisturbOn />
           </StyledButton>
         </StyledFriend> : null
