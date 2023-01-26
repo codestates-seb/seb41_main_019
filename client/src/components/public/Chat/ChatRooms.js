@@ -29,7 +29,7 @@ const StyledChatList = styled.div`
   }
 `;
 
-const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend, curChat, setChatChange }) => {
+const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend, curChat, setChatChange, chatChange }) => {
   return (
     <StyledChatList curChat={curChat}>
       <p>채팅 목록</p>  
@@ -44,6 +44,7 @@ const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend, curChat, setChatC
                   setCurChat={setCurChat}
                   setCurFriend={setCurFriend}
                   setChatChange={setChatChange}
+                  chatChange={chatChange}
                 />
               );
             })
