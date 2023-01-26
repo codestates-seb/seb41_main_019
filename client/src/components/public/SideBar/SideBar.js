@@ -124,7 +124,13 @@ const StyledSidebar = styled.aside`
     border: 1px solid #dbdbdb;
     box-shadow: 0px;
 
-    h2, div {
+    .hambuger {
+      position: fixed;
+      top: 22px;
+      left: 120px;
+    }
+
+    h2 {
       display: none;
     }
 
@@ -190,6 +196,12 @@ const StyledHeader = styled.header`
     border-radius: 10px;
     border: 1px solid #dbdbdb;
     padding: 10px 12px 10px 30px;
+    outline:none;
+    display: flex;
+
+    :focus {
+      box-shadow: 0 0 6px #5e8b7e;
+    }
   }
 
   @media screen and (max-width: 770px) {
@@ -209,6 +221,12 @@ const StyledExtend = styled.div`
     overflow: hidden;
     background-color: white;
     box-shadow: 1px 0px 5px gray;
+  }
+
+  > div:first-of-type {
+    @media screen and (max-width: 755px) {
+      display: none;
+    }
   }
 
   .active {
@@ -293,7 +311,7 @@ const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
         {
           opendModal ? <SideModal handleOpendModal={handleOpendModal} setIsLanded={setIsLanded} /> : null
         }
-        <div onClick={handleOpendModal}>
+        <div className="hambuger" onClick={handleOpendModal}>
           <AiOutlineMenu />
           <span>더 보기</span>
         </div>
