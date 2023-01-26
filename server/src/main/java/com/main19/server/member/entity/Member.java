@@ -10,6 +10,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
@@ -57,16 +58,16 @@ public class Member {
 		ROLE_ADMIN
 	}
   
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", cascade = REMOVE)
 	private List<Posting> postings = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", cascade = REMOVE)
 	private List<Scrap> scrapPostingList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "followerId")
+	@OneToMany(mappedBy = "followerId", cascade = REMOVE)
 	private List<Follow> followerList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "followingId")
+	@OneToMany(mappedBy = "followingId", cascade = REMOVE)
 	private List<Follow> followingList = new ArrayList<>();
 
 	@PrePersist
