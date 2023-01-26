@@ -43,6 +43,7 @@ const Chat = ({ change }) => {
   const [ curFriend, setCurFriend ] = useState(null);
   const [ rooms, setRooms ] = useState([]);
   const [ friends, setFriends ] = useState([]);
+  const [ chatChange, setChatChange] = useState(false);
   const cookie = new Cookie();
 
   useEffect(() => {
@@ -52,8 +53,9 @@ const Chat = ({ change }) => {
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
       setRooms(res.data);
+      if(curChat) setCurChat(res.data.filter(data => data.chatRoomId === curChat.chatRoomId)[0]);
     })
-  }, [change])
+  }, [change, chatChange])
 
   useEffect(() => {
     axios({
@@ -61,16 +63,9 @@ const Chat = ({ change }) => {
       url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
-      // const following  = res.data.data.followingList;
-      // const follower = res.data.data.followerList;
-
-      // setFriends(following.filter((flwi) => {
-      //   return follower.find(flwe => flwe.followerId === flwi.followingId);
-      // }))
-
       setFriends(res.data.data.followingList);
     })
-  }, [change])
+  }, [change, chatChange])
   
   return (  
     <>
@@ -79,14 +74,19 @@ const Chat = ({ change }) => {
         {
           !curChat ? 
           <>
-            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} />
-            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} />
+            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} curChat={curChat}
+              setChatChange={setChatChange} chatChange={chatChange} />
+            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} 
+              chatChange={chatChange} setChatChange={setChatChange} curChat={curChat} />
           </>
           : 
           <>
-            <Chatting curChat={curChat} curFriend={curFriend} setCurChat={setCurChat} setCurFriend={setCurFriend} />
-            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} />
-            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} />
+            <Chatting curChat={curChat} curFriend={curFriend} setCurChat={setCurChat} setCurFriend={setCurFriend}
+              setChatChange={setChatChange} chatChange={chatChange} />
+            <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} curChat={curChat} 
+              setChatChange={setChatChange} chatChange={chatChange} />
+            <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} 
+              chatChange={chatChange} setChatChange={setChatChange} curChat={curChat} />
           </>
         }
       </StyledChat>

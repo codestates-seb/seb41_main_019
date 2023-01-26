@@ -1,11 +1,15 @@
-import styled from "styled-components";
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5"
+import styled from "styled-components"; 
+import { MdDoDisturbOn } from "react-icons/md"
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Cookie from "../../../util/Cookie";
 
 const StyledFriend = styled.li`
   display: flex;
   margin: 0px 0px 10px 0px;
-  padding: 0px 0px 5px 0px;
+  padding: 3px 5px 2px 5px;
   align-items: center;
+  cursor: pointer;
 
   div:nth-of-type(1) {
     width: 10%;
@@ -34,6 +38,15 @@ const StyledFriend = styled.li`
       color: black;
     }
   }
+
+  :hover {
+    background-color: #DBDBDB;
+    border-radius: 3px;
+  }
+
+  :hover button {
+    background-color: #DBDBDB;
+  }
 `;
 
 const StyledButton = styled.button`
@@ -42,28 +55,76 @@ const StyledButton = styled.button`
   background-color: white;
   
   svg {
+    color: #808080;
     font-size: 22px;
+
+    :hover { 
+      color: #D96846;
+    }
   }
 `;
 
-const ChatRoom = ({ room, setCurChat, friend, setCurFriend }) => {
+const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange, chatChange }) => {
+  const cookie = new Cookie();
+
+  const deleteChat = () => {
+    console.log(room.leaveId);
+    //leaveId null 인 경우 추가
+    if(!room.leaveId) {
+      axios({
+        method: "patch",
+        url: `http://13.124.33.113:8080/chatroom/${room.chatRoomId}`,
+        headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
+        data: JSON.stringify({
+          "memberId": cookie.get("memberId")
+        })
+      }).then(res => {
+        setChatChange(!chatChange);
+      }).catch(e => {
+        console.log(e);
+      })
+    }else if(room.leaveId !== Number(cookie.get("memberId"))) {
+      //leaveId 확인, 상대방이 채팅방을 떠났을 경우 해당 챗룸 삭제
+      axios({
+        method: "delete",
+        url: `http://13.124.33.113:8080/chatroom/${room.chatRoomId}`,
+        headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
+      }).then(res => {
+        setChatChange(!chatChange);
+      }).catch(e => {
+        console.log(e);
+      })
+    }
+  }
+
   return (
-    <StyledFriend>
-      <div>
-        <img
-          src="https://cdn.pixabay.com/photo/2020/05/17/20/21/cat-5183427__480.jpg"
-          alt="img"
-        ></img>
-      </div>
-      <div>
-        <span>{friend.length > 0 ? friend[0].userName : null}</span>
-        <span>{friend.length > 0 ? friend[0].profileText : null}</span>
-      </div>  
-      <StyledButton onClick={() => {
-        setCurFriend(...friend);
-        setCurChat(room);
-      }}><IoChatbubbleEllipsesOutline /></StyledButton>
-    </StyledFriend>
+    <>
+    { friend ?
+        <StyledFriend onClick={() => {
+          setCurFriend(friend);
+          setCurChat(room);
+        }}
+          className={room.leaveId === Number(cookie.get("memberId")) ? "deleted" : null}
+        >
+          <div>
+            <img
+              src={friend.profileImage}
+              alt="img"
+            ></img>
+          </div>
+          <div>
+            <span>{friend.userName}</span>
+            <span>{friend.profileText}</span>
+          </div>  
+          <StyledButton onClick={(e) => {
+            e.stopPropagation();
+            deleteChat();
+          }}>
+            <MdDoDisturbOn />
+          </StyledButton>
+        </StyledFriend> : null
+    }
+    </>
   );
 };
 
