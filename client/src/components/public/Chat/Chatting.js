@@ -7,6 +7,7 @@ import Cookie from "../../../util/Cookie";
 import { useChat } from "./useChat";
 import { MdSend } from "react-icons/md"
 import { soltChat } from "../../../util/soltChat";
+import axios from "axios";
 
 const StyledChatLog = styled.div`
   display: flex;
@@ -91,7 +92,7 @@ const StyledInput = styled.div`
   }
 `;
 
-const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
+const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend, setChatChange, chatChange }) => {
   const [ message, setMessage ] = useState("");
   const [ log, setLog ] = useChat(curChat);
   const [ res, setRes ] = useState(null);
@@ -117,7 +118,6 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
     if(res) {
       const preLog = log.length > 0 ? log.reduce((acc, cur) => [...acc, ...cur]) : log;
       preLog.push(res)
-      console.log(preLog);
       setLog(soltChat(preLog));
       setTimeout(() => {
         ul.current.scrollIntoView({block: "end", behavior: "smooth"})
@@ -131,6 +131,22 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend }) => {
     setTimeout(() => {
       ul.current.scrollIntoView({block: "end", behavior: "smooth"})
     }, 150)
+
+    if(curChat.leaveId === Number(cookie.get("memberId"))) {
+      axios({
+        method: "patch",
+        url: `http://13.124.33.113:8080/chatroom/${curChat.chatRoomId}`,
+        headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
+        data: JSON.stringify({
+          "memberId": cookie.get("memberId")
+        })
+      }).then(res => {
+        setChatChange(!chatChange);
+      }).catch(e => {
+        console.log(e);
+      })
+    }
+
     input.current.focus();
   }
 

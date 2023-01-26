@@ -52,7 +52,8 @@ const Chat = ({ change }) => {
       url: `http://13.124.33.113:8080/chatroom/${cookie.get("memberId")}`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
-      setRooms(res.data.filter(data => data.leaveId !== Number(cookie.get("memberId"))));
+      setRooms(res.data);
+      if(curChat) setCurChat(res.data.filter(data => data.chatRoomId === curChat.chatRoomId)[0]);
     })
   }, [change, chatChange])
 
@@ -74,15 +75,16 @@ const Chat = ({ change }) => {
           !curChat ? 
           <>
             <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} curChat={curChat}
-              setChatChange={setChatChange} />
+              setChatChange={setChatChange} chatChange={chatChange} />
             <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} 
               chatChange={chatChange} setChatChange={setChatChange} curChat={curChat} />
           </>
           : 
           <>
-            <Chatting curChat={curChat} curFriend={curFriend} setCurChat={setCurChat} setCurFriend={setCurFriend} />
+            <Chatting curChat={curChat} curFriend={curFriend} setCurChat={setCurChat} setCurFriend={setCurFriend}
+              setChatChange={setChatChange} chatChange={chatChange} />
             <ChatRooms rooms={rooms} setCurChat={setCurChat} friends={friends} setCurFriend={setCurFriend} curChat={curChat} 
-              setChatChange={setChatChange} />
+              setChatChange={setChatChange} chatChange={chatChange} />
             <Friends setCurChat={setCurChat} friends={friends} rooms={rooms} setCurFriend={setCurFriend} 
               chatChange={chatChange} setChatChange={setChatChange} curChat={curChat} />
           </>

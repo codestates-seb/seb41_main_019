@@ -64,7 +64,7 @@ const StyledButton = styled.button`
   }
 `;
 
-const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange }) => {
+const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange, chatChange }) => {
   const cookie = new Cookie();
 
   const deleteChat = () => {
@@ -79,7 +79,7 @@ const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange }) => 
           "memberId": cookie.get("memberId")
         })
       }).then(res => {
-        setChatChange(true);
+        setChatChange(!chatChange);
       }).catch(e => {
         console.log(e);
       })
@@ -90,7 +90,7 @@ const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange }) => 
         url: `http://13.124.33.113:8080/chatroom/${room.chatRoomId}`,
         headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
       }).then(res => {
-        setChatChange(true);
+        setChatChange(!chatChange);
       }).catch(e => {
         console.log(e);
       })
@@ -103,7 +103,9 @@ const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange }) => 
         <StyledFriend onClick={() => {
           setCurFriend(friend);
           setCurChat(room);
-        }}>
+        }}
+          className={room.leaveId === Number(cookie.get("memberId")) ? "deleted" : null}
+        >
           <div>
             <img
               src={friend.profileImage}

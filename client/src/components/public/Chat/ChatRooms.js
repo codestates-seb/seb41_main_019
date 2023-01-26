@@ -23,6 +23,10 @@ const StyledChatList = styled.div`
     font-weight: 600;
     margin: 0px 0px 10px 0px;
   }
+
+  .deleted {
+    display: none;
+  }
 `;
 
 const ChatRooms = ({ rooms, setCurChat, friends, setCurFriend, curChat, setChatChange }) => {
