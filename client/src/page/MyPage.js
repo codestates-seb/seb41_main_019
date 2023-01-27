@@ -104,16 +104,11 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
     setIsAddPlantOpened(!isAddPlantOpened);
     handleIsCovered();
   }
-
+ 
   const handleModal = (postingData) => {
     setCurPost(postingData);
     setIsViewOpened(!isViewOpened);
     handleIsCovered();
-  };
-
-  const handlePlantClick = (plantId) => {
-    // 반려식물 클릭시 해당건 조회
-    setCurrentView("plant");
   };
 
   const handleFolderClick = () => {
@@ -133,7 +128,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   return (
     <>
       {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
-      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} />}
+      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
       <StyledContainer>
         <UserInfo userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened && 
@@ -142,8 +137,9 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
               currentPlantData={currentPlantData}
               setCurrentPlantData={setCurrentPlantData}
               userInfo={userInfo}
-              handlePlantClick={handlePlantClick}
-              handleModal={handleModal}
+              setCurrentView={setCurrentView}
+              handleAddPlant={handleAddPlant}
+              handleChange={handleChange}
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
               {currentPlantData && <Gallery setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} /> }

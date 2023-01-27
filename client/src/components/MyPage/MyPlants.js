@@ -88,7 +88,7 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt, currentPlantData, setCurrentPlantData }) => {
+const MyPlants = ({setCurrentView, userInfo, jwt, currentPlantData, setCurrentPlantData, handleAddPlant, handleChange }) => {
   const [myPlantsData, setMyPlantsData] = useState(null); // My Plants 리스트 데이터
   const [isPanelOpened, setIsPanelOpened] = useState(false);
 
@@ -105,7 +105,13 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt, currentPlantDa
     ).catch((err) => console.error(err))
   };
   
-  useEffect(() => getMyPlantsData(), [])
+  useEffect(() => getMyPlantsData(), [handleChange])
+
+  const handlePlantClick = (el) => {
+    setCurrentView("plant")
+    setCurrentPlantData(el);
+    setIsPanelOpened(true);
+  }
 
   const handleMoveButtonClick = (go) => {
     // 이동 버튼 클릭
@@ -124,7 +130,7 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt, currentPlantDa
           <GrPrevious className="icon" />
         </div>
         <StyledListsContainer>
-          <StyledMyPlantsItem onClick={() => handleModal("addPlant", null)}>
+          <StyledMyPlantsItem onClick={handleAddPlant}>
             <div className="image-wrapper">
               <Cookie className="image" />
             </div>
@@ -135,11 +141,7 @@ const MyPlants = ({ handlePlantClick, handleModal, userInfo, jwt, currentPlantDa
               return (
                 <StyledMyPlantsItem
                   key={el.myPlantsId}
-                  onClick={() => {
-                    handlePlantClick(el.myPlantsId);
-                    setCurrentPlantData(el);
-                    setIsPanelOpened(true);
-                  }}
+                  onClick={() => handlePlantClick(el)}
                 >
                   <div
                     className={
