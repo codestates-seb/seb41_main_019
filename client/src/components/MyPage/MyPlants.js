@@ -179,7 +179,7 @@ const MyPlants = ({setCurrentView, userInfo, jwt, currentPlantData, setCurrentPl
           <GrNext className="icon" />
         </div>
       </StyledMyPlantsDashBoard>
-      {isPanelOpened && <MyPlantInfo currentPlantData={currentPlantData} />}
+      {isPanelOpened && <MyPlantInfo handleChange={handleChange} currentPlantData={currentPlantData} />}
     </StyledContainer>
   );
 };

@@ -62,7 +62,7 @@ const StyledUpdateButtons = styled.div`
   text-align: center;
 `;
 
-const MyPlantInfo = ({ currentPlantData }) => {
+const MyPlantInfo = ({ currentPlantData, handleChange }) => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
 
   const handleUpdateMode = () => {
@@ -121,7 +121,7 @@ const MyPlantInfo = ({ currentPlantData }) => {
           </div>
         </StyledButtonsContainer>
       ) : (
-          <MyPlantEdit handleUpdateMode={handleUpdateMode} currentPlantData={currentPlantData}/>    
+          <MyPlantEdit handleChange={handleChange} handleUpdateMode={handleUpdateMode} currentPlantData={currentPlantData}/>    
       )}
     </StyledContainer>
   );

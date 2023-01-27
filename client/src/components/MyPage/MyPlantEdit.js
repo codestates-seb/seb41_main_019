@@ -2,7 +2,9 @@ import styled from "styled-components";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { TbCameraPlus } from "react-icons/tb";
+import axios from "axios";
 
+import Cookie from "../../util/Cookie";
 import AddPlantImage from "./AddPlantImage";
 
 const StyledContainer = styled.div`
@@ -55,7 +57,10 @@ const StyledMenuItem = styled.div`
   }
 `;
 
-const MyPlantEdit = ({ handleUpdateMode, currentPlantData }) => {
+const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData }) => {
+  const cookie = new Cookie();
+  const jwt = cookie.get("authorization")
+
   const [isAddModalOn, setIsAddModalOn] = useState(false);
   const [isEditModalOn, setIsEditModalOn] = useState(false);
   const handleEditModal = () => {
@@ -66,8 +71,26 @@ const MyPlantEdit = ({ handleUpdateMode, currentPlantData }) => {
     setIsAddModalOn(!isAddModalOn);
   };
   const handleUpdateClick = () => {};
-  const handleDeleteClick = () => {};
-  const handleDnDClick = () => {};
+  const handleDeleteClick = () => {
+    axios({
+      method: "delete",
+      url: `http://13.124.33.113:8080/myplants/${currentPlantData.myPlantsId}`,
+      headers: {
+            "Authorization" : jwt
+      },
+    }).then(res => {
+      alert("삭제되었습니다")
+      handleEditModal();
+      handleChange();
+    }).catch(
+      e => {
+        console.error(e)
+      }
+    )
+  };
+  const handleDnDClick = () => {
+    alert("구현 예정")
+  };
 
   return (
     <StyledContainer>
@@ -83,8 +106,8 @@ const MyPlantEdit = ({ handleUpdateMode, currentPlantData }) => {
       {isEditModalOn && (
         <StyledMenuContainer>
           <StyledMenuItem onClick={handleUpdateMode}>식물 수정</StyledMenuItem>
-          <StyledMenuItem>식물 삭제</StyledMenuItem>
-          <StyledMenuItem>앨범 편집</StyledMenuItem>
+          <StyledMenuItem onClick={handleDeleteClick}>식물 삭제</StyledMenuItem>
+          <StyledMenuItem onClick={handleDnDClick}>앨범 편집</StyledMenuItem>
           <StyledMenuItem onClick={handleEditModal}>취소</StyledMenuItem>
         </StyledMenuContainer>
       )}
