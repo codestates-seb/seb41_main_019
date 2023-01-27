@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const StyledContainer = styled.div`
     display: flex;
@@ -99,6 +100,10 @@ const AddPlantImage = ({handleAddClick, currentPlantId}) => {
     const [contentInput, setContentInput] = useState("");
     const [form, setForm] = useState(null);
 
+    useEffect(() => {
+        console.log(contentInput)
+    }, [contentInput])
+
     const onSetFormData = useCallback((e) => {
         if (!e.target.files) {
             return;
@@ -108,15 +113,16 @@ const AddPlantImage = ({handleAddClick, currentPlantId}) => {
         reader.onloadend = () => {
             setImageInput(reader.result)
         }
-        const formData = new FormData();
-        formData.append('galleryImage', e.target.files[0]);
-        formData.append('requestBody', new Blob([JSON.stringify({
-            "content": contentInput
-        })], { type: "application/json"}));
-        setForm(formData)
     }, [])
 
     const onSubmit = () => {
+        const formData = new FormData();
+        formData.append("galleryImage", imageInput);
+        formData.append("requestBody", new Blob([JSON.stringify({
+            "content": contentInput
+        })], { type: "application/json"}));
+        setForm(formData)
+
         axios({
             method: "post",
             url: `http://13.124.33.113:8080/myplants/${currentPlantId}/gallery`,
