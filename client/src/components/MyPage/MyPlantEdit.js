@@ -64,10 +64,12 @@ const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData }) => {
   const [isAddModalOn, setIsAddModalOn] = useState(false);
   const [isEditModalOn, setIsEditModalOn] = useState(false);
   const handleEditModal = () => {
+    setIsAddModalOn(false)
     setIsEditModalOn(!isEditModalOn);
   };
 
   const handleAddClick = () => {
+    setIsEditModalOn(false)
     setIsAddModalOn(!isAddModalOn);
   };
   const handleUpdateClick = () => {};
