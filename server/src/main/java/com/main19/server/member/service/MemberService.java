@@ -60,6 +60,21 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
+    @Transactional(readOnly = true)
+    public Member findTokenMember(String token) {
+
+        long memberId = jwtTokenizer.getMemberId(token);
+        return findVerifiedMember(memberId);
+    }
+
+    @Transactional(readOnly = true)
+    public String findTokenMemberEmail(String token) {
+        long memberId = jwtTokenizer.getMemberId(token);
+        String email = findVerifiedMember(memberId).getEmail();
+        return email;
+    }
+
+
     public void deleteMember(long memberId, String token){
         // todo 토큰 정보 확인해서 권한 검증후 삭제 해야함
 
