@@ -13,6 +13,7 @@ import UserInfo from "../components/MyPage/UserInfo";
 import Gallery from "../components/MyPage/Gallery";
 import AddPlant from "../components/MyPage/AddPlant";
 import View from "../components/Home/View";
+import CommentModal from "../components/Home/CommentModal";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -127,6 +128,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
 
   return (
     <>
+      {commentMenu && <CommentModal post={curPost} handleCommentMenu={handleCommentMenu} handleChange={handleChange} commentId={commentId}/>}
       {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
       <StyledContainer>
