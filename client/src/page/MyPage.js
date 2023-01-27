@@ -146,7 +146,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
               handleModal={handleModal}
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
-              <Gallery setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} />
+              {currentPlantData && <Gallery setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} /> }
               <p>
                 My Plants 접기 <TiArrowSortedUp />
               </p>
