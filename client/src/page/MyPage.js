@@ -14,6 +14,7 @@ import Gallery from "../components/MyPage/Gallery";
 import AddPlant from "../components/MyPage/AddPlant";
 import View from "../components/Home/View";
 import CommentModal from "../components/Home/CommentModal";
+import PlantImageView from "../components/MyPage/PlantImageView";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -77,12 +78,17 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const [commentId, setCommentId] = useState(null);
   const [commentMenu, setCommentMenu] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState(null);
+  const [plantImageViewData, setplantImageViewData] = useState({
+    imgs: [],
+    imgIdx: null,
+  });
   
   // 모달 등 상태관리
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [currentView, setCurrentView] = useState("postings"); // 현재 view (Gallery.js를 조건부 렌더링하기 위한 상태)
   const [isAddPlantOpened, setIsAddPlantOpened] = useState(false); // AddPlant.js 모달 조건부 렌더링하기 위한 상태
   const [isViewOpened, setIsViewOpened] = useState(false); // Gallery.js에서 map 함수의 요소 클릭 했을 때 모달(View.js) 렌더링 
+  const [isPlantImageViewOpened, setIsPlantImageViewOpened] = useState(false);
 
   useEffect(() => {
     getUserInfo()
@@ -112,6 +118,15 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
     handleIsCovered();
   };
 
+  const handlePlantImageView = (imgs, imgIdx) => {
+    setplantImageViewData({
+      imgs: imgs,
+      imgIdx: imgIdx
+    })
+    setIsPlantImageViewOpened(!isPlantImageViewOpened);
+    handleIsCovered()
+  }
+
   const handleFolderClick = () => {
     if (isFolderOpened) {
       setIsFolderOpened(false);
@@ -131,6 +146,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
       {commentMenu && <CommentModal post={curPost} handleCommentMenu={handleCommentMenu} handleChange={handleChange} commentId={commentId}/>}
       {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
+      {isCovered && isPlantImageViewOpened && <PlantImageView handlePlantImageView={handlePlantImageView} plantImageViewData={plantImageViewData} />}
       <StyledContainer>
         <UserInfo userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened && 
@@ -145,7 +161,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
               handleChange={handleChange}
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
-              {currentPlantData && <Gallery setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} /> }
+              {currentPlantData && <Gallery isCovered={isCovered} isPlantImageViewOpened={isPlantImageViewOpened} setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} handlePlantImageView={handlePlantImageView}/> }
               <p>
                 My Plants 접기 <TiArrowSortedUp />
               </p>

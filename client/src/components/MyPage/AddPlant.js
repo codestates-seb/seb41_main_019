@@ -74,7 +74,7 @@ const StyledModalHeader = styled.div`
   }
 `;
 
-const AddPlant = ({ handleAddPlant, userInfo, jwt, getUserInfo }) => {
+const AddPlant = ({ handleAddPlant, userInfo, jwt }) => {
   const nowDate = new Date();
   const today = nowDate.toISOString().substring(0,10)
 

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
+import PlantImageView from "./PlantImageView";
 
 import { FcAnswers } from "react-icons/fc";
 
@@ -57,7 +58,7 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlantData }) => {
+const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
@@ -112,39 +113,42 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
   useEffect(() => {
     getGalleryData(currentView)
   }, [currentView, currentPlantData])
+
   return (
-    <StyledContainer>
-      {galleryData.length !== 0 ? (
-        <StyledMyPageGallery>
-          {galleryData.map((el) => {
-            if (currentView === "plant" || currentView === "plantRerender") {
-              return (           
-                <div className="image-wrapper" key={el.galleryId}>
-                  <img className="image" src={el.plantImage} alt="each item" />
-                </div>
-              );
-            } else if (currentView === "postings") {
-              return (
-                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal(el)}>
-                  <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
-                </div>
-              );
-            } else if (currentView === "scraps") {
-              return (
-                <div className="image-wrapper" key={el.postingId} onClick={() => setViewData(el.postingId)}>
-                  <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
-                </div>
-              )
-            }
-          })}
-        </StyledMyPageGallery>
-      ) : (
-        <StyledNoContents>
-          <FcAnswers />
-          <p>게시물이 없습니다</p>
-        </StyledNoContents>
-      )}
-    </StyledContainer>
+    <>
+      <StyledContainer>
+        {galleryData.length !== 0 ? (
+          <StyledMyPageGallery>
+            {galleryData.map((el, idx) => {
+              if (currentView === "plant" || currentView === "plantRerender") {
+                return (           
+                  <div className="image-wrapper" key={el.galleryId} onClick={() => handlePlantImageView(galleryData, idx)}>
+                    <img className="image" src={el.plantImage} alt="each item" />
+                  </div>
+                );
+              } else if (currentView === "postings") {
+                return (
+                  <div className="image-wrapper" key={el.postingId} onClick={() => handleModal(el)}>
+                    <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                  </div>
+                );
+              } else if (currentView === "scraps") {
+                return (
+                  <div className="image-wrapper" key={el.postingId} onClick={() => setViewData(el.postingId)}>
+                    <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                  </div>
+                )
+              }
+            })}
+          </StyledMyPageGallery>
+        ) : (
+          <StyledNoContents>
+            <FcAnswers />
+            <p>게시물이 없습니다</p>
+          </StyledNoContents>
+        )}
+      </StyledContainer>
+    </>
   );
 };
 
