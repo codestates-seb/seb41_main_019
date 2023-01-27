@@ -57,7 +57,7 @@ const StyledMenuItem = styled.div`
   }
 `;
 
-const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData, currentView, setCurrentView }) => {
+const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData, havePlantDeleted, currentView, setCurrentView }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
 
@@ -82,6 +82,7 @@ const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData, current
       },
     }).then(res => {
       alert("삭제되었습니다")
+      havePlantDeleted();
       handleEditModal();
       handleChange();
     }).catch(

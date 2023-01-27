@@ -113,6 +113,11 @@ const MyPlants = ({currentView, setCurrentView, userInfo, jwt, currentPlantData,
     setIsPanelOpened(true);
   }
 
+  const havePlantDeleted = () => {
+    setIsPanelOpened(false);
+    setCurrentPlantData(null);
+  }
+
   const handleMoveButtonClick = (go) => {
     // 이동 버튼 클릭
     alert("구현 예정");
@@ -179,7 +184,7 @@ const MyPlants = ({currentView, setCurrentView, userInfo, jwt, currentPlantData,
           <GrNext className="icon" />
         </div>
       </StyledMyPlantsDashBoard>
-      {isPanelOpened && <MyPlantInfo handleChange={handleChange} currentPlantData={currentPlantData} currentView={currentView} setCurrentView={setCurrentView}/>}
+      {isPanelOpened && <MyPlantInfo havePlantDeleted={havePlantDeleted} handleChange={handleChange} currentPlantData={currentPlantData} setCurrentPlantData={setCurrentPlantData} currentView={currentView} setCurrentView={setCurrentView}/>}
     </StyledContainer>
   );
 };
