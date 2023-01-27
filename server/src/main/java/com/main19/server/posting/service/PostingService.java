@@ -11,6 +11,7 @@ import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.tags.entity.PostingTags;
+import com.main19.server.posting.tags.repository.PostingTagsRepository;
 import com.main19.server.posting.tags.service.PostingTagsService;
 import com.main19.server.posting.tags.service.TagService;
 import com.main19.server.storageService.s3.MediaStorageService;
@@ -44,6 +45,7 @@ public class PostingService {
 	private final PostingMapper mapper;
 	private final CustomBeanUtils<Posting> beanUtils;
 	private final JwtTokenizer jwtTokenizer;
+	private final PostingTagsRepository postingTagsRepository;
 
 	public Posting createPosting(PostingPostDto requestBody, long memberId, List<MultipartFile> multipartFiles, String token) {
 
@@ -120,9 +122,20 @@ public class PostingService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<Posting> findPostingsByTagName(int page, int size, String tagName) {
-		long tagId = tagService.findTag(tagName).getTagId();
-		return postingRepository.findPostingsByTags(tagId, PageRequest.of(page, size, Sort.by("posting_id").descending()));
+	public Page<Posting> findPostingsByStrContent(int page, int size, String str) {
+		str = "%" + str + "%";
+		Page<Posting> postingListSearchByPostingContent =
+				postingRepository.findPostingsByPostingContent(str, PageRequest.of(page, size, Sort.by("posting_id").descending()));
+
+		return postingListSearchByPostingContent;
+	}
+
+	public Page<Posting> findPostingsByStrTag(int page, int size, String str) {
+		str = "%" + str + "%";
+		Page<Posting> postingListSearchByTagName =
+				postingRepository.findPostingsByTagName(str, PageRequest.of(page, size, Sort.by("posting_id").descending()));
+
+		return postingListSearchByTagName;
 	}
 
 
