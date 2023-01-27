@@ -76,6 +76,10 @@ const StyledMenu = styled.div`
     .active {
         border-left: 3px solid #374435;
     }
+
+    @media screen and (max-width: 770px) {
+       
+    }
 `
 
 const Setting = ({ setIsLanded }) => {
@@ -85,7 +89,11 @@ const Setting = ({ setIsLanded }) => {
     const [ location, setLocation] = useState("");
     const [ img, setImg ] = useState(null);
     const { open, close, Modal } = useModal();
+    const [ oldName, setOldName ] = useState("");
+    const [ reload, setReload ] = useState(false);
     const cookie = new Cookie();
+
+    const handleReload = () => setReload(!reload);
 
     useEffect(() => {
         axios({
@@ -97,11 +105,12 @@ const Setting = ({ setIsLanded }) => {
             setName(user.userName);
             setText(user.profileText);
             setLocation(user.location);
+            setOldName(user.userName);
             user.profileImage ? setImg(user.profileImage) : setImg(defaultImg);
         }).catch(e => {
             console.log(e);
         })
-    }, [])
+    }, [reload])
 
     return (
         <Container>
@@ -111,8 +120,8 @@ const Setting = ({ setIsLanded }) => {
                     <p className={isClicked === 1 ? "active" : null} onClick={() => setIsClicked(1)}>계정 탈퇴</p>
                 </StyledMenu>
                 { isClicked === 0 
-                    ? <EditProfile open={open} name={name} text={text} location={location} img={img} 
-                    setName={setName} setText={setText} setLocation={setLocation} setImg={setImg} /> 
+                    ? <EditProfile open={open} name={name} text={text} location={location} img={img} oldName={oldName}
+                    handleReload={handleReload} setName={setName} setText={setText} setLocation={setLocation} setImg={setImg} /> 
                     :  <DeleteProfile name={name} img={img} setIsLanded={setIsLanded}/>
                 }
             </Wrapper>
