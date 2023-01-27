@@ -79,7 +79,7 @@ function App() {
         <Route
           path={isLanded ? null : "/mypage"}
           element={
-            <MyPage handleIsCovered={handleIsCovered} isCovered={isCovered} />
+            <MyPage isCovered={isCovered} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
           }
         />
         <Route

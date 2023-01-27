@@ -74,7 +74,7 @@ const StyledModalHeader = styled.div`
   }
 `;
 
-const AddPlant = ({ handleModal, userInfo, jwt }) => {
+const AddPlant = ({ handleAddPlant, userInfo, jwt }) => {
   const nowDate = new Date();
   const today = nowDate.toISOString().substring(0,10)
 
@@ -86,9 +86,9 @@ const AddPlant = ({ handleModal, userInfo, jwt }) => {
 
   useEffect(() => {
     document.getElementById("bg").addEventListener("click", () => {
-      handleModal("AddPlant");
+      handleAddPlant();
     });
-  }, [handleModal]);
+  }, [handleAddPlant]);
 
   const { plantName, plantType, plantBirthday } = form
 
@@ -111,7 +111,7 @@ const AddPlant = ({ handleModal, userInfo, jwt }) => {
         "plantBirthDay" : plantBirthday.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')
       }
     }).then(res => {
-      handleModal("AddPlant")
+      handleAddPlant()
     }).catch(
       e => {
         console.error(e)
@@ -123,7 +123,7 @@ const AddPlant = ({ handleModal, userInfo, jwt }) => {
     <>
       <StyledContainer>
         <StyledModalHeader>
-          <CloseBtn className="close-button" handleModal={handleModal} />
+          <CloseBtn className="close-button" handleAddPlant={handleAddPlant} />
           <p>반려식물 등록하기</p>
         </StyledModalHeader>
         <form onSubmit={handleSubmit}>
@@ -157,7 +157,7 @@ const AddPlant = ({ handleModal, userInfo, jwt }) => {
           />
           <div className="button-container">
             <BlueBtn type="submit">완료</BlueBtn>
-            <BlueBtn onClick={() => handleModal("AddPlant")}>취소</BlueBtn>
+            <BlueBtn onClick={handleAddPlant}>취소</BlueBtn>
           </div>
         </form>
       </StyledContainer>

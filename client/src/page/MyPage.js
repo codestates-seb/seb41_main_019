@@ -64,7 +64,7 @@ const StyledChangeViewButton = styled.div`
   }
 `;
 
-const MyPage = ({ isCovered, handleIsCovered }) => {
+const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
@@ -72,7 +72,6 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   // 데이터 상태관리
   const [userInfo, setUserInfo] = useState([]); // 유저정보 (UserInfo.js로 props)
   const [postCount, setPostCount] = useState(); // 게시물 숫자 (setState는 UserInfo.js에서 핸들링)
-  const [galleryData, setGalleryData] = useState([]); // 관심사 분리를 위하여 Gallery.js로 이관됨. handleModal 변경 후 삭제 예정
   const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
   const [commentId, setCommentId] = useState(null);
   const [commentMenu, setCommentMenu] = useState(false);
@@ -101,14 +100,13 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
       console.error(err))
   };
 
-  const handleModal = (modal, postingData) => {
-    if(modal === "AddPlant") {
-      // setIsAddPlantOpened(!isAddPlantOpened);
-    } else if(modal === "postings") {
-      setCurPost(postingData);
-    } else if(modal === "scraps") {
-      setCurPost(postingData)
-    }
+  const handleAddPlant = () => {
+    setIsAddPlantOpened(!isAddPlantOpened);
+    handleIsCovered();
+  }
+
+  const handleModal = (postingData) => {
+    setCurPost(postingData);
     setIsViewOpened(!isViewOpened);
     handleIsCovered();
   };
@@ -119,7 +117,13 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   };
 
   const handleFolderClick = () => {
-    setIsFolderOpened(!isFolderOpened);
+    if (isFolderOpened) {
+      setIsFolderOpened(false);
+      setCurrentView("postings")
+    } else {
+      setIsFolderOpened(true);
+      setCurrentView("plant")
+    }
   };
 
   const handleCommentMenu = () => {
@@ -128,11 +132,11 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
 
   return (
     <>
-      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
-      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} setGalleryData={setGalleryData} handleModal={handleModal} userInfo={userInfo} />}
+      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
+      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} />}
       <StyledContainer>
         <UserInfo userInfo={userInfo} postCount={postCount}/>
-        {isFolderOpened ? (
+        {isFolderOpened && 
           <div className="container">
             <MyPlants
               currentPlantData={currentPlantData}
@@ -148,32 +152,33 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
               </p>
             </StyledMyPlantFolder>
           </div>
-        ) : (
+        }
+        {!isFolderOpened &&
           <div className="container">
-            <StyledMyPlantFolder>
-              <p onClick={handleFolderClick}>
-                My Plants 펼치기 <TiArrowSortedDown />
-              </p>
-              <StyledChangeViewContainer>
-                <StyledChangeViewButton
-                  onClick={() => setCurrentView("postings")}
-                  className={currentView === "postings" ? "selected" : ""}
-                >
-                  <BsGrid3X3 />
-                  <span>게시물</span>
-                </StyledChangeViewButton>
-                <StyledChangeViewButton
-                  onClick={() => setCurrentView("scraps")}
-                  className={currentView === "scraps" ? "selected" : ""}
-                >
-                  <BsBookmark />
-                  <span>스크랩</span>
-                </StyledChangeViewButton>
-              </StyledChangeViewContainer>
-              <Gallery setPostCount={setPostCount} currentView={currentView} handleModal={handleModal} userInfo={userInfo}/>
-            </StyledMyPlantFolder>
-          </div>
-        )}
+          <StyledMyPlantFolder>
+            <p onClick={handleFolderClick}>
+              My Plants 펼치기 <TiArrowSortedDown />
+            </p>
+            <StyledChangeViewContainer>
+              <StyledChangeViewButton
+                onClick={() => setCurrentView("postings")}
+                className={currentView === "postings" && "selected"}
+              >
+                <BsGrid3X3 />
+                <span>게시물</span>
+              </StyledChangeViewButton>
+              <StyledChangeViewButton
+                onClick={() => setCurrentView("scraps")}
+                className={currentView === "scraps" && "selected"}
+              >
+                <BsBookmark />
+                <span>스크랩</span>
+              </StyledChangeViewButton>
+            </StyledChangeViewContainer>
+            <Gallery setPostCount={setPostCount} currentView={currentView} handleModal={handleModal} userInfo={userInfo}/>
+          </StyledMyPlantFolder>
+        </div>
+        }
       </StyledContainer>
     </>
   );

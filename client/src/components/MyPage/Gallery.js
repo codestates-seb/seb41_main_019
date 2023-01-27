@@ -63,6 +63,10 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
   const memberId = Number(cookie.get("memberId"));
 
   const [galleryData, setGalleryData] = useState([])
+
+  useEffect(() => {
+    setGalleryData([])
+  } ,[currentView])
   
   const getGalleryData = (view) => {
     if(view === 'postings') {
@@ -104,7 +108,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
         Authorization: jwt,
       },
     }).then((res) => {
-      handleModal("scraps", res.data.data)
+      handleModal(res.data.data)
     }).catch ((err) => {
       console.error(err);
     })
@@ -126,7 +130,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
               );
             } else if (currentView === "postings") {
               return (
-                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal("postings", el)}>
+                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal(el)}>
                   <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
                 </div>
               );
