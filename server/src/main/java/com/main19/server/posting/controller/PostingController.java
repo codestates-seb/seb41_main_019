@@ -137,11 +137,22 @@ public class PostingController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("/tags")
-    public ResponseEntity getPostingsByTagName(@NotBlank @Length(min = 1, max = 15) @RequestParam String tagName,
+    @GetMapping("/search")
+    public ResponseEntity getPostingsByStr(@NotBlank @Length(min = 2, max = 15) @RequestParam String str,
                                            @Positive @RequestParam int page,
                                            @Positive @RequestParam int size) {
-        Page<Posting> postings = postingService.findPostingsByTagName(page - 1, size, tagName);
+        Page<Posting> postings = postingService.findPostingsByStrContent(page - 1, size, str);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings)
+                , HttpStatus.OK);
+    }
+
+    @GetMapping("/tag/search")
+    public ResponseEntity getPostingTagsByStr(@NotBlank @Length(min = 2, max = 15) @RequestParam String str,
+                                           @Positive @RequestParam int page,
+                                           @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.findPostingsByStrTag(page - 1, size, str);
         List<Posting> content = postings.getContent();
         return new ResponseEntity<>(
                 new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
