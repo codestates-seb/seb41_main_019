@@ -13,6 +13,8 @@ import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.service.PostingService;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
 
+import com.main19.server.posting.tags.entity.PostingTags;
+import com.main19.server.posting.tags.entity.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1320,7 +1322,7 @@ public class PostingControllerRestDocs {
         // when
         ResultActions actions =
                 mockMvc.perform(
-                        RestDocumentationRequestBuilders.get("/search")
+                        RestDocumentationRequestBuilders.get("/posts/search")
                                 .header("Authorization", "Bearer AccessToken")
                                 .param("str", "게시글")
                                 .param("page", "1")
@@ -1418,6 +1420,26 @@ public class PostingControllerRestDocs {
         responseList2.add(response3);
         responseList2.add(response4);
 
+        Tag tag1 = new Tag();
+        tag1.setTagName("식물1");
+
+        Tag tag2 = new Tag();
+        tag1.setTagName("식물2");
+
+        PostingTags tag = new PostingTags();
+        tag.setTag(tag1);
+        tag.setTag(tag2);
+
+        List<PostingTags> tags = new ArrayList<>();
+        tags.add(tag);
+
+        PostingTagsResponseDto tagResponseDto1 = new PostingTagsResponseDto("식물1");
+        PostingTagsResponseDto tagResponseDto2 = new PostingTagsResponseDto("식물2");
+
+        List<PostingTagsResponseDto> tagsResponseDto = new ArrayList<>();
+        tagsResponseDto.add(tagResponseDto1);
+        tagsResponseDto.add(tagResponseDto2);
+
         Posting posting1 = new Posting(
                 1L,
                 "게시글 test1",
@@ -1426,7 +1448,7 @@ public class PostingControllerRestDocs {
                 LocalDateTime.of(2023,01,01,23,59,59),
                 member,
                 new ArrayList<>(),
-                new ArrayList<>(),
+                tags,
                 new ArrayList<>(),
                 0L,
                 0L,
@@ -1441,7 +1463,7 @@ public class PostingControllerRestDocs {
                 LocalDateTime.of(2023,01,01,23,59,59),
                 member,
                 new ArrayList<>(),
-                new ArrayList<>(),
+                tags,
                 new ArrayList<>(),
                 0L,
                 0L,
@@ -1461,7 +1483,7 @@ public class PostingControllerRestDocs {
                         responseList1,
                         LocalDateTime.of(2023,01,01,23,59,59),
                         LocalDateTime.of(2023,01,01,23,59,59),
-                        new ArrayList<>(),
+                        tagsResponseDto,
                         0L,
                         new ArrayList<>(),
                         0L,
@@ -1476,7 +1498,7 @@ public class PostingControllerRestDocs {
                         responseList2,
                         LocalDateTime.of(2023,01,01,23,59,59),
                         LocalDateTime.of(2023,01,01,23,59,59),
-                        new ArrayList<>(),
+                        tagsResponseDto,
                         0L,
                         new ArrayList<>(),
                         0L,
@@ -1490,9 +1512,9 @@ public class PostingControllerRestDocs {
         // when
         ResultActions actions =
                 mockMvc.perform(
-                        RestDocumentationRequestBuilders.get("/tag/search")
+                        RestDocumentationRequestBuilders.get("/posts/tag/search")
                                 .header("Authorization", "Bearer AccessToken")
-                                .param("str", "풀")
+                                .param("str", "식물")
                                 .param("page", "1")
                                 .param("size", "10")
                                 .accept(MediaType.APPLICATION_JSON)
@@ -1539,7 +1561,7 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
-                                fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
+                                fieldWithPath("data[].tags[].tagName").type(JsonFieldType.STRING).description("태그 이름"),
                                 fieldWithPath("data[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
                                 fieldWithPath("data[].postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
                                 fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
