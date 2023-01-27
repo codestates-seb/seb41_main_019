@@ -114,6 +114,11 @@ const AddPlantImage = ({handleAddClick, currentPlantId, currentView, setCurrentV
     }, [])
 
     const onSubmit = () => {
+        if(contentInput.length === 0) {
+            alert("사진의 코멘트를 입력해주세요.")
+            return;
+        }
+
         const formData = new FormData();
         formData.append("requestBody", new Blob([JSON.stringify({
             "content": contentInput
