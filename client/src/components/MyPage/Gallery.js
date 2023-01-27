@@ -67,7 +67,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
   useEffect(() => {
     setGalleryData([])
   } ,[currentView])
-  
+
   const getGalleryData = (view) => {
     if(view === 'postings') {
       axios({
@@ -116,7 +116,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
 
   useEffect(() => {
     getGalleryData(currentView)
-  }, [currentView])
+  }, [currentView, currentPlantData])
   return (
     <StyledContainer>
       {galleryData.length !== 0 ? (
