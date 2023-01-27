@@ -15,6 +15,7 @@ import AddPlant from "../components/MyPage/AddPlant";
 import View from "../components/Home/View";
 import CommentModal from "../components/Home/CommentModal";
 import PlantImageView from "../components/MyPage/PlantImageView";
+import Followers from "../components/MyPage/Followers";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -89,6 +90,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const [isAddPlantOpened, setIsAddPlantOpened] = useState(false); // AddPlant.js 모달 조건부 렌더링하기 위한 상태
   const [isViewOpened, setIsViewOpened] = useState(false); // Gallery.js에서 map 함수의 요소 클릭 했을 때 모달(View.js) 렌더링 
   const [isPlantImageViewOpened, setIsPlantImageViewOpened] = useState(false);
+  const [isFollowersOpened, setIsFollowersOpened] = useState(false);
 
   useEffect(() => {
     getUserInfo()
@@ -106,6 +108,11 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
       }).catch ((err) => 
       console.error(err))
   };
+
+  const handleFollowers = () => {
+    setIsFollowersOpened(!isFollowersOpened)
+    handleIsCovered();
+  }
 
   const handleAddPlant = () => {
     setIsAddPlantOpened(!isAddPlantOpened);
@@ -147,8 +154,9 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
       {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
       {isCovered && isPlantImageViewOpened && <PlantImageView handlePlantImageView={handlePlantImageView} plantImageViewData={plantImageViewData} />}
+      {isCovered && isFollowersOpened && <Followers handleFollowers={handleFollowers} followers={userInfo.followerList}/>}
       <StyledContainer>
-        <UserInfo userInfo={userInfo} postCount={postCount}/>
+        <UserInfo handleFollows={handleFollowers} userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened && 
           <div className="container">
             <MyPlants

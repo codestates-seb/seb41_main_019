@@ -56,7 +56,7 @@ const StyledInfoItem = styled.div`
   width: 80px;
 `;
 
-const UserInfo = ({ userInfo, postCount }) => {
+const UserInfo = ({ userInfo, postCount, handleFollows }) => {
   const {
     memberId,
     userName,
@@ -93,13 +93,13 @@ const UserInfo = ({ userInfo, postCount }) => {
                 <p>{postCount}</p>
               </StyledInfoItem>
             <a href="#">
-              <StyledInfoItem>
+              <StyledInfoItem onClick={handleFollows}>
                 <p>팔로워</p>
                 <p>{followerList ? followerList.length : 0}</p>
               </StyledInfoItem>
             </a>
             <a href="#">
-              <StyledInfoItem>
+              <StyledInfoItem >
                 <p>팔로잉</p>
                 <p>{followingList ? followingList.length : 0}</p>
               </StyledInfoItem>
