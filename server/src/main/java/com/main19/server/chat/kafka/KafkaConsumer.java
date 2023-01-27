@@ -30,7 +30,6 @@ public class KafkaConsumer {
         chatService.createChat(mappedChat, chat.getReceiverId(), chat.getSenderId(), chat.getChatRoomId());
         ChatDto.Response response = chatMapper.chatToChatResponse(mappedChat);
 
-        ObjectMapper mapper = new ObjectMapper();
         template.convertAndSend("/sub/chat/" + chat.getChatRoomId(), response);
     }
 }
