@@ -11,7 +11,7 @@ const useModal = () => {
     const close = () => setIsOpen(false);
 
     return {
-        Modal: isOpen ? () => <Modal onClose={close} /> : () => null, 
+        Modal: isOpen ? ({ children }) => <Modal onClose={close}>{children}</Modal>: () => null, 
         open, 
         close
     };

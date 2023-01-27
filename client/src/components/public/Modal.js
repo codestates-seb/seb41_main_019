@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import CloseBtn from "./CloseBtn";
 
 const Wrapper = styled.div`
     width: 100%;
@@ -12,20 +13,32 @@ const Wrapper = styled.div`
 `;
 
 const ModalContainer = styled.div`
-    width: 380px;
-    padding: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    height: auto;
     background-color: white;
-    margin: 0 auto;
-    top: 50%;
-    left: 50%;
-    transform:translate(-50%, 500%);
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%); 
+    box-shadow: 5px 10px 10px 1px rgba(0,0,0,0.3); 
+ 
+    >div:first-of-type {
+        width: 20px;
+        margin: 0 0 0 auto;
+    }
 `;
 
-const Modal = ({ onClose }) => {
+const Modal = ({ onClose, children }) => {
     return (
         <Wrapper onClick={onClose}>
             <ModalContainer onClick={(e) => e.stopPropagation()}>
-                dfdf
+                <CloseBtn handleEvent={onClose} />
+                {children}
             </ModalContainer>
         </Wrapper>
     )

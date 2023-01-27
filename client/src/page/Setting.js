@@ -6,6 +6,26 @@ import axios from "axios";
 import Cookie from "../util/Cookie";
 import defaultImg from "../assets/img/profile.jpg";
 import Footer from "../components/public/Footer";
+import useModal from "../hooks/useModal";
+import { MdInfoOutline } from "react-icons/md";
+
+const Container = styled.div`
+   
+    .modal {
+        display: flex;
+        font-size: 17px;
+        height: 80px;
+
+        svg {
+            font-size: 35px;
+            
+        }
+
+        span {
+            margin-left: 10px;
+        }
+    }
+`;
 
 const Wrapper = styled.div`
     display: flex;
@@ -18,7 +38,7 @@ const Wrapper = styled.div`
     border: 1px solid #dbdbdb;
 
     input, textarea {
-        width :300px;
+        width :150px;
         outline: none;
         border: 1px solid #dbdbdb;
         border-radius: 5px;
@@ -31,10 +51,6 @@ const Wrapper = styled.div`
 
     input {
         height: 30px;
-
-        @media screen and (max-width: 770px) {
-            width: 300px;
-        }
     }
 
     @media screen and (max-width: 770px) {
@@ -68,6 +84,7 @@ const Setting = ({ setIsLanded }) => {
     const [ text, setText ] = useState("");
     const [ location, setLocation] = useState("");
     const [ img, setImg ] = useState(null);
+    const { open, close, Modal } = useModal();
     const cookie = new Cookie();
 
     useEffect(() => {
@@ -87,20 +104,26 @@ const Setting = ({ setIsLanded }) => {
     }, [])
 
     return (
-        <>
+        <Container>
             <Wrapper>
                 <StyledMenu>
                     <p className={isClicked === 0 ? "active" : null} onClick={() => setIsClicked(0)}>프로필 편집</p>
                     <p className={isClicked === 1 ? "active" : null} onClick={() => setIsClicked(1)}>계정 탈퇴</p>
                 </StyledMenu>
                 { isClicked === 0 
-                    ? <EditProfile name={name} text={text} location={location} img={img} 
+                    ? <EditProfile open={open} name={name} text={text} location={location} img={img} 
                     setName={setName} setText={setText} setLocation={setLocation} setImg={setImg} /> 
                     :  <DeleteProfile name={name} img={img} setIsLanded={setIsLanded}/>
                 }
             </Wrapper>
             <Footer />
-        </>
+            <Modal>
+                <div className="modal">
+                    <MdInfoOutline />
+                    <span>변경되었습니다</span>
+                </div>
+            </Modal>
+        </Container>
     )
 };
 

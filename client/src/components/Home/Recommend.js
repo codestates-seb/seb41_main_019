@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { AiFillHeart } from "react-icons/ai";
-import { useState } from "react";
 
 const StyledLi = styled.li`
     display: flex;
