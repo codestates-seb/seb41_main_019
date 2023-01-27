@@ -2,7 +2,6 @@ package com.main19.server.member;
 
 import com.google.gson.Gson;
 import com.main19.server.auth.jwt.JwtTokenizer;
-import com.main19.server.comment.entity.Comment;
 import com.main19.server.member.controller.MemberController;
 import com.main19.server.member.dto.MemberDto;
 import com.main19.server.member.dto.MemberDto.Response;
@@ -34,10 +33,10 @@ import java.util.List;
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
 import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -47,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = MemberController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs(uriHost = "http://ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
+@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class MemberControllerRestDocs {
     @Autowired
     private MockMvc mockMvc;
@@ -70,16 +69,16 @@ public class MemberControllerRestDocs {
         String content = gson.toJson(post);
 
         MemberDto.Response response =
-                new MemberDto.Response(
-                        1L,
-                        "taebong98",
-                        "aaa@naver.com",
-                        "코드스테이츠",
-                        null,
-                        "자기소개",
-                        new ArrayList<>(),
-                        new ArrayList<>(),
-                        new ArrayList<>());
+            new MemberDto.Response(
+                1L,
+                "taebong98",
+                "aaa@naver.com",
+                "코드스테이츠",
+                null,
+                "자기소개",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>());
 
         given(mapper.memberPostToMember(Mockito.any(MemberDto.Post.class))).willReturn(new Member());
         given(memberService.createMember(Mockito.any(Member.class))).willReturn(new Member());
@@ -87,48 +86,48 @@ public class MemberControllerRestDocs {
 
         // when
         ResultActions actions = mockMvc.perform(
-                post("/members/sign-up")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(content)
+            post("/members/sign-up")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content)
         );
 
         // then
         actions
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.data.userName").value(post.getUserName()))
-                .andExpect(jsonPath("$.data.email").value(post.getEmail()))
-                .andExpect(jsonPath("$.data.location").value(post.getLocation()))
-                .andExpect(jsonPath("$.data.profileText").value(post.getProfileText()))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.data.userName").value(post.getUserName()))
+            .andExpect(jsonPath("$.data.email").value(post.getEmail()))
+            .andExpect(jsonPath("$.data.location").value(post.getLocation()))
+            .andExpect(jsonPath("$.data.profileText").value(post.getProfileText()))
 
-                .andDo(document(
-                        "post-member",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        requestFields(
-                                List.of(
-                                        fieldWithPath("userName").type(JsonFieldType.STRING).description("닉네임"),
-                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                                        fieldWithPath("location").type(JsonFieldType.STRING).description("소속"),
-                                        fieldWithPath("profileText").type(JsonFieldType.STRING).description("자기소개"),
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
-                                )
-                        ),
-                        responseFields(
-                                List.of(
-                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("식별자"),
-                                        fieldWithPath("data.userName").type(JsonFieldType.STRING).description("닉네임"),
-                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
-                                        fieldWithPath("data.location").type(JsonFieldType.STRING).description("소속"),
-                                        fieldWithPath("data.profileImage").type(JsonFieldType.NULL).description("프로필사진"),
-                                        fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기소개"),
-                                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅"),
-                                        fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
-                                        fieldWithPath("data.followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
+            .andDo(document(
+                "post-member",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestFields(
+                    List.of(
+                        fieldWithPath("userName").type(JsonFieldType.STRING).description("닉네임"),
+                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                        fieldWithPath("location").type(JsonFieldType.STRING).description("소속"),
+                        fieldWithPath("profileText").type(JsonFieldType.STRING).description("자기소개"),
+                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")
+                    )
+                ),
+                responseFields(
+                    List.of(
+                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("식별자"),
+                        fieldWithPath("data.userName").type(JsonFieldType.STRING).description("닉네임"),
+                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
+                        fieldWithPath("data.location").type(JsonFieldType.STRING).description("소속"),
+                        fieldWithPath("data.profileImage").type(JsonFieldType.NULL).description("프로필사진"),
+                        fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기소개"),
+                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅"),
+                        fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
+                        fieldWithPath("data.followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
 
-                                )
-                        )
-                ));
+                    )
+                )
+            ));
     }
 
     @Test
@@ -140,16 +139,16 @@ public class MemberControllerRestDocs {
         MockMultipartFile profileImage = new MockMultipartFile("profileImage", "profileImage.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
 
         MemberDto.Response response =
-                new MemberDto.Response(
-                        1L,
-                        "taebong98",
-                        "aaa@naver.com",
-                        "코드스테이츠",
-                        "profileImage.jpeg",
-                        "자기소개",
-                        new ArrayList<>(),
-                        new ArrayList<>(),
-                        new ArrayList<>());
+            new MemberDto.Response(
+                1L,
+                "taebong98",
+                "aaa@naver.com",
+                "코드스테이츠",
+                "profileImage.jpeg",
+                "자기소개",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>());
 
 
         given(storageService.uploadProfileImage(Mockito.any())).willReturn("profileImageUrl");
@@ -158,44 +157,44 @@ public class MemberControllerRestDocs {
 
         // when
         ResultActions actions = mockMvc.perform(
-                RestDocumentationRequestBuilders.multipart("/members/{member-id}/profileimage",memberId)
-                        .file(profileImage)
-                        .contentType(MediaType.MULTIPART_FORM_DATA)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header("Authorization","Atk")
+            RestDocumentationRequestBuilders.multipart("/members/{member-id}/profileimage",memberId)
+                .file(profileImage)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .accept(MediaType.APPLICATION_JSON)
+                .header("Authorization","Bear AccessToken")
         );
 
         // then
         actions
-                .andExpect(status().isCreated())
-                .andDo(document(
-                                "post-member-image",
-                                getRequestPreProcessor(),
-                                getResponsePreProcessor(),
-                                requestHeaders(
-                                        headerWithName("Authorization").description("Bearer AccessToken")
-                                ),
-                                pathParameters(
-                                        parameterWithName("member-id").description("회원 식별자")
-                                ),
-                                RequestDocumentation.requestParts
-                                        (RequestDocumentation.partWithName("profileImage").description("회원 이미지")),
-                                responseFields(
-                                        List.of(
-                                                fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
-                                                fieldWithPath("userName").type(JsonFieldType.STRING).description("회원 닉네임"),
-                                                fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
-                                                fieldWithPath("location").type(JsonFieldType.STRING).description("회원 소속"),
-                                                fieldWithPath("profileImage").type(JsonFieldType.STRING).description("회원 프로필 이미지"),
-                                                fieldWithPath("profileText").type(JsonFieldType.STRING).description("자기 소개"),
-                                                fieldWithPath("scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩 포스팅"),
-                                                fieldWithPath("followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
-                                                fieldWithPath("followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
-                                        )
-                                )
-
+            .andExpect(status().isCreated())
+            .andDo(document(
+                    "post-member-image",
+                    getRequestPreProcessor(),
+                    getResponsePreProcessor(),
+                    requestHeaders(
+                        headerWithName("Authorization").description("Bearer AccessToken")
+                    ),
+                    pathParameters(
+                        parameterWithName("member-id").description("회원 식별자")
+                    ),
+                    RequestDocumentation.requestParts
+                        (RequestDocumentation.partWithName("profileImage").description("회원 이미지")),
+                    responseFields(
+                        List.of(
+                            fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                            fieldWithPath("userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                            fieldWithPath("email").type(JsonFieldType.STRING).description("회원 이메일"),
+                            fieldWithPath("location").type(JsonFieldType.STRING).description("회원 소속"),
+                            fieldWithPath("profileImage").type(JsonFieldType.STRING).description("회원 프로필 이미지"),
+                            fieldWithPath("profileText").type(JsonFieldType.STRING).description("자기 소개"),
+                            fieldWithPath("scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩 포스팅"),
+                            fieldWithPath("followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
+                            fieldWithPath("followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
                         )
-                );
+                    )
+
+                )
+            );
     }
 
     @Test
@@ -215,49 +214,49 @@ public class MemberControllerRestDocs {
         // then
         ResultActions actions = mockMvc.perform(
             RestDocumentationRequestBuilders.patch("/members/{member-id}", memberId)
-                    .header("Authorization", "Bear AccessToken")
-                    .accept(MediaType.APPLICATION_JSON)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(content)
+                .header("Authorization", "Bear AccessToken")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
         );
 
         actions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(patch.getMemberId()))
-                .andExpect(jsonPath("$.data.userName").value(patch.getUserName()))
-                .andExpect(jsonPath("$.data.profileText").value(patch.getProfileText()))
-                .andExpect(jsonPath("$.data.location").value(patch.getLocation()))
-                .andDo(document(
-                        "patch-member",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer AccessToken")
-                        ),
-                        pathParameters(
-                                parameterWithName("member-id").description("회원 식별자")
-                        ),
-                        requestFields(
-                                List.of(
-                                        fieldWithPath("memberId").description("회원 식별자"),
-                                        fieldWithPath("userName").description("닉네임"),
-                                        fieldWithPath("profileText").description("자기소개"),
-                                        fieldWithPath("location").description("소속")
-                                )
-                        ),
-                        responseFields(
-                                List.of(
-                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
-                                        fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
-                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 이메일"),
-                                        fieldWithPath("data.location").type(JsonFieldType.STRING).description("회원 소속"),
-                                        fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 프로필 이미지"),
-                                        fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기 소개"),
-                                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩 포스팅"),
-                                        fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
-                                        fieldWithPath("data.followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
-                                )
-                        )
-                ));
+            .andExpect(jsonPath("$.data.memberId").value(patch.getMemberId()))
+            .andExpect(jsonPath("$.data.userName").value(patch.getUserName()))
+            .andExpect(jsonPath("$.data.profileText").value(patch.getProfileText()))
+            .andExpect(jsonPath("$.data.location").value(patch.getLocation()))
+            .andDo(document(
+                "patch-member",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                ),
+                pathParameters(
+                    parameterWithName("member-id").description("회원 식별자")
+                ),
+                requestFields(
+                    List.of(
+                        fieldWithPath("memberId").description("회원 식별자"),
+                        fieldWithPath("userName").description("닉네임"),
+                        fieldWithPath("profileText").description("자기소개"),
+                        fieldWithPath("location").description("소속")
+                    )
+                ),
+                responseFields(
+                    List.of(
+                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                        fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("회원 이메일"),
+                        fieldWithPath("data.location").type(JsonFieldType.STRING).description("회원 소속"),
+                        fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 프로필 이미지"),
+                        fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기 소개"),
+                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩 포스팅"),
+                        fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
+                        fieldWithPath("data.followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
+                    )
+                )
+            ));
     }
 
     @Test
@@ -265,58 +264,58 @@ public class MemberControllerRestDocs {
         // given
         long memberId = 1L;
         MemberDto.Response response =
-                new MemberDto.Response(
-                        1L,
-                        "taebong98",
-                        "aaa@naver.com",
-                        "코드스테이츠",
-                        null,
-                        "자기소개",
-                        new ArrayList<>(),
-                        new ArrayList<>(),
-                        new ArrayList<>());
+            new MemberDto.Response(
+                1L,
+                "taebong98",
+                "aaa@naver.com",
+                "코드스테이츠",
+                null,
+                "자기소개",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>());
 
         // when
         given(memberService.findMember(memberId)).willReturn(new Member());
         given(mapper.memberToMemberResponse(Mockito.any(Member.class))).willReturn(response);
 
         ResultActions actions = mockMvc.perform(
-                RestDocumentationRequestBuilders.get("/members/{member-id}", memberId)
-                        .accept(MediaType.APPLICATION_JSON)
+            RestDocumentationRequestBuilders.get("/members/{member-id}", memberId)
+                .accept(MediaType.APPLICATION_JSON)
         );
 
         // then
         actions // get요청시 나오는 response 가 맞는지 확인
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.memberId").value(response.getMemberId()))
-                .andExpect(jsonPath("$.data.userName").value(response.getUserName()))
-                .andExpect(jsonPath("$.data.email").value(response.getEmail()))
-                .andExpect(jsonPath("$.data.location").value(response.getLocation()))
-                .andExpect(jsonPath("$.data.profileImage").value(response.getProfileImage()))
-                .andExpect(jsonPath("$.data.profileText").value(response.getProfileText()))
-                .andDo(document(
-                        "get-member",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        pathParameters(
-                                List.of(
-                                        parameterWithName("member-id").description("회원 식별자")
-                                )
-                        ),
-                        responseFields(
-                                List.of(
-                                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("식별자"),
-                                        fieldWithPath("data.userName").type(JsonFieldType.STRING).description("닉네임"),
-                                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
-                                        fieldWithPath("data.location").type(JsonFieldType.STRING).description("소속"),
-                                        fieldWithPath("data.profileImage").type(JsonFieldType.NULL).description("프로필사진"),
-                                        fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기소개"),
-                                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅"),
-                                        fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
-                                        fieldWithPath("data.followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
-                                )
-                        )
-                ));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.memberId").value(response.getMemberId()))
+            .andExpect(jsonPath("$.data.userName").value(response.getUserName()))
+            .andExpect(jsonPath("$.data.email").value(response.getEmail()))
+            .andExpect(jsonPath("$.data.location").value(response.getLocation()))
+            .andExpect(jsonPath("$.data.profileImage").value(response.getProfileImage()))
+            .andExpect(jsonPath("$.data.profileText").value(response.getProfileText()))
+            .andDo(document(
+                "get-member",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                pathParameters(
+                    List.of(
+                        parameterWithName("member-id").description("회원 식별자")
+                    )
+                ),
+                responseFields(
+                    List.of(
+                        fieldWithPath("data.memberId").type(JsonFieldType.NUMBER).description("식별자"),
+                        fieldWithPath("data.userName").type(JsonFieldType.STRING).description("닉네임"),
+                        fieldWithPath("data.email").type(JsonFieldType.STRING).description("이메일"),
+                        fieldWithPath("data.location").type(JsonFieldType.STRING).description("소속"),
+                        fieldWithPath("data.profileImage").type(JsonFieldType.NULL).description("프로필사진"),
+                        fieldWithPath("data.profileText").type(JsonFieldType.STRING).description("자기소개"),
+                        fieldWithPath("data.scrapPostingList").type(JsonFieldType.ARRAY).description("스크랩한 포스팅"),
+                        fieldWithPath("data.followingList").type(JsonFieldType.ARRAY).description("팔로잉 목록"),
+                        fieldWithPath("data.followerList").type(JsonFieldType.ARRAY).description("팔로워 목록")
+                    )
+                )
+            ));
     }
 
     @Test
@@ -419,6 +418,55 @@ public class MemberControllerRestDocs {
     }
 
     @Test
+    public void logoutMemberTest() throws Exception {
+
+        given(memberService.findTokenMemberEmail(Mockito.anyString())).willReturn("email");
+        doNothing().when(jwtTokenizer).deleteToken(Mockito.anyString());
+
+        ResultActions actions = mockMvc.perform(
+            get("/members/logouts")
+                .header("Authorization", "Bearer AccessToken")
+        );
+
+        actions
+            .andExpect(status().isOk())
+            .andDo(document(
+                "logout-member",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                )
+            ));
+    }
+
+    @Test
+    public void reissuesMemberTest() throws Exception {
+
+        given(memberService.findTokenMember(Mockito.anyString())).willReturn(new Member());
+        given(jwtTokenizer.reissueAtk(Mockito.any())).willReturn("access token");
+
+        ResultActions actions = mockMvc.perform(
+            post("/members/reissues")
+                .header("Refresh" , "refresh token")
+        );
+
+        actions
+            .andExpect(status().isOk())
+            .andDo(document(
+                "reissues-member",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestHeaders(
+                    headerWithName("Refresh").description("refresh token")
+                ),
+                responseHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                )));
+
+    }
+
+    @Test
     public void deleteMemberTest() throws Exception {
         // given
         long memberId = 1L;
@@ -426,23 +474,23 @@ public class MemberControllerRestDocs {
 
         // when
         ResultActions actions = mockMvc.perform(
-                RestDocumentationRequestBuilders.delete("/members/{member-id}", memberId)
-                        .header("Authorization", "Bearer AccessToken")
+            RestDocumentationRequestBuilders.delete("/members/{member-id}", memberId)
+                .header("Authorization", "Bearer AccessToken")
         );
 
         // then
         actions
-                .andExpect(status().isNoContent())
-                .andDo(document(
-                        "delete-member",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        pathParameters(
-                                parameterWithName("member-id").description("회원 식별자")
-                        ),
-                        requestHeaders(
-                                headerWithName("Authorization").description("Bearer AccessToken")
-                        )
-                ));
+            .andExpect(status().isNoContent())
+            .andDo(document(
+                "delete-member",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                pathParameters(
+                    parameterWithName("member-id").description("회원 식별자")
+                ),
+                requestHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                )
+            ));
     }
 }

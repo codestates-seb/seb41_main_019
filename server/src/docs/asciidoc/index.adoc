@@ -32,6 +32,39 @@ include::{snippets}/post-member/http-response.adoc[]
 .response-fields
 include::{snippets}/post-member/response-fields.adoc[]
 
+=== 로그인
+.curl-request
+include::{snippets}/login/curl-request.adoc[]
+
+.http-request
+include::{snippets}/login/http-request.adoc[]
+
+.request-fields
+include::{snippets}/login/request-fields.adoc[]
+
+.http-response
+include::{snippets}/login/http-response.adoc[]
+
+=== 로그아웃
+.curl-request
+include::{snippets}/logout-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/logout-member/http-request.adoc[]
+
+.http-response
+include::{snippets}/logout-member/http-response.adoc[]
+
+=== 토큰 재발급
+.curl-request
+include::{snippets}/reissues-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/reissues-member/http-request.adoc[]
+
+.http-response
+include::{snippets}/reissues-member/http-response.adoc[]
+
 === 회원 프로필 등록
 .curl-request
 include::{snippets}/post-member-image/curl-request.adoc[]
