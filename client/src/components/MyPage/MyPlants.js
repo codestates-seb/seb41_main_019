@@ -88,7 +88,7 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({setCurrentView, userInfo, jwt, currentPlantData, setCurrentPlantData, handleAddPlant, handleChange }) => {
+const MyPlants = ({currentView, setCurrentView, userInfo, jwt, currentPlantData, setCurrentPlantData, handleAddPlant, handleChange }) => {
   const [myPlantsData, setMyPlantsData] = useState(null); // My Plants 리스트 데이터
   const [isPanelOpened, setIsPanelOpened] = useState(false);
 
@@ -179,7 +179,7 @@ const MyPlants = ({setCurrentView, userInfo, jwt, currentPlantData, setCurrentPl
           <GrNext className="icon" />
         </div>
       </StyledMyPlantsDashBoard>
-      {isPanelOpened && <MyPlantInfo handleChange={handleChange} currentPlantData={currentPlantData} />}
+      {isPanelOpened && <MyPlantInfo handleChange={handleChange} currentPlantData={currentPlantData} currentView={currentView} setCurrentView={setCurrentView}/>}
     </StyledContainer>
   );
 };

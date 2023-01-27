@@ -137,6 +137,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
               currentPlantData={currentPlantData}
               setCurrentPlantData={setCurrentPlantData}
               userInfo={userInfo}
+              currentView={currentView}
               setCurrentView={setCurrentView}
               handleAddPlant={handleAddPlant}
               handleChange={handleChange}

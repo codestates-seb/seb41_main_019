@@ -57,7 +57,7 @@ const StyledMenuItem = styled.div`
   }
 `;
 
-const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData }) => {
+const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData, currentView, setCurrentView }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
 
@@ -104,7 +104,7 @@ const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData }) => {
         <BsThreeDotsVertical />
         편집
       </p>
-      {isAddModalOn && <AddPlantImage handleAddClick={handleAddClick} currentPlantId={currentPlantData.myPlantsId}/>}
+      {isAddModalOn && <AddPlantImage handleAddClick={handleAddClick} currentPlantId={currentPlantData.myPlantsId} currentView={currentView} setCurrentView={setCurrentView}/>}
       {isEditModalOn && (
         <StyledMenuContainer>
           <StyledMenuItem onClick={handleUpdateMode}>식물 수정</StyledMenuItem>

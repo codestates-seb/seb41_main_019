@@ -64,10 +64,6 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
 
   const [galleryData, setGalleryData] = useState([])
 
-  useEffect(() => {
-    setGalleryData([])
-  } ,[currentView])
-
   const getGalleryData = (view) => {
     if(view === 'postings') {
       axios({
@@ -84,7 +80,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
       })
     } else if (view === 'scraps') {
       setGalleryData(userInfo.scrapPostingList)
-    } else if (view === 'plant') {
+    } else if (view === 'plant' || view === 'plantRerender') {
       axios({
         method: "get",
         url: `http://13.124.33.113:8080/myplants/${currentPlantData.myPlantsId}/gallery?page=1&size=10`,
@@ -92,7 +88,6 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
           Authorization: jwt,
         },
       }).then((res) => {
-        console.log(res.data.data)
         setGalleryData(res.data.data)
       }).catch ((err) => {
         console.error(err);
@@ -122,7 +117,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
       {galleryData.length !== 0 ? (
         <StyledMyPageGallery>
           {galleryData.map((el) => {
-            if (currentView === "plant") {
+            if (currentView === "plant" || currentView === "plantRerender") {
               return (           
                 <div className="image-wrapper" key={el.galleryId}>
                   <img className="image" src={el.plantImage} alt="each item" />

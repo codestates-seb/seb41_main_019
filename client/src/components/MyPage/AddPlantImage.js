@@ -91,23 +91,21 @@ const StyledInputWrapper = styled.div`
     }
 `;
 
-const AddPlantImage = ({handleAddClick, currentPlantId}) => {
+const AddPlantImage = ({handleAddClick, currentPlantId, currentView, setCurrentView}) => {
     const cookie = new Cookie();
     const jwt = cookie.get("authorization")
 
     const inputRef = useRef(null);
     const [imageInput, setImageInput] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
     const [contentInput, setContentInput] = useState("");
-    const [form, setForm] = useState(null);
-
-    useEffect(() => {
-        console.log(contentInput)
-    }, [contentInput])
 
     const onSetFormData = useCallback((e) => {
         if (!e.target.files) {
             return;
         }
+        setImageFile(e.target.files[0])
+
         const reader = new FileReader();
         reader.readAsDataURL(e.target.files[0])
         reader.onloadend = () => {
@@ -117,22 +115,25 @@ const AddPlantImage = ({handleAddClick, currentPlantId}) => {
 
     const onSubmit = () => {
         const formData = new FormData();
-        formData.append("galleryImage", imageInput);
         formData.append("requestBody", new Blob([JSON.stringify({
             "content": contentInput
         })], { type: "application/json"}));
-        setForm(formData)
+        formData.append("galleryImage", imageFile);
 
         axios({
             method: "post",
             url: `http://13.124.33.113:8080/myplants/${currentPlantId}/gallery`,
-            data: form,
+            data:  formData,
             headers: {
-              "Content-Type": "multipart/form-data",
               Authorization: jwt,
             },
           }).then((res) => {
-            console.log(res.data)
+            handleAddClick();
+            if(currentView === "plant") {
+                setCurrentView("plantRerender")
+            } else {
+                setCurrentView("plant")
+            }
           }).catch ((err) => {
             console.error(err);
           })
@@ -157,7 +158,7 @@ const AddPlantImage = ({handleAddClick, currentPlantId}) => {
                 <input ref={inputRef} type="file" accept="image/*" onChange={onSetFormData} />
             </StyledInputWrapper>
             <p>코멘트</p>
-            <input pattern=".{0, 20}" required title="최소 0글자, 최대 20글자 입력하세요." type="text" onChange={onContentInputChange}/>
+            <input type="text" onChange={onContentInputChange}/>
             <div className="button-container">
                 <BlueBtn onClick={onSubmit}>완료</BlueBtn>
                 <BlueBtn onClick={handleAddClick}>취소</BlueBtn>
