@@ -285,7 +285,7 @@ include::{snippets}/get-following-postings-sorting-by-likes/http-response.adoc[]
 .response-fields
 include::{snippets}/get-following-postings-sorting-by-likes/response-fields.adoc[]
 
-=== 태그명으로 게시글 검색
+=== 태그로 게시글 검색
 .curl-request
 include::{snippets}/search-postings-by-tagName/curl-request.adoc[]
 
@@ -300,6 +300,22 @@ include::{snippets}/search-postings-by-tagName/http-response.adoc[]
 
 .response-fields
 include::{snippets}/search-postings-by-tagName/response-fields.adoc[]
+
+=== 게시글 내용으로 검색
+.curl-request
+include::{snippets}/search-postings-by-str/curl-request.adoc[]
+
+.http-request
+include::{snippets}/search-postings-by-str/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/search-postings-by-str/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/search-postings-by-str/http-response.adoc[]
+
+.response-fields
+include::{snippets}/search-postings-by-str/response-fields.adoc[]
 
 === 게시글 삭제
 .curl-request
