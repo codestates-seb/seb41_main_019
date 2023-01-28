@@ -61,6 +61,7 @@ public class LoginRestDocs {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>());
 
 //        memberService.createMember(member);
