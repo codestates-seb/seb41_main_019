@@ -16,6 +16,7 @@ import View from "../components/Home/View";
 import CommentModal from "../components/Home/CommentModal";
 import PlantImageView from "../components/MyPage/PlantImageView";
 import Followers from "../components/MyPage/Followers";
+import Followings from "../components/MyPage/Followings";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -91,6 +92,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const [isViewOpened, setIsViewOpened] = useState(false); // Gallery.js에서 map 함수의 요소 클릭 했을 때 모달(View.js) 렌더링 
   const [isPlantImageViewOpened, setIsPlantImageViewOpened] = useState(false);
   const [isFollowersOpened, setIsFollowersOpened] = useState(false);
+  const [isFollowingsOpened, setIsFollowingsOpened] = useState(false);
 
   useEffect(() => {
     getUserInfo()
@@ -111,6 +113,11 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
 
   const handleFollowers = () => {
     setIsFollowersOpened(!isFollowersOpened)
+    handleIsCovered();
+  }
+
+  const handleFollowings = () => {
+    setIsFollowingsOpened(!isFollowingsOpened)
     handleIsCovered();
   }
 
@@ -155,8 +162,9 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
       {isCovered && isPlantImageViewOpened && <PlantImageView handlePlantImageView={handlePlantImageView} plantImageViewData={plantImageViewData} />}
       {isCovered && isFollowersOpened && <Followers handleFollowers={handleFollowers} followers={userInfo.followerList}/>}
+      {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList}/>}
       <StyledContainer>
-        <UserInfo handleFollows={handleFollowers} userInfo={userInfo} postCount={postCount}/>
+        <UserInfo handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened && 
           <div className="container">
             <MyPlants

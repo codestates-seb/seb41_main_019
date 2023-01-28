@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { useEffect } from "react";
-import FollowerItem from "./FollwersItem";
+import { useEffect, useState } from "react";
+import FollowingsItem from "./FollowingsItem";
 
 const StyledContainer = styled.div`
   position: absolute;
@@ -38,24 +38,26 @@ const StyledContainer = styled.div`
 
 `
 
-const Followers = ({handleFollowers, followers}) => {
+const Followings = ({handleFollowings, followings}) => {
   useEffect(() => {
       document.getElementById("bg").addEventListener("click", () => {
-        handleFollowers();
+        handleFollowings();
       });
-    }, [handleFollowers]);
+    }, [handleFollowings]);
+
+    console.log(followings)
 
   return (
       <StyledContainer>
         <p>팔로워 목록</p>
         <ul>
-          {followers.length > 0 
-            ? followers.map((follower, idx) => (
-              <FollowerItem follower={follower} key={follower.followerId}/>
-          )) : "팔로워가 없습니다."}
+          {followings.length > 0 
+            ? followings.map((following, idx) => (
+              <FollowingsItem following={following} key={following.followingId}/>
+          )) : "팔로우하는 사람이 없습니다."}
         </ul>
       </StyledContainer>
   )
 }
 
-export default Followers
+export default Followings
