@@ -8,6 +8,7 @@ import defaultImg from "../assets/img/profile.jpg";
 import Footer from "../components/public/Footer";
 import useModal from "../hooks/useModal";
 import { MdInfoOutline } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
    
@@ -88,12 +89,23 @@ const Setting = ({ setIsLanded }) => {
     const [ text, setText ] = useState("");
     const [ location, setLocation] = useState("");
     const [ img, setImg ] = useState(null);
-    const { open, close, Modal } = useModal();
+    const { open, close, Modal } = useModal(deleteOut);
     const [ oldName, setOldName ] = useState("");
     const [ reload, setReload ] = useState(false);
     const cookie = new Cookie();
+    const navigate = useNavigate();
 
     const handleReload = () => setReload(!reload);
+
+    function deleteOut () {
+        cookie.remove("memberId");
+        cookie.remove("list");
+        cookie.remove("username");
+        cookie.remove("refresh");   
+        cookie.remove("authorization");
+        navigate("/");
+        setIsLanded(true);
+    }
 
     useEffect(() => {
         axios({
@@ -122,15 +134,27 @@ const Setting = ({ setIsLanded }) => {
                 { isClicked === 0 
                     ? <EditProfile open={open} name={name} text={text} location={location} img={img} oldName={oldName}
                     handleReload={handleReload} setName={setName} setText={setText} setLocation={setLocation} setImg={setImg} /> 
-                    :  <DeleteProfile name={name} img={img} setIsLanded={setIsLanded}/>
+                    :  <DeleteProfile open={open} name={name} img={img} setIsLanded={setIsLanded}/>
                 }
             </Wrapper>
             <Footer />
             <Modal>
-                <div className="modal">
-                    <MdInfoOutline />
-                    <span>변경되었습니다</span>
-                </div>
+                {
+                    isClicked === 0 && (
+                        <div className="modal">
+                            <MdInfoOutline />
+                            <span>변경되었습니다</span>
+                        </div>
+                    ) 
+                }   
+                {   
+                    isClicked === 1 && (
+                        <div className="modal">
+                            <MdInfoOutline />
+                            <span>탈퇴되었습니다</span>
+                        </div>
+                    )
+                }
             </Modal>
         </Container>
     )

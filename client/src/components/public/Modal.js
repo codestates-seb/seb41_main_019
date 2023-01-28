@@ -33,11 +33,17 @@ const ModalContainer = styled.div`
     }
 `;
 
-const Modal = ({ onClose, children }) => {
+const Modal = ({ onClose, children, func = null }) => {
     return (
-        <Wrapper onClick={onClose}>
+        <Wrapper onClick={() => {
+            onClose()
+            func && func();
+        }}>
             <ModalContainer onClick={(e) => e.stopPropagation()}>
-                <CloseBtn handleEvent={onClose} />
+                <CloseBtn handleEvent={() => {
+                    onClose()
+                    func && func();
+                }} />
                 {children}
             </ModalContainer>
         </Wrapper>

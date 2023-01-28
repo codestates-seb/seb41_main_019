@@ -174,7 +174,6 @@ const EditProfile = ({ open, name, text, location, img, setName, setText, setLoc
 
     useEffect(() => {
         if(!isName && !isIntro && !isLocation) {
-            console.log(1);
             btn.current.classList.add("active");
         } else btn.current.classList.remove("active");
     }, [isName, isIntro, isLocation])

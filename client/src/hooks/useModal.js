@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "../components/public/Modal";
 
-const useModal = () => {
+const useModal = (func) => {
     const [ isOpen, setIsOpen ] = useState(false);
 
     const open = () => {
@@ -11,7 +11,7 @@ const useModal = () => {
     const close = () => setIsOpen(false);
 
     return {
-        Modal: isOpen ? ({ children }) => <Modal onClose={close}>{children}</Modal>: () => null, 
+        Modal: isOpen ? ({ children }) => <Modal onClose={close} children={children} func={func} />: () => null, 
         open, 
         close
     };
