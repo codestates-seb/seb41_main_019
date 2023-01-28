@@ -71,7 +71,7 @@ public class Member {
 	@OneToMany(mappedBy = "member", cascade = REMOVE)
 	private List<MyPlants> myPlantsList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member", cascade = REMOVE)
+	@OneToMany(mappedBy = "receiver", cascade = REMOVE)
 	private List<ChatRoom> chatRoomList = new ArrayList<>();
 
 	@PrePersist
