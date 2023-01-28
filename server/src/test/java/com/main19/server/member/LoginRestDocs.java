@@ -44,7 +44,21 @@ public class LoginRestDocs {
     @Test
     public void LoginTest() throws Exception {
 
-        Member member = new Member(1L,"머호","oheadnah@github.com","profileImage","자기소개","codestates","12345678a",new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
+        Member member = new Member(
+                1L,
+                "머호",
+                "oheadnah@github.com",
+                "profileImage",
+                "자기소개",
+                "codestates",
+                "12345678a",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>());
 
         memberService.createMember(member);
 
