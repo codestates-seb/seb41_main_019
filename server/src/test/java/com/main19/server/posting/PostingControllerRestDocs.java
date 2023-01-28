@@ -419,6 +419,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -434,6 +435,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -587,6 +589,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -602,6 +605,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -755,6 +759,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -770,6 +775,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -926,6 +932,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -941,6 +948,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -1094,6 +1102,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -1109,6 +1118,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -1262,6 +1272,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -1277,6 +1288,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -1452,6 +1464,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -1467,6 +1480,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
