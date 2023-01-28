@@ -1,5 +1,6 @@
 package com.main19.server.posting.entity;
 
+import com.main19.server.sse.entity.Sse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +39,11 @@ public class Posting {
 
 	private LocalDateTime modifiedAt = LocalDateTime.now();
 
-	 @ManyToOne
+	 @ManyToOne(cascade = CascadeType.PERSIST)
 	 @JoinColumn(name = "member_id")
 	 private Member member;
 
-	 @OneToMany(mappedBy = "posting")
+	 @OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
 	 private List<Comment> comments;
 
 	@OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
@@ -55,6 +56,9 @@ public class Posting {
 
 	@OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
 	private List<PostingLike> postingLikes = new ArrayList<>();
+
+	@OneToMany(mappedBy = "posting", cascade = CascadeType.REMOVE)
+	private List<Sse> sseList = new ArrayList<>();
 
 	public void createLikeCount() {
 		likeCount++;

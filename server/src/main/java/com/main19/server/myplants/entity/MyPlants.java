@@ -38,7 +38,7 @@ public class MyPlants {
     @Column(nullable = false)
     private String plantBirthDay;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
     private Member member;
 
