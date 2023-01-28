@@ -58,9 +58,12 @@ public class LoginRestDocs {
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
                 new ArrayList<>());
 
-        memberService.createMember(member);
+//        memberService.createMember(member);
 
         LoginDto loginDto = new LoginDto();
         loginDto.setEmail(member.getEmail());
