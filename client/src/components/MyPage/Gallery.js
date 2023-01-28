@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
+import PlantImageView from "./PlantImageView";
 
 import { FcAnswers } from "react-icons/fc";
 
@@ -57,13 +58,13 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlantData }) => {
+const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
 
   const [galleryData, setGalleryData] = useState([])
-  
+
   const getGalleryData = (view) => {
     if(view === 'postings') {
       axios({
@@ -80,7 +81,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
       })
     } else if (view === 'scraps') {
       setGalleryData(userInfo.scrapPostingList)
-    } else if (view === 'plant') {
+    } else if (view === 'plant' || view === 'plantRerender') {
       axios({
         method: "get",
         url: `http://13.124.33.113:8080/myplants/${currentPlantData.myPlantsId}/gallery?page=1&size=10`,
@@ -88,7 +89,6 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
           Authorization: jwt,
         },
       }).then((res) => {
-        console.log(res.data.data)
         setGalleryData(res.data.data)
       }).catch ((err) => {
         console.error(err);
@@ -104,7 +104,7 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
         Authorization: jwt,
       },
     }).then((res) => {
-      handleModal("scraps", res.data.data)
+      handleModal(res.data.data)
     }).catch ((err) => {
       console.error(err);
     })
@@ -112,40 +112,43 @@ const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlan
 
   useEffect(() => {
     getGalleryData(currentView)
-  }, [currentView])
+  }, [currentView, currentPlantData])
+
   return (
-    <StyledContainer>
-      {galleryData.length !== 0 ? (
-        <StyledMyPageGallery>
-          {galleryData.map((el) => {
-            if (currentView === "plant") {
-              return (           
-                <div className="image-wrapper" key={el.galleryId}>
-                  <img className="image" src={el.plantImage} alt="each item" />
-                </div>
-              );
-            } else if (currentView === "postings") {
-              return (
-                <div className="image-wrapper" key={el.postingId} onClick={() => handleModal("postings", el)}>
-                  <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
-                </div>
-              );
-            } else if (currentView === "scraps") {
-              return (
-                <div className="image-wrapper" key={el.postingId} onClick={() => setViewData(el.postingId)}>
-                  <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
-                </div>
-              )
-            }
-          })}
-        </StyledMyPageGallery>
-      ) : (
-        <StyledNoContents>
-          <FcAnswers />
-          <p>게시물이 없습니다</p>
-        </StyledNoContents>
-      )}
-    </StyledContainer>
+    <>
+      <StyledContainer>
+        {galleryData.length !== 0 ? (
+          <StyledMyPageGallery>
+            {galleryData.map((el, idx) => {
+              if (currentView === "plant" || currentView === "plantRerender") {
+                return (           
+                  <div className="image-wrapper" key={el.galleryId} onClick={() => handlePlantImageView(galleryData, idx)}>
+                    <img className="image" src={el.plantImage} alt="each item" />
+                  </div>
+                );
+              } else if (currentView === "postings") {
+                return (
+                  <div className="image-wrapper" key={el.postingId} onClick={() => handleModal(el)}>
+                    <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                  </div>
+                );
+              } else if (currentView === "scraps") {
+                return (
+                  <div className="image-wrapper" key={el.postingId} onClick={() => setViewData(el.postingId)}>
+                    <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                  </div>
+                )
+              }
+            })}
+          </StyledMyPageGallery>
+        ) : (
+          <StyledNoContents>
+            <FcAnswers />
+            <p>게시물이 없습니다</p>
+          </StyledNoContents>
+        )}
+      </StyledContainer>
+    </>
   );
 };
 

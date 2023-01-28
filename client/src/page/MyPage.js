@@ -13,6 +13,10 @@ import UserInfo from "../components/MyPage/UserInfo";
 import Gallery from "../components/MyPage/Gallery";
 import AddPlant from "../components/MyPage/AddPlant";
 import View from "../components/Home/View";
+import CommentModal from "../components/Home/CommentModal";
+import PlantImageView from "../components/MyPage/PlantImageView";
+import Followers from "../components/MyPage/Followers";
+import Followings from "../components/MyPage/Followings";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -64,7 +68,7 @@ const StyledChangeViewButton = styled.div`
   }
 `;
 
-const MyPage = ({ isCovered, handleIsCovered }) => {
+const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
@@ -72,17 +76,23 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
   // 데이터 상태관리
   const [userInfo, setUserInfo] = useState([]); // 유저정보 (UserInfo.js로 props)
   const [postCount, setPostCount] = useState(); // 게시물 숫자 (setState는 UserInfo.js에서 핸들링)
-  const [galleryData, setGalleryData] = useState([]); // 관심사 분리를 위하여 Gallery.js로 이관됨. handleModal 변경 후 삭제 예정
   const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
   const [commentId, setCommentId] = useState(null);
   const [commentMenu, setCommentMenu] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState(null);
+  const [plantImageViewData, setplantImageViewData] = useState({
+    imgs: [],
+    imgIdx: null,
+  });
   
   // 모달 등 상태관리
   const [isFolderOpened, setIsFolderOpened] = useState(false); // myPlants 펼치기/접기 상태
   const [currentView, setCurrentView] = useState("postings"); // 현재 view (Gallery.js를 조건부 렌더링하기 위한 상태)
   const [isAddPlantOpened, setIsAddPlantOpened] = useState(false); // AddPlant.js 모달 조건부 렌더링하기 위한 상태
   const [isViewOpened, setIsViewOpened] = useState(false); // Gallery.js에서 map 함수의 요소 클릭 했을 때 모달(View.js) 렌더링 
+  const [isPlantImageViewOpened, setIsPlantImageViewOpened] = useState(false);
+  const [isFollowersOpened, setIsFollowersOpened] = useState(false);
+  const [isFollowingsOpened, setIsFollowingsOpened] = useState(false);
 
   useEffect(() => {
     getUserInfo()
@@ -101,25 +111,44 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
       console.error(err))
   };
 
-  const handleModal = (modal, postingData) => {
-    if(modal === "AddPlant") {
-      // setIsAddPlantOpened(!isAddPlantOpened);
-    } else if(modal === "postings") {
-      setCurPost(postingData);
-    } else if(modal === "scraps") {
-      setCurPost(postingData)
-    }
+  const handleFollowers = () => {
+    setIsFollowersOpened(!isFollowersOpened)
+    handleIsCovered();
+  }
+
+  const handleFollowings = () => {
+    setIsFollowingsOpened(!isFollowingsOpened)
+    handleIsCovered();
+  }
+
+  const handleAddPlant = () => {
+    setIsAddPlantOpened(!isAddPlantOpened);
+    handleIsCovered();
+  }
+ 
+  const handleModal = (postingData) => {
+    setCurPost(postingData);
     setIsViewOpened(!isViewOpened);
     handleIsCovered();
   };
 
-  const handlePlantClick = (plantId) => {
-    // 반려식물 클릭시 해당건 조회
-    setCurrentView("plant");
-  };
+  const handlePlantImageView = (imgs, imgIdx) => {
+    setplantImageViewData({
+      imgs: imgs,
+      imgIdx: imgIdx
+    })
+    setIsPlantImageViewOpened(!isPlantImageViewOpened);
+    handleIsCovered()
+  }
 
   const handleFolderClick = () => {
-    setIsFolderOpened(!isFolderOpened);
+    if (isFolderOpened) {
+      setIsFolderOpened(false);
+      setCurrentView("postings")
+    } else {
+      setIsFolderOpened(true);
+      setCurrentView("plant")
+    }
   };
 
   const handleCommentMenu = () => {
@@ -128,52 +157,59 @@ const MyPage = ({ isCovered, handleIsCovered }) => {
 
   return (
     <>
-      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
-      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} setGalleryData={setGalleryData} handleModal={handleModal} userInfo={userInfo} />}
+      {commentMenu && <CommentModal post={curPost} handleCommentMenu={handleCommentMenu} handleChange={handleChange} commentId={commentId}/>}
+      {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
+      {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
+      {isCovered && isPlantImageViewOpened && <PlantImageView handlePlantImageView={handlePlantImageView} plantImageViewData={plantImageViewData} />}
+      {isCovered && isFollowersOpened && <Followers handleFollowers={handleFollowers} followers={userInfo.followerList}/>}
+      {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList}/>}
       <StyledContainer>
-        <UserInfo userInfo={userInfo} postCount={postCount}/>
-        {isFolderOpened ? (
+        <UserInfo handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount}/>
+        {isFolderOpened && 
           <div className="container">
             <MyPlants
               currentPlantData={currentPlantData}
               setCurrentPlantData={setCurrentPlantData}
               userInfo={userInfo}
-              handlePlantClick={handlePlantClick}
-              handleModal={handleModal}
+              currentView={currentView}
+              setCurrentView={setCurrentView}
+              handleAddPlant={handleAddPlant}
+              handleChange={handleChange}
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
-              <Gallery setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} />
+              {currentPlantData && <Gallery isCovered={isCovered} isPlantImageViewOpened={isPlantImageViewOpened} setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} handlePlantImageView={handlePlantImageView}/> }
               <p>
                 My Plants 접기 <TiArrowSortedUp />
               </p>
             </StyledMyPlantFolder>
           </div>
-        ) : (
+        }
+        {!isFolderOpened &&
           <div className="container">
-            <StyledMyPlantFolder>
-              <p onClick={handleFolderClick}>
-                My Plants 펼치기 <TiArrowSortedDown />
-              </p>
-              <StyledChangeViewContainer>
-                <StyledChangeViewButton
-                  onClick={() => setCurrentView("postings")}
-                  className={currentView === "postings" ? "selected" : ""}
-                >
-                  <BsGrid3X3 />
-                  <span>게시물</span>
-                </StyledChangeViewButton>
-                <StyledChangeViewButton
-                  onClick={() => setCurrentView("scraps")}
-                  className={currentView === "scraps" ? "selected" : ""}
-                >
-                  <BsBookmark />
-                  <span>스크랩</span>
-                </StyledChangeViewButton>
-              </StyledChangeViewContainer>
-              <Gallery setPostCount={setPostCount} currentView={currentView} handleModal={handleModal} userInfo={userInfo}/>
-            </StyledMyPlantFolder>
-          </div>
-        )}
+          <StyledMyPlantFolder>
+            <p onClick={handleFolderClick}>
+              My Plants 펼치기 <TiArrowSortedDown />
+            </p>
+            <StyledChangeViewContainer>
+              <StyledChangeViewButton
+                onClick={() => setCurrentView("postings")}
+                className={currentView === "postings" && "selected"}
+              >
+                <BsGrid3X3 />
+                <span>게시물</span>
+              </StyledChangeViewButton>
+              <StyledChangeViewButton
+                onClick={() => setCurrentView("scraps")}
+                className={currentView === "scraps" && "selected"}
+              >
+                <BsBookmark />
+                <span>스크랩</span>
+              </StyledChangeViewButton>
+            </StyledChangeViewContainer>
+            <Gallery setPostCount={setPostCount} currentView={currentView} handleModal={handleModal} userInfo={userInfo}/>
+          </StyledMyPlantFolder>
+        </div>
+        }
       </StyledContainer>
     </>
   );
