@@ -1,6 +1,7 @@
 package com.main19.server.member.entity;
 
 import com.main19.server.chatroom.entity.ChatRoom;
+import com.main19.server.comment.entity.Comment;
 import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.sse.entity.Sse;
 import javax.persistence.*;
@@ -59,6 +60,9 @@ public class Member {
   
 	@OneToMany(mappedBy = "member", cascade = REMOVE)
 	private List<Posting> postings = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = REMOVE)
+	private List<Comment> comments = new ArrayList<>();
 
 	@OneToMany(mappedBy = "member", cascade = REMOVE)
 	private List<Scrap> scrapPostingList = new ArrayList<>();
