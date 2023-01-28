@@ -2,6 +2,7 @@ package com.main19.server.member.entity;
 
 import com.main19.server.chatroom.entity.ChatRoom;
 import com.main19.server.myplants.entity.MyPlants;
+import com.main19.server.sse.entity.Sse;
 import javax.persistence.*;
 
 import com.main19.server.follow.entity.Follow;
@@ -72,7 +73,16 @@ public class Member {
 	private List<MyPlants> myPlantsList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "receiver", cascade = REMOVE)
-	private List<ChatRoom> chatRoomList = new ArrayList<>();
+	private List<ChatRoom> receiverChatRoomList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "sender", cascade = REMOVE)
+	private List<ChatRoom> senderChatRoomList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "receiver", cascade = CascadeType.REMOVE)
+	private List<Sse> receiverSseList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "sender", cascade = CascadeType.REMOVE)
+	private List<Sse> senderSseList = new ArrayList<>();
 
 	@PrePersist
 	public void prePersist() {
