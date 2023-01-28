@@ -75,6 +75,7 @@ const DeleteProfile = ({ name, img, open }) => {
             url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
             headers: { Authorization : cookie.get("authorization") }
         }).then(res => {
+            open();
         })
         .catch(e => {
            console.log(e);
@@ -97,7 +98,6 @@ const DeleteProfile = ({ name, img, open }) => {
                 <label htmlFor="checkbox">안내 사항을 모두 확인하였으며, 이에 동의합니다.</label>
             </div>
             <BlueBtn disabled={isChecked ? false : true} onClick={() => {
-                open();
                 deleteMember();
             }}>계정 삭제</BlueBtn>
         </Wrapper>

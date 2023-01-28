@@ -89,7 +89,7 @@ const Setting = ({ setIsLanded }) => {
     const [ text, setText ] = useState("");
     const [ location, setLocation] = useState("");
     const [ img, setImg ] = useState(null);
-    const { open, close, Modal } = useModal(deleteOut);
+    const { open, close, Modal } = useModal(isClicked === 1 && deleteOut);
     const [ oldName, setOldName ] = useState("");
     const [ reload, setReload ] = useState(false);
     const cookie = new Cookie();
