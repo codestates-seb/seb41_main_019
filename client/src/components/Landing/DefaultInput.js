@@ -1,11 +1,9 @@
 import styled from "styled-components";
-import { useState } from "react";
 
 const StyledInput = styled.div`
     display: flex;
     flex-direction: column;
     margin: 20px 0px 0px 0px;
-
     label {
         font-size: 14px;
         color: gray;
@@ -15,11 +13,9 @@ const StyledInput = styled.div`
         cursor: text;
         transition: top 0.2s ease;
     }
-
     :focus-within label{
         top: -4px;
     }
-
     input { 
         height: 35px;
         width: 280px;
@@ -28,7 +24,6 @@ const StyledInput = styled.div`
         outline: none;
         padding: 0px 0px 0px 6px;
     }
-
     .valid {
         top: -4px;
     }

@@ -12,7 +12,6 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
     form div:first-child {
         margin: 0px 0px 0px 0px;
     }
@@ -60,7 +59,7 @@ const Sign = ({ setSelected }) => {
     const handleSubmit = () => {
         axios({
             method: "post",
-            url: "http://13.124.33.113:8080/members/sign-up",
+            url: `${process.env.REACT_APP_API}/members/sign-up`,
             data: {
                 "userName" : name,
                 "email" : id,

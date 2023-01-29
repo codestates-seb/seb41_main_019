@@ -3,7 +3,6 @@ import styled from "styled-components"
 import { BlueBtn } from "../public/BlueBtn";
 import axios from 'axios';
 import Cookie from "../../util/Cookie";
-import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
     width: 100%;
@@ -66,10 +65,9 @@ const Wrapper = styled.div`
     }
 `;
 
-const DeleteProfile = ({ name, img, setIsLanded }) => {
+const DeleteProfile = ({ name, img, open }) => {
     const [isChecked, setIsChecked] = useState(false);
     const cookie = new Cookie();
-    const navigate = useNavigate();
 
     const deleteMember = () => {
         axios({
@@ -77,14 +75,7 @@ const DeleteProfile = ({ name, img, setIsLanded }) => {
             url: `${process.env.REACT_APP_API}/members/${cookie.get("memberId")}`,
             headers: { Authorization : cookie.get("authorization") }
         }).then(res => {
-            alert('계정이 삭제되었습니다.');
-            cookie.remove("memberId");
-            cookie.remove("list");
-            cookie.remove("username");
-            cookie.remove("refresh");
-            cookie.remove("authorization");
-            navigate("/");
-            setIsLanded(true);
+            open();
         })
         .catch(e => {
            console.log(e);
@@ -106,7 +97,9 @@ const DeleteProfile = ({ name, img, setIsLanded }) => {
                 <input id="checkbox" type="checkbox" value={isChecked} onClick={handleBtn}/>
                 <label htmlFor="checkbox">안내 사항을 모두 확인하였으며, 이에 동의합니다.</label>
             </div>
-            <BlueBtn disabled={isChecked ? false : true} onClick={deleteMember}>계정 삭제</BlueBtn>
+            <BlueBtn disabled={isChecked ? false : true} onClick={() => {
+                deleteMember();
+            }}>계정 삭제</BlueBtn>
         </Wrapper>
     )
 };

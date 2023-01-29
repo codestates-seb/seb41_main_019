@@ -89,7 +89,7 @@ const Login = ({ setSelected, setIsLanded }) => {
     const handleLogin = () => {
         axios({
             method: "post",
-            url: process.env.REACT_APP_API + "member",
+            url: `${process.env.REACT_APP_API}/member`,
             data: {
                 email: id,
                 password: pw
