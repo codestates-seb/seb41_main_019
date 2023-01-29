@@ -5,7 +5,6 @@ import DefaultInput from "./DefaultInput"
 import axios from "axios"
 import Cookie from "../../util/Cookie"
 import { decode } from "../../util/decode"
-import { RiContactsBookLine } from "react-icons/ri"
 
 const Wrapper = styled.div`
     position: absolute;
@@ -90,7 +89,7 @@ const Login = ({ setSelected, setIsLanded }) => {
     const handleLogin = () => {
         axios({
             method: "post",
-            url: "http://13.124.33.113:8080/member",
+            url: process.env.REACT_APP_API + "member",
             data: {
                 email: id,
                 password: pw
