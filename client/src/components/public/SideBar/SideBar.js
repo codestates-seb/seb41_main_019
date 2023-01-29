@@ -10,6 +10,7 @@ import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
 import { useLocation } from "react-router-dom";
 import Alert from "../Alert/Alert";
+import Cookie from "../../../util/Cookie";
 
 const StyledSidebar = styled.aside`
   z-index: 600;
@@ -124,12 +125,6 @@ const StyledSidebar = styled.aside`
     border: 1px solid #dbdbdb;
     box-shadow: 0px;
 
-    .hambuger {
-      position: fixed;
-      top: 22px;
-      left: 120px;
-    }
-
     h2 {
       display: none;
     }
@@ -147,6 +142,13 @@ const StyledSidebar = styled.aside`
 
     .none {
       display: none;
+    }
+  }
+
+  @media screen and (min-width: 770px) {
+    .hambuger {
+      position: fixed;
+      bottom: 10px;
     }
   }
 `;
@@ -171,6 +173,7 @@ const StyledHeader = styled.header`
     align-items: flex-end;
     font-weight: 400;
     letter-spacing: 2px;
+    cursor: pointer;
   }
 
   h3 svg {
@@ -245,10 +248,11 @@ const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
-  const location = useLocation().pathname;
+  const location = useLocation();
+  const id = new Cookie().get("memberId");
 
   useEffect(() => {
-    if(location === "/landing") {
+    if(location.pathname === "/landing") {
       setIsLanded(true);
     }
   }, [location, setIsLanded])
@@ -300,21 +304,26 @@ const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
             <li onClick={() => handleIsOpend("Alert")}>
               <IoAlertCircleOutline /> <span>알림</span>
             </li>
-            <li onClick={() => navigate("/mypage")}>
+            <li onClick={() => {
+              navigate("/mypage", {state:{id}})
+            }}>
               <BsPerson /> <span>프로필</span>
             </li>
             <li onClick={handleIsPosted}>
               <BsPlusSquareDotted /> <span>작성하기</span>
+            </li>
+            <li className="hambuger" onClick={handleOpendModal}>
+              <AiOutlineMenu /> <span>더 보기</span>
             </li>
           </ul>
         </nav>
         {
           opendModal ? <SideModal handleOpendModal={handleOpendModal} setIsLanded={setIsLanded} /> : null
         }
-        <div className="hambuger" onClick={handleOpendModal}>
+        {/* <div className="hambuger" onClick={handleOpendModal}>
           <AiOutlineMenu />
           <span>더 보기</span>
-        </div>
+        </div> */}
       </StyledSidebar>
       <StyledExtend>
         <div className={isOpend === "Search" ? "active" : null}>

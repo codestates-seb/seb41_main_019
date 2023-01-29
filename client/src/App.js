@@ -83,6 +83,12 @@ function App() {
           }
         />
         <Route
+          path={isLanded ? null : "/member"}
+          element={
+            <MyPage isCovered={isCovered} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
+          }
+        />
+        <Route
           path={isLanded ? "/" : null}
           element={<Landing setIsLanded={setIsLanded} isLanded={isLanded} />}
         />

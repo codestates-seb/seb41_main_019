@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 import { TiArrowSortedDown } from "react-icons/ti";
 import { TiArrowSortedUp } from "react-icons/ti";
@@ -17,17 +18,22 @@ import CommentModal from "../components/Home/CommentModal";
 import PlantImageView from "../components/MyPage/PlantImageView";
 import Followers from "../components/MyPage/Followers";
 import Followings from "../components/MyPage/Followings";
+import Footer from "../components/public/Footer";
 
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 300px 0 270px;
 
   > .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  @media screen and (max-width: 770px) {
+    position: relative;
+    top: 60px;
   }
 `;
 
@@ -71,7 +77,7 @@ const StyledChangeViewButton = styled.div`
 const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
-  const memberId = Number(cookie.get("memberId"));
+  const memberId = useLocation().state.id;
 
   // 데이터 상태관리
   const [userInfo, setUserInfo] = useState([]); // 유저정보 (UserInfo.js로 props)
@@ -96,7 +102,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
 
   useEffect(() => {
     getUserInfo()
-  }, [])
+  }, [memberId])
   
   const getUserInfo = () => {
       axios({
@@ -211,6 +217,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
         </div>
         }
       </StyledContainer>
+      <Footer />
     </>
   );
 };

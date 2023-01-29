@@ -41,10 +41,9 @@ const StyledModal = styled.div`
   }
 
   @media screen and (max-width: 770px) {
-    display: flex;
-    position: fixed;
-    top: 60px;
-    left: 110px;
+    width: 150px;
+    left: 490px;
+    bottom: 50px;
   }
 `;
 
