@@ -37,11 +37,9 @@ export const useAlert = (alert) => {
         sse.addEventListener("sse", res => {
             try {
                 const json = JSON.parse(res.data);
+                console.log(json);
                 setNewLog(json);
-            }catch {
-                console.log(1);
-            }
-            // console.log(JSON.parse(res.data));
+            }catch {}
         })
 
         sse.onerror = (err) => {
@@ -51,26 +49,11 @@ export const useAlert = (alert) => {
         return sse;
     }
 
-    const appendAlert = (data) => {
-        console.log(data);
-        const li = document.createElement("li");
-        const img = document.createElement("img");
-        img.src = data.profileImage;
-        img.alt = "img";
-
-        const span = document.createElement("span");
-        span.textContent = `${data.userName}님이 ${soltText(data.sseType)}`;
-
-        li.append(span);
-        li.append(img);
-
-        console.log(alert)
-        alert.current.append(li);
-    }
-
     const soltText = (type) => {
         switch(type) {
             case "postLike" : return "님이 회원님의 게시글을 좋아합니다."
+            case "message" : return "님이 메세지를 보냈습니다."
+            case "commentLike": return "님이 회원님의 댓글을 좋아합니다."
             default: return;
         }
     }
