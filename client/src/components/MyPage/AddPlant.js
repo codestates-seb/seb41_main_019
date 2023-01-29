@@ -100,7 +100,7 @@ const AddPlant = ({ handleAddPlant, userInfo, jwt }) => {
     e.preventDefault();
     axios({
       method: "post",
-      url: "http://13.124.33.113:8080/myplants",
+      url: `${process.env.REACT_APP_API}/myplants`,
       headers: {
         "Authorization" : jwt
       },

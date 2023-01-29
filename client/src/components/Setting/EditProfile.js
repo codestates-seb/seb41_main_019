@@ -62,7 +62,7 @@ const EditProfile = ({ name, text, location, img, setName, setText, setLocation,
     const editProfile = () => {
         axios({
             method: "patch",
-            url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
+            url: `${process.env.REACT_APP_API}/members/${cookie.get("memberId")}`,
             headers: { Authorization : cookie.get("authorization") },
             data : {
                 userName: name,
@@ -87,7 +87,7 @@ const EditProfile = ({ name, text, location, img, setName, setText, setLocation,
 
             axios({
                 method: "post",
-                url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}/profileimage`,
+                url: `${process.env.REACT_APP_API}/members/${cookie.get("memberId")}/profileimage`,
                 data: formData,
                 headers: { "Content-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
             }).then(res => {

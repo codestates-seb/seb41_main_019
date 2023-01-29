@@ -76,7 +76,7 @@ const Friend = ({ friend, top, setCurChat, setCurFriend, room, setChatChange, ch
     if(!room.length > 0) {
       axios({
         method: "post",
-        url: `http://13.124.33.113:8080/chatroom`,
+        url: `${process.env.REACT_APP_API}/chatroom`,
         headers: { Authorization: cookie.get("authorization") },
         data: { 
           receiverId: friend.followingId,

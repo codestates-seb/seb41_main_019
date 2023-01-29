@@ -91,7 +91,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
     const deleteFollow = (id) => {
         axios({ 
             method: "delete", 
-            url: `http://13.124.33.113:8080/followings/${id}`,
+            url: `${process.env.REACT_APP_API}/followings/${id}`,
             headers: { Authorization: cookie.get("authorization") }
         }).then(res => {
             handleChange();
@@ -103,7 +103,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
     const addFollow = () => {
         axios({
             method: "post",
-            url: `http://13.124.33.113:8080/followings/${post.memberId}`,
+            url: `${process.env.REACT_APP_API}/followings/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 handleChange();
@@ -115,7 +115,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
     useEffect(() => {
         axios({
             method: "get",
-            url: `http://13.124.33.113:8080/members/${post.memberId}`,
+            url: `${process.env.REACT_APP_API}/members/${post.memberId}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 setFollow(res.data.data.followerList);

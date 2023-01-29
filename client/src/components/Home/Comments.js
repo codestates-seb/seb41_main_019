@@ -139,7 +139,7 @@ const Comments = ({ post, handleChange, handleCommentMenu, setCommentId }) => {
     const addComment = () => {
         axios({
             method: "post",
-            url: `http://13.124.33.113:8080/comments/${post.postingId}`,
+            url: `${process.env.REACT_APP_API}/comments/${post.postingId}`,
             headers: { Authorization: cookie.get("authorization") },
             data : {
                 "memberId" : cookie.get("memberId"),
@@ -156,7 +156,7 @@ const Comments = ({ post, handleChange, handleCommentMenu, setCommentId }) => {
     const likeComment = (commentId) => {
         axios({
             method: "post",
-            url: `http://13.124.33.113:8080/comments/${commentId}/likes`,
+            url: `${process.env.REACT_APP_API}/comments/${commentId}/likes`,
             headers: { Authorization: cookie.get("authorization") },
             data: {
                 "memberId" : cookie.get("memberId"),
@@ -171,7 +171,7 @@ const Comments = ({ post, handleChange, handleCommentMenu, setCommentId }) => {
     const unLikeComment = (likeId) => {
         axios({
             method: "delete", 
-            url: `http://13.124.33.113:8080/comments/likes/${likeId}`,
+            url: `${process.env.REACT_APP_API}/comments/likes/${likeId}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 handleChange();

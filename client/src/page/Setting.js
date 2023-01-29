@@ -73,7 +73,7 @@ const Setting = ({ setIsLanded }) => {
     useEffect(() => {
         axios({
             method: "get",
-            url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
+            url: `${process.env.REACT_APP_API}/members/${cookie.get("memberId")}`,
             headers: { Authorization : cookie.get("authorization") }
         }).then(res => {
             const user = res.data.data;

@@ -76,7 +76,7 @@ const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData, havePla
   const handleDeleteClick = () => {
     axios({
       method: "delete",
-      url: `http://13.124.33.113:8080/myplants/${currentPlantData.myPlantsId}`,
+      url: `${process.env.REACT_APP_API}/myplants/${currentPlantData.myPlantsId}`,
       headers: {
             "Authorization" : jwt
       },

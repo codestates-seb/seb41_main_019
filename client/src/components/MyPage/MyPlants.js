@@ -95,7 +95,7 @@ const MyPlants = ({currentView, setCurrentView, userInfo, jwt, currentPlantData,
   const getMyPlantsData = () => {
     axios({
       method: "get",
-      url: `http://13.124.33.113:8080/${userInfo.memberId}/myplants?page=1&size=10`,
+      url: `${process.env.REACT_APP_API}/${userInfo.memberId}/myplants?page=1&size=10`,
       headers: {
         "Authorization" : jwt
       },

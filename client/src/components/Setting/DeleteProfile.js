@@ -74,7 +74,7 @@ const DeleteProfile = ({ name, img, setIsLanded }) => {
     const deleteMember = () => {
         axios({
             method: "delete",
-            url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
+            url: `${process.env.REACT_APP_API}/members/${cookie.get("memberId")}`,
             headers: { Authorization : cookie.get("authorization") }
         }).then(res => {
             alert('계정이 삭제되었습니다.');

@@ -101,7 +101,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const getUserInfo = () => {
       axios({
         method: "get",
-        url: `http://13.124.33.113:8080/members/${memberId}`,
+        url: `${process.env.REACT_APP_API}/members/${memberId}`,
         headers: {
           Authorization: jwt,
         },

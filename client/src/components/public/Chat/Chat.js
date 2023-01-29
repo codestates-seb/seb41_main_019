@@ -49,7 +49,7 @@ const Chat = ({ change }) => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://13.124.33.113:8080/chatroom/${cookie.get("memberId")}`,
+      url: `${process.env.REACT_APP_API}/chatroom/${cookie.get("memberId")}`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
       setRooms(res.data);
@@ -60,7 +60,7 @@ const Chat = ({ change }) => {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://13.124.33.113:8080/members/${cookie.get("memberId")}`,
+      url: `${process.env.REACT_APP_API}/members/${cookie.get("memberId")}`,
       headers: { Authorization: cookie.get("authorization") }
     }).then(res => {
       setFriends(res.data.data.followingList);

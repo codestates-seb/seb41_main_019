@@ -66,7 +66,7 @@ const DeleteModal = ({ handleDelete, postId, handleChange }) => {
     const DeletePost = () => {
             axios({
                 method: "delete",
-                url: `http://13.124.33.113:8080/posts/${postId}`,
+                url: `${process.env.REACT_APP_API}/posts/${postId}`,
                 headers: { Authorization: cookie.get("authorization") }
                 }).then(res => {
                     handleChange();

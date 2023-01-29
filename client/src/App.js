@@ -35,7 +35,7 @@ function App() {
     if(isLanded && cookie.get("refresh")) {
       axios({
         method: "post",
-        url: "http://13.124.33.113:8080/members/reissues",
+        url: `${process.env.REACT_APP_API}/members/reissues`,
         headers: { refresh : cookie.get("refresh") }
       }).then((res) => {
             const date = new Date()
