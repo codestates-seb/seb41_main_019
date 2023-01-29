@@ -125,12 +125,6 @@ const StyledSidebar = styled.aside`
     border: 1px solid #dbdbdb;
     box-shadow: 0px;
 
-    .hambuger {
-      position: fixed;
-      top: 22px;
-      left: 120px;
-    }
-
     h2 {
       display: none;
     }
@@ -148,6 +142,13 @@ const StyledSidebar = styled.aside`
 
     .none {
       display: none;
+    }
+  }
+
+  @media screen and (min-width: 770px) {
+    .hambuger {
+      position: fixed;
+      bottom: 10px;
     }
   }
 `;
@@ -172,6 +173,7 @@ const StyledHeader = styled.header`
     align-items: flex-end;
     font-weight: 400;
     letter-spacing: 2px;
+    cursor: pointer;
   }
 
   h3 svg {
@@ -310,15 +312,18 @@ const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
             <li onClick={handleIsPosted}>
               <BsPlusSquareDotted /> <span>작성하기</span>
             </li>
+            <li className="hambuger" onClick={handleOpendModal}>
+              <AiOutlineMenu /> <span>더 보기</span>
+            </li>
           </ul>
         </nav>
         {
           opendModal ? <SideModal handleOpendModal={handleOpendModal} setIsLanded={setIsLanded} /> : null
         }
-        <div className="hambuger" onClick={handleOpendModal}>
+        {/* <div className="hambuger" onClick={handleOpendModal}>
           <AiOutlineMenu />
           <span>더 보기</span>
-        </div>
+        </div> */}
       </StyledSidebar>
       <StyledExtend>
         <div className={isOpend === "Search" ? "active" : null}>
