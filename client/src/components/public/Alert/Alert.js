@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { alertDatas } from "../../../assets/dummyData/alertData";
-import Cookie from "../../../util/Cookie";
-import { EventSourcePolyfill } from 'event-source-polyfill';
+import { useAlert } from "../../../hooks/useAlert";
 
 const StyledAlertDiv = styled.div`
   display: flex;
@@ -33,7 +31,7 @@ const StyledAlertDiv = styled.div`
   }
 `;
 
-const StyledAlerts = styled.ul`
+const StyledAlertUl = styled.ul`
   margin: 0px;
   padding: 0px;
   list-style: none;
@@ -42,7 +40,9 @@ const StyledAlerts = styled.ul`
 const StyledAlert = styled.li`
   display: flex;
   align-items: center;
-  padding: 5px 0px 5px 0px;
+  padding: 5px 5px 5px 5px;
+  border-radius: 3px;
+  margin: 0px 0px 5px 0px;
   
   img {
     width: 24px;
@@ -54,112 +54,43 @@ const StyledAlert = styled.li`
     font-size: 14px;
     font-weight: 300;
   }
+
+  :hover {
+    background-color: #dbdbdb;
+  }
 `
 
 const Alert = () => {
-  const [alertLog, setAlertLog] = useState({});
-  const cookie = new Cookie();
-  let EventSource = EventSourcePolyfill;
-
-  // useEffect(() => {
-  //   const url = `http://13.124.33.113:8080/notification/subscribe/${cookie.get("memberId")}`
-
-  //   const ess = new EventSource(url, {
-  //     headers: { "Authorization": cookie.get("authorization")},
-  //   })
-
-  //   ess.addEventListener("connect", (res) => {
-  //     console.log(res);
-  //   })
-
-  //   ess.addEventListener("sse", res => {
-  //     console.log(res);
-  //   })
-
-  //   ess.addEventListener()
-
-  //   return () => {
-  //     console.log("종료");
-  //     ess.close();
-  //   }
-  // }, [])
-
-  const soltAlert = () => {
-    const solted = {
-      message : [],
-      post : [],
-      like : []
-    }
-
-    alertDatas.forEach(data => {
-      solted[data.type].push(data);
-    });
-
-    setAlertLog(solted);
-  }
+  const alert = useRef(null);
+  const {log, setLog, patchLog, connect, soltText, newLog} = useAlert(alert);
 
   useEffect(() => {
-    soltAlert();
+    const sse = connect();
+
+    return () => sse.close();
   }, [])
+
+  useEffect(() => {
+    if(newLog) {
+      setLog([...log, newLog]);
+    }
+  }, [newLog])
 
   return (
       <StyledAlertDiv>
           <p>알림</p>
+          <StyledAlertUl ref={alert}>
           {
-            alertLog.message ?
-            <div>
-              <p>내 채팅</p>
-              <StyledAlerts>
-              {
-                alertLog.message.map((data, idx) => {
-                  return (
-                    <StyledAlert key={idx}>
-                      <div>
-                        <img src={data.profileImg} alt="img" /></div>
-                      <span>{data.username} 님이 새로운 채팅을 보냈습니다.</span>
-                    </StyledAlert>
-                  )
-                })
-              }
-              </StyledAlerts>
-            </div> : null
+            log.map((data, idx) => {
+              return (
+                <StyledAlert key={idx}>
+                  <img src={data.profileImg} alt="img"/>
+                  <span>{data.userName}{soltText(data.sseType)}</span>
+                </StyledAlert>
+              )
+            })
           }
-          {
-            alertLog.post ?
-            <div>
-              <p>내 게시물</p>
-              <StyledAlerts>
-                {
-                  alertLog.post.map((data, idx) => {
-                    return (
-                      <StyledAlert key={idx}>
-                        <img src={data.profileImg} alt="img" />
-                        <span>{data.username} 님이 회원님의 게시물을 좋아합니다.</span>
-                      </StyledAlert>
-                    )
-                  })
-                }
-              </StyledAlerts>
-            </div> : null
-          }
-          {
-            alertLog.like ? 
-            <div>
-              <p>내 프로필</p>
-              <StyledAlerts>
-                {
-                  alertLog.like.map((data, idx) => {
-                    return (
-                      <StyledAlert key={idx}>
-                        <img src={data.profileImg} alt="img" />
-                        <span>{data.username} 님이 회원님을 팔로우했습니다. </span>
-                      </StyledAlert>
-                    )
-                  })
-                }
-              </StyledAlerts> 
-            </div>: null
-          }
+          </StyledAlertUl>
       </StyledAlertDiv>
   );
 }
