@@ -47,9 +47,7 @@ public class FileSystemStorageService {
         }
     }
 
-    // todo 스케쥴러 사용하여 시스템 폴더 내 파일 삭제, 혹시 저장로직이랑 동시에 실행되면 에러나기에 요청을 다시 해야하는 단점이 있따... 이거 어뜨케 하면 조으까 ㅇㅅㅇ??
-    // todo 10분에 한번 씩으로 설정했는데 이건 추후에 논의하여 변경
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(cron = "0  0  3  *  *  *")
     public void delete() {
         File folder = new File("/home/ubuntu/main19/ffmpeg");
         try {

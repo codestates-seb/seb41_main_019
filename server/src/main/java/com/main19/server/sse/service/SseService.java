@@ -31,7 +31,7 @@ import com.main19.server.member.entity.Member;
 @Transactional
 public class SseService {
 
-    private static final Long DEFAULT_TIMEOUT = 1L * 1000 ;
+    private static final Long DEFAULT_TIMEOUT = 5L * 1000 ;
 
     private final EmitterRepositoryImpl emitterRepository;
     private final SseRepository sseRepository;
