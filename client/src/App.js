@@ -36,7 +36,7 @@ function App() {
       axios({
         method: "post",
         url: `${process.env.REACT_APP_API}/members/reissues`,
-        headers: { refresh : cookie.get("refresh") }
+        headers: { Refresh : cookie.get("refresh") }
       }).then((res) => {
             const date = new Date()
             const user = decode(res.headers.authorization);
