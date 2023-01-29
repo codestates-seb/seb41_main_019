@@ -4,7 +4,6 @@ const StyledInput = styled.div`
     display: flex;
     flex-direction: column;
     margin: 20px 0px 0px 0px;
-
     label {
         font-size: 14px;
         color: gray;
@@ -14,11 +13,9 @@ const StyledInput = styled.div`
         cursor: text;
         transition: top 0.2s ease;
     }
-
     :focus-within label{
         top: -4px;
     }
-
     input { 
         height: 35px;
         width: 280px;
@@ -26,18 +23,7 @@ const StyledInput = styled.div`
         border-radius: 3px;
         outline: none;
         padding: 0px 0px 0px 6px;
-
-        &:focus {
-            &.wrong {
-                outline: 1px solid red;
-                box-shadow: 3px 3px 15px rgb(197 110 110), -3px -3px 15px rgb(197 110 110);
-            }
-            &.correct {
-                outline: 1px solid #6bbbf7;
-            }
-        }
     }
-
     .valid {
         top: -4px;
     }
