@@ -25,7 +25,7 @@ const Wrapper = styled.div`
     }
 
     input {
-        
+        display: none;
     }
 `
 
@@ -111,7 +111,7 @@ const Uploader = ({ images, handleImg, deleteImg, fileInputs, edit }) => {
                 <div ref={fileInputs}>
                     {
                         edit ?
-                            images.map((el, idx) => el.mediaId > 0 ? <input type="file" key={idx}></input> : null) : null
+                            images.map((el, idx) => el.mediaId > 0 ? <input type="file" key={idx} hidden /> : null) : null
                     }
                 </div>
         </Wrapper>
