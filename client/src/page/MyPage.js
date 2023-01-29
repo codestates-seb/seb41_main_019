@@ -18,17 +18,22 @@ import CommentModal from "../components/Home/CommentModal";
 import PlantImageView from "../components/MyPage/PlantImageView";
 import Followers from "../components/MyPage/Followers";
 import Followings from "../components/MyPage/Followings";
+import Footer from "../components/public/Footer";
 
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 300px 0 270px;
 
   > .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+  }
+
+  @media screen and (max-width: 770px) {
+    position: relative;
+    top: 60px;
   }
 `;
 
@@ -212,6 +217,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
         </div>
         }
       </StyledContainer>
+      <Footer />
     </>
   );
 };
