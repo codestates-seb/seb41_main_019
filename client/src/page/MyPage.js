@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 import { TiArrowSortedDown } from "react-icons/ti";
 import { TiArrowSortedUp } from "react-icons/ti";
@@ -71,7 +72,7 @@ const StyledChangeViewButton = styled.div`
 const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
-  const memberId = Number(cookie.get("memberId"));
+  const memberId = useLocation().state.id;
 
   // 데이터 상태관리
   const [userInfo, setUserInfo] = useState([]); // 유저정보 (UserInfo.js로 props)
@@ -96,7 +97,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
 
   useEffect(() => {
     getUserInfo()
-  }, [])
+  }, [memberId])
   
   const getUserInfo = () => {
       axios({

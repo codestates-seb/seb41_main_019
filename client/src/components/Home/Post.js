@@ -129,9 +129,9 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
                 <img src={post.profileImage ? post.profileImage : defaultImg} 
-                onClick={() => navigate("/mypage", { memberId : post.memberId })} alt="profileImg" />
+                onClick={() => navigate("/member", { state: { id: post.memberId } })} alt="profileImg" />
                 <div>
-                    <span>{post.userName}</span>
+                    <span onClick={() => navigate("/member", { state : {post : post.memberId} })}>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">

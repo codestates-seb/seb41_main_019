@@ -10,6 +10,7 @@ import Search from "../Search/Search";
 import Chat from "../Chat/Chat";
 import { useLocation } from "react-router-dom";
 import Alert from "../Alert/Alert";
+import Cookie from "../../../util/Cookie";
 
 const StyledSidebar = styled.aside`
   z-index: 600;
@@ -245,10 +246,11 @@ const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
-  const location = useLocation().pathname;
+  const location = useLocation();
+  const id = new Cookie().get("memberId");
 
   useEffect(() => {
-    if(location === "/landing") {
+    if(location.pathname === "/landing") {
       setIsLanded(true);
     }
   }, [location, setIsLanded])
@@ -300,7 +302,9 @@ const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
             <li onClick={() => handleIsOpend("Alert")}>
               <IoAlertCircleOutline /> <span>알림</span>
             </li>
-            <li onClick={() => navigate("/mypage")}>
+            <li onClick={() => {
+              navigate("/mypage", {state:{id}})
+            }}>
               <BsPerson /> <span>프로필</span>
             </li>
             <li onClick={handleIsPosted}>
