@@ -115,7 +115,7 @@ const EditPost = ({ handleEdit, curPost, handleChange, change }) => {
             deleted.forEach((id) => {
                 axios({
                     method: "delete",
-                    url: `http://13.124.33.113:8080/posts/medias/${id}`,
+                    url: `${process.env.REACT_APP_API}/posts/medias/${id}`,
                     headers: { Authorization: cookie.get("authorization") }
                 }).then(res => {
                 }).catch(e => {
@@ -134,7 +134,7 @@ const EditPost = ({ handleEdit, curPost, handleChange, change }) => {
 
             axios({
                 method: "post",
-                url: `http://13.124.33.113:8080/posts/${curPost.postingId}/medias`,
+                url: `${process.env.REACT_APP_API}/posts/${curPost.postingId}/medias`,
                 data: formData,
                 headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
@@ -146,7 +146,7 @@ const EditPost = ({ handleEdit, curPost, handleChange, change }) => {
         // 게시글의 변경점을 추가한다.
         axios({
             method: "patch",
-            url: `http://13.124.33.113:8080/posts/${curPost.postingId}`,
+            url: `${process.env.REACT_APP_API}/posts/${curPost.postingId}`,
             data: JSON.stringify({
                 postingContent: value,
                 tagName: tags.map(tag => tag.tagName)

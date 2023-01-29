@@ -49,7 +49,7 @@ const CommentModal = ({ handleChange, handleCommentMenu, commentId }) => {
     const deleteComment = (commentId) => {
         axios({
             method: "delete", 
-            url: `http://13.124.33.113:8080/comments/${commentId}`,
+            url: `${process.env.REACT_APP_API}/comments/${commentId}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 handleChange();

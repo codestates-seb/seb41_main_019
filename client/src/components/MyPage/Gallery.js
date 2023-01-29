@@ -69,7 +69,7 @@ const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, 
     if(view === 'postings') {
       axios({
         method: "get",
-        url: `http://13.124.33.113:8080/posts/members/${memberId}?page=1&size=10`,
+        url: `${process.env.REACT_APP_API}/posts/members/${memberId}?page=1&size=10`,
         headers: {
           Authorization: jwt,
         },
@@ -84,7 +84,7 @@ const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, 
     } else if (view === 'plant' || view === 'plantRerender') {
       axios({
         method: "get",
-        url: `http://13.124.33.113:8080/myplants/${currentPlantData.myPlantsId}/gallery?page=1&size=10`,
+        url: `${process.env.REACT_APP_API}/myplants/${currentPlantData.myPlantsId}/gallery?page=1&size=10`,
         headers: {
           Authorization: jwt,
         },
@@ -99,7 +99,7 @@ const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, 
   const setViewData = (postingId) => {
     axios({
       method: "get",
-      url: `http://13.124.33.113:8080/posts/${postingId}`,
+      url: `${process.env.REACT_APP_API}/posts/${postingId}`,
       headers: {
         Authorization: jwt,
       },

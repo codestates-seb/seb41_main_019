@@ -69,7 +69,7 @@ const Recommends = ({ change, handleModal, setCurPost }) => {
     useEffect(() => {
         axios({
             method: "get",
-            url: `http://13.124.33.113:8080/posts/${clickedBtn === 0 ? "" : "follow/"}popular?page=1&size=10`,
+            url: `${process.env.REACT_APP_API}/posts/${clickedBtn === 0 ? "" : "follow/"}popular?page=1&size=10`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 setPosts(res.data.data);

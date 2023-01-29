@@ -7,7 +7,7 @@ export const follow = (type = true, memberId, handleChange) => {
     if(type) {
         axios({
             method: "post",
-            url: `http://13.124.33.113:8080/followings/${memberId}`,
+            url: `${process.env.REACT_APP_API}/followings/${memberId}`,
             headers: { Authorization: cookie.get("authorization") }
         }).then(res => {
             handleChange();
@@ -17,7 +17,7 @@ export const follow = (type = true, memberId, handleChange) => {
     } else {
         axios({ 
             method: "delete", 
-            url: `http://13.124.33.113:8080/followings/${memberId}`,
+            url: `${process.env.REACT_APP_API}/followings/${memberId}`,
             headers: { Authorization: cookie.get("authorization") }
         }).then(res => {
             handleChange();

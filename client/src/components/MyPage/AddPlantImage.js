@@ -127,7 +127,7 @@ const AddPlantImage = ({handleAddClick, currentPlantId, currentView, setCurrentV
 
         axios({
             method: "post",
-            url: `http://13.124.33.113:8080/myplants/${currentPlantId}/gallery`,
+            url: `${process.env.REACT_APP_API}/myplants/${currentPlantId}/gallery`,
             data:  formData,
             headers: {
               Authorization: jwt,

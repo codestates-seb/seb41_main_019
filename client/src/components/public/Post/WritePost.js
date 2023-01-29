@@ -121,7 +121,7 @@ const WritePost = ({ handleIsPosted, handleChange }) => {
 
         axios({
             method: "post",
-            url: "http://13.124.33.113:8080/posts",
+            url: `${process.env.REACT_APP_API}/posts`,
             data: formData,
             headers: { "Contest-Type": "multipart/form-data", Authorization: cookie.get("authorization") }
             }).then(res => {

@@ -36,7 +36,7 @@ const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, se
     useEffect(() => {
         axios({
             method: "get",
-            url: `http://13.124.33.113:8080/posts?page=1&size=${page * 10}`,
+            url: `${process.env.REACT_APP_API}/posts?page=1&size=${page * 10}`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 setPosts(res.data.data)
@@ -50,7 +50,7 @@ const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, se
     useEffect(() => {
         axios({
             method: "get",
-            url: `http://13.124.33.113:8080/posts?page=${page}&size=10`,
+            url: `${process.env.REACT_APP_API}/posts?page=${page}&size=10`,
             headers: { Authorization: cookie.get("authorization") }
             }).then(res => {
                 setPosts([...posts, ...res.data.data]);

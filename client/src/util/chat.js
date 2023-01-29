@@ -1,7 +1,7 @@
 import * as StompJs from '@stomp/stompjs';
 
 export const client = new StompJs.Client({
-    brokerURL : "ws://13.124.33.113:8080/chat",
+    brokerURL : `${process.env.REACT_APP_CHAT}`,
     debug : (e) => {
         console.log(e);
     }

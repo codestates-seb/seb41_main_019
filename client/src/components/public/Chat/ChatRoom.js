@@ -72,7 +72,7 @@ const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange, chatC
     if(!room.leaveId) {
       axios({
         method: "patch",
-        url: `http://13.124.33.113:8080/chatroom/${room.chatRoomId}`,
+        url: `${process.env.REACT_APP_API}/chatroom/${room.chatRoomId}`,
         headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
         data: JSON.stringify({
           "memberId": cookie.get("memberId")
@@ -86,7 +86,7 @@ const ChatRoom = ({ room, setCurChat, friend, setCurFriend, setChatChange, chatC
       //leaveId 확인, 상대방이 채팅방을 떠났을 경우 해당 챗룸 삭제
       axios({
         method: "delete",
-        url: `http://13.124.33.113:8080/chatroom/${room.chatRoomId}`,
+        url: `${process.env.REACT_APP_API}/chatroom/${room.chatRoomId}`,
         headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
       }).then(res => {
         setChatChange(!chatChange);

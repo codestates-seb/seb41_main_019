@@ -135,7 +135,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend, setChatChange,
     if(curChat.leaveId === Number(cookie.get("memberId"))) {
       axios({
         method: "patch",
-        url: `http://13.124.33.113:8080/chatroom/${curChat.chatRoomId}`,
+        url: `${process.env.REACT_APP_API}/chatroom/${curChat.chatRoomId}`,
         headers: { "content-type": "Application/json", Authorization: cookie.get("authorization") },
         data: JSON.stringify({
           "memberId": cookie.get("memberId")

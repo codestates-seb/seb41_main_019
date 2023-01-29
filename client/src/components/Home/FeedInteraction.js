@@ -64,7 +64,7 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, 
     const handleLike = () => {
         axios({
             method: "post",
-            url: `http://13.124.33.113:8080/posts/${post.postingId}/likes`,
+            url: `${process.env.REACT_APP_API}/posts/${post.postingId}/likes`,
             headers: { Authorization: cookie.get("authorization") },
             data : {
                 "memberId" : cookie.get("memberId")
@@ -78,7 +78,7 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, 
     const handleUnlike = (like) => {
         axios({
             method: "delete",
-            url: `http://13.124.33.113:8080/posts/likes/${like}`,
+            url: `${process.env.REACT_APP_API}/posts/likes/${like}`,
             headers: { Authorization: cookie.get("authorization") },
         }).then(res => {
             handleChange();
@@ -89,7 +89,7 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, 
     const addScrap = () => {
         axios({
             method: "post",
-            url: `http://13.124.33.113:8080/scraps/${post.postingId}`,
+            url: `${process.env.REACT_APP_API}/scraps/${post.postingId}`,
             headers: { Authorization: cookie.get("authorization") },
             data : {
                 "postingId": post.postingId,
@@ -104,7 +104,7 @@ const FeedInteraction = ({ setModal, type=null, post, handleCurPost, setPostId, 
     const deleteScrap = (scrap) => {
         axios({
             method: "delete",
-            url: `http://13.124.33.113:8080/scraps/${scrap}`,
+            url: `${process.env.REACT_APP_API}/scraps/${scrap}`,
             headers: { Authorization: cookie.get("authorization") },
         }).then(res => {
             handleChange();

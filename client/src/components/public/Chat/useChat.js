@@ -10,7 +10,7 @@ export const useChat = (curChat) => {
     useEffect(() => {
         axios({
           method: "get",
-          url: `http://13.124.33.113:8080/message/${curChat.chatRoomId}?page=1&size=15`,
+          url: `${process.env.REACT_APP_API}/message/${curChat.chatRoomId}?page=1&size=15`,
           headers: { Authorization: cookie.get("authorization") }
         }).then(res => {
           setLog(soltChat(res.data)); 
