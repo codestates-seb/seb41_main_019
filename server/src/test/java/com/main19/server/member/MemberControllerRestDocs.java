@@ -198,6 +198,36 @@ public class MemberControllerRestDocs {
     }
 
     @Test
+    public void deleteProfileImageTest() throws Exception {
+        // given
+        long memberId = 1L;
+
+        doNothing().when(storageService).removeProfileImage(memberId);
+        doNothing().when(memberService).deleteMember(memberId, "token");
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                RestDocumentationRequestBuilders.delete("/members/{member-id}/profileimage", memberId)
+                        .header("Authorization", "Bearer AccessToken")
+        );
+
+        // then
+        actions
+                .andExpect(status().isNoContent())
+                .andDo(document(
+                        "delete-member-profileImage",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("member-id").description("회원 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        )
+                ));
+    }
+
+    @Test
     public void patchMemberTest() throws Exception {
         // given
         long memberId = 1L;
