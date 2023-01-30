@@ -95,7 +95,7 @@ public class Member {
 		}
 
 		if (this.profileImage == null) {
-			this.profileImage = "https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/aa697bd5-d15c-4941-afd7-b0506624f0a4.png";
+			this.profileImage = "https://main19-bucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/default+image.png";
 		}
 
 		if (this.profileText == null) {

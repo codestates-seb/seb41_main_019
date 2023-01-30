@@ -26,7 +26,7 @@ public class ProfileStorageService extends S3StorageService{
     private final MemberService memberService;
     public String uploadProfileImage(MultipartFile profileImage, long memberId) {
         Member findMember = memberService.findMember(memberId);
-        if (!findMember.getProfileImage().equals("https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/aa697bd5-d15c-4941-afd7-b0506624f0a4.png")) {
+        if (!findMember.getProfileImage().equals("https://main19-bucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/default+image.png")) {
             removeProfileImage(memberId);
         }
 
@@ -49,6 +49,10 @@ public class ProfileStorageService extends S3StorageService{
 
     public void removeProfileImage(long memberId) {
         Member findMember = memberService.findMember(memberId);
+        if (findMember.getProfileImage().equals("https://main19-bucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/default+image.png")) {
+            throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
+        }
+
         String fileName = (findMember.getProfileImage()).substring(74);
 
         if (!s3Client.doesObjectExist(bucket + "/member/profileImage", fileName)) {
