@@ -544,7 +544,6 @@ public class MemberControllerRestDocs {
         // when
         ResultActions actions = mockMvc.perform(
                 RestDocumentationRequestBuilders.get("/members/existence")
-                        .header("Authorization", "Access Token")
                         .param("email", "taebong")
         );
 
@@ -557,10 +556,7 @@ public class MemberControllerRestDocs {
                                 requestParameters(
                                         parameterWithName("email").description("userId (email)")
                                 ),
-                                requestHeaders(
-                                        headerWithName("Authorization").description("Bearer AccessToken")
-                                ),
-                                responseFields(fieldWithPath("true").type(JsonFieldType.STRING).description("있으면 true, 없으면 false"))
+                                responseFields(fieldWithPath("data").type(JsonFieldType.BOOLEAN).description("있으면 true, 없으면 false"))
                         )
                 );
     }
