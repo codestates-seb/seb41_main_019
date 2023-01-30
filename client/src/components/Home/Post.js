@@ -131,7 +131,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
                 <img src={post.profileImage ? post.profileImage : defaultImg} 
                 onClick={() => navigate("/member", { state: { id: post.memberId } })} alt="profileImg" />
                 <div>
-                    <span onClick={() => navigate("/member", { state : {post : post.memberId} })}>{post.userName}</span>
+                    <span onClick={() => navigate("/member", { state : {id : post.memberId} })}>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
