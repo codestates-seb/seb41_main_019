@@ -26,13 +26,13 @@ jobs:
       working-directory: ./server
       run: chmod +x ./gradlew
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: /server/gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
     
     # build한 후 프로젝트를 압축합니다.
     - name: Make zip file
-      run: zip -r ./practice-deploy.zip .
+      run: zip -r ./increaf.zip .
       shell: bash
     
     # Access Key와 Secret Access Key를 통해 권한을 확인합니다.
