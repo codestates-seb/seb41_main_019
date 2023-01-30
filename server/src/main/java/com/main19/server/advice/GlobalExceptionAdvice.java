@@ -3,6 +3,7 @@ package com.main19.server.advice;
 import javax.naming.SizeLimitExceededException;
 import javax.validation.ConstraintViolationException;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -85,6 +86,17 @@ public class GlobalExceptionAdvice {
 		MissingRequestHeaderException e) {
 
 		final ErrorResponse response = ErrorResponse.of(HttpStatus.UNAUTHORIZED,e.getMessage());
+
+		return response;
+	}
+
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public ErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+		log.error(" handle Exception: Duplicated Unique Column", e);
+
+		final ErrorResponse response = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicated Unique Column");
 
 		return response;
 	}
