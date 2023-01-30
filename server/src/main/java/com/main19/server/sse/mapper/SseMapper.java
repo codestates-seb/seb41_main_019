@@ -13,6 +13,7 @@ public interface SseMapper {
     @Mapping(source = "sender.profileImage" , target = "profileImage")
     @Mapping(source = "sender.userName" , target = "userName")
     @Mapping(source = "posting.postingId" , target = "postingId")
+    @Mapping(source = "read" , target = "isRead")
     SseResponseDto sseToSseResponseDto(Sse sse);
 
     List<SseResponseDto> sseToSseResponseDtos(List<Sse> sse);

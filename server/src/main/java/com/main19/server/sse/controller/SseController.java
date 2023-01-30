@@ -7,6 +7,7 @@ import com.main19.server.sse.entity.Sse;
 import com.main19.server.sse.mapper.SseMapper;
 import com.main19.server.sse.service.SseService;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -46,11 +48,19 @@ public class SseController {
         return new ResponseEntity(new SingleResponseDto<>(response),HttpStatus.OK);
     }
 
+    @PatchMapping("/notification")
+    public ResponseEntity patchAllSse(@RequestHeader(name = "Authorization") String token) {
+
+        sseService.updateAllSse(token);
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/notification/{member-id}")
     public ResponseEntity getSse(@RequestHeader(name = "Authorization") String token, @PathVariable("member-id") @Positive long memberId,
-        @PageableDefault(size = 10, sort = "sse_id", direction = Direction.DESC) Pageable pageable) {
+        @Positive @RequestParam int page, @Positive @RequestParam int size) {
 
-        Page<Sse> pageSse = sseService.findSse(memberId,pageable,token);
+        Page<Sse> pageSse = sseService.findSse(memberId,page-1,size,token);
         List<Sse> response = pageSse.getContent();
 
         return new ResponseEntity<>(
