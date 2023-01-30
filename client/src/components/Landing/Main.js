@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { TfiMinus } from "react-icons/tfi";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { Content } from "./Content";
 
 const StyledMain = styled.main`
 position: absolute;
@@ -52,38 +53,25 @@ ul {
 `
 
 const StyledContents = styled.section`
-width: 100%;
-height: 100%;
-overflow: hidden;
-
-div {
-    height: 0%;
-    transition: height 0.8s ease;
-}
-
-.located {
+    width: 100%;
     height: 100%;
-}
 
-#one {
-    background-color: red;
-}
-
-#two {
-    background-color: blue;
-}
-
-#three {
-    background-color: orange;
-}
+    > div {
+        transform: ${({located}) => `translateY(${-located * 33}%)`};
+    }
 `
 
 const Main = () => {
     const [ located, setLocated ] = useState(0);
+    const [ load, setLoad ] = useState(false);
     let timer;
 
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+    }, [])
+
     const handleScroll = (e) => {
-        if(!timer) {
+        if(!timer && !load) {
             timer = setTimeout(() => {
                 timer = null;
 
@@ -94,8 +82,13 @@ const Main = () => {
                 if(e.deltaY < 0 && located > 0) {
                     setLocated(located - 1);
                 }
+                // setLoad(true);
             }, 500)
         }
+
+        setTimeout(() => {
+            setLoad(false   );
+        }, 1000)
     }
 
     return (
@@ -120,22 +113,8 @@ const Main = () => {
                     </li>
                 </ul>
             </StyledMenu>
-            <StyledContents onWheel={handleScroll}>
-                <div 
-                    id="one"
-                    className={located === 0 ? "located" : null}>
-
-                </div>
-                <div 
-                    id="two"
-                    className={located === 1 ? "located" : null}>
-
-                </div>
-                <div 
-                    id="three"
-                    className={located === 2 ? "located" : null}>
-
-                </div>
+            <StyledContents onWheel={handleScroll} located={located}>
+                <Content located={located}/>
             </StyledContents>
         </StyledMain>
     )
