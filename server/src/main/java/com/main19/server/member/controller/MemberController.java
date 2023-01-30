@@ -118,11 +118,12 @@ public class MemberController {
         return new ResponseEntity(new MultiResponseDto<>(response,memberPage),HttpStatus.OK);
     }
 
-    @GetMapping("/existence")
-    public ResponseEntity isExistMember(@RequestParam String userId) {
-        boolean isExist = memberService.findMemberEmail(userId);
+    @GetMapping("/existences")
+    public ResponseEntity isExistMember(@RequestParam String email) {
+        boolean isExist = memberService.findMemberEmail(email);
 
         // 있으면 true, 없으면 false
-        return new ResponseEntity(isExist, HttpStatus.OK);
+        return new ResponseEntity(
+                new SingleResponseDto(isExist), HttpStatus.OK);
     }
 }
