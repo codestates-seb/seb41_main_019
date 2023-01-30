@@ -26,8 +26,9 @@ jobs:
       working-directory: ./server
       run: chmod +x ./gradlew
     - name: Build with Gradle
-      uses: /server/gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+      uses: /gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
+        path: ./server
         arguments: build
     
     # build한 후 프로젝트를 압축합니다.
