@@ -24,7 +24,7 @@ public class MemberDto {
 		@Pattern(regexp = "^[a-zA-Z0-9]*$", message = "아이디는 영어, 숫자만 가능합니다.")
 		private String userName;
 
-		@Pattern(regexp = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-z]+$", message = "이메일 형식이 아닙니다.")
+		@Pattern(regexp = "^[a-zA-Z0-9]*$", message = "영문 또는 숫자")
 		private String email;
 
 		private String location;
