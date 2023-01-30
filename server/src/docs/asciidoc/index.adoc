@@ -32,6 +32,16 @@ include::{snippets}/post-member/http-response.adoc[]
 .response-fields
 include::{snippets}/post-member/response-fields.adoc[]
 
+=== 아이디 중복 체크
+.curl-request
+include::{snippets}/check-duplicate-email/curl-request.adoc[]
+
+.http-request
+include::{snippets}/check-duplicate-email/http-request.adoc[]
+
+.response-body
+include::{snippets}/check-duplicate-email/response-fields.adoc[]
+
 === 로그인
 .curl-request
 include::{snippets}/login/curl-request.adoc[]
