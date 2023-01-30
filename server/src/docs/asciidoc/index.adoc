@@ -65,7 +65,7 @@ include::{snippets}/reissues-member/http-request.adoc[]
 .http-response
 include::{snippets}/reissues-member/http-response.adoc[]
 
-=== 회원 프로필 이미지 등록
+=== 회원 프로필 이미지 등록 및 변경
 .curl-request
 include::{snippets}/post-member-image/curl-request.adoc[]
 
