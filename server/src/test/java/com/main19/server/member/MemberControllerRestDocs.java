@@ -543,7 +543,7 @@ public class MemberControllerRestDocs {
 
         // when
         ResultActions actions = mockMvc.perform(
-                RestDocumentationRequestBuilders.get("/members/existence")
+                RestDocumentationRequestBuilders.get("/members/existences")
                         .param("email", "taebong")
         );
 
