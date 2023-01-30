@@ -19,7 +19,7 @@ public class MemberDto {
 	public static class Post {
 		@NotBlank
 		@Size(min = 3, max = 12, message = "아이디는 3자 이상 12자 이하여야 합니다.")
-		@Pattern(regexp = "^[a-zA-Z0-9]*$", message = "아이디는 영어, 숫자만 가능합니다.")
+//		@Pattern(regexp = "^[a-zA-Z0-9]*$", message = "아이디는 영어, 숫자만 가능합니다.")
 		private String userName;
     
 		@Pattern(regexp = "^[a-zA-Z0-9]*$", message = "영문 또는 숫자")
