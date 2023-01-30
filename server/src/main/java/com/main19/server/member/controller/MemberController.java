@@ -117,4 +117,11 @@ public class MemberController {
 
         return new ResponseEntity(new MultiResponseDto<>(response,memberPage),HttpStatus.OK);
     }
+
+    @GetMapping("/existence")
+    public ResponseEntity isExistMember(@RequestParam String username) {
+        boolean isExist = memberService.findMemberName(username);
+
+        return new ResponseEntity(isExist, HttpStatus.OK);
+    }
 }

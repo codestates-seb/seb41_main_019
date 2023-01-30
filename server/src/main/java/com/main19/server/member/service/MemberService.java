@@ -106,6 +106,7 @@ public class MemberService {
         member.setProfileImage("https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/aa697bd5-d15c-4941-afd7-b0506624f0a4.png");
         memberRepository.save(member);
     }
+
     @Transactional(readOnly = true)
     public boolean findMemberName(String search) {
         Member member = memberRepository.findByUserName(search);
