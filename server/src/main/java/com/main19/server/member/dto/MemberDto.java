@@ -52,4 +52,20 @@ public class MemberDto {
 			this.location = location;
 		}
 	}
+
+	@Getter
+	@Setter
+	@AllArgsConstructor
+	public static class Response {
+		private long memberId;
+		private String userName;
+		private String email;
+		private String location;
+		private String profileImage;
+		private String profileText;
+		private List<ScrapResponseDto> scrapPostingList;
+		private List<FollowDto.FollowingResponse> followingList;
+		private List<FollowDto.FollowerResponse> followerList;
+	}
+
 }
