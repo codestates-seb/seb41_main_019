@@ -605,6 +605,9 @@ include::{snippets}/gets-my-plants/curl-request.adoc[]
 .http-request
 include::{snippets}/gets-my-plants/http-request.adoc[]
 
+.path-parameters
+include::{snippets}/gets-my-plants/path-parameters.adoc[]
+
 .request-parameters
 include::{snippets}/gets-my-plants/request-parameters.adoc[]
 
@@ -811,6 +814,17 @@ include::{snippets}/patch-sse/http-response.adoc[]
 
 .response-fields
 include::{snippets}/patch-sse/response-fields.adoc[]
+
+=== 알림 전체 확인
+
+.curl-request
+include::{snippets}/patch-all-sse/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-all-sse/http-request.adoc[]
+
+.http-response
+include::{snippets}/patch-all-sse/http-response.adoc[]
 
 === 알림 조회
 .curl-request
