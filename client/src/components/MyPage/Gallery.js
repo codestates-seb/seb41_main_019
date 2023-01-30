@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
-import PlantImageView from "./PlantImageView";
 
 import { FcAnswers } from "react-icons/fc";
 
@@ -46,7 +45,7 @@ const StyledNoContents = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ababa7;
+  background-color: #dbdbdb;
   svg {
     width: 100px;
     height: 100px;
@@ -58,7 +57,7 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
+const Gallery = ({ currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
   const memberId = Number(cookie.get("memberId"));
@@ -75,12 +74,15 @@ const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, 
         },
       }).then((res) => {
         setGalleryData(res.data.data)
+        // const reverse = res.data.data.reverse();
+        // setGalleryData(reverse);
         setPostCount(res.data.pageInfo.totalElements)
       }).catch ((err) => {
         console.error(err);
       })
     } else if (view === 'scraps') {
-      setGalleryData(userInfo.scrapPostingList)
+      const reverse = userInfo.scrapPostingList.reverse();
+      setGalleryData(reverse)
     } else if (view === 'plant' || view === 'plantRerender') {
       axios({
         method: "get",
@@ -89,7 +91,8 @@ const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, 
           Authorization: jwt,
         },
       }).then((res) => {
-        setGalleryData(res.data.data)
+        const reverse = res.data.data.reverse();
+        setGalleryData(reverse);
       }).catch ((err) => {
         console.error(err);
       })

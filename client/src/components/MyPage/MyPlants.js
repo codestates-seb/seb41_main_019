@@ -143,6 +143,8 @@ const MyPlants = ({currentView, setCurrentView, userInfo, jwt, currentPlantData,
           </StyledMyPlantsItem>
           {myPlantsData ? (
             myPlantsData.map((el) => {
+              // console.log(myPlantsData)
+              console.log(el)
               return (
                 <StyledMyPlantsItem
                   key={el.myPlantsId}
@@ -158,7 +160,7 @@ const MyPlants = ({currentView, setCurrentView, userInfo, jwt, currentPlantData,
                   >
                     <img
                       className="image"
-                      src={el.length ? el.galleryList[el.galleryList.length - 1] : defaultIcon}
+                      src={el.length !== 0 ? el.galleryList[el.galleryList.length - 1] : defaultIcon}
                       alt="each item"
                     />
                   </div>
