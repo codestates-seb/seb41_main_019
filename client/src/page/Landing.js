@@ -14,6 +14,7 @@ const StyledHeader = styled.header`
     height: 85px;
     border-bottom: 1px solid #dbdbdb;
     z-index: 33;
+    background-color: white;
 
     nav {
         height : 100%;
@@ -79,7 +80,13 @@ const Landing = ({ setIsLanded, isLanded }) => {
                 </nav>
             </StyledHeader>
             {
-                selected === 0 ? <Main /> :  selected === 1 ? <Login setSelected={setSelected} setIsLanded={setIsLanded} /> : <Sign setSelected={setSelected}/>
+                selected === 0 && <Main />
+            }
+            {
+                selected === 1 && <Login setSelected={setSelected} setIsLanded={setIsLanded} />
+            }
+            {
+                selected === 2 && <Sign setSelected={setSelected}/>
             }
         </Wrapper>
     )
