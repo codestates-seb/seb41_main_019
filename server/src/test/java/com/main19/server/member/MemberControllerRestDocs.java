@@ -65,14 +65,14 @@ public class MemberControllerRestDocs {
     @Test
     public void postMemberTest() throws Exception {
         // given
-        MemberDto.Post post = new MemberDto.Post("taebong98", "aaa@naver.com", "코드스테이츠", "자기소개", "q1w2e3r4!!");
+        MemberDto.Post post = new MemberDto.Post("taebong98", "taebong98", "코드스테이츠", "자기소개", "q1w2e3r4!!");
         String content = gson.toJson(post);
 
         MemberDto.Response response =
             new MemberDto.Response(
                 1L,
                 "taebong98",
-                "aaa@naver.com",
+                "taebong98",
                 "코드스테이츠",
                 null,
                 "자기소개",
@@ -142,7 +142,7 @@ public class MemberControllerRestDocs {
             new MemberDto.Response(
                 1L,
                 "taebong98",
-                "aaa@naver.com",
+                "taebong98",
                 "코드스테이츠",
                 "profileImage.jpeg",
                 "자기소개",
@@ -198,13 +198,43 @@ public class MemberControllerRestDocs {
     }
 
     @Test
+    public void deleteProfileImageTest() throws Exception {
+        // given
+        long memberId = 1L;
+
+        doNothing().when(storageService).removeProfileImage(memberId);
+        doNothing().when(memberService).deleteMember(memberId, "token");
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                RestDocumentationRequestBuilders.delete("/members/{member-id}/profileimage", memberId)
+                        .header("Authorization", "Bearer AccessToken")
+        );
+
+        // then
+        actions
+                .andExpect(status().isNoContent())
+                .andDo(document(
+                        "delete-member-profileImage",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("member-id").description("회원 식별자")
+                        ),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        )
+                ));
+    }
+
+    @Test
     public void patchMemberTest() throws Exception {
         // given
         long memberId = 1L;
         MemberDto.Patch patch = new MemberDto.Patch("김태현", "안녕 나는 태봉", "코드스테이츠");
         patch.setMemberId(memberId);
         String content = gson.toJson(patch);
-        MemberDto.Response response = new MemberDto.Response(memberId, "김태현", "aaa@naver.com", "코드스테이츠", "", "안녕 나는 태봉", new ArrayList<>(), new ArrayList<>(),new ArrayList<>());
+        MemberDto.Response response = new MemberDto.Response(memberId, "김태현", "taebong98", "코드스테이츠", "", "안녕 나는 태봉", new ArrayList<>(), new ArrayList<>(),new ArrayList<>());
 
         // when
         given(mapper.memberPatchToMember(Mockito.any(MemberDto.Patch.class))).willReturn(new Member());
@@ -267,7 +297,7 @@ public class MemberControllerRestDocs {
             new MemberDto.Response(
                 1L,
                 "taebong98",
-                "aaa@naver.com",
+                "taebong98",
                 "코드스테이츠",
                 null,
                 "자기소개",
@@ -327,7 +357,7 @@ public class MemberControllerRestDocs {
         Member member1 = new Member();
         member1.setMemberId(memberId1);
         member1.setUserName("머호");
-        member1.setEmail("oheadnah@gmail.com");
+        member1.setEmail("oheadnah");
         member1.setLocation("코드스테이츠");
         member1.setProfileImage("profileImage.jpeg");
         member1.setProfileText("자기소개");
@@ -335,7 +365,7 @@ public class MemberControllerRestDocs {
         Member member2 = new Member();
         member2.setMemberId(memberId2);
         member2.setUserName("머호2");
-        member2.setEmail("oheadnah2@gmail.com");
+        member2.setEmail("oheadnah2");
         member2.setLocation("코드스테이츠");
         member2.setProfileImage("profileImage.jpeg");
         member2.setProfileText("자기소개");

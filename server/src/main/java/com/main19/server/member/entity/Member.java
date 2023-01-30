@@ -26,7 +26,7 @@ public class Member {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long memberId;
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String userName;
 
 	@Column(unique = true)
@@ -95,7 +95,7 @@ public class Member {
 		}
 
 		if (this.profileImage == null) {
-			this.profileImage = "https://main19-bucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/fcb8c543-bae8-451a-a8e7-6467e2ef7f0c.PNG";
+			this.profileImage = "https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/aa697bd5-d15c-4941-afd7-b0506624f0a4.png";
 		}
 
 		if (this.profileText == null) {
