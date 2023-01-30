@@ -6,7 +6,8 @@ import com.main19.server.myplants.dto.MyPlantsDto;
 import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.mapper.MyPlantsMapper;
 import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.s3service.S3StorageService;
+import com.main19.server.storageService.s3.GalleryStorageService;
+
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -30,7 +31,7 @@ public class MyPlantsController {
 
     private final MyPlantsMapper myPlantsMapper;
     private final MyPlantsService myPlantsService;
-    private final S3StorageService storageService;
+    private final GalleryStorageService storageService;
 
     @PostMapping("/myplants")
     public ResponseEntity postMyPlants(@RequestHeader(name = "Authorization") String token,

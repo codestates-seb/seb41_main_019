@@ -1,5 +1,9 @@
 package com.main19.server.member.entity;
 
+import com.main19.server.chatroom.entity.ChatRoom;
+import com.main19.server.comment.entity.Comment;
+import com.main19.server.myplants.entity.MyPlants;
+import com.main19.server.sse.entity.Sse;
 import javax.persistence.*;
 
 import com.main19.server.follow.entity.Follow;
@@ -10,6 +14,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
@@ -18,7 +23,7 @@ import static javax.persistence.FetchType.EAGER;
 @AllArgsConstructor
 public class Member {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long memberId;
 
 	@Column(nullable = false, unique = true)
@@ -53,31 +58,48 @@ public class Member {
 		ROLE_ADMIN
 	}
   
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", cascade = REMOVE)
 	private List<Posting> postings = new ArrayList<>();
 
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member", cascade = REMOVE)
+	private List<Comment> comments = new ArrayList<>();
+
+	@OneToMany(mappedBy = "member", cascade = REMOVE)
 	private List<Scrap> scrapPostingList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "followedId")
-	private List<Follow> followeds = new ArrayList<>();
+	@OneToMany(mappedBy = "followerId", cascade = REMOVE)
+	private List<Follow> followerList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "followingId")
-	private List<Follow> followings = new ArrayList<>();
+	@OneToMany(mappedBy = "followingId", cascade = REMOVE)
+	private List<Follow> followingList = new ArrayList<>();
 
-//	@Builder
-//	public Member(Long memberId, String userName, String email, String profileImage, String profileText, String location, String password, List<String> roles, List<Posting> postings, List<Scrap> scrapPostingList, List<Follow> followeds, List<Follow> followings) {
-//		this.memberId = memberId;
-//		this.userName = userName;
-//		this.email = email;
-//		this.profileImage = profileImage;
-//		this.profileText = profileText;
-//		this.location = location;
-//		this.password = password;
-//		this.roles = roles;
-//		this.postings = postings;
-//		this.scrapPostingList = scrapPostingList;
-//		this.followeds = followeds;
-//		this.followings = followings;
-//	}
+	@OneToMany(mappedBy = "member", cascade = REMOVE)
+	private List<MyPlants> myPlantsList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "receiver", cascade = REMOVE)
+	private List<ChatRoom> receiverChatRoomList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "sender", cascade = REMOVE)
+	private List<ChatRoom> senderChatRoomList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "receiver", cascade = CascadeType.REMOVE)
+	private List<Sse> receiverSseList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "sender", cascade = CascadeType.REMOVE)
+	private List<Sse> senderSseList = new ArrayList<>();
+
+	@PrePersist
+	public void prePersist() {
+		if (this.location == null) {
+			this.location = "...";
+		}
+
+		if (this.profileImage == null) {
+			this.profileImage = "https://main19-bucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/fcb8c543-bae8-451a-a8e7-6467e2ef7f0c.PNG";
+		}
+
+		if (this.profileText == null) {
+			this.profileText = "...";
+		}
+	}
 }

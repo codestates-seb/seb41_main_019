@@ -1,5 +1,7 @@
 package com.main19.server.comment.like.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +14,8 @@ public class CommentLikeDto {
     @AllArgsConstructor
     public static class Post {
 
+        @Positive
         private long memberId;
-        private long commentId;
 
     }
 

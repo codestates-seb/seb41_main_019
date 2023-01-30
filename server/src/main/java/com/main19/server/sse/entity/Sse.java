@@ -2,6 +2,7 @@ package com.main19.server.sse.entity;
 
 import com.main19.server.posting.entity.Posting;
 import java.time.LocalDateTime;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import com.main19.server.member.entity.Member;
 import javax.persistence.Entity;
@@ -37,15 +38,15 @@ public class Sse {
     @Column(nullable = false)
     private SseType sseType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     private Member receiver;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "sender_id")
     private Member sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "posting_id")
     private Posting posting;
 
@@ -63,5 +64,9 @@ public class Sse {
         this.sender = sender;
         this.isRead = isRead;
         this.posting = posting;
+    }
+
+    public long getReceiverId() {
+        return receiver.getMemberId();
     }
 }

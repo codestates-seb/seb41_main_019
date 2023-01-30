@@ -2,13 +2,16 @@ package com.main19.server.posting.scrap.entity;
 
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.entity.Posting;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Scrap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +36,9 @@ public class Scrap {
         if (!this.member.getScrapPostingList().contains(this)) {
             this.member.getScrapPostingList().add(this);
         }
+    }
+
+    public long getMemberId() {
+        return member.getMemberId();
     }
 }

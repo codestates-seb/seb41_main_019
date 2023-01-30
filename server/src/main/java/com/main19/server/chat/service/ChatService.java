@@ -1,6 +1,7 @@
 package com.main19.server.chat.service;
 
 import com.main19.server.auth.jwt.JwtTokenizer;
+import com.main19.server.chat.dto.ChatDto;
 import com.main19.server.chat.entitiy.Chat;
 import com.main19.server.chat.repository.ChatRepository;
 import com.main19.server.chatroom.service.ChatRoomService;
@@ -9,12 +10,18 @@ import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.service.MemberService;
 import com.main19.server.sse.entity.Sse.SseType;
 import com.main19.server.sse.service.SseService;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatService {
 
     private final ChatRepository chatRepository;
@@ -34,16 +41,26 @@ public class ChatService {
         return chatRepository.save(chat);
     }
 
-    public List<Chat> findAllChat(long chatRoomId, String token) {
+    @Transactional(readOnly = true)
+    public Page<Chat> findAllChat(long chatRoomId, String token, int page, int size) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (chatRoomService.findChatRoom(chatRoomId).getReceiver().getMemberId() != tokenId
-            || chatRoomService.findChatRoom(chatRoomId).getSender().getMemberId() != tokenId) {
+        if (chatRoomService.findChatRoom(chatRoomId).getReceiverId() != jwtTokenizer.getMemberId(token)
+            && chatRoomService.findChatRoom(chatRoomId).getSenderId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
-        return chatRepository.findAllByChatRoom_ChatRoomId(chatRoomId);
+        return chatRepository.findAllByChatRoom_ChatRoomId(chatRoomId, PageRequest.of(page, size, Sort.by("chatId").descending()));
+    }
+
+    public List<ChatDto.Response> changeList(List<ChatDto.Response> chat) {
+
+        List<ChatDto.Response> response = new ArrayList<>();
+
+        for(int i=0; i<chat.size(); i++) {
+            response.add(chat.get(chat.size()-i-1));
+        }
+
+        return response;
     }
 
 

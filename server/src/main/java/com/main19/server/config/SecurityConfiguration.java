@@ -55,6 +55,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         // TODO Admin 계정 생성시 권한 추가가 필요합니다.
                         .antMatchers(HttpMethod.POST, "/members/sign-up/**").permitAll() // 회원가입
+                        .antMatchers(HttpMethod.POST, "/members/reissues/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/members/**").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/members/**").hasRole("USER")

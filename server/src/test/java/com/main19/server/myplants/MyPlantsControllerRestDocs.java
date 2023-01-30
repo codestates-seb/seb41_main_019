@@ -14,8 +14,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,7 +29,8 @@ import com.main19.server.myplants.entity.MyPlants;
 import com.main19.server.myplants.gallery.dto.GalleryDto;
 import com.main19.server.myplants.mapper.MyPlantsMapper;
 import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.s3service.S3StorageService;
+import com.main19.server.storageService.s3.GalleryStorageService;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(value = MyPlantsController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class MyPlantsControllerRestDocs {
 
     @Autowired
@@ -62,7 +62,7 @@ public class MyPlantsControllerRestDocs {
     @MockBean
     private MyPlantsService myPlantsService;
     @MockBean
-    private S3StorageService storageService;
+    private GalleryStorageService storageService;
 
 
     @Test
@@ -71,11 +71,11 @@ public class MyPlantsControllerRestDocs {
         long myPlantsId = 1L;
         long memberId = 1L;
 
-        MyPlantsDto.Post post = new Post(memberId, "머호");
+        MyPlantsDto.Post post = new Post(memberId, "머호","머호","2023.01.21");
 
         String content = gson.toJson(post);
 
-        MyPlantsDto.Response response = new Response(myPlantsId, "머호", new ArrayList<>());
+        MyPlantsDto.Response response = new Response(myPlantsId, "머호", "머호", "2023.01.21", new ArrayList<>());
 
         given(myPlantsMapper.myPlantsPostDtoToMyPlants(Mockito.any(MyPlantsDto.Post.class)))
             .willReturn(new MyPlants());
@@ -99,6 +99,8 @@ public class MyPlantsControllerRestDocs {
         actions
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.data.plantName").value(post.getPlantName()))
+            .andExpect(jsonPath("$.data.plantType").value(post.getPlantType()))
+            .andExpect(jsonPath("$.data.plantBirthDay").value(post.getPlantBirthDay()))
             .andDo(document(
                 "post-my-plants",
                 getRequestPreProcessor(),
@@ -109,12 +111,16 @@ public class MyPlantsControllerRestDocs {
                 requestFields(
                     List.of(
                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
-                        fieldWithPath("plantName").type(JsonFieldType.STRING).description("식물 이름")
+                        fieldWithPath("plantName").type(JsonFieldType.STRING).description("식물 이름"),
+                        fieldWithPath("plantType").type(JsonFieldType.STRING).description("식물 종류"),
+                        fieldWithPath("plantBirthDay").type(JsonFieldType.STRING).description("식물 생일")
                     )
                 ),
                 responseFields(
                     fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
                     fieldWithPath("data.plantName").type(JsonFieldType.STRING).description("식물 이름"),
+                    fieldWithPath("data.plantType").type(JsonFieldType.STRING).description("식물 종류"),
+                    fieldWithPath("data.plantBirthDay").type(JsonFieldType.STRING).description("식물 생일"),
                     fieldWithPath("data.galleryList").type(JsonFieldType.ARRAY).description("갤러리 리스트")
                 )
             ));
@@ -139,7 +145,7 @@ public class MyPlantsControllerRestDocs {
 
         String content = gson.toJson(patch);
 
-        MyPlantsDto.Response response = new Response(myPlantsId, "머호", responses);
+        MyPlantsDto.Response response = new Response(myPlantsId, "머호","머호","2023.01.21", responses);
 
         given(myPlantsService.changeMyPlants(Mockito.anyLong(), Mockito.anyLong(),
             Mockito.anyInt(), Mockito.anyString()))
@@ -179,6 +185,8 @@ public class MyPlantsControllerRestDocs {
                 responseFields(
                     fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
                     fieldWithPath("data.plantName").type(JsonFieldType.STRING).description("식물 이름"),
+                    fieldWithPath("data.plantType").type(JsonFieldType.STRING).description("식물 종류"),
+                    fieldWithPath("data.plantBirthDay").type(JsonFieldType.STRING).description("식물 생일"),
                     fieldWithPath("data.galleryList[].galleryId").type(JsonFieldType.NUMBER).description("갤러리 식별자")
                 )
             ));
@@ -189,7 +197,7 @@ public class MyPlantsControllerRestDocs {
 
         long myPlantsId = 1L;
 
-        MyPlantsDto.Response response = new MyPlantsDto.Response(myPlantsId,"머호",new ArrayList<>());
+        MyPlantsDto.Response response = new MyPlantsDto.Response(myPlantsId,"머호","머호","2023.01.21",new ArrayList<>());
 
         given(myPlantsService.findMyPlants(Mockito.anyLong())).willReturn(new MyPlants());
         given(myPlantsMapper.myPlantsToMyPlantsResponseDto(Mockito.any())).willReturn(response);
@@ -216,6 +224,8 @@ public class MyPlantsControllerRestDocs {
                 responseFields(
                     fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
                     fieldWithPath("data.plantName").type(JsonFieldType.STRING).description("식물 이름"),
+                    fieldWithPath("data.plantType").type(JsonFieldType.STRING).description("식물 종류"),
+                    fieldWithPath("data.plantBirthDay").type(JsonFieldType.STRING).description("식물 생일"),
                     fieldWithPath("data.galleryList").type(JsonFieldType.ARRAY).description("갤러리 리스트")
                 )
             ));
@@ -231,8 +241,8 @@ public class MyPlantsControllerRestDocs {
         Member member = new Member();
         member.setMemberId(memberId);
 
-        MyPlants myPlants1 = new MyPlants(plantsId1,"머호",member,new ArrayList<>());
-        MyPlants myPlants2 = new MyPlants(plantsId2,"머호",member,new ArrayList<>());
+        MyPlants myPlants1 = new MyPlants(plantsId1,"머호","머호","2023.01.21",member,new ArrayList<>());
+        MyPlants myPlants2 = new MyPlants(plantsId2,"머호","머호","2023.01.21",member,new ArrayList<>());
 
         Page<MyPlants> pageMyPlants = new PageImpl<>(List.of(myPlants1, myPlants2));
         List<MyPlants> listMyPlants = List.of(myPlants1,myPlants2);
@@ -245,10 +255,14 @@ public class MyPlantsControllerRestDocs {
                 new MyPlantsDto.Response(
                     listMyPlants.get(0).getMyPlantsId(),
                     listMyPlants.get(0).getPlantName(),
+                    listMyPlants.get(0).getPlantType(),
+                    listMyPlants.get(0).getPlantBirthDay(),
                     new ArrayList<>()),
                 new MyPlantsDto.Response(
                     listMyPlants.get(1).getMyPlantsId(),
                     listMyPlants.get(1).getPlantName(),
+                    listMyPlants.get(0).getPlantType(),
+                    listMyPlants.get(0).getPlantBirthDay(),
                     new ArrayList<>())));
 
         ResultActions actions =
@@ -263,18 +277,28 @@ public class MyPlantsControllerRestDocs {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data[0].myPlantsId").value(listMyPlants.get(0).getMyPlantsId()))
             .andExpect(jsonPath("$.data[0].plantName").value(listMyPlants.get(0).getPlantName()))
+            .andExpect(jsonPath("$.data[0].plantType").value(listMyPlants.get(0).getPlantType()))
+            .andExpect(jsonPath("$.data[0].plantBirthDay").value(listMyPlants.get(0).getPlantBirthDay()))
             .andExpect(jsonPath("$.data[0].galleryList").value(listMyPlants.get(0).getGalleryList()))
             .andExpect(jsonPath("$.data[1].myPlantsId").value(listMyPlants.get(1).getMyPlantsId()))
             .andExpect(jsonPath("$.data[1].plantName").value(listMyPlants.get(1).getPlantName()))
+            .andExpect(jsonPath("$.data[1].plantType").value(listMyPlants.get(1).getPlantType()))
+            .andExpect(jsonPath("$.data[1].plantBirthDay").value(listMyPlants.get(1).getPlantBirthDay()))
             .andExpect(jsonPath("$.data[1].galleryList").value(listMyPlants.get(1).getGalleryList()))
 
             .andDo(document(
                 "gets-my-plants",
                 getRequestPreProcessor(),
                 getResponsePreProcessor(),
+                requestParameters(
+                        parameterWithName("page").description("조회 할 페이지"),
+                        parameterWithName("size").description("조회 할 데이터 갯수")
+                ),
                 responseFields(
                     fieldWithPath("data[].myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
                     fieldWithPath("data[].plantName").type(JsonFieldType.STRING).description("식물 이름"),
+                    fieldWithPath("data[].plantType").type(JsonFieldType.STRING).description("식물 종류"),
+                    fieldWithPath("data[].plantBirthDay").type(JsonFieldType.STRING).description("식물 생일"),
                     fieldWithPath("data[].galleryList").type(JsonFieldType.ARRAY).description("갤러리 리스트"),
                     fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
                     fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),

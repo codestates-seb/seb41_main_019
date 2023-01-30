@@ -1,7 +1,10 @@
 package com.main19.server.chatroom.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class ChatRoomDto {
 
@@ -9,8 +12,20 @@ public class ChatRoomDto {
     @AllArgsConstructor
     public static class Post {
 
+        @Positive
         private long receiverId;
+        @Positive
         private long senderId;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class Patch {
+
+        @Positive
+        private long memberId;
+
     }
 
     @Getter
@@ -20,5 +35,7 @@ public class ChatRoomDto {
         private long chatRoomId;
         private long receiverId;
         private long senderId;
+        private Long leaveId;
+
     }
 }

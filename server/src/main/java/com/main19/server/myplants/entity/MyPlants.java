@@ -32,11 +32,20 @@ public class MyPlants {
     @Column(nullable = false)
     private String plantName;
 
-    @ManyToOne
+    @Column(nullable = false)
+    private String plantType;
+
+    @Column(nullable = false)
+    private String plantBirthDay;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "memberId")
     private Member member;
 
     @OneToMany(mappedBy = "myPlants" , cascade = CascadeType.REMOVE)
     private List<Gallery> galleryList = new ArrayList<>();
 
+    public long getMemberId() {
+        return member.getMemberId();
+    }
 }

@@ -11,9 +11,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,7 +25,8 @@ import com.main19.server.myplants.gallery.entity.Gallery;
 import com.main19.server.myplants.gallery.mapper.GalleryMapper;
 import com.main19.server.myplants.gallery.service.GalleryService;
 import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.s3service.S3StorageService;
+import com.main19.server.storageService.s3.GalleryStorageService;
+
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(value = GalleryController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class GalleryControllerRestDocs {
 
     @Autowired
@@ -60,7 +59,7 @@ public class GalleryControllerRestDocs {
     @Autowired
     private Gson gson;
     @MockBean
-    private S3StorageService storageService;
+    private GalleryStorageService storageService;
     @MockBean
     private GalleryMapper galleryMapper;
     @MockBean
@@ -233,6 +232,10 @@ public class GalleryControllerRestDocs {
                 "gets-gallery",
                 getRequestPreProcessor(),
                 getResponsePreProcessor(),
+                requestParameters(
+                        parameterWithName("page").description("조회 할 페이지"),
+                        parameterWithName("size").description("조회 할 데이터 갯수")
+                ),
                 pathParameters(
                     parameterWithName("myplants-id").description("내 식물 식별자")
                 ),

@@ -38,9 +38,7 @@ public class CommentLikeController {
         @PathVariable("comment-id") @Positive long commentId,
         @Valid @RequestBody CommentLikeDto.Post commentLikePostDto) {
 
-        CommentLike commentLikes = commentLikeMapper.commentLikePostDtoToCommentLike(
-            commentLikePostDto);
-        CommentLike createdComment = commentLikeService.createLike(commentLikes, commentId,
+        CommentLike createdComment = commentLikeService.createLike(commentId,
             commentLikePostDto.getMemberId(), token);
         CommentLikeDto.Response response = commentLikeMapper.commentLikeToCommentLikeResponse(
             createdComment);

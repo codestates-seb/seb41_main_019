@@ -21,21 +21,28 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.main19.server.member.entity.Member;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class SseService {
 
-    private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
+    private static final Long DEFAULT_TIMEOUT = 5L * 1000 ;
 
     private final EmitterRepositoryImpl emitterRepository;
     private final SseRepository sseRepository;
     private final SseMapper sseMapper;
     private final JwtTokenizer jwtTokenizer;
 
-    public SseEmitter subscribe(Long userId, String lastEventId) {
+    public SseEmitter subscribe(Long userId, String lastEventId, String token) {
+
+        if(userId != jwtTokenizer.getMemberId(token)) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
 
         String id = userId + "_" + System.currentTimeMillis();
 
@@ -81,7 +88,7 @@ public class SseService {
             }
         );
     }
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public void sendPosting(Member receiver, SseType sseType, Member sender, Posting posting) {
         Sse sse = createSsePosting(receiver, sseType, sender, posting);
         sseRepository.save(sse);
@@ -96,6 +103,7 @@ public class SseService {
         );
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void sendChatRoom(Member receiver, SseType sseType, Member sender) {
         Sse sse = createSse(receiver, sseType, sender);
         sse.setPosting(null);
@@ -132,9 +140,7 @@ public class SseService {
 
     public Sse updateSse(long sseId,String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if(findVerifiedSse(sseId).getReceiver().getMemberId() != tokenId) {
+        if(findVerifiedSse(sseId).getReceiver().getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -145,7 +151,12 @@ public class SseService {
         return sse;
     }
 
-    public Page<Sse> findSse(long memberId, Pageable pageable) {
+    public Page<Sse> findSse(long memberId, Pageable pageable, String token) {
+
+        if(memberId != jwtTokenizer.getMemberId(token)) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         return sseRepository.findSse(memberId, pageable);
     }
 
@@ -155,9 +166,7 @@ public class SseService {
 
     public void deleteSee(long sseId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if(findVerifiedSse(sseId).getReceiver().getMemberId() != tokenId) {
+        if(findVerifiedSse(sseId).getReceiverId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

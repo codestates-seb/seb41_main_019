@@ -7,12 +7,12 @@ import com.main19.server.comment.entity.Comment;
 import com.main19.server.comment.like.dto.CommentLikeGetResponseDto;
 import com.main19.server.comment.like.entity.CommentLike;
 import com.main19.server.posting.scrap.dto.ScrapDto;
+import com.main19.server.posting.scrap.dto.ScrapPostResponseDto;
 import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import com.main19.server.posting.scrap.entity.Scrap;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.main19.server.posting.like.dto.PostingLikeDto;
 import com.main19.server.posting.like.dto.PostingLikeGetResponseDto;
 import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
@@ -35,10 +35,6 @@ public interface PostingMapper {
 	PostingResponseDto postingToPostingResponseDto(Posting posting);
 
 	List<PostingResponseDto> postingsToPostingsResponseDto(List<Posting> postings);
-
-
-	// 좋아요 매퍼
-	PostingLike postingLikeDtoToPostingLike(PostingLikeDto requestBody);
 
 	@Mapping(source = "posting.postingId", target = "postingId")
 	@Mapping(source = "member.memberId", target = "memberId")
@@ -71,5 +67,5 @@ public interface PostingMapper {
 
 	@Mapping(source = "posting.postingId", target = "postingId")
 	@Mapping(source = "member.memberId", target = "memberId")
-	ScrapResponseDto scrapToScrapResponseDto(Scrap scrap);
+	ScrapPostResponseDto scrapToScrapPostResponseDto(Scrap scrap);
 }

@@ -10,9 +10,11 @@ import com.main19.server.member.service.MemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -21,17 +23,11 @@ public class ChatRoomService {
 
     public ChatRoom createChatRoom(ChatRoom chatRoom, long receiverId, long senderId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (senderId != tokenId) {
+        if (senderId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
-        if(chatRoomRepository.findSenderChatRoom(receiverId,senderId) != null) {
-            throw new BusinessLogicException(ExceptionCode.CHATROOM_EXISTS);
-        }
-
-        if(chatRoomRepository.findReceiverChatRoom(receiverId,senderId) != null) {
+        if(chatRoomRepository.findChatRoom(receiverId,senderId) != null) {
             throw new BusinessLogicException(ExceptionCode.CHATROOM_EXISTS);
         }
 
@@ -43,16 +39,50 @@ public class ChatRoomService {
         return chatRoomRepository.save(chatRoom);
     }
 
+    public ChatRoom updateChatRoom(long chatRoomId, long memberId, String token) {
+
+        if (memberId != jwtTokenizer.getMemberId(token)) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        ChatRoom chatRoom = findChatRoom(chatRoomId);
+
+        if(chatRoom.getLeaveId() == null) {
+            chatRoom.setLeaveId(memberId);
+        }
+        else {
+            chatRoom.setLeaveId(null);
+        }
+
+        return chatRoomRepository.save(chatRoom);
+    }
+
+    public void deleteChatRoom(long chatRoomId, String token) {
+
+        ChatRoom chatRoom = findChatRoom(chatRoomId);
+
+        if (chatRoom.getSenderId() != jwtTokenizer.getMemberId(token) && chatRoom.getReceiverId() != jwtTokenizer.getMemberId(token)) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        if(chatRoom.getLeaveId() == null) {
+            throw new BusinessLogicException(ExceptionCode.CHATROOM_NOT_DELETE);
+        }
+
+        chatRoomRepository.delete(chatRoom);
+
+    }
+
+    @Transactional(readOnly = true)
     public ChatRoom findChatRoom(long chatRoomId) {
 
         return chatRoomRepository.findById(chatRoomId);
     }
 
+    @Transactional(readOnly = true)
     public List<ChatRoom> findAllChatRoom(long memberId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (memberId != tokenId) {
+        if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

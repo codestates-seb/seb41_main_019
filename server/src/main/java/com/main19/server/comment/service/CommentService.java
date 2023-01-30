@@ -18,9 +18,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -31,9 +33,7 @@ public class CommentService {
 
     public Comment createComment(Comment comment, long postingId, long memberId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (memberId != tokenId) {
+        if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -44,7 +44,7 @@ public class CommentService {
         comment.setMember(member);
         posting.createCommentCount();
 
-        if(posting.getMember().getMemberId() != tokenId) {
+        if(posting.getMemberId() != jwtTokenizer.getMemberId(token)) {
             sseService.sendPosting(posting.getMember(), SseType.comment, member, comment.getPosting());
         }
 
@@ -53,9 +53,7 @@ public class CommentService {
 
     public Comment updateComment(Comment comments, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (comments.getMember().getMemberId() != tokenId) {
+        if (comments.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -69,21 +67,21 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional(readOnly = true)
     public Comment findComment(long commentId) {
 
         return findVerifiedComment(commentId);
     }
 
-    public Page<Comment> findComments(int page, int size) {
-        return commentRepository.findAll(PageRequest.of(page, size,
+    @Transactional(readOnly = true)
+    public Page<Comment> findComments(long postingId, int page, int size) {
+        return commentRepository.findByPosting_PostingId(postingId,PageRequest.of(page, size,
             Sort.by("commentId").descending()));
     }
 
     public void deleteComment(long commentId, String token) {
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (findComment(commentId).getMember().getMemberId() != tokenId) {
+        if (findComment(commentId).getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 

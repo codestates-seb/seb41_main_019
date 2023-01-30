@@ -1,6 +1,7 @@
 package com.main19.server.myplants.gallery.dto;
 
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ public class GalleryDto {
     @NoArgsConstructor
     public static class Post {
 
+        @NotBlank
         private String content;
 
     }

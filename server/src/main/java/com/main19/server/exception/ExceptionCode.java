@@ -16,11 +16,11 @@ public enum ExceptionCode {
 	SCRAP_ALREADY_EXIST(409, "Scrap already exist"),
 	FOLLOW_NOT_FOUND(404, "Follow not found"),
 	FOLLOW_ALREADY_EXIST(409, "Follow already exist"),
-	WRONG_POSTING_MEDIA(405, "Wrong posting media"), // 첨부파일 없이 포스팅 할 시
-	WRONG_MEDIA_FORMAT(405, "Wrong media format"), // 지원하는 포맷이 아닐 때
-	MEDIA_UPLOAD_ERROR(404, "Media upload error"), // s3에 업로드하다가 뭐 안됐을 때
-	MEDIA_NOT_FOUND(404, "Media not found"), // 찾는 첨부파일 없을 때 (s3, media테이블 공통)
-	POSTING_MEDIA_ERROR(405, "Posting requires at least 1 media"),
+	WRONG_POSTING_MEDIA(405, "Wrong posting media"),
+	WRONG_MEDIA_FORMAT(405, "Wrong media format"),
+	MEDIA_UPLOAD_ERROR(404, "Media upload error"),
+	MEDIA_NOT_FOUND(404, "Media not found"),
+	POSTING_MEDIA_ERROR(405, "Posting requires at least 1 media or less than 3 medias"),
 	COMMENT_NOT_FOUND(404,"Comment Not Found"),
 	COMMENT_LIKE_NOT_FOUND(404,"Comment Not Found"),
 	COMMENT_LIKE_EXISTS(409,"You Already Pressed Like"),
@@ -28,7 +28,9 @@ public enum ExceptionCode {
 	CHATROOM_EXISTS(409, "ChatRoom Already Exists"),
 	NOTIFICATION_NOT_FOUND(404, "Notification Not Found"),
 	MYPLANTS_NOT_FOUND(404, "My Plants Not Found"),
-	GALLERY_NOT_FOUND(404, "Gallery Not Found"),;
+	GALLERY_NOT_FOUND(404, "Gallery Not Found"),
+	CONVERSION_FAILED(404, "File conversion failed"),
+	CHATROOM_NOT_DELETE(409, "ChatRoom Not Delete");
 
 
 	@Getter

@@ -6,8 +6,12 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.repository.MemberRepository;
+import com.main19.server.redis.RedisDao;
 import com.main19.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +29,6 @@ public class MemberService {
     private final CustomBeanUtils<Member> beanUtils;
     private final JwtTokenizer jwtTokenizer;
 
-
     public Member createMember(Member member) {
         verifiedByEmail(member.getEmail());
         String encodedPassword = passwordEncoder.encode(member.getPassword());
@@ -41,9 +44,8 @@ public class MemberService {
     public Member updateMember(Member member ,String token) {
         // todo 토큰 정보 확인해서 권한 검증후 수정 해야함
         // todo password 수정할지?
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (member.getMemberId() != tokenId) {
+        if (member.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -58,12 +60,25 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
+    @Transactional(readOnly = true)
+    public Member findTokenMember(String token) {
+
+        long memberId = jwtTokenizer.getMemberId(token);
+        return findVerifiedMember(memberId);
+    }
+
+    @Transactional(readOnly = true)
+    public String findTokenMemberEmail(String token) {
+        long memberId = jwtTokenizer.getMemberId(token);
+        String email = findVerifiedMember(memberId).getEmail();
+        return email;
+    }
+
+
     public void deleteMember(long memberId, String token){
         // todo 토큰 정보 확인해서 권한 검증후 삭제 해야함
 
-        long tokenId = jwtTokenizer.getMemberId(token);
-
-        if (memberId != tokenId) {
+        if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -71,9 +86,8 @@ public class MemberService {
     }
 
     public Member createProfileImage(long memberId, String imagePath, String token) {
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (memberId != tokenId) {
+        if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -83,9 +97,8 @@ public class MemberService {
     }
 
     public void deleteProfileImage(long memberId, String token) {
-        long tokenId = jwtTokenizer.getMemberId(token);
 
-        if (memberId != tokenId) {
+        if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -93,15 +106,16 @@ public class MemberService {
         member.setProfileImage(null);
         memberRepository.save(member);
     }
-
+    @Transactional(readOnly = true)
     public boolean findMemberName(String search) {
         Member member = memberRepository.findByUserName(search);
-        if(member == null) {
-            return false;
-        }
-        return true;
+        return member != null;
     }
 
+    public Page<Member> findUserName(String search , int page , int size) {
+        Page<Member> member = memberRepository.findByUserNameContaining(search, PageRequest.of(page, size, Sort.by("memberId").descending()));
+        return member;
+    }
 
     private void verifiedByEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);

@@ -4,14 +4,14 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.*;
 
 @Getter
 @AllArgsConstructor
 public class PostingPatchDto {
-	private long postingId;
 	private String postingContent;
-	private List<String> tagName;
-	public void setPostingId(long postingId) {
-		this.postingId = postingId;
-	}
+	@Size(max = 5)
+	private List<@NotBlank @Length(min = 1, max = 15) String> tagName;
 }

@@ -19,10 +19,18 @@ public class Follow {
     private Long followId;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "followed_member_id")
-    private Member followedId;
+    @JoinColumn(name = "follower_member_id")
+    private Member followerId;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "following_member_id")
     private Member followingId;
+
+    public long getFollowingMemberId() {
+        return followingId.getMemberId();
+    }
+
+    public long getFollowerMemberId() {
+        return followerId.getMemberId();
+    }
 }

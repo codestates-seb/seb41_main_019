@@ -14,7 +14,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.main19.server.chat.controller.ChatController;
+
+import com.main19.server.chat.controller.KafkaController;
 import com.main19.server.chat.dto.ChatDto;
 import com.main19.server.chat.entitiy.Chat;
 import com.main19.server.chat.mapper.ChatMapper;
@@ -31,16 +32,18 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-@WebMvcTest(value = ChatController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@WebMvcTest(value = KafkaController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class ChatRestDocs {
 
     @Autowired
@@ -52,7 +55,7 @@ public class ChatRestDocs {
     @MockBean
     private ChatRoomService chatRoomService;;
     @MockBean
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private KafkaTemplate kafkaTemplate;
 
     @Test
     public void GetChatTest() throws Exception {
@@ -77,37 +80,58 @@ public class ChatRestDocs {
         Chat chat1 = new Chat(chatId1,member1,member2,chatRoom,"hi", createdAt);
         Chat chat2 = new Chat(chatId2,member1,member2,chatRoom,"hello", createdAt);
 
+        Page<Chat> chat = new PageImpl<>(List.of(chat1,chat2));
         List<Chat> list = List.of(chat1,chat2);
 
-        given(chatService.findAllChat(Mockito.anyLong(),Mockito.anyString()))
-            .willReturn(list);
+        given(chatService.findAllChat(Mockito.anyLong(),Mockito.anyString(),Mockito.anyInt(),Mockito.anyInt()))
+            .willReturn(chat);
+
+        given(chatMapper.pageChatToListChat(Mockito.any())).willReturn(list);
 
         given(chatMapper.chatToChatDtoResponse(Mockito.anyList())).willReturn(
             List.of(
                 new ChatDto.Response(
+                    list.get(0).getChatRoom().getChatRoomId(),
                     list.get(0).getReceiver().getMemberId(),
                     list.get(0).getSender().getMemberId(),
                     list.get(0).getChat(),
                     list.get(0).getCreatedAt()),
                 new ChatDto.Response(
+                    list.get(1).getChatRoom().getChatRoomId(),
                     list.get(1).getReceiver().getMemberId(),
                     list.get(1).getSender().getMemberId(),
                     list.get(1).getChat(),
                     list.get(1).getCreatedAt())));
+        given(chatService.changeList(Mockito.anyList())).willReturn(List.of(new ChatDto.Response(
+                        list.get(0).getChatRoom().getChatRoomId(),
+                        list.get(0).getReceiver().getMemberId(),
+                        list.get(0).getSender().getMemberId(),
+                        list.get(0).getChat(),
+                        list.get(0).getCreatedAt()),
+                new ChatDto.Response(
+                        list.get(1).getChatRoom().getChatRoomId(),
+                        list.get(1).getReceiver().getMemberId(),
+                        list.get(1).getSender().getMemberId(),
+                        list.get(1).getChat(),
+                        list.get(1).getCreatedAt())));
 
         ResultActions actions =
             mockMvc.perform(
                 get("/message/{member-id}", memberId1)
                     .header("Authorization", "Bearer AccessToken")
+                    .param("page","1")
+                    .param("size","10")
                     .accept(MediaType.APPLICATION_JSON)
             );
 
         actions
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[0].chatRoomId").value(list.get(0).getChatRoom().getChatRoomId()))
             .andExpect(jsonPath("$.[0].receiverId").value(list.get(0).getReceiver().getMemberId()))
-            .andExpect(jsonPath("$.[0].senderId").value(list.get(1).getSender().getMemberId()))
+            .andExpect(jsonPath("$.[0].senderId").value(list.get(0).getSender().getMemberId()))
             .andExpect(jsonPath("$.[0].chat").value(list.get(0).getChat()))
             .andExpect(jsonPath("$.[0].createdAt").value("2023-01-01T23:59:59"))
+            .andExpect(jsonPath("$.[1].chatRoomId").value(list.get(1).getChatRoom().getChatRoomId()))
             .andExpect(jsonPath("$.[1].receiverId").value(list.get(1).getReceiver().getMemberId()))
             .andExpect(jsonPath("$.[1].senderId").value(list.get(1).getSender().getMemberId()))
             .andExpect(jsonPath("$.[1].chat").value(list.get(1).getChat()))
@@ -123,6 +147,7 @@ public class ChatRestDocs {
                     parameterWithName("member-id").description("회원 식별자")
                 ),
                 responseFields(
+                    fieldWithPath("[0].chatRoomId").type(JsonFieldType.NUMBER).description("채팅방 식별자"),
                     fieldWithPath("[0].receiverId").type(JsonFieldType.NUMBER).description("회원 식별자"),
                     fieldWithPath("[0].senderId").type(JsonFieldType.NUMBER).description("회원 식별자"),
                     fieldWithPath("[0].chat").type(JsonFieldType.STRING).description("채팅 내용"),

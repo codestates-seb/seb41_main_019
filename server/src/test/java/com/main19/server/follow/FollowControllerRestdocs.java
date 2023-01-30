@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = FollowController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class FollowControllerRestdocs {
     @Autowired
     private MockMvc mockMvc;
@@ -54,16 +54,16 @@ public class FollowControllerRestdocs {
         // given
         long followId = 1L;
         long followingMemberId = 1L;
-        long followedMemberId = 2L;
-        FollowDto.Response response = new FollowDto.Response(followId, followedMemberId, followingMemberId);
+        long followerMemberId = 2L;
+        FollowDto.Response response = new FollowDto.Response(followId, followerMemberId, followingMemberId);
 
         // when
-        given(followService.createFollow(Mockito.anyLong(), Mockito.anyLong())).willReturn(new Follow());
+        given(followService.createFollow(Mockito.anyString(), Mockito.anyLong())).willReturn(new Follow());
         given(mapper.followToFollowResponseDto(Mockito.any(Follow.class))).willReturn(response);
 
         // then
         ResultActions actions = mockMvc.perform(
-                post("/followings/{member-id}", followedMemberId)
+                post("/followings/{member-id}", followId)
                         .header("Authorization", "Bearer AccessToken")
                         .accept(MediaType.APPLICATION_JSON)
         );
@@ -82,7 +82,7 @@ public class FollowControllerRestdocs {
                         ),
                         responseFields(
                                 fieldWithPath("data.followId").type(JsonFieldType.NUMBER).description("팔로우 식별자"),
-                                fieldWithPath("data.followedId").type(JsonFieldType.NUMBER).description("팔로워 식별자"),
+                                fieldWithPath("data.followerId").type(JsonFieldType.NUMBER).description("팔로워 식별자"),
                                 fieldWithPath("data.followingId").type(JsonFieldType.NUMBER).description("팔로잉 식별자")
                         )
                 ));
@@ -91,15 +91,15 @@ public class FollowControllerRestdocs {
     @Test
     public void deleteFollowingTest() throws Exception {
         // given
-        long followingMemberId = 1L;
-        long followedMemberId = 2L;
+        long followId = 1L;
+        String token = "AccessToken";
 
         // when
-        doNothing().when(followService).deleteFollowing(followingMemberId, followedMemberId);
+        doNothing().when(followService).deleteFollowing(token, followId);
 
         // then
         ResultActions actions = mockMvc.perform(
-                delete("/followings/{member-id}", followedMemberId)
+                delete("/followings/{follow-id}", followId)
                         .header("Authorization", "Bearer AccessToken")
         );
 
@@ -108,7 +108,7 @@ public class FollowControllerRestdocs {
                         "delete-following",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        pathParameters(parameterWithName("member-id").description("내가 팔로우하고 있는 유저의 식별자")),
+                        pathParameters(parameterWithName("follow-id").description("팔로우 식별자")),
                         requestHeaders(headerWithName("Authorization").description("Bearer AccessToken"))
                 ));
     }
@@ -116,15 +116,15 @@ public class FollowControllerRestdocs {
     @Test
     public void deleteFollowedTest() throws Exception {
         // given
-        long followingMemberId = 1L;
-        long followedMemberId = 2L;
+        String token = "AccessToken";
+        long followId = 1L;
 
         // when
-        doNothing().when(followService).deleteFollowed(followingMemberId, followedMemberId);
+        doNothing().when(followService).deleteFollowed(token, followId);
 
         // then
         ResultActions actions = mockMvc.perform(
-                delete("/followed/{member-id}", followingMemberId)
+                delete("/followed/{follow-id}", followId)
                         .header("Authorization", "Bearer AccessToken")
         );
 
@@ -133,7 +133,7 @@ public class FollowControllerRestdocs {
                         "delete-followed",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        pathParameters(parameterWithName("member-id").description("나를 팔로우하는 유저의 식별자")),
+                        pathParameters(parameterWithName("follow-id").description("팔로우 식별자")),
                         requestHeaders(headerWithName("Authorization").description("Bearer AccessToken"))
                 ));
     }

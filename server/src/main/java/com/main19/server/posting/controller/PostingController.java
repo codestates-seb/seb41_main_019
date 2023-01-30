@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-import com.main19.server.member.entity.Member;
-import com.main19.server.posting.dto.MediaPostDto;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,17 +28,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.main19.server.dto.MultiResponseDto;
 import com.main19.server.dto.SingleResponseDto;
-import com.main19.server.exception.BusinessLogicException;
-import com.main19.server.exception.ExceptionCode;
 import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
 import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.service.PostingService;
-import com.main19.server.s3service.S3StorageService;
-import com.main19.server.posting.tags.entity.PostingTags;
-import com.main19.server.posting.tags.service.PostingTagsService;
-import com.main19.server.posting.tags.service.TagService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,9 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 public class PostingController {
 
     private final PostingService postingService;
-    private final S3StorageService storageService;
-    private final TagService tagService;
-    private final PostingTagsService postingTagsService;
     private final PostingMapper mapper;
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -66,17 +57,7 @@ public class PostingController {
         multipartFiles.add(file2);
         multipartFiles.add(file3);
 
-        List<String> mediaPaths = storageService.uploadMedia(multipartFiles, requestBody.getMemberId() ,token);
-
-        Posting posting = postingService.createPosting(mapper.postingPostDtoToPosting(requestBody),
-            requestBody.getMemberId(), mediaPaths);
-
-        for(int i = 0; i < requestBody.getTagName().size(); i++) {
-            tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
-            PostingTags postingTags = mapper.postingPostDtoToPostingTag(requestBody);
-            String tagName = requestBody.getTagName().get(i);
-            postingTagsService.createPostingTags(postingTags, posting, tagName);
-        }
+        Posting posting = postingService.createPosting(requestBody, requestBody.getMemberId(), multipartFiles, token);
 
         return new ResponseEntity<>(
             new SingleResponseDto<>(mapper.postingToPostingResponseDto(posting)),
@@ -87,16 +68,7 @@ public class PostingController {
     public ResponseEntity updatePosting(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId,
         @Valid @RequestBody PostingPatchDto requestBody) {
-        requestBody.setPostingId(postingId);
-        Posting updatedposting = postingService.updatePosting(
-            mapper.postingPatchDtoToPosting(requestBody),token);
-
-        for (int i = 0; i < requestBody.getTagName().size(); i++) {
-            tagService.createTag(mapper.tagPostDtoToTag(requestBody.getTagName().get(i)));
-            PostingTags postingTags = mapper.postingPatchDtoToPostingTag(requestBody);
-            String tagName = requestBody.getTagName().get(i);
-            postingTagsService.updatePostingTags(postingTags, postingId, tagName);
-        }
+        Posting updatedposting = postingService.updatePosting(postingId ,requestBody, token);
 
         return new ResponseEntity<>(
             new SingleResponseDto<>(mapper.postingToPostingResponseDto(updatedposting)),
@@ -122,6 +94,17 @@ public class PostingController {
             HttpStatus.OK);
     }
 
+    @GetMapping("/follow")
+    public ResponseEntity getPostingsByFollwingMember(@RequestHeader(name = "Authorization") String token,
+                                            @Positive @RequestParam int page,
+                                            @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.findPostingsByFollowing(page - 1, size, token);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
+                HttpStatus.OK);
+    }
+
     @GetMapping("/members/{member-id}")
     public ResponseEntity getPostingsByMember(@PathVariable("member-id") @Positive long memberId,
                                               @Positive @RequestParam int page,
@@ -133,12 +116,54 @@ public class PostingController {
                 HttpStatus.OK);
     }
 
+    @GetMapping("/popular")
+    public ResponseEntity getPostingSortByLikes(@Positive @RequestParam int page,
+                                            @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.sortPostingsByLikes(page - 1, size);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/follow/popular")
+    public ResponseEntity getFollowPostingsSortByLikes(@RequestHeader(name = "Authorization") String token,
+                                                   @Positive @RequestParam int page,
+                                                   @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.sortFollowPostingsByLikes(page - 1, size, token);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity getPostingsByStr(@NotBlank @Length(min = 2, max = 15) @RequestParam String str,
+                                           @Positive @RequestParam int page,
+                                           @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.findPostingsByStrContent(page - 1, size, str);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings)
+                , HttpStatus.OK);
+    }
+
+    @GetMapping("/tag/search")
+    public ResponseEntity getPostingTagsByStr(@NotBlank @Length(min = 2, max = 15) @RequestParam String str,
+                                           @Positive @RequestParam int page,
+                                           @Positive @RequestParam int size) {
+        Page<Posting> postings = postingService.findPostingsByStrTag(page - 1, size, str);
+        List<Posting> content = postings.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.postingsToPostingsResponseDto(content), postings),
+                HttpStatus.OK);
+    }
+
     @DeleteMapping(value = "/{posting-id}")
     public ResponseEntity deletePosting(@RequestHeader(name = "Authorization") String token,
         @PathVariable("posting-id") @Positive long postingId) {
 
-        storageService.removeAll(postingId, token);
-        postingService.deletePosting(postingId);
+        postingService.deletePosting(postingId, token);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -146,15 +171,14 @@ public class PostingController {
     @PostMapping(value = "/{posting-id}/medias", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity postMedia(@RequestHeader(name = "Authorization") String token,
                                     @PathVariable("posting-id") @Positive long postingId,
-                                    @RequestPart MediaPostDto requestBody, @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2) {
+                                    @RequestPart MultipartFile file1, @RequestPart(required = false) MultipartFile file2, @RequestPart(required = false) MultipartFile file3) {
 
         List<MultipartFile> multipartFiles = new ArrayList<>();
         multipartFiles.add(file1);
         multipartFiles.add(file2);
+        multipartFiles.add(file3);
 
-        List<String> mediaPaths = storageService.uploadMedia(multipartFiles, requestBody.getMemberId() ,token);
-
-        Posting updatedPosting = postingService.addMedia(postingId, mediaPaths);
+        Posting updatedPosting = postingService.addMedia(postingId, multipartFiles, token);
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.postingToPostingResponseDto(updatedPosting)),
             HttpStatus.OK);
@@ -164,8 +188,7 @@ public class PostingController {
     public ResponseEntity deleteMedia(@RequestHeader(name = "Authorization") String token,
         @PathVariable("media-id") @Positive long mediaId) {
 
-        storageService.remove(mediaId, token);
-        postingService.deleteMedia(mediaId);
+        postingService.deleteMedia(mediaId, token);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

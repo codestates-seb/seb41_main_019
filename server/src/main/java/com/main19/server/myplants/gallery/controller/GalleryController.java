@@ -8,8 +8,10 @@ import com.main19.server.myplants.gallery.entity.Gallery;
 import com.main19.server.myplants.gallery.mapper.GalleryMapper;
 import com.main19.server.myplants.gallery.service.GalleryService;
 import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.s3service.S3StorageService;
+import com.main19.server.storageService.s3.GalleryStorageService;
+
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,14 +34,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/myplants")
 public class GalleryController {
 
-    private final S3StorageService storageService;
+    private final GalleryStorageService storageService;
     private final GalleryMapper galleryMapper;
     private final GalleryService galleryService;
     private final MyPlantsService myPlantsService;
 
     @PostMapping(value = "/{myplants-id}/gallery" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postGallery(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
-        @RequestPart GalleryDto.Post requestBody, @RequestPart MultipartFile galleryImage) {
+        @Valid @RequestPart GalleryDto.Post requestBody, @RequestPart MultipartFile galleryImage) {
 
         String imagePath = storageService.uploadGalleryImage(galleryImage);
         Gallery gallery = galleryMapper.galleryDtoPostToGallery(requestBody);

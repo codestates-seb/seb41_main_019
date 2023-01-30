@@ -3,7 +3,6 @@ package com.main19.server.posting;
 import com.google.gson.Gson;
 import com.main19.server.member.entity.Member;
 import com.main19.server.posting.controller.PostingController;
-import com.main19.server.posting.dto.MediaPostDto;
 import com.main19.server.posting.dto.MediaResponseDto;
 import com.main19.server.posting.dto.PostingPatchDto;
 import com.main19.server.posting.dto.PostingPostDto;
@@ -13,11 +12,9 @@ import com.main19.server.posting.entity.Posting;
 import com.main19.server.posting.mapper.PostingMapper;
 import com.main19.server.posting.service.PostingService;
 import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
+
 import com.main19.server.posting.tags.entity.PostingTags;
 import com.main19.server.posting.tags.entity.Tag;
-import com.main19.server.posting.tags.service.PostingTagsService;
-import com.main19.server.posting.tags.service.TagService;
-import com.main19.server.s3service.S3StorageService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = PostingController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class PostingControllerRestDocs {
     @Autowired
     private MockMvc mockMvc;
@@ -62,12 +59,6 @@ public class PostingControllerRestDocs {
     private Gson gson;
     @MockBean
     private PostingService postingService;
-    @MockBean
-    private S3StorageService storageService;
-    @MockBean
-    private TagService tagService;
-    @MockBean
-    private PostingTagsService postingTagsService;
     @MockBean
     private PostingMapper mapper;
 
@@ -99,8 +90,8 @@ public class PostingControllerRestDocs {
         MockMultipartFile file1 = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
         MockMultipartFile file2 = new MockMultipartFile("file2", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList = new ArrayList<>();
         responseList.add(response1);
@@ -126,13 +117,8 @@ public class PostingControllerRestDocs {
                         new ArrayList<>()
                 );
 
-        given(storageService.uploadMedia(Mockito.anyList(), Mockito.anyLong(), Mockito.anyString())).willReturn(new ArrayList<>());
-        given(mapper.postingPostDtoToPosting(Mockito.any(PostingPostDto.class))).willReturn(new Posting());
-        given(postingService.createPosting(Mockito.any(Posting.class), Mockito.anyLong(), Mockito.anyList())).willReturn(new Posting());
-        given(mapper.tagPostDtoToTag(Mockito.anyString())).willReturn(new Tag());
-        given(tagService.createTag(Mockito.any(Tag.class))).willReturn(new Tag());
-        given(mapper.postingPostDtoToPostingTag(Mockito.any(PostingPostDto.class))).willReturn(new PostingTags());
-        given(postingTagsService.createPostingTags(Mockito.any(PostingTags.class), Mockito.any(Posting.class), Mockito.anyString())).willReturn(new PostingTags());
+
+        given(postingService.createPosting(Mockito.any(PostingPostDto.class), Mockito.anyLong(), Mockito.anyList(), Mockito.anyString())).willReturn(new Posting());
         given(mapper.postingToPostingResponseDto(Mockito.any(Posting.class))).willReturn(response);
 
         // when
@@ -179,8 +165,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data.postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data.postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[].tagName").type(JsonFieldType.STRING).description("태그 이름"),
@@ -202,7 +190,7 @@ public class PostingControllerRestDocs {
         tagName.add("스투키");
         tagName.add("몬스테라");
 
-        PostingPatchDto patch = new PostingPatchDto(postingId, postingContent, tagName);
+        PostingPatchDto patch = new PostingPatchDto(postingContent, tagName);
 
         PostingTagsResponseDto tag1 = new PostingTagsResponseDto("스투키");
         PostingTagsResponseDto tag2 = new PostingTagsResponseDto("몬스테라");
@@ -211,8 +199,8 @@ public class PostingControllerRestDocs {
         tags.add(tag1);
         tags.add(tag2);
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList = new ArrayList<>();
         responseList.add(response1);
@@ -241,12 +229,7 @@ public class PostingControllerRestDocs {
                         new ArrayList<>()
                 );
 
-        given(mapper.postingPatchDtoToPosting(Mockito.any(PostingPatchDto.class))).willReturn(new Posting());
-        given(postingService.updatePosting(Mockito.any(Posting.class), Mockito.anyString())).willReturn(new Posting());
-        given(mapper.tagPostDtoToTag(Mockito.anyString())).willReturn(new Tag());
-        given(tagService.createTag(Mockito.any(Tag.class))).willReturn(new Tag());
-        given(mapper.postingPatchDtoToPostingTag(Mockito.any(PostingPatchDto.class))).willReturn(new PostingTags());
-        given(postingTagsService.updatePostingTags(Mockito.any(PostingTags.class), Mockito.anyLong(), Mockito.anyString())).willReturn(new PostingTags());
+        given(postingService.updatePosting(Mockito.anyLong(), Mockito.any(PostingPatchDto.class), Mockito.anyString())).willReturn(new Posting());
         given(mapper.postingToPostingResponseDto(Mockito.any(Posting.class))).willReturn(response);
 
         // when
@@ -262,7 +245,6 @@ public class PostingControllerRestDocs {
         // then
         actions
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.postingId").value(patch.getPostingId()))
                 .andExpect(jsonPath("$.data.postingContent").value(patch.getPostingContent()))
                 .andExpect(jsonPath("$.data.tags[0].tagName").value(patch.getTagName().get(0)))
                 .andExpect(jsonPath("$.data.tags[1].tagName").value(patch.getTagName().get(1)))
@@ -277,8 +259,7 @@ public class PostingControllerRestDocs {
                                 parameterWithName("posting-id").description("게시글 식별자")
                         ),
                         requestFields(
-                                List.of(fieldWithPath("postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
-                                        fieldWithPath("postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                List.of(fieldWithPath("postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
                                         fieldWithPath("tagName").type(JsonFieldType.ARRAY).description("태그 이름")
                                 )
                         ),
@@ -288,8 +269,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data.postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data.postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[].tagName").type(JsonFieldType.STRING).description("태그 이름"),
@@ -306,8 +289,8 @@ public class PostingControllerRestDocs {
     public void getPostingTest() throws Exception {
         // given
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList = new ArrayList<>();
         responseList.add(response1);
@@ -369,8 +352,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data.postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data.postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -396,27 +381,27 @@ public class PostingControllerRestDocs {
         member2.setUserName("taebong98");
         member2.setProfileImage("image");
 
-        Media media1 = new Media("imageUrl", new Posting());
-        Media media2 = new Media("imageUrl", new Posting());
+        Media media1 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media2 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
         List<Media> mediaList1 = new ArrayList<>();
         mediaList1.add(media1);
         mediaList1.add(media2);
 
-        Media media3 = new Media("imageUrl", new Posting());
-        Media media4 = new Media("imageUrl", new Posting());
+        Media media3 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media4 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
         List<Media> mediaList2 = new ArrayList<>();
         mediaList2.add(media3);
         mediaList2.add(media4);
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList1 = new ArrayList<>();
         responseList1.add(response1);
         responseList1.add(response2);
 
-        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl");
-        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl");
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl", "", "image");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList2 = new ArrayList<>();
         responseList2.add(response3);
@@ -434,6 +419,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -449,9 +435,9 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
-        List<Posting> content = List.of(posting1, posting2);
 
         Page<Posting> pagePostings =
                 new PageImpl<>(List.of(posting1, posting2));
@@ -520,7 +506,7 @@ public class PostingControllerRestDocs {
                 .andExpect(jsonPath("$.data[1].createdAt").value("2023-01-01T23:59:59"))
                 .andExpect(jsonPath("$.data[1].modifiedAt").value("2023-01-01T23:59:59"))
                 .andDo(document(
-                        "get-all-posting",
+                        "get-all-postings",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
                         requestHeaders(
@@ -536,8 +522,180 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data[].postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
+                                fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
+                                fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
+                                fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
+                                fieldWithPath("data[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
+                                fieldWithPath("data[].postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
+                                fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
+                                fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 작성한 회원 리스르"),
+                                fieldWithPath("data[].scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트"),
+                                fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
+                                fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                                fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
+                                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                        )
+                ));
+    }
+
+    @Test
+    public void getPostingsByFollwingMemberTest() throws Exception {
+        // given
+        Member member = new Member();
+        member.setMemberId(1L);
+        member.setUserName("gimhae_person");
+        member.setProfileImage("image");
+
+        Media media1 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media2 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList1 = new ArrayList<>();
+        mediaList1.add(media1);
+        mediaList1.add(media2);
+
+        Media media3 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media4 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList2 = new ArrayList<>();
+        mediaList2.add(media3);
+        mediaList2.add(media4);
+
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList1 = new ArrayList<>();
+        responseList1.add(response1);
+        responseList1.add(response2);
+
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl", "", "image");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList2 = new ArrayList<>();
+        responseList2.add(response3);
+        responseList2.add(response4);
+
+        Posting posting1 = new Posting(
+                1L,
+                "게시글 test1",
+                mediaList1,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Posting posting2 = new Posting(
+                2L,
+                "게시글 test2",
+                mediaList2,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Page<Posting> pagePostings =
+                new PageImpl<>(List.of(posting1, posting2));
+
+        List<PostingResponseDto> responses = List.of(
+                new PostingResponseDto(
+                        1L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test1",
+                        responseList1,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>()),
+                new PostingResponseDto(
+                        2L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test2",
+                        responseList2,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>())
+        );
+
+        given(postingService.findPostingsByFollowing(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString())).willReturn(pagePostings);
+        given(mapper.postingsToPostingsResponseDto(Mockito.anyList())).willReturn(responses);
+
+        // when
+        ResultActions actions =
+                mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/posts/follow")
+                                .header("Authorization", "Bearer AccessToken")
+                                .param("page", "1")
+                                .param("size", "10")
+                                .accept(MediaType.APPLICATION_JSON)
+                );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].postingId").value(posting1.getPostingId()))
+                .andExpect(jsonPath("$.data[0].memberId").value(posting1.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[0].userName").value(posting1.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[0].profileImage").value(posting1.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[0].postingContent").value(posting1.getPostingContent()))
+                .andExpect(jsonPath("$.data[0].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[0].modifiedAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].postingId").value(posting2.getPostingId()))
+                .andExpect(jsonPath("$.data[1].memberId").value(posting2.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[1].userName").value(posting2.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[1].profileImage").value(posting2.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[1].postingContent").value(posting2.getPostingContent()))
+                .andExpect(jsonPath("$.data[1].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].modifiedAt").value("2023-01-01T23:59:59"))
+                .andDo(document(
+                        "get-following-postings",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        ),
+                        requestParameters(
+                                parameterWithName("page").description("조회 할 페이지"),
+                                parameterWithName("size").description("조회 할 데이터 갯수")
+                        ),
+                        responseFields(
+                                fieldWithPath("data[].postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
+                                fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
+                                fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data[].postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -563,27 +721,27 @@ public class PostingControllerRestDocs {
         member.setUserName("gimhae_person");
         member.setProfileImage("image");
 
-        Media media1 = new Media("imageUrl", new Posting());
-        Media media2 = new Media("imageUrl", new Posting());
+        Media media1 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media2 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
         List<Media> mediaList1 = new ArrayList<>();
         mediaList1.add(media1);
         mediaList1.add(media2);
 
-        Media media3 = new Media("imageUrl", new Posting());
-        Media media4 = new Media("imageUrl", new Posting());
+        Media media3 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media4 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
         List<Media> mediaList2 = new ArrayList<>();
         mediaList2.add(media3);
         mediaList2.add(media4);
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList1 = new ArrayList<>();
         responseList1.add(response1);
         responseList1.add(response2);
 
-        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl");
-        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl");
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl", "", "image");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl", "thumbnail", "video");
 
         List<MediaResponseDto> responseList2 = new ArrayList<>();
         responseList2.add(response3);
@@ -601,6 +759,7 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
 
@@ -616,10 +775,9 @@ public class PostingControllerRestDocs {
                 new ArrayList<>(),
                 0L,
                 0L,
+                new ArrayList<>(),
                 new ArrayList<>()
         );
-
-        List<Posting> content = List.of(posting1, posting2);
 
         Page<Posting> pagePostings =
                 new PageImpl<>(List.of(posting1, posting2));
@@ -707,8 +865,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data[].postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -725,13 +885,716 @@ public class PostingControllerRestDocs {
                         )
                 ));
     }
-    
+
+    @Test
+    public void getPostingSortByLikesTest() throws Exception {
+        // given
+        Member member = new Member();
+        member.setMemberId(1L);
+        member.setUserName("gimhae_person");
+        member.setProfileImage("image");
+
+        Media media1 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media2 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList1 = new ArrayList<>();
+        mediaList1.add(media1);
+        mediaList1.add(media2);
+
+        Media media3 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media4 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList2 = new ArrayList<>();
+        mediaList2.add(media3);
+        mediaList2.add(media4);
+
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList1 = new ArrayList<>();
+        responseList1.add(response1);
+        responseList1.add(response2);
+
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl", "", "image");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList2 = new ArrayList<>();
+        responseList2.add(response3);
+        responseList2.add(response4);
+
+        Posting posting1 = new Posting(
+                1L,
+                "게시글 test1",
+                mediaList1,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Posting posting2 = new Posting(
+                2L,
+                "게시글 test2",
+                mediaList2,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Page<Posting> pagePostings =
+                new PageImpl<>(List.of(posting1, posting2));
+
+        List<PostingResponseDto> responses = List.of(
+                new PostingResponseDto(
+                        1L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test1",
+                        responseList1,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>()),
+                new PostingResponseDto(
+                        2L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test2",
+                        responseList2,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>())
+        );
+
+        given(postingService.sortPostingsByLikes(Mockito.anyInt(), Mockito.anyInt())).willReturn(pagePostings);
+        given(mapper.postingsToPostingsResponseDto(Mockito.anyList())).willReturn(responses);
+
+        // when
+        ResultActions actions =
+                mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/posts/popular")
+                                .header("Authorization", "Bearer AccessToken")
+                                .param("page", "1")
+                                .param("size", "10")
+                                .accept(MediaType.APPLICATION_JSON)
+                );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].postingId").value(posting1.getPostingId()))
+                .andExpect(jsonPath("$.data[0].memberId").value(posting1.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[0].userName").value(posting1.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[0].profileImage").value(posting1.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[0].postingContent").value(posting1.getPostingContent()))
+                .andExpect(jsonPath("$.data[0].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[0].modifiedAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].postingId").value(posting2.getPostingId()))
+                .andExpect(jsonPath("$.data[1].memberId").value(posting2.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[1].userName").value(posting2.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[1].profileImage").value(posting2.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[1].postingContent").value(posting2.getPostingContent()))
+                .andExpect(jsonPath("$.data[1].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].modifiedAt").value("2023-01-01T23:59:59"))
+                .andDo(document(
+                        "get-postings-sorting-by-likes",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        ),
+                        requestParameters(
+                                parameterWithName("page").description("조회 할 페이지"),
+                                parameterWithName("size").description("조회 할 데이터 갯수")
+                        ),
+                        responseFields(
+                                fieldWithPath("data[].postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
+                                fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
+                                fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data[].postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
+                                fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
+                                fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
+                                fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
+                                fieldWithPath("data[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
+                                fieldWithPath("data[].postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
+                                fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
+                                fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 작성한 회원 리스르"),
+                                fieldWithPath("data[].scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트"),
+                                fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
+                                fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                                fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
+                                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                        )
+                ));
+    }
+
+    @Test
+    public void getFollowPostingsSortByLikesTest() throws Exception {
+        // given
+        Member member = new Member();
+        member.setMemberId(1L);
+        member.setUserName("gimhae_person");
+        member.setProfileImage("image");
+
+        Media media1 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media2 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList1 = new ArrayList<>();
+        mediaList1.add(media1);
+        mediaList1.add(media2);
+
+        Media media3 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media4 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList2 = new ArrayList<>();
+        mediaList2.add(media3);
+        mediaList2.add(media4);
+
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList1 = new ArrayList<>();
+        responseList1.add(response1);
+        responseList1.add(response2);
+
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl", "", "image");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList2 = new ArrayList<>();
+        responseList2.add(response3);
+        responseList2.add(response4);
+
+        Posting posting1 = new Posting(
+                1L,
+                "게시글 test1",
+                mediaList1,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Posting posting2 = new Posting(
+                2L,
+                "게시글 test2",
+                mediaList2,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Page<Posting> pagePostings =
+                new PageImpl<>(List.of(posting1, posting2));
+
+        List<PostingResponseDto> responses = List.of(
+                new PostingResponseDto(
+                        1L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test1",
+                        responseList1,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>()),
+                new PostingResponseDto(
+                        2L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test2",
+                        responseList2,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>())
+        );
+
+        given(postingService.sortFollowPostingsByLikes(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString())).willReturn(pagePostings);
+        given(mapper.postingsToPostingsResponseDto(Mockito.anyList())).willReturn(responses);
+
+        // when
+        ResultActions actions =
+                mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/posts/follow/popular")
+                                .header("Authorization", "Bearer AccessToken")
+                                .param("page", "1")
+                                .param("size", "10")
+                                .accept(MediaType.APPLICATION_JSON)
+                );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].postingId").value(posting1.getPostingId()))
+                .andExpect(jsonPath("$.data[0].memberId").value(posting1.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[0].userName").value(posting1.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[0].profileImage").value(posting1.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[0].postingContent").value(posting1.getPostingContent()))
+                .andExpect(jsonPath("$.data[0].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[0].modifiedAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].postingId").value(posting2.getPostingId()))
+                .andExpect(jsonPath("$.data[1].memberId").value(posting2.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[1].userName").value(posting2.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[1].profileImage").value(posting2.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[1].postingContent").value(posting2.getPostingContent()))
+                .andExpect(jsonPath("$.data[1].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].modifiedAt").value("2023-01-01T23:59:59"))
+                .andDo(document(
+                        "get-following-postings-sorting-by-likes",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        ),
+                        requestParameters(
+                                parameterWithName("page").description("조회 할 페이지"),
+                                parameterWithName("size").description("조회 할 데이터 갯수")
+                        ),
+                        responseFields(
+                                fieldWithPath("data[].postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
+                                fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
+                                fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data[].postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
+                                fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
+                                fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
+                                fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
+                                fieldWithPath("data[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
+                                fieldWithPath("data[].postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
+                                fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
+                                fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 작성한 회원 리스르"),
+                                fieldWithPath("data[].scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트"),
+                                fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
+                                fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                                fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
+                                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                        )
+                ));
+    }
+
+    @Test
+    public void getPostingsByStrTest() throws Exception {
+        // given
+        Member member = new Member();
+        member.setMemberId(1L);
+        member.setUserName("gimhae_person");
+        member.setProfileImage("image");
+
+        Media media1 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media2 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList1 = new ArrayList<>();
+        mediaList1.add(media1);
+        mediaList1.add(media2);
+
+        Media media3 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media4 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList2 = new ArrayList<>();
+        mediaList2.add(media3);
+        mediaList2.add(media4);
+
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList1 = new ArrayList<>();
+        responseList1.add(response1);
+        responseList1.add(response2);
+
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl", "", "image");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList2 = new ArrayList<>();
+        responseList2.add(response3);
+        responseList2.add(response4);
+
+        Posting posting1 = new Posting(
+                1L,
+                "게시글 test1",
+                mediaList1,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Posting posting2 = new Posting(
+                2L,
+                "게시글 test2",
+                mediaList2,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Page<Posting> pagePostings =
+                new PageImpl<>(List.of(posting1, posting2));
+
+        List<PostingResponseDto> responses = List.of(
+                new PostingResponseDto(
+                        1L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test1",
+                        responseList1,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>()),
+                new PostingResponseDto(
+                        2L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test2",
+                        responseList2,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>())
+        );
+
+        given(postingService.findPostingsByStrContent(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString())).willReturn(pagePostings);
+        given(mapper.postingsToPostingsResponseDto(Mockito.anyList())).willReturn(responses);
+
+        // when
+        ResultActions actions =
+                mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/posts/search")
+                                .header("Authorization", "Bearer AccessToken")
+                                .param("str", "게시글")
+                                .param("page", "1")
+                                .param("size", "10")
+                                .accept(MediaType.APPLICATION_JSON)
+                );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].postingId").value(posting1.getPostingId()))
+                .andExpect(jsonPath("$.data[0].memberId").value(posting1.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[0].userName").value(posting1.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[0].profileImage").value(posting1.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[0].postingContent").value(posting1.getPostingContent()))
+                .andExpect(jsonPath("$.data[0].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[0].modifiedAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].postingId").value(posting2.getPostingId()))
+                .andExpect(jsonPath("$.data[1].memberId").value(posting2.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[1].userName").value(posting2.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[1].profileImage").value(posting2.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[1].postingContent").value(posting2.getPostingContent()))
+                .andExpect(jsonPath("$.data[1].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].modifiedAt").value("2023-01-01T23:59:59"))
+                .andDo(document(
+                        "search-postings-by-str",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        ),
+                        requestParameters(
+                                parameterWithName("str").description("검색 할 단어"),
+                                parameterWithName("page").description("조회 할 페이지"),
+                                parameterWithName("size").description("조회 할 데이터 갯수")
+                        ),
+                        responseFields(
+                                fieldWithPath("data[].postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
+                                fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
+                                fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data[].postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
+                                fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
+                                fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
+                                fieldWithPath("data[].tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
+                                fieldWithPath("data[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
+                                fieldWithPath("data[].postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
+                                fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
+                                fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 작성한 회원 리스르"),
+                                fieldWithPath("data[].scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트"),
+                                fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
+                                fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                                fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
+                                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                        )
+                ));
+    }
+
+    @Test
+    public void getPostingTagsByStrTest() throws Exception {
+        // given
+        Member member = new Member();
+        member.setMemberId(1L);
+        member.setUserName("gimhae_person");
+        member.setProfileImage("image");
+
+        Media media1 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media2 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList1 = new ArrayList<>();
+        mediaList1.add(media1);
+        mediaList1.add(media2);
+
+        Media media3 = new Media(1L, "imageUrl", "", "image", new Posting());
+        Media media4 = new Media(2L,"imageUrl", "thumbnail", "video" , new Posting());
+        List<Media> mediaList2 = new ArrayList<>();
+        mediaList2.add(media3);
+        mediaList2.add(media4);
+
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList1 = new ArrayList<>();
+        responseList1.add(response1);
+        responseList1.add(response2);
+
+        MediaResponseDto response3 = new MediaResponseDto(3L,"imageUrl", "", "image");
+        MediaResponseDto response4 = new MediaResponseDto(4L,"imageUrl", "thumbnail", "video");
+
+        List<MediaResponseDto> responseList2 = new ArrayList<>();
+        responseList2.add(response3);
+        responseList2.add(response4);
+
+        Tag tag1 = new Tag();
+        tag1.setTagName("식물1");
+
+        Tag tag2 = new Tag();
+        tag1.setTagName("식물2");
+
+        PostingTags tag = new PostingTags();
+        tag.setTag(tag1);
+        tag.setTag(tag2);
+
+        List<PostingTags> tags = new ArrayList<>();
+        tags.add(tag);
+
+        PostingTagsResponseDto tagResponseDto1 = new PostingTagsResponseDto("식물1");
+        PostingTagsResponseDto tagResponseDto2 = new PostingTagsResponseDto("식물2");
+
+        List<PostingTagsResponseDto> tagsResponseDto = new ArrayList<>();
+        tagsResponseDto.add(tagResponseDto1);
+        tagsResponseDto.add(tagResponseDto2);
+
+        Posting posting1 = new Posting(
+                1L,
+                "게시글 test1",
+                mediaList1,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                tags,
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Posting posting2 = new Posting(
+                2L,
+                "게시글 test2",
+                mediaList2,
+                LocalDateTime.of(2023,01,01,23,59,59),
+                LocalDateTime.of(2023,01,01,23,59,59),
+                member,
+                new ArrayList<>(),
+                tags,
+                new ArrayList<>(),
+                0L,
+                0L,
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+
+        Page<Posting> pagePostings =
+                new PageImpl<>(List.of(posting1, posting2));
+
+        List<PostingResponseDto> responses = List.of(
+                new PostingResponseDto(
+                        1L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test1",
+                        responseList1,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        tagsResponseDto,
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>()),
+                new PostingResponseDto(
+                        2L,
+                        1L,
+                        "gimhae_person",
+                        "image",
+                        "게시글 test2",
+                        responseList2,
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        LocalDateTime.of(2023,01,01,23,59,59),
+                        tagsResponseDto,
+                        0L,
+                        new ArrayList<>(),
+                        0L,
+                        new ArrayList<>(),
+                        new ArrayList<>())
+        );
+
+        given(postingService.findPostingsByStrTag(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyString())).willReturn(pagePostings);
+        given(mapper.postingsToPostingsResponseDto(Mockito.anyList())).willReturn(responses);
+
+        // when
+        ResultActions actions =
+                mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/posts/tag/search")
+                                .header("Authorization", "Bearer AccessToken")
+                                .param("str", "식물")
+                                .param("page", "1")
+                                .param("size", "10")
+                                .accept(MediaType.APPLICATION_JSON)
+                );
+
+        // then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].postingId").value(posting1.getPostingId()))
+                .andExpect(jsonPath("$.data[0].memberId").value(posting1.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[0].userName").value(posting1.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[0].profileImage").value(posting1.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[0].postingContent").value(posting1.getPostingContent()))
+                .andExpect(jsonPath("$.data[0].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[0].modifiedAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].postingId").value(posting2.getPostingId()))
+                .andExpect(jsonPath("$.data[1].memberId").value(posting2.getMember().getMemberId()))
+                .andExpect(jsonPath("$.data[1].userName").value(posting2.getMember().getUserName()))
+                .andExpect(jsonPath("$.data[1].profileImage").value(posting2.getMember().getProfileImage()))
+                .andExpect(jsonPath("$.data[1].postingContent").value(posting2.getPostingContent()))
+                .andExpect(jsonPath("$.data[1].createdAt").value("2023-01-01T23:59:59"))
+                .andExpect(jsonPath("$.data[1].modifiedAt").value("2023-01-01T23:59:59"))
+                .andDo(document(
+                        "search-postings-by-tagName",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestHeaders(
+                                headerWithName("Authorization").description("Bearer AccessToken")
+                        ),
+                        requestParameters(
+                                parameterWithName("str").description("검색 할 단어"),
+                                parameterWithName("page").description("조회 할 페이지"),
+                                parameterWithName("size").description("조회 할 데이터 갯수")
+                        ),
+                        responseFields(
+                                fieldWithPath("data[].postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
+                                fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                fieldWithPath("data[].userName").type(JsonFieldType.STRING).description("회원 닉네임"),
+                                fieldWithPath("data[].profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
+                                fieldWithPath("data[].postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
+                                fieldWithPath("data[].postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data[].postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data[].postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data[].postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
+                                fieldWithPath("data[].createdAt").type(JsonFieldType.STRING).description("작성일"),
+                                fieldWithPath("data[].modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
+                                fieldWithPath("data[].tags[].tagName").type(JsonFieldType.STRING).description("태그 이름"),
+                                fieldWithPath("data[].likeCount").type(JsonFieldType.NUMBER).description("좋아요 합계"),
+                                fieldWithPath("data[].postingLikes").type(JsonFieldType.ARRAY).description("좋아요 누른 회원 리스트"),
+                                fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("댓글 합계"),
+                                fieldWithPath("data[].comments").type(JsonFieldType.ARRAY).description("댓글 작성한 회원 리스르"),
+                                fieldWithPath("data[].scrapMemberList").type(JsonFieldType.ARRAY).description("해당 게시글을 스크랩한 회원 리스트"),
+                                fieldWithPath("pageInfo").type(JsonFieldType.OBJECT).description("페이징 정보"),
+                                fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                                fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+                                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 데이터 수"),
+                                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                        )
+                ));
+    }
+
     @Test
     public void deletePostingTest() throws Exception {
         // given
         long postingId = 1L;
-        doNothing().when(storageService).removeAll(Mockito.anyLong(), Mockito.anyString());
-        doNothing().when(postingService).deletePosting(Mockito.anyLong());
+        doNothing().when(postingService).deletePosting(Mockito.anyLong(), Mockito.anyString());
         
         // when
         ResultActions actions =
@@ -760,20 +1623,17 @@ public class PostingControllerRestDocs {
         // given
         long postingId = 1L;
         long memberId = 1L;
-        MediaPostDto post = new MediaPostDto(memberId);
 
+        MediaResponseDto response1 = new MediaResponseDto(1L, "imageUrl", "", "image");
+        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl", "thumbnail", "video");
 
-        MediaResponseDto response1 = new MediaResponseDto(1L,"imageUrl");
-        MediaResponseDto response2 = new MediaResponseDto(2L,"imageUrl");
 
         List<MediaResponseDto> responseList = new ArrayList<>();
         responseList.add(response1);
         responseList.add(response2);
 
-        String content = gson.toJson(post);
 
         MockMultipartFile file1 = new MockMultipartFile("file1", "Image.jpeg", "image/jpeg", "<<jpeg data>>".getBytes());
-        MockMultipartFile requestBody = new MockMultipartFile("requestBody", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
 
         PostingResponseDto response =
                 new PostingResponseDto(
@@ -793,19 +1653,16 @@ public class PostingControllerRestDocs {
                         new ArrayList<>()
                 );
 
-        given(storageService.uploadMedia(Mockito.anyList(), Mockito.anyLong(), Mockito.anyString())).willReturn(new ArrayList<>());
-        given(postingService.addMedia(Mockito.anyLong(), Mockito.anyList())).willReturn(new Posting());
+        given(postingService.addMedia(Mockito.anyLong(), Mockito.anyList(), Mockito.anyString())).willReturn(new Posting());
         given(mapper.postingToPostingResponseDto(Mockito.any(Posting.class))).willReturn(response);
         // when
         ResultActions actions =
                 mockMvc.perform(
                         RestDocumentationRequestBuilders.multipart("/posts/{posting-id}/medias", postingId)
                                 .file(file1)
-                                .file(requestBody)
                                 .header("Authorization", "Bearer AccessToken")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
-                                .content(content)
                 );
         // then
         actions
@@ -821,13 +1678,9 @@ public class PostingControllerRestDocs {
                                 parameterWithName("posting-id").description("게시글 식별자")
                         ),
                         requestParts(
-                                RequestDocumentation.partWithName("requestBody").description("회원 식별자"),
                                 RequestDocumentation.partWithName("file1").description("첨부파일1"),
-                                RequestDocumentation.partWithName("file2").optional().description("첨부파일2")
-                        ),
-                        requestPartFields(
-                                "requestBody",
-                                fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자")
+                                RequestDocumentation.partWithName("file2").optional().description("첨부파일2"),
+                                RequestDocumentation.partWithName("file3").optional().description("첨부파일3")
                         ),
                         responseFields(
                                 fieldWithPath("data.postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
@@ -835,8 +1688,10 @@ public class PostingControllerRestDocs {
                                 fieldWithPath("data.userName").type(JsonFieldType.STRING).description("회원 닉네임"),
                                 fieldWithPath("data.profileImage").type(JsonFieldType.STRING).description("회원 이미지"),
                                 fieldWithPath("data.postingContent").type(JsonFieldType.STRING).description("게시글 내용"),
-                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("이미지 식별자"),
-                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("이미지 주소"),
+                                fieldWithPath("data.postingMedias[].mediaId").type(JsonFieldType.NUMBER).description("첨부파일 식별자"),
+                                fieldWithPath("data.postingMedias[].mediaUrl").type(JsonFieldType.STRING).description("첨부파일 주소"),
+                                fieldWithPath("data.postingMedias[].thumbnailUrl").type(JsonFieldType.STRING).description("동영상 썸네일 이미지 주소"),
+                                fieldWithPath("data.postingMedias[].format").type(JsonFieldType.STRING).description("첨부파일 형식"),
                                 fieldWithPath("data.createdAt").type(JsonFieldType.STRING).description("작성일"),
                                 fieldWithPath("data.modifiedAt").type(JsonFieldType.STRING).description("최종 수정일"),
                                 fieldWithPath("data.tags[]").type(JsonFieldType.ARRAY).description("태그 이름"),
@@ -854,8 +1709,7 @@ public class PostingControllerRestDocs {
         // given
         long mediaId = 1L;
 
-        doNothing().when(storageService).remove(Mockito.anyLong(), Mockito.anyString());
-        doNothing().when(postingService).deleteMedia(Mockito.anyLong());
+        doNothing().when(postingService).deleteMedia(Mockito.anyLong(), Mockito.anyString());
 
         // when
         ResultActions actions =

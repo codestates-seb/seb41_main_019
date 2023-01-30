@@ -44,7 +44,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(value = SseController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class SseRestDocs {
 
     @Autowired
@@ -131,7 +131,7 @@ public class SseRestDocs {
 
         Page<Sse> page = new PageImpl<>(List.of(sse1, sse2));
 
-        given(sseService.findSse(Mockito.anyLong(),Mockito.any()))
+        given(sseService.findSse(Mockito.anyLong(),Mockito.any(),Mockito.anyString()))
             .willReturn(page);
 
         List<Sse> list = List.of(sse1,sse2);

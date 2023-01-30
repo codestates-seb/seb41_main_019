@@ -1,5 +1,6 @@
 package com.main19.server.advice;
 
+import javax.naming.SizeLimitExceededException;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +19,7 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.response.ErrorResponse;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @Slf4j
 @RestControllerAdvice
@@ -95,6 +97,15 @@ public class GlobalExceptionAdvice {
 		log.error(" handle Exception: Duplicated Unique Column", e);
 
 		final ErrorResponse response = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicated Unique Column");
+
+		return response;
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResponse handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+
+		final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
 
 		return response;
 	}

@@ -1,14 +1,12 @@
 package com.main19.server.member.dto;
 
 import com.main19.server.follow.dto.FollowDto;
-import com.main19.server.follow.entity.Follow;
 import com.main19.server.posting.scrap.dto.ScrapResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -23,7 +21,7 @@ public class MemberDto {
 		@Size(min = 3, max = 12, message = "아이디는 3자 이상 12자 이하여야 합니다.")
 		@Pattern(regexp = "^[a-zA-Z0-9]*$", message = "아이디는 영어, 숫자만 가능합니다.")
 		private String userName;
-
+    
 		@Pattern(regexp = "^[a-zA-Z0-9]*$", message = "영문 또는 숫자")
 		private String email;
 
@@ -53,20 +51,5 @@ public class MemberDto {
 			this.profileText = profileText;
 			this.location = location;
 		}
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	public static class Response {
-		private long memberId;
-		private String userName;
-		private String email;
-		private String location;
-		private String profileImage;
-		private String profileText;
-		private List<ScrapResponseDto> scrapPostingList;
-		private List<FollowDto.FollowingResponse> followingList;
-		private List<FollowDto.FollowedResponse> followedList;
 	}
 }

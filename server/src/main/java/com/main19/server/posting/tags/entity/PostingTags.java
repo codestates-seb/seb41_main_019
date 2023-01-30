@@ -9,10 +9,13 @@ import javax.persistence.ManyToOne;
 
 import com.main19.server.posting.entity.Posting;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class PostingTags {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

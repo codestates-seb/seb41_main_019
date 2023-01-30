@@ -12,12 +12,13 @@ import com.main19.server.posting.tags.entity.Tag;
 import com.main19.server.posting.tags.repository.PostingTagsRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostingTagsService {
 	private final PostingTagsRepository postingTagsRepository;
-	private final PostingService postingService;
 	private final TagService tagService;
 
 	public PostingTags createPostingTags(PostingTags postingTags, Posting posting, String tagName) {
@@ -28,21 +29,14 @@ public class PostingTagsService {
 		return postingTagsRepository.save(postingTags);
 	}
 
-	public PostingTags updatePostingTags(PostingTags postingTags, long postingId, String tagName) {
-		List<PostingTags> getpostingTags = findPostingTagsByPostingId(postingId);
-		postingTagsRepository.deletePostingTagsByPostingId(postingId);
+	public PostingTags updatePostingTags(PostingTags postingTags, Posting updatePosting, String tagName) {
+		postingTagsRepository.deletePostingTagsByPostingId(updatePosting.getPostingId());
 
-		Posting posting = postingService.findVerifiedPosting(postingId);
-		postingTags.setPosting(posting);
+		postingTags.setPosting(updatePosting);
 
 		Tag tag	 = tagService.findTag(tagName);
 		postingTags.setTag(tag);
 
 		return postingTagsRepository.save(postingTags);
-	}
-
-	private List<PostingTags> findPostingTagsByPostingId(long postingId) {
-		List<PostingTags> getpostingTags = postingTagsRepository.findAllByPosting_PostingId(postingId);
-		return getpostingTags;
 	}
 }

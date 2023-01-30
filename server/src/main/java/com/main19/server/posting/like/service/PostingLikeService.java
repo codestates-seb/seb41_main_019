@@ -17,9 +17,11 @@ import com.main19.server.posting.like.entity.PostingLike;
 import com.main19.server.posting.like.repository.PostingLikeRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PostingLikeService {
 	private final PostingLikeRepository postingLikeRepository;
 	private final PostingService postingService;
@@ -27,11 +29,9 @@ public class PostingLikeService {
 	private final JwtTokenizer jwtTokenizer;
 	private final SseService sseService;
 
-	public PostingLike createPostingLike(PostingLike postingLike, long postingId, long memberId, String token) {
+	public PostingLike createPostingLike(long postingId, long memberId, String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (memberId != tokenId) {
+		if (memberId != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 
@@ -43,13 +43,14 @@ public class PostingLikeService {
 
 		Posting posting = postingService.findVerifiedPosting(postingId);
 		Member member = memberService.findMember(memberId);
+		PostingLike postingLike= new PostingLike();
 
 		postingLike.setPosting(posting);
 		postingLike.setMember(member);
 
 		posting.createLikeCount();
 
-		if(posting.getMember().getMemberId() != tokenId) {
+		if(posting.getMemberId() != jwtTokenizer.getMemberId(token)) {
 			sseService.sendPosting(posting.getMember(), SseType.postLike, member, posting);
 		}
 
@@ -58,9 +59,7 @@ public class PostingLikeService {
 
 	public void deletePostingLike(long postingLikeId, String token) {
 
-		long tokenId = jwtTokenizer.getMemberId(token);
-
-		if (findVerifiedPostingLike(postingLikeId).getMember().getMemberId() != tokenId) {
+		if (findVerifiedPostingLike(postingLikeId).getMemberId() != jwtTokenizer.getMemberId(token)) {
 			throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
 		}
 

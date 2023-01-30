@@ -45,14 +45,18 @@ public class Comment {
     @Column
     private long likeCount;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "posting_id")
     private Posting posting;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<CommentLike> commentLikeList = new ArrayList<>();
+
+    public long getMemberId() {
+        return member.getMemberId();
+    }
 }

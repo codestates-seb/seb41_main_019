@@ -32,6 +32,39 @@ include::{snippets}/post-member/http-response.adoc[]
 .response-fields
 include::{snippets}/post-member/response-fields.adoc[]
 
+=== 로그인
+.curl-request
+include::{snippets}/login/curl-request.adoc[]
+
+.http-request
+include::{snippets}/login/http-request.adoc[]
+
+.request-fields
+include::{snippets}/login/request-fields.adoc[]
+
+.http-response
+include::{snippets}/login/http-response.adoc[]
+
+=== 로그아웃
+.curl-request
+include::{snippets}/logout-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/logout-member/http-request.adoc[]
+
+.http-response
+include::{snippets}/logout-member/http-response.adoc[]
+
+=== 토큰 재발급
+.curl-request
+include::{snippets}/reissues-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/reissues-member/http-request.adoc[]
+
+.http-response
+include::{snippets}/reissues-member/http-response.adoc[]
+
 === 회원 프로필 등록
 .curl-request
 include::{snippets}/post-member-image/curl-request.adoc[]
@@ -47,6 +80,25 @@ include::{snippets}/post-member-image/http-response.adoc[]
 
 .response-fields
 include::{snippets}/post-member-image/response-fields.adoc[]
+
+=== 회원 정보 수정
+.curl-request
+include::{snippets}/patch-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-member/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-member/path-parameters.adoc[]
+
+.request-field
+include::{snippets}/patch-member/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-member/response-fields.adoc[]
 
 === 회원조회
 
@@ -64,6 +116,22 @@ include::{snippets}/get-member/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-member/response-fields.adoc[]
+
+=== 회원 닉네임으로 검색
+.curl-request
+include::{snippets}/get-search-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-search-member/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-search-member/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-search-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-search-member/response-fields.adoc[]
 
 === 회원삭제
 .curl-request
@@ -136,16 +204,35 @@ include::{snippets}/get-single-posting/response-fields.adoc[]
 
 === 게시글 전체 조회
 .curl-request
-include::{snippets}/get-all-posting/curl-request.adoc[]
+include::{snippets}/get-all-postings/curl-request.adoc[]
 
 .http-request
-include::{snippets}/get-all-posting/http-request.adoc[]
+include::{snippets}/get-all-postings/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-all-postings/request-parameters.adoc[]
 
 .http-response
-include::{snippets}/get-all-posting/http-response.adoc[]
+include::{snippets}/get-all-postings/http-response.adoc[]
 
 .response-fields
-include::{snippets}/get-all-posting/response-fields.adoc[]
+include::{snippets}/get-all-postings/response-fields.adoc[]
+
+=== 팔로우 하는 회원들의 게시글 전체 조회
+.curl-request
+include::{snippets}/get-following-postings/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-following-postings/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-following-postings/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-following-postings/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-following-postings/response-fields.adoc[]
 
 === 특정 회원의 게시글 전체 조회
 .curl-request
@@ -153,6 +240,9 @@ include::{snippets}/get-postings-by-member/curl-request.adoc[]
 
 .http-request
 include::{snippets}/get-postings-by-member/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-postings-by-member/request-parameters.adoc[]
 
 .path-parameters
 include::{snippets}/get-postings-by-member/path-parameters.adoc[]
@@ -162,6 +252,70 @@ include::{snippets}/get-postings-by-member/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-postings-by-member/response-fields.adoc[]
+
+=== 게시글 좋아요 순 조회
+.curl-request
+include::{snippets}/get-postings-sorting-by-likes/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-postings-sorting-by-likes/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-postings-sorting-by-likes/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-postings-sorting-by-likes/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-postings-sorting-by-likes/response-fields.adoc[]
+
+=== 팔로우 하는 회원들의 게시글 좋아요 순 조회
+.curl-request
+include::{snippets}/get-following-postings-sorting-by-likes/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-following-postings-sorting-by-likes/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/get-following-postings-sorting-by-likes/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/get-following-postings-sorting-by-likes/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-following-postings-sorting-by-likes/response-fields.adoc[]
+
+=== 태그로 게시글 검색
+.curl-request
+include::{snippets}/search-postings-by-tagName/curl-request.adoc[]
+
+.http-request
+include::{snippets}/search-postings-by-tagName/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/search-postings-by-tagName/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/search-postings-by-tagName/http-response.adoc[]
+
+.response-fields
+include::{snippets}/search-postings-by-tagName/response-fields.adoc[]
+
+=== 게시글 내용으로 검색
+.curl-request
+include::{snippets}/search-postings-by-str/curl-request.adoc[]
+
+.http-request
+include::{snippets}/search-postings-by-str/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/search-postings-by-str/request-parameters.adoc[]
+
+.http-response
+include::{snippets}/search-postings-by-str/http-response.adoc[]
+
+.response-fields
+include::{snippets}/search-postings-by-str/response-fields.adoc[]
 
 === 게시글 삭제
 .curl-request
@@ -274,6 +428,25 @@ include::{snippets}/patch-comment/http-response.adoc[]
 .response-fields
 include::{snippets}/patch-comment/response-fields.adoc[]
 
+=== 댓글 조회
+.curl-request
+include::{snippets}/gets-comments/curl-request.adoc[]
+
+.http-request
+include::{snippets}/gets-comments/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/gets-comments/request-parameters.adoc[]
+
+.path-parameters
+include::{snippets}/gets-comments/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/gets-comments/http-response.adoc[]
+
+.response-fields
+include::{snippets}/gets-comments/response-fields.adoc[]
+
 === 댓글 삭제
 .curl-request
 include::{snippets}/delete-comment/curl-request.adoc[]
@@ -350,9 +523,9 @@ include::{snippets}/delete-scrap/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-scrap/http-response.adoc[]
 
-== follow
+== Follow
 
-=== follow 등록(신청)
+=== 팔로우 등록(신청)
 .curl-request
 include::{snippets}/post-follow/curl-request.adoc[]
 
@@ -365,7 +538,7 @@ include::{snippets}/post-follow/path-parameters.adoc[]
 .response-fields
 include::{snippets}/post-follow/response-fields.adoc[]
 
-=== following 삭제
+=== 팔로잉 삭제
 .curl-request
 include::{snippets}/delete-following/curl-request.adoc[]
 
@@ -378,7 +551,7 @@ include::{snippets}/delete-following/path-parameters.adoc[]
 .http-response
 include::{snippets}/delete-following/http-response.adoc[]
 
-=== follower(followed) 삭제
+=== 팔로워 삭제
 .curl-request
 include::{snippets}/delete-followed/curl-request.adoc[]
 
@@ -431,6 +604,9 @@ include::{snippets}/gets-my-plants/curl-request.adoc[]
 
 .http-request
 include::{snippets}/gets-my-plants/http-request.adoc[]
+
+.request-parameters
+include::{snippets}/gets-my-plants/request-parameters.adoc[]
 
 .http-response
 include::{snippets}/gets-my-plants/http-response.adoc[]
@@ -514,6 +690,9 @@ include::{snippets}/gets-gallery/curl-request.adoc[]
 .http-request
 include::{snippets}/gets-gallery/http-request.adoc[]
 
+.request-parameters
+include::{snippets}/gets-gallery/request-parameters.adoc[]
+
 .path-parameters
 include::{snippets}/gets-gallery/path-parameters.adoc[]
 
@@ -584,6 +763,36 @@ include::{snippets}/get-chat/http-response.adoc[]
 
 .response-fields
 include::{snippets}/get-chat/response-fields.adoc[]
+
+=== 채팅방 나간사람 등록
+.curl-request
+include::{snippets}/patch-chat-room/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-chat-room/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-chat-room/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/patch-chat-room/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-chat-room/response-fields.adoc[]
+
+=== 채팅방 삭제
+.curl-request
+include::{snippets}/delete-chat-room/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-chat-room/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-chat-room/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/delete-chat-room/http-response.adoc[]
+
 
 == Notification
 

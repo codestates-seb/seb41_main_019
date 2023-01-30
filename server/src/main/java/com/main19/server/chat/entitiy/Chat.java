@@ -3,6 +3,7 @@ package com.main19.server.chat.entitiy;
 import com.main19.server.chatroom.entity.ChatRoom;
 import com.main19.server.member.entity.Member;
 import java.time.LocalDateTime;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,16 +26,17 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatId;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "receiverId")
     private Member receiver;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "senderId")
     private Member sender;
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "chatRoomId")
     private ChatRoom chatRoom;
-    @Column(nullable = false)
+    @Column(nullable = false , columnDefinition = "Text")
     private String chat;
 
     @Column(nullable = false)

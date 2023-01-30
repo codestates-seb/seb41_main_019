@@ -1,5 +1,6 @@
 package com.main19.server.follow.service;
 
+import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.follow.entity.Follow;
@@ -10,14 +11,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FollowService {
     private final FollowRepository followRepository;
     private final MemberRepository memberRepository;
+    private final JwtTokenizer jwtTokenizer;
 
-    public Follow createFollow(long followingMemberId, long followedMemberId) {
+    public Follow createFollow(String token, long followedMemberId) {
+        long followingMemberId = jwtTokenizer.getMemberId(token);
         if (followedMemberId == followingMemberId) {
             throw new BusinessLogicException(ExceptionCode.SAME_MEMBER);
         }
@@ -26,21 +31,34 @@ public class FollowService {
 
         Follow follow = new Follow();
         follow.setFollowingId(findFollowMember(followingMemberId));
-        follow.setFollowedId(findFollowMember(followedMemberId));
+        follow.setFollowerId(findFollowMember(followedMemberId));
 
         return followRepository.save(follow);
     }
 
-    public void deleteFollowing(long followingMemberId, long followedMemberId) {
-        Follow follow = findExistFollow(followingMemberId, followedMemberId);
+    public void deleteFollowing(String token, long followId) {
+        long memberId = jwtTokenizer.getMemberId(token);
+        Optional<Follow> optionalFollow = followRepository.findById(followId);
+        Follow follow = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
+
+        if (memberId != follow.getFollowingMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         followRepository.delete(follow);
     }
 
-    public void deleteFollowed(long followingMemberId, long followedMemberId) {
-        Follow follow = findExistFollow(followedMemberId, followingMemberId);
+    public void deleteFollowed(String token, long followId) {
+        long memberId = jwtTokenizer.getMemberId(token);
+        Optional<Follow> optionalFollow = followRepository.findById(followId);
+        Follow follow = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.FOLLOW_NOT_FOUND));
+
+        if (memberId != follow.getFollowerMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         followRepository.delete(follow);
     }
-
 
     private void verifiedFollow(long followingMemberId, long followedMemberId) {
         Follow findFollow = followRepository.findFollow(followingMemberId, followedMemberId);
@@ -54,7 +72,6 @@ public class FollowService {
         Member member = optionalFollow.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return member;
     }
-
 
     private Follow findExistFollow(long followingMemberId, long followedMemberId) {
         Optional<Follow> optionalFollow = followRepository.findFollowId(followingMemberId, followedMemberId);

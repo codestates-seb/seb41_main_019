@@ -41,7 +41,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(value = PostingLikeController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class PostingLikeControllerRestDocs {
 
     @Autowired
@@ -60,15 +60,13 @@ public class PostingLikeControllerRestDocs {
         long postingId = 1L;
         long memberId = 1L;
 
-        PostingLikeDto post = new PostingLikeDto(postingId,memberId);
+        PostingLikeDto post = new PostingLikeDto(memberId);
 
         String content = gson.toJson(post);
 
         PostingLikeResponseDto response = new PostingLikeResponseDto(postingLikeId,postingId,memberId);
 
-        given(postingMapper.postingLikeDtoToPostingLike(Mockito.any())).willReturn(
-            new PostingLike());
-        given(postingLikeService.createPostingLike(Mockito.any(PostingLike.class), Mockito.anyLong(),
+        given(postingLikeService.createPostingLike(Mockito.anyLong(),
                 Mockito.anyLong(), Mockito.anyString())).willReturn(new PostingLike());
         given(postingMapper.postingLikeToPostingLikeResponseDto(Mockito.any(PostingLike.class))).willReturn(response);
 
@@ -83,7 +81,6 @@ public class PostingLikeControllerRestDocs {
 
         actions
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.data.postingId").value(post.getPostingId()))
             .andExpect(jsonPath("$.data.memberId").value(post.getMemberId()))
             .andDo(document(
                 "post-posting-like",
@@ -97,7 +94,6 @@ public class PostingLikeControllerRestDocs {
                 ),
                 requestFields(
                     List.of(
-                        fieldWithPath("postingId").type(JsonFieldType.NUMBER).description("게시글 식별자"),
                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자")
                     )
                 ),

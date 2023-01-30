@@ -46,7 +46,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(value = CommentLikeController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
 public class CommentLikeControllerRestDocs {
 
     @Autowired
@@ -65,16 +65,13 @@ public class CommentLikeControllerRestDocs {
         long commentId = 1L;
         long memberId = 1L;
 
-        CommentLikeDto.Post post = new Post(memberId,commentId);
+        CommentLikeDto.Post post = new Post(memberId);
 
         String content = gson.toJson(post);
 
         CommentLikeDto.Response response = new Response(commentLikeId,memberId,commentId);
 
-        given(commentLikeMapper.commentLikePostDtoToCommentLike(Mockito.any())).willReturn(
-            new CommentLike());
-
-        given(commentLikeService.createLike(Mockito.any(CommentLike.class), Mockito.anyLong(),
+        given(commentLikeService.createLike(Mockito.anyLong(),
                 Mockito.anyLong(), Mockito.anyString())).willReturn(new CommentLike());
 
         given(commentLikeMapper.commentLikeToCommentLikeResponse(
@@ -91,7 +88,6 @@ public class CommentLikeControllerRestDocs {
 
         actions
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.data.commentId").value(post.getCommentId()))
             .andExpect(jsonPath("$.data.memberId").value(post.getMemberId()))
             .andDo(document(
                 "post-comment-like",
@@ -105,7 +101,6 @@ public class CommentLikeControllerRestDocs {
                 ),
                 requestFields(
                     List.of(
-                        fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("댓글 식별자"),
                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자")
                     )
                 ),
