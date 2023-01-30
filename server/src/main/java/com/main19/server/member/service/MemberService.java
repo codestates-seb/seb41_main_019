@@ -6,7 +6,6 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import com.main19.server.member.entity.Member;
 import com.main19.server.member.repository.MemberRepository;
-import com.main19.server.redis.RedisDao;
 import com.main19.server.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -106,9 +105,10 @@ public class MemberService {
         member.setProfileImage("https://main19-bucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/default+image.png");
         memberRepository.save(member);
     }
+
     @Transactional(readOnly = true)
-    public boolean findMemberName(String search) {
-        Member member = memberRepository.findByUserName(search);
+    public boolean findMemberEmail(String search) {
+        Member member = memberRepository.checkEmail(search);
         return member != null;
     }
 
