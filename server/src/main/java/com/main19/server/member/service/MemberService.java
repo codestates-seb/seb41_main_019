@@ -103,7 +103,7 @@ public class MemberService {
         }
 
         Member member = findMember(memberId);
-        member.setProfileImage(null);
+        member.setProfileImage("https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/24c5fffd-63ff-4fce-8e3f-a87a3e5a5c8d.png");
         memberRepository.save(member);
     }
     @Transactional(readOnly = true)
