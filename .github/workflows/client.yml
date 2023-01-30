@@ -10,6 +10,13 @@ jobs:
       - name: Checkout source code.
         uses: actions/checkout@v3
         
+      - name: Setting env
+        run: |
+          echo "REACT_APP_API=${{secrets.REACT_APP_API}}" >> .env
+          echo "REACT_APP_CHAT=${{secrets.REACT_APP_CHAT}}" >> .env
+          cat .env
+        working-directory: ./client
+        
       - name: Install dependencies
         run: npm install
         working-directory: ./client
