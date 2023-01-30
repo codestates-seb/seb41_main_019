@@ -212,7 +212,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
                 <span>스크랩</span>
               </StyledChangeViewButton>
             </StyledChangeViewContainer>
-            <Gallery setPostCount={setPostCount} currentView={currentView} handleModal={handleModal} userInfo={userInfo}/>
+            <Gallery memberId={memberId} setPostCount={setPostCount} currentView={currentView} handleModal={handleModal} userInfo={userInfo}/>
           </StyledMyPlantFolder>
         </div>
         }
