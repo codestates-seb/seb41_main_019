@@ -24,7 +24,12 @@ import java.io.InputStream;
 public class ProfileStorageService extends S3StorageService{
     private final AmazonS3 s3Client;
     private final MemberService memberService;
-    public String uploadProfileImage(MultipartFile profileImage) {
+    public String uploadProfileImage(MultipartFile profileImage, long memberId) {
+        Member findMember = memberService.findMember(memberId);
+        if (findMember.getProfileImage() != "https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/aa697bd5-d15c-4941-afd7-b0506624f0a4.png") {
+            removeProfileImage(memberId);
+        }
+
         String profileImageUrl;
 
         String fileName = createFileName(profileImage.getOriginalFilename());

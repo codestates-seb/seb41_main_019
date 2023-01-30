@@ -96,7 +96,7 @@ public class MemberController {
     public ResponseEntity postProfileImage(@PathVariable("member-id") @Positive long memberId,
                                            @RequestHeader(name = "Authorization") String token,
                                            @RequestPart MultipartFile profileImage) {
-        String imagePath = storageService.uploadProfileImage(profileImage);
+        String imagePath = storageService.uploadProfileImage(profileImage, memberId);
         return new ResponseEntity(mapper.memberToMemberResponse(memberService.createProfileImage(memberId, imagePath, token)), HttpStatus.CREATED);
     }
 
