@@ -63,6 +63,7 @@ const StyledContents = styled.section`
 
 const Main = () => {
     const [ located, setLocated ] = useState(0);
+    const [ load, setLoad ] = useState(false);
     let timer;
 
     useEffect(() => {
@@ -70,7 +71,7 @@ const Main = () => {
     }, [])
 
     const handleScroll = (e) => {
-        if(!timer) {
+        if(!timer && !load) {
             timer = setTimeout(() => {
                 timer = null;
 
@@ -81,8 +82,13 @@ const Main = () => {
                 if(e.deltaY < 0 && located > 0) {
                     setLocated(located - 1);
                 }
-            }, 300)
+                // setLoad(true);
+            }, 500)
         }
+
+        setTimeout(() => {
+            setLoad(false   );
+        }, 1000)
     }
 
     return (

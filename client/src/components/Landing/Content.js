@@ -52,14 +52,14 @@ const StyledFirst = styled.div`
     .active {
         span:first-child {
             transform: translateY(100px);
-            animation: fadeIn 2s ease;
+            animation: fadeIn 3s ease;
             animation-delay: 0.7s;
             animation-fill-mode: forwards;
         }
 
         span:last-child {
             transform: translateY(100px);
-            animation: fadeIn 2s ease;
+            animation: fadeIn 3s ease;
             animation-delay: 1.1s;
             animation-fill-mode: forwards;
         }
@@ -96,14 +96,14 @@ const StyledSecond = styled.div`
     .active {
         span:first-child {
             transform: translateY(100px);
-            animation: fadeIn 2s ease;
+            animation: fadeIn 3s ease;
             animation-delay: 0.7s;
             animation-fill-mode: forwards;
         }
 
         span:last-child {
             transform: translateY(100px);
-            animation: fadeIn 2s ease;
+            animation: fadeIn 3s ease;
             animation-delay: 1.1s;
             animation-fill-mode: forwards;
         }
@@ -140,14 +140,14 @@ const StyledThird = styled.div`
     .active {
         span:first-child {
             transform: translateY(100px);
-            animation: fadeIn 2s ease;
+            animation: fadeIn 3s ease;
             animation-delay: 0.7s;
             animation-fill-mode: forwards;
         }
 
         span:last-child {
             transform: translateY(100px);
-            animation: fadeIn 2s ease;
+            animation: fadeIn 3s ease;
             animation-delay: 1.1s;
             animation-fill-mode: forwards;
         }
@@ -157,7 +157,7 @@ const StyledThird = styled.div`
 export const Content = ({located}) => {
     return (
         <StyledContent located={located}>
-            <StyledFirst located={located} className={located === 0 ? "located" : null}>
+            <StyledFirst located={located}>
                 <div>
 
                 </div>
@@ -166,11 +166,11 @@ export const Content = ({located}) => {
                     <span>당신의 반려를 자랑해보세요!</span>
                 </div>
             </StyledFirst>
-            <StyledSecond located={located}>
+            <StyledSecond located={located} className={located === 0 ? "located" : null}>
                 <div>
 
                 </div>
-                <div className={located === 1 ? "active" : null}>
+                <div className={located === 1 ? "active" : "none"}>
                     <span>사랑스러운 당신의 반려식물,</span>
                     <span>당신의 반려를 자랑해보세요!</span>
                 </div>
