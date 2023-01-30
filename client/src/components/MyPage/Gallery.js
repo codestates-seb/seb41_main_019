@@ -58,10 +58,9 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
+const Gallery = ({ memberId, isCovered, isPlantImageViewOpened, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
-  const memberId = Number(cookie.get("memberId"));
 
   const [galleryData, setGalleryData] = useState([])
 
@@ -112,7 +111,7 @@ const Gallery = ({ isCovered, isPlantImageViewOpened, currentView, handleModal, 
 
   useEffect(() => {
     getGalleryData(currentView)
-  }, [currentView, currentPlantData])
+  }, [currentView, currentPlantData, memberId])
 
   return (
     <>
