@@ -13,6 +13,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -131,7 +132,7 @@ public class SseRestDocs {
 
         Page<Sse> page = new PageImpl<>(List.of(sse1, sse2));
 
-        given(sseService.findSse(Mockito.anyLong(),Mockito.any(),Mockito.anyString()))
+        given(sseService.findSse(Mockito.anyLong(),Mockito.anyInt(),Mockito.anyInt(),Mockito.anyString()))
             .willReturn(page);
 
         List<Sse> list = List.of(sse1,sse2);
@@ -160,6 +161,8 @@ public class SseRestDocs {
             mockMvc.perform(
                 get("/notification/{member-id}", memberId1)
                     .header("Authorization", "Bearer (accessToken)")
+                    .param("page","1")
+                    .param("size","10")
                     .accept(MediaType.APPLICATION_JSON)
             );
 
@@ -189,6 +192,10 @@ public class SseRestDocs {
                 pathParameters(
                     parameterWithName("member-id").description("회원 식별자")
                 ),
+                requestParameters(
+                    parameterWithName("page").description("조회 할 페이지"),
+                    parameterWithName("size").description("조회 할 데이터 갯수")
+                ),
                 responseFields(
                     fieldWithPath("data[].sseId").type(JsonFieldType.NUMBER).description("알림 식별자"),
                     fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
@@ -204,6 +211,29 @@ public class SseRestDocs {
                     fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
                 )
             ));
+    }
+
+    @Test
+    public void patchAllSseTest() throws Exception {
+
+        doNothing().when(sseService).updateAllSse(Mockito.anyString());
+
+        ResultActions resultActions = mockMvc.perform(
+            patch("/notification")
+                .header("Authorization", "Bearer (accessToken)")
+        );
+
+        resultActions.andExpect(status().isOk())
+            .andDo(
+                document(
+                    "patch-all-sse",
+                    getRequestPreProcessor(),
+                    getResponsePreProcessor(),
+                    requestHeaders(
+                        headerWithName("Authorization").description("Bearer AccessToken")
+                    )
+                )
+            );
     }
 
     @Test
