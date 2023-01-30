@@ -523,4 +523,45 @@ public class MemberControllerRestDocs {
                 )
             ));
     }
+
+
+    @Test
+    public void isExistMemberTest() throws Exception {
+        // given
+        long memberId1 = 1L;
+
+        Member member = new Member();
+        member.setMemberId(memberId1);
+        member.setUserName("nickName");
+        member.setEmail("taebong");
+        member.setLocation("코드스테이츠");
+        member.setProfileImage("profileImage.jpeg");
+        member.setProfileText("자기소개");
+
+
+        given(memberService.findMemberEmail(Mockito.anyString())).willReturn(true);
+
+        // when
+        ResultActions actions = mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/members/existence")
+                        .header("Authorization", "Access Token")
+                        .param("email", "taebong")
+        );
+
+        // then
+        actions.andExpect(status().isOk())
+                .andDo(document(
+                                "check-duplicate-email",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor(),
+                                requestParameters(
+                                        parameterWithName("email").description("userId (email)")
+                                ),
+                                requestHeaders(
+                                        headerWithName("Authorization").description("Bearer AccessToken")
+                                ),
+                                responseFields(fieldWithPath("true").type(JsonFieldType.STRING).description("있으면 true, 없으면 false"))
+                        )
+                );
+    }
 }
