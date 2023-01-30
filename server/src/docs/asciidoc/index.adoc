@@ -542,11 +542,14 @@ include::{snippets}/delete-scrap/http-response.adoc[]
 .curl-request
 include::{snippets}/post-follow/curl-request.adoc[]
 
-.http-response
+.http-request
 include::{snippets}/post-follow/http-request.adoc[]
 
 .path-parameters
 include::{snippets}/post-follow/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/post-follow/http-response.adoc[]
 
 .response-fields
 include::{snippets}/post-follow/response-fields.adoc[]
@@ -851,6 +854,9 @@ include::{snippets}/get-sse/path-parameters.adoc[]
 
 .http-response
 include::{snippets}/get-sse/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-sse/response-fields.adoc[]
 
 === 알림 삭제
 .curl-request
