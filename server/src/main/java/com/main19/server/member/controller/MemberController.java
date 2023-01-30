@@ -119,9 +119,10 @@ public class MemberController {
     }
 
     @GetMapping("/existence")
-    public ResponseEntity isExistMember(@RequestParam String username) {
-        boolean isExist = memberService.findMemberName(username);
+    public ResponseEntity isExistMember(@RequestParam String userId) {
+        boolean isExist = memberService.findMemberEmail(userId);
 
+        // 있으면 true, 없으면 false
         return new ResponseEntity(isExist, HttpStatus.OK);
     }
 }
