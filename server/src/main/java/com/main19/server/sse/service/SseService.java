@@ -140,7 +140,7 @@ public class SseService {
 
     public Sse updateSse(long sseId,String token) {
 
-        if(findVerifiedSse(sseId).getReceiver().getMemberId() != jwtTokenizer.getMemberId(token)) {
+        if(findVerifiedSse(sseId).getReceiverId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
@@ -151,13 +151,25 @@ public class SseService {
         return sse;
     }
 
-    public Page<Sse> findSse(long memberId, Pageable pageable, String token) {
+    public void updateAllSse(String token) {
+
+        long memberId = jwtTokenizer.getMemberId(token);
+
+        List<Sse> sseList = sseRepository.findAllSse(memberId);
+
+        for(int i=0; i<sseList.size(); i++) {
+            sseList.get(i).setRead(true);
+        }
+    }
+
+    public Page<Sse> findSse(long memberId, int page, int size, String token) {
 
         if(memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
-        return sseRepository.findSse(memberId, pageable);
+        return sseRepository.findSse(memberId, PageRequest.of(page, size,
+            Sort.by("sse_Id").descending()));
     }
 
     public Sse findSseId(long sseId) {

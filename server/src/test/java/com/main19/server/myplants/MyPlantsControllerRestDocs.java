@@ -290,6 +290,9 @@ public class MyPlantsControllerRestDocs {
                 "gets-my-plants",
                 getRequestPreProcessor(),
                 getResponsePreProcessor(),
+                pathParameters(
+                    parameterWithName("member-id").description("회원 식별자")
+                ),
                 requestParameters(
                         parameterWithName("page").description("조회 할 페이지"),
                         parameterWithName("size").description("조회 할 데이터 갯수")
