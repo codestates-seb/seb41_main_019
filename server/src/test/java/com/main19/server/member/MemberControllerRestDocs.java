@@ -151,7 +151,7 @@ public class MemberControllerRestDocs {
                 new ArrayList<>());
 
 
-        given(storageService.uploadProfileImage(Mockito.any())).willReturn("profileImageUrl");
+        given(storageService.uploadProfileImage(Mockito.any(), Mockito.anyLong())).willReturn("profileImageUrl");
         given(memberService.createProfileImage(Mockito.anyLong(),Mockito.anyString(),Mockito.anyString())).willReturn(new Member());
         given(mapper.memberToMemberResponse(Mockito.any(Member.class))).willReturn(response);
 
