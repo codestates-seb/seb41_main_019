@@ -30,7 +30,6 @@ public class PostingTagsService {
 	}
 
 	public PostingTags updatePostingTags(PostingTags postingTags, Posting updatePosting, String tagName) {
-		postingTagsRepository.deletePostingTagsByPostingId(updatePosting.getPostingId());
 
 		postingTags.setPosting(updatePosting);
 
