@@ -43,7 +43,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(value = ChatRoomController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
+@AutoConfigureRestDocs(uriHost = "increaf.site")
 public class ChatRoomRestDocs {
 
     @Autowired
