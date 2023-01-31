@@ -4,6 +4,7 @@ import com.main19.server.auth.jwt.JwtTokenizer;
 import com.main19.server.chat.dto.ChatDto;
 import com.main19.server.chat.entitiy.Chat;
 import com.main19.server.chat.repository.ChatRepository;
+import com.main19.server.chatroom.entity.ChatRoom;
 import com.main19.server.chatroom.service.ChatRoomService;
 import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
@@ -32,9 +33,19 @@ public class ChatService {
 
     public Chat createChat(Chat chat, long receiverId, long senderId, long roomId) {
 
+        ChatRoom chatRoom = chatRoomService.findChatRoom(roomId);
+
+        if(chatRoom.getReceiverId() != receiverId && chatRoom.getSenderId() != receiverId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        if(chatRoom.getReceiverId() != senderId && chatRoom.getSenderId() != senderId) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
         chat.setReceiver(memberService.findMember(receiverId));
         chat.setSender(memberService.findMember(senderId));
-        chat.setChatRoom(chatRoomService.findChatRoom(roomId));
+        chat.setChatRoom(chatRoom);
 
         sseService.sendChatRoom(memberService.findMember(receiverId), SseType.message, memberService.findMember(senderId));
 
