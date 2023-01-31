@@ -10,6 +10,7 @@ import com.main19.server.exception.BusinessLogicException;
 import com.main19.server.exception.ExceptionCode;
 import java.util.Collections;
 import java.util.List;
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class KafkaController {
 
 
     @MessageMapping("/message")
-    public void message(ChatDto.Post chatDto) {
+    public void message(@Valid ChatDto.Post chatDto) {
 
         if(chatRoomService.findChatRoom(chatDto.getChatRoomId()) == null) {
             throw new BusinessLogicException(ExceptionCode.CHATROOM_NOT_FOUND);
