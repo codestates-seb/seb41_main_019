@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
+@AutoConfigureRestDocs(uriHost = "increaf.site")
 public class LoginRestDocs {
 
     @Autowired

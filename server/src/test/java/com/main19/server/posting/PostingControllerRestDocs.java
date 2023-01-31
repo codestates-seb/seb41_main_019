@@ -51,7 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = PostingController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs(uriHost = "ec2-13-124-33-113.ap-northeast-2.compute.amazonaws.com")
+@AutoConfigureRestDocs(uriHost = "increaf.site")
 public class PostingControllerRestDocs {
     @Autowired
     private MockMvc mockMvc;
