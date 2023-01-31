@@ -64,6 +64,11 @@ public class PostingLikeService {
 		}
 
 		PostingLike findPostingLike = findVerifiedPostingLike(postingLikeId);
+
+		if(findPostingLike.getPostingLikeCount() == 0) {
+			throw new BusinessLogicException(ExceptionCode.POSTING_LIKE_NOT_FOUND);
+		}
+
 		findPostingLike.getPosting().deleteLikeCount();
 
 		postingLikeRepository.delete(findPostingLike);

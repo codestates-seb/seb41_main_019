@@ -38,4 +38,6 @@ public class PostingLike {
 	public long getMemberId() {
 		return member.getMemberId();
 	}
+
+	public long getPostingLikeCount() {return posting.getLikeCount();}
 }
