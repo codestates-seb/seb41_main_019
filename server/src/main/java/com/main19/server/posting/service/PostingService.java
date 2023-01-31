@@ -218,6 +218,9 @@ public class PostingService {
 	}
 
 	private void updatePostingTags(PostingPatchDto requestBody, Posting updatePosting) {
+
+		postingTagsRepository.deletePostingTagsByPostingId(updatePosting.getPostingId());
+
 		for (String tagName : requestBody.getTagName()) {
 			tagService.createTag(mapper.tagPostDtoToTag(tagName));
 			PostingTags postingTags = mapper.postingPatchDtoToPostingTag(requestBody);
