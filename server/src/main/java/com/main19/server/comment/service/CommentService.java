@@ -43,6 +43,8 @@ public class CommentService {
         comment.setPosting(posting);
         comment.setMember(member);
 
+        posting.createCommentCount();
+
         if(posting.getMemberId() != jwtTokenizer.getMemberId(token)) {
             sseService.sendPosting(posting.getMember(), SseType.comment, member, comment.getPosting());
         }
@@ -85,6 +87,8 @@ public class CommentService {
         }
 
         Comment comment = findVerifiedComment(commentId);
+
+        comment.getPosting().deleteCommentCount();
 
         commentRepository.delete(comment);
     }

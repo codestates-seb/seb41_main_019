@@ -1,5 +1,7 @@
 package com.main19.server.chat.websocket;
 
+import java.util.Arrays;
+import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -18,6 +20,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat").setAllowedOrigins("*");
+        registry.addEndpoint("/chat").setAllowedOrigins("https://increaf.com","https://www.increaf.com");
+//        registry.addEndpoint("/chat").setAllowedOrigins("*");
     }
 }
