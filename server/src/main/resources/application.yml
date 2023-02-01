@@ -3,16 +3,16 @@ server:
 
 spring:
   datasource:
-    driver-class-name: ${DRIVER_CLASS_NAME}
-    username: ${USER_NAME}
-    url: ${DATASOURCE_URL}
-    password: ${DATASOURCE_PASSWORD}
+    driver-class-name: ${{ secrets.DRIVER_CLASS_NAME }}
+    username: ${{ secrets.USER_NAME }}
+    url: ${{ secrets.DATASOURCE_URL }}
+    password: ${{ secrets.DATASOURCE_PASSWORD }}
     hikari:
       maximum-pool-size: 20
 
   jpa:
-    database: ${JPA_DATABASE}
-    database-platform: ${DATABASE_PLATFORM}
+    database: ${{ secrets.JPA_DATABASE }}
+    database-platform: ${{ secrets.DATABASE_PLATFORM }}
     hibernate:
       ddl-auto: update
     properties:
@@ -26,31 +26,31 @@ spring:
 
   redis:
     host: localhost
-    port: ${REDIS_PORT}
-    password: ${REDIS_PASSWORD}
+    port: ${{ secrets.REDIS_PORT }}
+    password: ${{ secrets.REDIS_PASSWORD }}
 
 mail:
   address:
-    admin: ${MAIL_ADDRESS_ADMIN}
+    admin: ${{ secrets.MAIL_ADDRESS_ADMIN }}
 
 cloud:
   aws:
     credentials:
-      accessKey: ${BE_AWS_ACCESS_KEY}
-      secretKey: ${BE_AWS_SECRET_ACCESS_KEY}
+      accessKey: ${{ secrets.BE_AWS_ACCESS_KEY }}
+      secretKey: ${{ secrets.BE_AWS_SECRET_ACCESS_KEY }}
     s3:
-      bucket: ${IMAGE_S3_BUCKET}
+      bucket: ${{ secrets.IMAGE_S3_BUCKET }}
     region:
       static: ap-northeast-2
     stack:
       auto: 'false'
 
 jwt:
-  key: ${JWT_SECRET_KEY}
-  access-token-expiration-minutes: ${ACCESS_TOKEN_EXPIRATION_MINUTES}
-  refresh-token-expiration-minutes: ${REFRESH_TOKEN_EXPIRATION_MINUTES}
+  key: ${{ secrets.JWT_SECRET_KEY }}
+  access-token-expiration-minutes: ${{ secrets.ACCESS_TOKEN_EXPIRATION_MINUTES }}
+  refresh-token-expiration-minutes: ${{ secrets.REFRESH_TOKEN_EXPIRATION_MINUTES }}
 
 kafka:
-  topic: ${KAFKA_TOPIC}
-  id: ${KAFKA_ID}
-  broker: ${KAFKA_BROKER}
+  topic: ${{ secrets.KAFKA_TOPIC }}
+  id: ${{ secrets.KAFKA_ID }}
+  broker: ${{ secrets.KAFKA_BROKER }}
