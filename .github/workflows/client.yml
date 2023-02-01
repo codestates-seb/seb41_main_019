@@ -1,0 +1,49 @@
+name: client
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code.
+        uses: actions/checkout@v3
+        
+      - name: Setting env
+        run: |
+          echo "REACT_APP_API=${{secrets.REACT_APP_API}}" >> .env
+          echo "REACT_APP_CHAT=${{secrets.REACT_APP_CHAT}}" >> .env
+          echo "PUBLIC_URL=${{secrets.PUBLIC_URL}}" >> .env
+          cat .env
+        working-directory: ./client
+        
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./client
+        
+      - name: Build
+        run: npm run build
+        env:
+          CI: ""
+        working-directory: ./client
+        
+      - name: SHOW AWS CLI VERSION
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
+        run: |
+          aws --version
+          
+      - name: Sync Bucket
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_EC2_METADATA_DISABLED: true
+        run: |
+          aws s3 sync \
+            --region ap-northeast-2 \
+            build s3://increaf.com \
+            --delete
+        working-directory: ./client
