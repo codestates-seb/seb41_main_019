@@ -66,8 +66,6 @@ public class LoginRestDocs {
                 new ArrayList<>(),
                 new ArrayList<>());
 
-        memberService.createMember(member);
-
         LoginDto loginDto = new LoginDto();
         loginDto.setEmail(member.getEmail());
         loginDto.setPassword("12345678a!");
