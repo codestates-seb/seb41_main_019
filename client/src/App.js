@@ -28,7 +28,7 @@ function App() {
   const handleChange = () => setChange(!change);
 
   useEffect(() => {
-    document.body.style.overflow = isCovered && "hidden";
+    document.body.style.overflow = isCovered ? "hidden" : null;
   }, [isCovered]);
 
   useEffect(() => {
