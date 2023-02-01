@@ -124,6 +124,8 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
   const [totalElements, setTotalElements] = useState(0);
   const [curPage, setCurPage] = useState(1);
   
+  console.log(totalPages)
+
   const getMyPlantsData = () => {
     if (isOwnPage) {
       axios({
@@ -147,13 +149,14 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
         },
       })
       .then((res) => {
+        setTotalElements(res.data.pageInfo.totalElements)
+        setTotalPages(res.data.pageInfo.totalPages)
         setMyPlantsData(res.data.data)}
       ).catch((err) => console.error(err))
     }
   };
   
-  useEffect(() => getMyPlantsData(), [handleChange, userInfo, curPage])
-  useEffect(() => {}, [curPage])
+  useEffect(() => getMyPlantsData(), [handleChange, userInfo, curPage, isOwnPage])
 
   const alertAddPlant = () => {
     alert("더 이상 추가하실 수 없습니다.")
@@ -198,6 +201,9 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
     const result = [];
     for(let i = 0; i < totalPages; i++) {
       result.push(<div key={i}></div>)
+    }
+    if (result.length === 0) {
+      return (<div></div>)
     }
     return result
   }
