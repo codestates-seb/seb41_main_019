@@ -59,7 +59,7 @@ const StyledInfoItem = styled.div`
   width: 80px;
 `;
 
-const UserInfo = ({ userInfo, postCount, handleFollows, handleFollowings }) => {
+const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowings }) => {
   const {
     memberId,
     userName,
@@ -83,12 +83,14 @@ const UserInfo = ({ userInfo, postCount, handleFollows, handleFollowings }) => {
         <StyledInfoBox>
           <StyledUserName>
             <span>{userName}</span>
-            <a href="/setting">
-              <span>
-                <AiFillSetting />
-                설정
-              </span>
-            </a>
+            {isOwnPage &&         
+              <a href="/setting">
+                <span>
+                  <AiFillSetting />
+                  설정
+                </span>
+              </a>
+            }
           </StyledUserName>
           <StyledUserInfoList>
               <StyledInfoItem>

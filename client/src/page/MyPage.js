@@ -77,9 +77,11 @@ const StyledChangeViewButton = styled.div`
 const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
+  const myMemberId = cookie.get("memberId");
   const memberId = useLocation().state.id;
 
   // 데이터 상태관리
+  const [isOwnPage, setIsOwnPage] = useState(myMemberId === memberId)
   const [userInfo, setUserInfo] = useState([]); // 유저정보 (UserInfo.js로 props)
   const [postCount, setPostCount] = useState(); // 게시물 숫자 (setState는 UserInfo.js에서 핸들링)
   const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
@@ -99,7 +101,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const [isPlantImageViewOpened, setIsPlantImageViewOpened] = useState(false);
   const [isFollowersOpened, setIsFollowersOpened] = useState(false);
   const [isFollowingsOpened, setIsFollowingsOpened] = useState(false);
-
+  
   useEffect(() => {
     getUserInfo()
   }, [memberId])
@@ -170,10 +172,11 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
       {isCovered && isFollowersOpened && <Followers handleFollowers={handleFollowers} followers={userInfo.followerList}/>}
       {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList}/>}
       <StyledContainer>
-        <UserInfo handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount}/>
+        <UserInfo isOwnPage={isOwnPage} handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened && 
           <div className="container">
             <MyPlants
+              isOwnPage={isOwnPage}
               currentPlantData={currentPlantData}
               setCurrentPlantData={setCurrentPlantData}
               userInfo={userInfo}
@@ -184,18 +187,28 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
               {currentPlantData && <Gallery isCovered={isCovered} isPlantImageViewOpened={isPlantImageViewOpened} setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} handlePlantImageView={handlePlantImageView}/> }
-              <p>
-                My Plants 접기 <TiArrowSortedUp />
-              </p>
+              {isOwnPage &&          
+                <p>
+                  My Plants 접기 <TiArrowSortedUp />
+                </p>}
+              {!isOwnPage && 
+                <p>
+                  {userInfo.userName}님의 Plants 접기 <TiArrowSortedUp />
+                </p>}
             </StyledMyPlantFolder>
           </div>
         }
         {!isFolderOpened &&
           <div className="container">
           <StyledMyPlantFolder>
-            <p onClick={handleFolderClick}>
-              My Plants 펼치기 <TiArrowSortedDown />
-            </p>
+            {isOwnPage &&          
+              <p onClick={handleFolderClick}>
+                 {userInfo.userName}님의 Plants 접기 <TiArrowSortedUp />
+              </p>}
+            {!isOwnPage && 
+              <p onClick={handleFolderClick}>
+                {userInfo.userName}님의 Plants 펼치기 <TiArrowSortedUp />
+              </p>}
             <StyledChangeViewContainer>
               <StyledChangeViewButton
                 onClick={() => setCurrentView("postings")}

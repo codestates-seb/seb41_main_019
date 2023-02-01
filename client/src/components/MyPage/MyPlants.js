@@ -88,7 +88,7 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({currentView, setCurrentView, userInfo, jwt, currentPlantData, setCurrentPlantData, handleAddPlant, handleChange }) => {
+const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, jwt, currentPlantData, setCurrentPlantData, handleAddPlant, handleChange }) => {
   const [myPlantsData, setMyPlantsData] = useState(null); // My Plants 리스트 데이터
   const [isPanelOpened, setIsPanelOpened] = useState(false);
 
