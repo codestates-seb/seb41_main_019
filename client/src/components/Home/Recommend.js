@@ -12,6 +12,10 @@ const StyledLi = styled.li`
         padding: 10px;
         border-radius: 50px;
         cursor: pointer;
+        @media screen and (max-width: 770px) {
+            width: 70px;
+            height: 70px;
+        }
     }
 
     span {
