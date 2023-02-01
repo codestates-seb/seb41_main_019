@@ -18,7 +18,7 @@ public class MemberDto {
 	@AllArgsConstructor
 	public static class Post {
 		@NotBlank
-		@Size(min = 3, max = 12, message = "아이디는 3자 이상 12자 이하여야 합니다.")
+		@Size(min = 2, max = 12, message = "아이디는 2자 이상 12자 이하여야 합니다.")
 		@Pattern(regexp = "^[0-9a-zA-Z가-힣]*$", message = "아이디는 영어, 숫자만 가능합니다.")
 		private String userName;
     
@@ -37,7 +37,11 @@ public class MemberDto {
 	@Getter
 	public static class Patch {
 		private long memberId;
+
+		@Size(min = 2, max = 12, message = "아이디는 2자 이상 12자 이하여야 합니다.")
+		@Pattern(regexp = "^[0-9a-zA-Z가-힣]*$", message = "아이디는 영어, 숫자만 가능합니다.")
 		private String userName;
+
 		private String profileText;
 		private String location;
 
