@@ -4,20 +4,25 @@ import { IoIosArrowDropleft } from "react-icons/io";
 import { IoIosArrowDropright } from "react-icons/io";
 
 const Wrapper = styled.div`
+    width: 100%;
+    height: ${({type}) => type === "post" ? "500px" : "100%"};
+
     ul {
         margin: 0px;
         padding: 0px;
         list-style: none;
+        width: 100%;
+        height: 100%;
 
         li {
             width: 100%;
             height: 100%;
-            position: relative;
         }
 
         li div:first-child {
-            height: ${({type}) => type ? "" : "500px"};
+            height: ${({type}) => type === "post" ? "500px" : "100%"};
             background-color: black;
+            width: 100%;
         }
 
         li div img {
@@ -29,8 +34,8 @@ const Wrapper = styled.div`
         li div:nth-of-type(2) {
             display: flex;
             justify-content: space-between;
-            position: absolute;
-            top: 50%;
+            position: relative;
+            top: -50%;
             width: 100%;
 
             .hidden {
@@ -50,11 +55,13 @@ const Wrapper = styled.div`
     }
 `;
 
-const Slider = ({ imgs }) => {
+const Slider = ({ imgs, type = "view" }) => {
     const [cur, setCur] = useState(0);
 
+    console.log(type);
+
     return (
-        <Wrapper>
+        <Wrapper type={type} >
             <ul>
                 { imgs.map((img, idx) => {
                         return (

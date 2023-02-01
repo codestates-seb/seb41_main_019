@@ -6,6 +6,10 @@ import { useEffect } from "react";
 import CloseBtn from "../public/CloseBtn";
 import { exchangeTime } from "../../util/exchangeTime";
 import defaultImg from "../../assets/img/profile.jpg";
+import Cookie from "../../util/Cookie";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
+import useModal from "../../hooks/useModal";
+import DeleteModal from "./DeleteModal";
 
 const Wrapper = styled.div`
     display: flex;
@@ -14,7 +18,7 @@ const Wrapper = styled.div`
     left:50%;
     transform:translate(-50%, -50%);
     width: 1240px;
-    height: 900px;
+    height: 700px;
     background-color: white;
     z-index: 1000;
 
@@ -24,13 +28,12 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 1255px) {
         width: 900px;
-        height: 900px;
+        height: 600px;
     }
 
     @media screen and (max-width: 1024px) {
-        width: 500px;
-        height: 600px;
-        top: 38%;
+        width: 400px;
+        height: 500px;
         flex-direction: column;
 
         svg {
@@ -40,23 +43,14 @@ const Wrapper = styled.div`
 `;
 
 const StyledSlider = styled.div`
-    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     background-color: black;
-
-    @media screen and (min-width: 1024px) {
-        > div ul li div:first-child {
-            height: 900px;
-        }
-    }   
-
-    @media screen and (max-width: 1024px) {
-        > div ul li div:first-child {
-            height: 400px;
-        }
-    }   
+    @media screen and (max-width: 1024px){
+        width: 100%;
+        height: 200px;
+    }
 `
 
 const StyledInteraction = styled.div`
@@ -91,6 +85,7 @@ const StyledInteraction = styled.div`
 
         > span:last-of-type {
             font-size: 13px;
+            margin-right: 5px;
         }
 
         > div {
@@ -103,12 +98,14 @@ const StyledInteraction = styled.div`
     }
 
     @media screen and (max-width: 1024px) {
-        width: 100%;
-        height: 80%;
+        height: 200px;
     }
 `;
 
-const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommentId }) => {
+const View = ({ deleteMenu, menu, handleMenu, handleModal, curPost, handleChange, handleCommentMenu, setCommentId, handleCurPost, handleDelete, handleEdit }) => {
+    const { open, close, Modal } = useModal();
+    const cookie = new Cookie();
+
     useEffect(() => {
         document.getElementById("bg").addEventListener("click", () => {
             handleModal();
@@ -117,9 +114,16 @@ const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommen
 
     return (
             <Wrapper>
+                { menu && 
+                    <Modal>
+                        <p onClick={handleEdit}>수정하기</p>
+                        <p onClick={handleDelete}>삭제하기</p>
+                    </Modal>
+                }
+                { deleteMenu ? <DeleteModal postId={curPost.postingId} handleDelete={handleDelete} handleChange={handleChange} /> : null }
                 <StyledSlider>
                     { curPost.postingMedias ?
-                        <Slider imgs={curPost.postingMedias} type={true} /> : null
+                        <Slider imgs={curPost.postingMedias} /> : null
                     }
                 </StyledSlider>
                 <StyledInteraction>
@@ -127,6 +131,14 @@ const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommen
                         <img src={curPost.profileImage ? curPost.profileImage : defaultImg} alt="profileImg" />
                         <span>{curPost.userName}</span>
                         <span>{curPost.modifiedAt ? exchangeTime(curPost) : ""}</span>
+                        { curPost.memberId === Number(cookie.get("memberId")) ?
+                            <BiDotsHorizontalRounded onClick={() => {
+                                handleCurPost(curPost);
+                                handleMenu();
+                                open();
+                            }} />
+                            : null
+                        }
                         <CloseBtn handleEvent={handleModal} />
                     </div>
                     <FeedInteraction post={curPost} type={1} handleChange={handleChange} />

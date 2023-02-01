@@ -5,10 +5,10 @@ import { FaMicroblog } from "react-icons/fa";
 
 const Wrapper = styled.footer`
     display: flex;
-	  width: 100%;
-	  height: 150px; /* 내용물에 따라 알맞는 값 설정 */
-	  bottom: 0px;
-	  position: absolute;
+    width: 100%;
+    height: 150px; /* 내용물에 따라 알맞는 값 설정 */
+    bottom: 0;
+    position: fixed;
     background: white;
     padding-top: 15px;
     color: #808080;
