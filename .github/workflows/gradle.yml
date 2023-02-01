@@ -25,6 +25,11 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         
+    - uses: actions/checkout@v3
+    - run: touch ./src/main/resources/application.yml
+    - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
+    - run: cat ./src/main/resources/application.yml
+        
     - name: Setup MySQL
       uses: samin/mysql-action@v1
       with:
@@ -36,9 +41,6 @@ jobs:
     - name: Add permission
       working-directory: ./server
       run: chmod +x ./gradlew
-     
-    - name: Validate Gradle wrapper
-      uses: gradle/wrapper-validation-action@daece9dbc5b79370cc8e4fd6fe4b2cd400e150a8
  
     - name: Build with Gradle
       run: ./gradlew build
