@@ -1,8 +1,11 @@
 package com.main19.server.global.redis;
 
+import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -22,12 +25,19 @@ public class RedisConfig {
     @Value("${spring.redis.password}")
     private String password;
 
+    @Autowired
+    private Environment environment;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHost);
         redisStandaloneConfiguration.setPort(redisPort);
-        redisStandaloneConfiguration.setPassword(password);
+        Arrays.stream(environment.getActiveProfiles()).forEach(profile -> {
+            if (!profile.equals("test")) {
+                redisStandaloneConfiguration.setPassword(password);
+            }
+        });
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
         return lettuceConnectionFactory;
     }
