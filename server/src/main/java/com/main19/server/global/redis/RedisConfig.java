@@ -30,14 +30,17 @@ public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
+
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHost);
         redisStandaloneConfiguration.setPort(redisPort);
+
         Arrays.stream(environment.getActiveProfiles()).forEach(profile -> {
-            if (!profile.equals("test")) {
+            if (!profile.equals("server")) {
                 redisStandaloneConfiguration.setPassword(password);
             }
         });
+
         LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(redisStandaloneConfiguration);
         return lettuceConnectionFactory;
     }

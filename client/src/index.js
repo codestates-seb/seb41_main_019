@@ -4,10 +4,13 @@ import App from "./App";
 import { createGlobalStyle } from "styled-components";
 
 const StyledGlobal = createGlobalStyle` 
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
-    box-sizing: border-box;
     font-family: "pretendard";
   }
 
