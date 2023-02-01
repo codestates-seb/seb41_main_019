@@ -24,6 +24,15 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+        
+    - name: Setup MySQL
+      uses: samin/mysql-action@v1
+      with:
+          character set server: 'utf8' 
+          mysql database: 'main19db' 
+          mysql user: ${{ secrets.USER_NAME }}
+          mysql password: ${{ secrets.DATASOURCE_PASSWORD }}
+          
     - name: Add permission
       working-directory: ./server
       run: chmod +x ./gradlew
