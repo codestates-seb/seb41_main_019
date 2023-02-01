@@ -62,7 +62,7 @@ const StyledUpdateButtons = styled.div`
   text-align: center;
 `;
 
-const MyPlantInfo = ({ havePlantDeleted, currentPlantData, setCurrentPlantData, handleChange, currentView, setCurrentView }) => {
+const MyPlantInfo = ({ isOwnPage, havePlantDeleted, currentPlantData, setCurrentPlantData, handleChange, currentView, setCurrentView }) => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
 
   // const [form, setForm] = useState({
@@ -78,26 +78,38 @@ const MyPlantInfo = ({ havePlantDeleted, currentPlantData, setCurrentPlantData, 
   const { plantName, plantType, plantBirthDay } = currentPlantData;
   return (
     <StyledContainer>
-      {isUpdateMode ? (
-        <StyledPlantInfoBox>
-          <div>
-            <p>
-              <TbPlant />
-              <input value={plantName} />
-            </p>
-          </div>
-          <div>
-            <span>
-              <BsTag />
-              <input value={plantType} />
-            </span>
-            <span>
-              <BsCalendar3 />
-              <input value={plantBirthDay} />
-            </span>
-          </div>
-        </StyledPlantInfoBox>
-      ) : (
+      {isUpdateMode && 
+        <>
+          <StyledPlantInfoBox>
+            <div>
+              <p>
+                <TbPlant />
+                <input value={plantName} />
+              </p>
+            </div>
+            <div>
+              <span>
+                <BsTag />
+                <input value={plantType} />
+              </span>
+              <span>
+                <BsCalendar3 />
+                <input value={plantBirthDay} />
+              </span>
+            </div>
+          </StyledPlantInfoBox>
+          <StyledButtonsContainer>
+            <div className="wrapper">
+              <StyledUpdateButtons>수정 완료</StyledUpdateButtons>
+              <StyledUpdateButtons onClick={handleUpdateMode}>
+                취소
+              </StyledUpdateButtons>
+            </div>
+          </StyledButtonsContainer>
+        </>
+      }
+      {!isUpdateMode &&
+      <>
         <StyledPlantInfoBox>
           <div>
             <p>
@@ -116,19 +128,11 @@ const MyPlantInfo = ({ havePlantDeleted, currentPlantData, setCurrentPlantData, 
             </span>
           </div>
         </StyledPlantInfoBox>
-      )}
-      {isUpdateMode ? (
-        <StyledButtonsContainer>
-          <div className="wrapper">
-            <StyledUpdateButtons>수정 완료</StyledUpdateButtons>
-            <StyledUpdateButtons onClick={handleUpdateMode}>
-              취소
-            </StyledUpdateButtons>
-          </div>
-        </StyledButtonsContainer>
-      ) : (
-          <MyPlantEdit handleChange={handleChange} handleUpdateMode={handleUpdateMode} currentPlantData={currentPlantData} setCurrentPlantData={setCurrentPlantData} currentView={currentView} setCurrentView={setCurrentView} havePlantDeleted={havePlantDeleted}/>    
-      )}
+        {isOwnPage &&
+          <MyPlantEdit handleChange={handleChange} handleUpdateMode={handleUpdateMode} currentPlantData={currentPlantData} setCurrentPlantData={setCurrentPlantData} currentView={currentView} setCurrentView={setCurrentView} havePlantDeleted={havePlantDeleted}/> 
+        }
+      </>   
+      }
     </StyledContainer>
   );
 };

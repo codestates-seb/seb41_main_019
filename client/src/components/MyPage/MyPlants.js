@@ -185,7 +185,7 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, jwt, curre
           <GrNext className="icon" />
         </div>
       </StyledMyPlantsDashBoard>
-      {isPanelOpened && <MyPlantInfo havePlantDeleted={havePlantDeleted} handleChange={handleChange} currentPlantData={currentPlantData} setCurrentPlantData={setCurrentPlantData} currentView={currentView} setCurrentView={setCurrentView}/>}
+      {isPanelOpened && <MyPlantInfo isOwnPage={isOwnPage} havePlantDeleted={havePlantDeleted} handleChange={handleChange} currentPlantData={currentPlantData} setCurrentPlantData={setCurrentPlantData} currentView={currentView} setCurrentView={setCurrentView}/>}
     </StyledContainer>
   );
 };

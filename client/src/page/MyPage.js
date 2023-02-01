@@ -204,11 +204,11 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
           <StyledMyPlantFolder>
             {isOwnPage &&          
               <p onClick={handleFolderClick}>
-                My Plants 접기 <TiArrowSortedUp />
+                My Plants 접기 <TiArrowSortedDown />
               </p>}
             {!isOwnPage && 
               <p onClick={handleFolderClick}>
-                {userInfo.userName}님의 Plants 펼치기 <TiArrowSortedUp />
+                {userInfo.userName}님의 Plants 펼치기 <TiArrowSortedDown />
               </p>}
             <StyledChangeViewContainer>
               <StyledChangeViewButton
