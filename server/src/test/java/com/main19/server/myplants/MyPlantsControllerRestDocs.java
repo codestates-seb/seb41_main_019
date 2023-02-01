@@ -1,4 +1,4 @@
-package com.main19.server.domain.myplants;
+package com.main19.server.myplants;
 
 import static com.main19.server.utils.DocumentUtils.getRequestPreProcessor;
 import static com.main19.server.utils.DocumentUtils.getResponsePreProcessor;
