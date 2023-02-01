@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 @AutoConfigureRestDocs(uriHost = "increaf.site")
 @ActiveProfiles("test")
 public class LoginRestDocs {

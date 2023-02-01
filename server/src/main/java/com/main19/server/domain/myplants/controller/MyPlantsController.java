@@ -47,6 +47,21 @@ public class MyPlantsController {
     }
 
     @PatchMapping("/myplants/{myplants-id}")
+    public ResponseEntity patchMyPlant(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
+        @Valid @RequestBody MyPlantsDto.PlantsPatch requestBody) {
+
+        requestBody.setMyPlantsId(myPlantsId);
+
+        MyPlants myPlants = myPlantsMapper.myPlantsPatchDtoToMyPlants(requestBody);
+
+        MyPlants updateMyPlants = myPlantsService.updateMyPlants(myPlants,token);
+
+        MyPlantsDto.Response response = myPlantsMapper.myPlantsToMyPlantsResponseDto(updateMyPlants);
+
+        return new ResponseEntity(new SingleResponseDto<>(response), HttpStatus.OK);
+    }
+
+    @PatchMapping("/myplants/{myplants-id}/gallerys")
     public ResponseEntity patchMyPlants(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
         @Valid @RequestBody MyPlantsDto.Patch requestBody) {
 

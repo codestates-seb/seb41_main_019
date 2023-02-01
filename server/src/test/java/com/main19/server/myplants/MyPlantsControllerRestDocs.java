@@ -23,6 +23,7 @@ import com.main19.server.domain.member.entity.Member;
 import com.main19.server.domain.myplants.controller.MyPlantsController;
 import com.main19.server.domain.myplants.dto.MyPlantsDto;
 import com.main19.server.domain.myplants.dto.MyPlantsDto.Patch;
+import com.main19.server.domain.myplants.dto.MyPlantsDto.PlantsPatch;
 import com.main19.server.domain.myplants.dto.MyPlantsDto.Post;
 import com.main19.server.domain.myplants.dto.MyPlantsDto.Response;
 import com.main19.server.domain.myplants.entity.MyPlants;
@@ -156,7 +157,7 @@ public class MyPlantsControllerRestDocs {
 
         ResultActions actions =
             mockMvc.perform(
-                patch("/myplants/{myplants-id}", myPlantsId)
+                patch("/myplants/{myplants-id}/gallerys", myPlantsId)
                     .header("Authorization", "Bearer AccessToken")
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -188,6 +189,63 @@ public class MyPlantsControllerRestDocs {
                     fieldWithPath("data.plantType").type(JsonFieldType.STRING).description("식물 종류"),
                     fieldWithPath("data.plantBirthDay").type(JsonFieldType.STRING).description("식물 생일"),
                     fieldWithPath("data.galleryList[].galleryId").type(JsonFieldType.NUMBER).description("갤러리 식별자")
+                )
+            ));
+    }
+
+    @Test
+    public void PatchMyPlantTest() throws Exception {
+
+        long myPlantsId = 1L;
+
+        MyPlantsDto.PlantsPatch patch = new PlantsPatch(myPlantsId,"머호2","머호2","2023.02.01");
+
+        MyPlantsDto.Response response = new Response(myPlantsId, "머호2","머호2","2023.02.01", new ArrayList<>());
+
+        String content = gson.toJson(patch);
+
+        given(myPlantsMapper.myPlantsPatchDtoToMyPlants(Mockito.any())).willReturn(new MyPlants());
+        given(myPlantsService.updateMyPlants(Mockito.any(),Mockito.anyString())).willReturn(new MyPlants());
+        given(myPlantsMapper.myPlantsToMyPlantsResponseDto(Mockito.any())).willReturn(response);
+
+        ResultActions actions =
+            mockMvc.perform(
+                patch("/myplants/{myplants-id}", myPlantsId)
+                    .header("Authorization", "Bearer AccessToken")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(content)
+            );
+
+        actions
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.plantName").value(patch.getPlantName()))
+            .andExpect(jsonPath("$.data.plantType").value(patch.getPlantType()))
+            .andExpect(jsonPath("$.data.plantBirthDay").value(patch.getPlantBirthDay()))
+            .andDo(document(
+                "patch-my-plant",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestHeaders(
+                    headerWithName("Authorization").description("Bearer AccessToken")
+                ),
+                pathParameters(
+                    parameterWithName("myplants-id").description("내 식물 식별자")
+                ),
+                requestFields(
+                    List.of(
+                        fieldWithPath("myPlantsId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                        fieldWithPath("plantName").type(JsonFieldType.STRING).description("식물 이름").optional(),
+                        fieldWithPath("plantType").type(JsonFieldType.STRING).description("식물 종류").optional(),
+                        fieldWithPath("plantBirthDay").type(JsonFieldType.STRING).description("식물 생일").optional()
+                    )
+                ),
+                responseFields(
+                    fieldWithPath("data.myPlantsId").type(JsonFieldType.NUMBER).description("내 식물 식별자"),
+                    fieldWithPath("data.plantName").type(JsonFieldType.STRING).description("식물 이름"),
+                    fieldWithPath("data.plantType").type(JsonFieldType.STRING).description("식물 종류"),
+                    fieldWithPath("data.plantBirthDay").type(JsonFieldType.STRING).description("식물 생일"),
+                    fieldWithPath("data.galleryList[]").type(JsonFieldType.ARRAY).description("갤러리 식별자")
                 )
             ));
     }

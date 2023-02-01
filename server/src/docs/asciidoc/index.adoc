@@ -608,6 +608,25 @@ include::{snippets}/post-my-plants/http-response.adoc[]
 .response-fields
 include::{snippets}/post-my-plants/response-fields.adoc[]
 
+=== 내 식물 수정
+.curl-request
+include::{snippets}/patch-my-plant/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-my-plant/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-my-plant/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/patch-my-plant/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-my-plant/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-my-plant/response-fields.adoc[]
+
 === 내 식물 조회
 .curl-request
 include::{snippets}/get-my-plants/curl-request.adoc[]
