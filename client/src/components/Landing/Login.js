@@ -98,12 +98,12 @@ const Login = ({ setSelected, setIsLanded }) => {
             const date = new Date()
             const user = decode(res.headers.authorization);
 
-            date.setMinutes(date.getMinutes() + 60);
+            date.setMinutes(date.getMinutes() + 60 * 24);
             cookie.set("authorization", res.headers.authorization, { expires: date });
             cookie.set("memberId", user.memberId, { expires : date });
             cookie.set("username", user.username, { expires : date });
 
-            date.setMinutes(date.getMinutes() + 60);
+            date.setMinutes(date.getMinutes() + 60 * 24 * 7);
             cookie.set("refresh", res.headers.refresh, { expires: date });
 
             setIsLanded(false);
