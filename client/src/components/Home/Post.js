@@ -31,7 +31,7 @@ const Wrapper = styled.div`
     }
 
     @media screen and (max-width: 770px) {
-        width: 460px;
+        width: 400px;
     }
 `;
 
@@ -78,15 +78,10 @@ const StyledHeader = styled.div`
     }  
 `;
 
-const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setPostId, handleChange, change, checkPost }) => {
-    const [menu, setMenu] = useState(false);
+const Post = ({ menu, handleMenu, post, handleModal, handleDelete, handleCurPost, handleEdit, setPostId, handleChange, change, checkPost }) => {
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
     const navigate = useNavigate();
-
-    const handleMenu = () => {
-        setMenu(!menu);
-    };
 
     const deleteFollow = (id) => {
         axios({ 
@@ -152,7 +147,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
                 </div>
             </StyledHeader>
             { post.postingMedias.length > 0 ?
-                <Slider imgs={post.postingMedias} /> : null
+                <Slider imgs={post.postingMedias} type /> : null
             }
             <FeedInteraction post={post} setModal={handleModal} handleCurPost={handleCurPost} setPostId={setPostId} handleChange={handleChange} />
         </Wrapper>
