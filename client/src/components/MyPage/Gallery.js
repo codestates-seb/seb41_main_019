@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
-import PlantImageView from "./PlantImageView";
 
 import { FcAnswers } from "react-icons/fc";
 
@@ -58,7 +57,7 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const Gallery = ({ memberId, isCovered, isPlantImageViewOpened, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
+const Gallery = ({ memberId, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
 

@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
 import MyPlantInfo from "./MyPlantInfo";
+import Cookie from "../../util/Cookie";
+import PlantThumbnail from "./PlantThumbnail";
 
-import defaultIcon from "../../assets/img/plants/defaultPlantIcon.png"
 import { GrPrevious } from "react-icons/gr";
 import { GrNext } from "react-icons/gr";
 import { RiPlantLine } from "react-icons/ri";
-import { ReactComponent as Cookie } from "../../assets/svg/plus.svg";
+import { ReactComponent as Cookiee } from "../../assets/svg/plus.svg";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -88,10 +89,13 @@ const StyledNoContents = styled.div`
   }
 `;
 
-const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, jwt, currentPlantData, setCurrentPlantData, handleAddPlant, handleChange }) => {
-  const [myPlantsData, setMyPlantsData] = useState(null); // My Plants 리스트 데이터
-  const [isPanelOpened, setIsPanelOpened] = useState(false);
+const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPlantData, setCurrentPlantData, handleAddPlant, handleChange }) => {
+  const cookie = new Cookie();
+  const jwt = cookie.get("authorization")
 
+  const [myPlantsData, setMyPlantsData] = useState(null);
+  const [isPanelOpened, setIsPanelOpened] = useState(false);
+  
   const getMyPlantsData = () => {
     axios({
       method: "get",
@@ -138,43 +142,28 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, jwt, curre
           {isOwnPage &&           
           <StyledMyPlantsItem onClick={handleAddPlant}>
             <div className="image-wrapper">
-              <Cookie className="image" />
+              <Cookiee className="image" />
             </div>
             <p>반려식물 추가</p>
           </StyledMyPlantsItem>}
-          {myPlantsData ? (
+          {myPlantsData && 
             myPlantsData.map((el) => {
               return (
-                <StyledMyPlantsItem
+                <PlantThumbnail 
                   key={el.myPlantsId}
-                  onClick={() => handlePlantClick(el)}
-                >
-                  <div
-                    className={
-                      currentPlantData &&
-                      currentPlantData.myPlantsId === el.myPlantsId
-                        ? "selected image-wrapper"
-                        : "image-wrapper"
-                    }
-                  >
-                    <img
-                      className="image"
-                      src={el.length ? el.galleryList[el.galleryList.length - 1] : defaultIcon}
-                      alt="each item"
-                    />
-                  </div>
-                  <p>{el.plantName}</p>
-                </StyledMyPlantsItem>
-              );
-            })
-          ) : (
+                  handlePlantClick={handlePlantClick}
+                  currentPlantData={currentPlantData}
+                  el={el}
+                  />
+              )
+              })}
+          {!myPlantsData && 
             <StyledNoContents>
               <div>
                 <RiPlantLine />
               </div>
-              <p>등록된 반려식물이 없습니다. 반려식물을 추가하세요.</p>
-            </StyledNoContents>
-          )}
+              <p>등록된 반려식물이 없습니다.</p>
+            </StyledNoContents>}
         </StyledListsContainer>
         <div
           className="move-button"
