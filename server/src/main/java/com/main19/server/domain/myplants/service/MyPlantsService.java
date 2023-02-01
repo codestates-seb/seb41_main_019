@@ -38,6 +38,26 @@ public class MyPlantsService {
         return myPlantsRepository.save(myPlants);
     }
 
+    public MyPlants updateMyPlants(MyPlants myPlants, String token) {
+
+        if(myPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        MyPlants myPlant = findMyPlants(myPlants.getMyPlantsId());
+
+        Optional.ofNullable(myPlants.getPlantName())
+            .ifPresent(myPlant::setPlantName);
+
+        Optional.ofNullable(myPlants.getPlantType())
+            .ifPresent(myPlant::setPlantType);
+
+        Optional.ofNullable(myPlants.getPlantBirthDay())
+            .ifPresent(myPlant::setPlantBirthDay);
+
+        return myPlantsRepository.save(myPlant);
+    }
+
     public MyPlants changeMyPlants(long myPlantsId , long galleryId, int changeNumber, String token) {
 
         MyPlants findMyPlants = findVerifiedMyPlants(myPlantsId);

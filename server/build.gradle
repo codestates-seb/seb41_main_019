@@ -69,6 +69,10 @@ dependencies {
 
     implementation "com.google.guava:guava:31.1-jre"
 
+    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.1'
+
+    testImplementation 'it.ozimov:embedded-redis:0.7.1'
+
     // mysql, security
 }
 

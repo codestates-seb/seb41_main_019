@@ -15,6 +15,8 @@ public interface MyPlantsMapper {
 
     MyPlantsDto.Response myPlantsToMyPlantsResponseDto(MyPlants myPlants);
 
+    MyPlants myPlantsPatchDtoToMyPlants(MyPlantsDto.PlantsPatch requestBody);
+
     List<MyPlantsDto.Response> myPlantsListToMyPlantsResponseDto(List<MyPlants> myPlants);
 
     GalleryDto.MyPlantsResponse galleryToGalleryMyPlantsResponseDto(Gallery gallery);
