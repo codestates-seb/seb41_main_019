@@ -52,6 +52,17 @@ const StyledView = styled.div`
             background-color: black;
         }
 
+        li div p {
+            width: 100%;
+            top: -50px;
+            text-align: center;
+            position: absolute;
+            font-size: 50px;
+            font-weight: 100;
+            color: white;
+            background-color: black;
+        }
+
         li div img {
             object-fit: contain;
             width: 100%;
@@ -93,28 +104,27 @@ const PlantImageView = ({handlePlantImageView, plantImageViewData}) => {
         })
     },[handlePlantImageView])
 
-    const {imgs , imgIdx} = plantImageViewData
-    const imgsMap = imgs.map((el) => {
-        return el.plantImage;
-    })
+    console.log(plantImageViewData)
 
-    const [cur, setCur] = useState(imgIdx)
-    const [imgsArray, setImagsArray] = useState(imgsMap)
+    const {galleryData, galleryIdx} = plantImageViewData
+
+    const [cur, setCur] = useState(galleryIdx)
 
     return (
             <Wrapper>
                 <StyledView>
                     <ul>
-                        { imgsArray.map((img, idx) => {
+                        { galleryData.map((el, idx) => {
                                 return (
                                     <li key={idx} className={cur === idx ? null : "none"}>
                                         <div>
-                                            <img src={img} alt="img" />
+                                            <p>{el.content}</p>
+                                            <img src={el.plantImage} alt="img" />
                                         </div>
-                                        { imgsArray.length > 1 ?
+                                        { galleryData.length > 1 ?
                                             <div className="arrow">
                                                 <IoIosArrowDropleft onClick={() => setCur(cur - 1)} className={`pre ${cur === 0 ? "hidden" : null}`} />
-                                                <IoIosArrowDropright onClick={() => setCur(cur + 1)} className={`next ${cur === imgs.length - 1 ? "hidden" : null}`} />
+                                                <IoIosArrowDropright onClick={() => setCur(cur + 1)} className={`next ${cur === galleryData.length - 1 ? "hidden" : null}`} />
                                             </div> 
                                             : null
                                         }

@@ -88,7 +88,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const [commentId, setCommentId] = useState(null);
   const [commentMenu, setCommentMenu] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState(null);
-  const [plantImageViewData, setplantImageViewData] = useState({
+  const [plantImageViewData, setPlantImageViewData] = useState({
     imgs: [],
     imgIdx: null,
   });
@@ -141,10 +141,10 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
     handleIsCovered();
   };
 
-  const handlePlantImageView = (imgs, imgIdx) => {
-    setplantImageViewData({
-      imgs: imgs,
-      imgIdx: imgIdx
+  const handlePlantImageView = (galleryData, galleryIdx) => {
+    setPlantImageViewData({
+      galleryData,
+      galleryIdx,
     })
     setIsPlantImageViewOpened(!isPlantImageViewOpened);
     handleIsCovered()
