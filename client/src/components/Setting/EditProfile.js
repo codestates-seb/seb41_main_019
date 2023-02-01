@@ -20,27 +20,27 @@ const Wrapper = styled.div`
     div {
         display: flex;
         justify-content: space-around;
+        align-items: center;
         gap: 0px;
 
         label {
-            width: 80px;
+            margin-right: 10px;
         }
     }
 
     .profile {
         display: flex;
         flex-direction: row;
-        width: 400px;
+        margin: 0 auto;
         
         div:nth-of-type(2) {
-            width: 300px;
+            width: 200px;
             display: flex;
             flex-direction: column;
 
             label {
                 color: blue;
                 cursor: pointer;
-                width: 50%;
             }
         }
     }
@@ -67,6 +67,7 @@ const Wrapper = styled.div`
     }
 
     button {
+        margin-left: 40px;
         pointer-events: none;
         opacity: 0.4;
     }
