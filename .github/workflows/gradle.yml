@@ -36,6 +36,10 @@ jobs:
     - name: Add permission
       working-directory: ./server
       run: chmod +x ./gradlew
+     
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@daece9dbc5b79370cc8e4fd6fe4b2cd400e150a8
+ 
     - name: Build with Gradle
       run: ./gradlew build
     
