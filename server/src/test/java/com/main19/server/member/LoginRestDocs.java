@@ -46,12 +46,12 @@ public class LoginRestDocs {
 
         Member member = new Member(
                 1L,
-                "머호",
-                "oheadnah@github.com",
+                "logintest",
+                "logintest",
                 "profileImage",
                 "자기소개",
                 "codestates",
-                "12345678a",
+                "12345678a!",
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -64,11 +64,11 @@ public class LoginRestDocs {
                 new ArrayList<>(),
                 new ArrayList<>());
 
-//        memberService.createMember(member);
+        memberService.createMember(member);
 
         LoginDto loginDto = new LoginDto();
         loginDto.setEmail(member.getEmail());
-        loginDto.setPassword("12345678a");
+        loginDto.setPassword("12345678a!");
 
         String content = gson.toJson(loginDto);
 
