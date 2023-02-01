@@ -45,15 +45,13 @@ const Followings = ({handleFollowings, followings}) => {
       });
     }, [handleFollowings]);
 
-    console.log(followings)
-
   return (
       <StyledContainer>
-        <p>팔로워 목록</p>
+        <p>팔로잉 목록</p>
         <ul>
           {followings.length > 0 
             ? followings.map((following, idx) => (
-              <FollowingsItem following={following} key={following.followingId}/>
+              <FollowingsItem handleFollowings={handleFollowings} following={following} key={following.followingId}/>
           )) : "팔로우하는 사람이 없습니다."}
         </ul>
       </StyledContainer>

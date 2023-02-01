@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const StyledFollowerItem = styled.li`
   display: flex;
@@ -49,16 +50,21 @@ const StyledFollowerItem = styled.li`
   } */
 `;
 
-const FollowerItem = ({follower}) => {
+const FollowerItem = ({handleFollowers ,follower}) => {
+    const navigate = useNavigate();
+    const handleFollowerClick = () => {
+      handleFollowers();
+      navigate("/member", { state: { id: follower.followerId}})
+    }
     return (
         <StyledFollowerItem>
-            <div>
+            <div onClick={handleFollowerClick}>
                 <img
                 src={follower.profileImage}
                 alt="img"
                 />
             </div>
-            <div>
+            <div onClick={handleFollowerClick}>
                 <span>{follower.userName}</span>
                 <span>{follower.profileText}</span>
             </div>

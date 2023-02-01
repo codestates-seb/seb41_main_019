@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const StyledFollowingsItem = styled.li`
   display: flex;
@@ -49,16 +50,22 @@ const StyledFollowingsItem = styled.li`
   } */
 `;
 
-const FollowingsItem = ({following}) => {
+const FollowingsItem = ({handleFollowings, following}) => {
+    const navigate = useNavigate();
+    const handleFollowingClick = () => {
+      handleFollowings();
+      navigate("/member", { state: { id: following.followingId}})
+    }
+
     return (
         <StyledFollowingsItem>
-            <div>
+            <div onClick={handleFollowingClick}>
                 <img
                 src={following.profileImage}
                 alt="img"
                 />
             </div>
-            <div>
+            <div onClick={handleFollowingClick}>
                 <span>{following.userName}</span>
                 <span>{following.profileText}</span>
             </div>
