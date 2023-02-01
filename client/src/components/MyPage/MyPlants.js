@@ -171,7 +171,10 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
   }
 
   const handlePrevButtonClick = () => {
-    if(curPage === 1) {
+    if (myPlantsData.length === 0) {
+      alert("먼저 반려식물을 등록해주세요.")
+      return;
+    } else if(curPage === 1) {
       alert("가장 앞 페이지입니다.")
       return;
     } else {
@@ -180,10 +183,13 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
   };
 
   const handleNextButtonClick = () => {
-    if(curPage === totalPages) {
+    if (myPlantsData.length === 0) {
+      alert("먼저 반려식물을 등록해주세요.")
+      return;
+    } else if(curPage === totalPages) {
       alert("마지막 페이지입니다.")
       return;
-    } else {
+    } else{
       setCurPage(curPage + 1);
     }
   };
