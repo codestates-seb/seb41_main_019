@@ -53,4 +53,4 @@ jobs:
         aws deploy create-deployment --application-name main19-increaf
         --deployment-config-name CodeDeployDefault.AllAtOnce
         --deployment-group-name main19-increaf-group
-        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=practice-deploy.zip
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=increaf.zip
