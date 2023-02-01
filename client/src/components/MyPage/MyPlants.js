@@ -36,13 +36,14 @@ const StyledMyPlantsDashBoard = styled.div`
 const StyledPagination = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
   background-color: white;
   margin-bottom: 5px;
 
   > div {
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     border-radius: 50%;
     background-color: grey;
     opacity: 0.8;
@@ -51,6 +52,8 @@ const StyledPagination = styled.div`
   }
 
   > div:nth-child(${props => props.curPage}) {
+    width: 15px;
+    height: 15px;
     background-color: #D96848;
   }
 `
