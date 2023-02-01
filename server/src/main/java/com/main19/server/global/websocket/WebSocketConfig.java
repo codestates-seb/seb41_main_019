@@ -1,4 +1,4 @@
-package com.main19.server.domain.chat.websocket;
+package com.main19.server.global.websocket;
 
 import java.util.Arrays;
 import java.util.List;
