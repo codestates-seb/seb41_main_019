@@ -38,12 +38,14 @@ const StyledPagination = styled.div`
   justify-content: center;
   width: 100%;
   background-color: white;
+  margin-bottom: 5px;
 
   > div {
     width: 14px;
     height: 14px;
     border-radius: 50%;
     background-color: grey;
+    opacity: 0.8;
     box-shadow: 2px 2px 2px #dbdbdb;
     margin: 5px;
   }
