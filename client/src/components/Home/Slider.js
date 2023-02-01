@@ -4,20 +4,26 @@ import { IoIosArrowDropleft } from "react-icons/io";
 import { IoIosArrowDropright } from "react-icons/io";
 
 const Wrapper = styled.div`
+    width: 100%;
+    height: 100%;
+
     ul {
         margin: 0px;
         padding: 0px;
         list-style: none;
+        width: 100%;
+        height: 100%;
 
         li {
             width: 100%;
             height: 100%;
-            position: relative;
         }
 
         li div:first-child {
-            height: ${({type}) => type ? "" : "500px"};
+            height: ${({type}) => !type ? "" : "500px"};
             background-color: black;
+            width: 100%;
+            height: 100%;
         }
 
         li div img {
@@ -50,11 +56,13 @@ const Wrapper = styled.div`
     }
 `;
 
-const Slider = ({ imgs }) => {
+const Slider = ({ imgs, type }) => {
     const [cur, setCur] = useState(0);
 
+    console.log(type);
+
     return (
-        <Wrapper>
+        <Wrapper type={type} >
             <ul>
                 { imgs.map((img, idx) => {
                         return (
