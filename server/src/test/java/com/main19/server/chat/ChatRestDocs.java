@@ -15,14 +15,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-import com.main19.server.chat.controller.KafkaController;
-import com.main19.server.chat.dto.ChatDto;
-import com.main19.server.chat.entitiy.Chat;
-import com.main19.server.chat.mapper.ChatMapper;
-import com.main19.server.chat.service.ChatService;
-import com.main19.server.chatroom.entity.ChatRoom;
-import com.main19.server.chatroom.service.ChatRoomService;
-import com.main19.server.member.entity.Member;
+import com.main19.server.domain.chat.controller.KafkaController;
+import com.main19.server.domain.chat.dto.ChatDto;
+import com.main19.server.domain.chat.entitiy.Chat;
+import com.main19.server.domain.chat.mapper.ChatMapper;
+import com.main19.server.domain.chat.service.ChatService;
+import com.main19.server.domain.chatroom.entity.ChatRoom;
+import com.main19.server.domain.chatroom.service.ChatRoomService;
+import com.main19.server.domain.member.entity.Member;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;

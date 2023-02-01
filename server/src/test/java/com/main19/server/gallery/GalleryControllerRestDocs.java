@@ -16,16 +16,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.myplants.entity.MyPlants;
-import com.main19.server.myplants.gallery.controller.GalleryController;
-import com.main19.server.myplants.gallery.dto.GalleryDto;
-import com.main19.server.myplants.gallery.dto.GalleryDto.Post;
-import com.main19.server.myplants.gallery.dto.GalleryDto.Response;
-import com.main19.server.myplants.gallery.entity.Gallery;
-import com.main19.server.myplants.gallery.mapper.GalleryMapper;
-import com.main19.server.myplants.gallery.service.GalleryService;
-import com.main19.server.myplants.service.MyPlantsService;
-import com.main19.server.storageService.s3.GalleryStorageService;
+import com.main19.server.domain.myplants.entity.MyPlants;
+import com.main19.server.domain.myplants.gallery.controller.GalleryController;
+import com.main19.server.domain.myplants.gallery.dto.GalleryDto;
+import com.main19.server.domain.myplants.gallery.dto.GalleryDto.Post;
+import com.main19.server.domain.myplants.gallery.dto.GalleryDto.Response;
+import com.main19.server.domain.myplants.gallery.entity.Gallery;
+import com.main19.server.domain.myplants.gallery.mapper.GalleryMapper;
+import com.main19.server.domain.myplants.gallery.service.GalleryService;
+import com.main19.server.domain.myplants.service.MyPlantsService;
+import com.main19.server.global.storageService.s3.GalleryStorageService;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;

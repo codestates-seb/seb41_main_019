@@ -1,7 +1,7 @@
 package com.main19.server.auth;
 
-import com.main19.server.auth.jwt.JwtTokenizer;
-import com.main19.server.redis.RedisDao;
+import com.main19.server.global.auth.jwt.JwtTokenizer;
+import com.main19.server.global.redis.RedisDao;
 import io.jsonwebtoken.io.Decoders;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

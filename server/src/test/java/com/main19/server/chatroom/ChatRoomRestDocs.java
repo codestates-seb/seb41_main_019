@@ -20,13 +20,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.chatroom.controller.ChatRoomController;
-import com.main19.server.chatroom.dto.ChatRoomDto;
-import com.main19.server.chatroom.dto.ChatRoomDto.Patch;
-import com.main19.server.chatroom.entity.ChatRoom;
-import com.main19.server.chatroom.mapper.ChatRoomMapper;
-import com.main19.server.chatroom.service.ChatRoomService;
-import com.main19.server.member.entity.Member;
+import com.main19.server.domain.chatroom.controller.ChatRoomController;
+import com.main19.server.domain.chatroom.dto.ChatRoomDto;
+import com.main19.server.domain.chatroom.dto.ChatRoomDto.Patch;
+import com.main19.server.domain.chatroom.entity.ChatRoom;
+import com.main19.server.domain.chatroom.mapper.ChatRoomMapper;
+import com.main19.server.domain.chatroom.service.ChatRoomService;
+import com.main19.server.domain.member.entity.Member;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

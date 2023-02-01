@@ -1,12 +1,12 @@
 package com.main19.server.posting;
 
 import com.google.gson.Gson;
-import com.main19.server.posting.mapper.PostingMapper;
-import com.main19.server.posting.scrap.controller.ScrapController;
-import com.main19.server.posting.scrap.dto.ScrapDto;
-import com.main19.server.posting.scrap.dto.ScrapPostResponseDto;
-import com.main19.server.posting.scrap.entity.Scrap;
-import com.main19.server.posting.scrap.service.ScrapService;
+import com.main19.server.domain.posting.mapper.PostingMapper;
+import com.main19.server.domain.posting.scrap.controller.ScrapController;
+import com.main19.server.domain.posting.scrap.dto.ScrapDto;
+import com.main19.server.domain.posting.scrap.dto.ScrapPostResponseDto;
+import com.main19.server.domain.posting.scrap.entity.Scrap;
+import com.main19.server.domain.posting.scrap.service.ScrapService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,18 +18,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.comment.like.controller.CommentLikeController;
-import com.main19.server.comment.like.dto.CommentLikeDto;
-import com.main19.server.comment.like.dto.CommentLikeDto.Post;
-import com.main19.server.comment.like.dto.CommentLikeDto.Response;
-import com.main19.server.comment.like.entity.CommentLike;
-import com.main19.server.comment.like.mapper.CommentLikeMapper;
-import com.main19.server.comment.like.service.CommentLikeService;
-import com.main19.server.posting.like.dto.PostingLikeDto;
-import com.main19.server.posting.like.dto.PostingLikeResponseDto;
-import com.main19.server.posting.like.entity.PostingLike;
-import com.main19.server.posting.like.service.PostingLikeService;
-import com.main19.server.posting.mapper.PostingMapper;
+import com.main19.server.domain.comment.like.controller.CommentLikeController;
+import com.main19.server.domain.comment.like.dto.CommentLikeDto;
+import com.main19.server.domain.comment.like.dto.CommentLikeDto.Post;
+import com.main19.server.domain.comment.like.dto.CommentLikeDto.Response;
+import com.main19.server.domain.comment.like.entity.CommentLike;
+import com.main19.server.domain.comment.like.mapper.CommentLikeMapper;
+import com.main19.server.domain.comment.like.service.CommentLikeService;
+
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

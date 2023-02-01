@@ -18,12 +18,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.posting.like.controller.PostingLikeController;
-import com.main19.server.posting.like.dto.PostingLikeDto;
-import com.main19.server.posting.like.dto.PostingLikeResponseDto;
-import com.main19.server.posting.like.entity.PostingLike;
-import com.main19.server.posting.like.service.PostingLikeService;
-import com.main19.server.posting.mapper.PostingMapper;
+import com.main19.server.domain.posting.like.controller.PostingLikeController;
+import com.main19.server.domain.posting.like.dto.PostingLikeDto;
+import com.main19.server.domain.posting.like.dto.PostingLikeResponseDto;
+import com.main19.server.domain.posting.like.entity.PostingLike;
+import com.main19.server.domain.posting.like.service.PostingLikeService;
+import com.main19.server.domain.posting.mapper.PostingMapper;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

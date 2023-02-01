@@ -1,20 +1,20 @@
 package com.main19.server.posting;
 
 import com.google.gson.Gson;
-import com.main19.server.member.entity.Member;
-import com.main19.server.posting.controller.PostingController;
-import com.main19.server.posting.dto.MediaResponseDto;
-import com.main19.server.posting.dto.PostingPatchDto;
-import com.main19.server.posting.dto.PostingPostDto;
-import com.main19.server.posting.dto.PostingResponseDto;
-import com.main19.server.posting.entity.Media;
-import com.main19.server.posting.entity.Posting;
-import com.main19.server.posting.mapper.PostingMapper;
-import com.main19.server.posting.service.PostingService;
-import com.main19.server.posting.tags.dto.PostingTagsResponseDto;
+import com.main19.server.domain.member.entity.Member;
+import com.main19.server.domain.posting.controller.PostingController;
+import com.main19.server.domain.posting.dto.MediaResponseDto;
+import com.main19.server.domain.posting.dto.PostingPatchDto;
+import com.main19.server.domain.posting.dto.PostingPostDto;
+import com.main19.server.domain.posting.dto.PostingResponseDto;
+import com.main19.server.domain.posting.entity.Media;
+import com.main19.server.domain.posting.entity.Posting;
+import com.main19.server.domain.posting.mapper.PostingMapper;
+import com.main19.server.domain.posting.service.PostingService;
+import com.main19.server.domain.posting.tags.dto.PostingTagsResponseDto;
 
-import com.main19.server.posting.tags.entity.PostingTags;
-import com.main19.server.posting.tags.entity.Tag;
+import com.main19.server.domain.posting.tags.entity.PostingTags;
+import com.main19.server.domain.posting.tags.entity.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,14 +1,14 @@
 package com.main19.server.member;
 
 import com.google.gson.Gson;
-import com.main19.server.auth.jwt.JwtTokenizer;
-import com.main19.server.member.controller.MemberController;
-import com.main19.server.member.dto.MemberDto;
-import com.main19.server.member.dto.MemberDto.Response;
-import com.main19.server.member.entity.Member;
-import com.main19.server.member.mapper.MemberMapper;
-import com.main19.server.member.service.MemberService;
-import com.main19.server.storageService.s3.ProfileStorageService;
+import com.main19.server.global.auth.jwt.JwtTokenizer;
+import com.main19.server.domain.member.controller.MemberController;
+import com.main19.server.domain.member.dto.MemberDto;
+import com.main19.server.domain.member.dto.MemberDto.Response;
+import com.main19.server.domain.member.entity.Member;
+import com.main19.server.domain.member.mapper.MemberMapper;
+import com.main19.server.domain.member.service.MemberService;
+import com.main19.server.global.storageService.s3.ProfileStorageService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

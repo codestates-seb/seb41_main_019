@@ -11,9 +11,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.member.entity.Member;
-import com.main19.server.auth.dto.LoginDto;
-import com.main19.server.member.service.MemberService;
+import com.main19.server.domain.member.entity.Member;
+import com.main19.server.global.auth.dto.LoginDto;
+import com.main19.server.domain.member.service.MemberService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;

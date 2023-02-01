@@ -19,15 +19,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.google.gson.Gson;
-import com.main19.server.comment.controller.CommentController;
-import com.main19.server.comment.dto.CommentDto;
-import com.main19.server.comment.dto.CommentDto.Patch;
-import com.main19.server.comment.dto.CommentDto.Post;
-import com.main19.server.comment.entity.Comment;
-import com.main19.server.comment.mapper.CommentMapper;
-import com.main19.server.comment.service.CommentService;
-import com.main19.server.member.entity.Member;
-import com.main19.server.posting.entity.Posting;
+import com.main19.server.domain.comment.controller.CommentController;
+import com.main19.server.domain.comment.dto.CommentDto;
+import com.main19.server.domain.comment.dto.CommentDto.Patch;
+import com.main19.server.domain.comment.dto.CommentDto.Post;
+import com.main19.server.domain.comment.entity.Comment;
+import com.main19.server.domain.comment.mapper.CommentMapper;
+import com.main19.server.domain.comment.service.CommentService;
+import com.main19.server.domain.member.entity.Member;
+import com.main19.server.domain.posting.entity.Posting;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
