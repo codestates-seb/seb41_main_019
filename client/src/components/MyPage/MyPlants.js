@@ -135,12 +135,13 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, jwt, curre
           <GrPrevious className="icon" />
         </div>
         <StyledListsContainer>
+          {isOwnPage &&           
           <StyledMyPlantsItem onClick={handleAddPlant}>
             <div className="image-wrapper">
               <Cookie className="image" />
             </div>
             <p>반려식물 추가</p>
-          </StyledMyPlantsItem>
+          </StyledMyPlantsItem>}
           {myPlantsData ? (
             myPlantsData.map((el) => {
               return (

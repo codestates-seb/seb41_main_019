@@ -104,6 +104,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   
   useEffect(() => {
     getUserInfo()
+    setIsOwnPage(myMemberId === memberId)
   }, [memberId])
   
   const getUserInfo = () => {
@@ -203,7 +204,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
           <StyledMyPlantFolder>
             {isOwnPage &&          
               <p onClick={handleFolderClick}>
-                 {userInfo.userName}님의 Plants 접기 <TiArrowSortedUp />
+                My Plants 접기 <TiArrowSortedUp />
               </p>}
             {!isOwnPage && 
               <p onClick={handleFolderClick}>
