@@ -55,7 +55,7 @@ const Feed = ({ menu, handleMenu, handleModal, handleDelete, handleCurPost, hand
             }).then(res => {
                 setPosts([...posts, ...res.data.data]);
                 setTimeout(() => {
-                    observe(checkPost.current, posts);
+                    observe(checkPost.current);
                 }, 150)
                 // console.log(res.data.data.filter(post => post.postingId === postId)[0])
             })
