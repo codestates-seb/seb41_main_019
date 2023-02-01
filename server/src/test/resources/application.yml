@@ -1,0 +1,57 @@
+server:
+  port: 8080
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+
+  datasource:
+    url: jdbc:h2:mem:test
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  redis:
+    host: localhost
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+
+#  kafka:
+#    consumer:
+#      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+#      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+#      properties:
+#        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+#        spring.deserializer.value.delegate.class: org.apache.kafka.common.serialization.LongDeserializer
+
+mail:
+  address:
+    admin: main19increaf
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ${BE_AWS_ACCESS_KEY}
+      secretKey: ${BE_AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: ${IMAGE_S3_BUCKET}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: 'false'
+
+jwt:
+  key: testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest
+  access-token-expiration-minutes: 1
+  refresh-token-expiration-minutes: 1
+
+kafka:
+  topic: ${KAFKA_TOPIC}
+  id: ${KAFKA_ID}
+  broker: ${KAFKA_BROKER}
