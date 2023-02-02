@@ -15,9 +15,10 @@ export const useAlert = (alert) => {
     useEffect(() => {
         axios({
             method: "get",
-            url: `${process.env.REACT_APP_API}/notification/${id}`,
+            url: `${process.env.REACT_APP_API}/notification/${id}?page=1&size=10`,
             headers: { Authorization }
         }).then(res => {
+            console.log(res.data.data)
             setLog(res.data.data);
         }).catch(e => {
             console.log(e);
