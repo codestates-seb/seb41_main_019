@@ -1,26 +1,114 @@
 <h1>🌿 IncreaF</h1>
+<img src="https://user-images.githubusercontent.com/110921798/216459211-262c75a2-9637-4870-a918-d4751a971db4.jpg" />
+
 <div align="center"> 
   <h3>" 나보다 소중한 반려식물, 당신의 반려식물을 소개하고, 매력적인 콘텐츠를 만들어보세요! "</h3><br />
   <div>반려식물판 소셜 미디어 플랫폼</div>
-  <p font-size="10px">Incredible Creative Leaf</p>
 </div>
-배포링크 : https://increaf.com/
+<strong>배포링크</strong> : https://increaf.com/
 
 - TEST ID : test, PW : q1w2e3r4!!<br />
-(테스트를 위한 게스트 아이디 및 패스워드 정보입니다)
+(게스트 아이디 및 패스워드 정보입니다)
 
-## 💡 프로젝트 소개
-- **팀 명 :** 식테크맨
-- **프로젝트 기간 :** 2023.01.03 - 2023.02.03
-
-## 👥 프로젝트 팀원 소개
-|<img src="https://user-images.githubusercontent.com/110921798/216306152-bcccdea4-9a5e-477a-a7c7-77e84a3fd43e.png" width="150px" />|<img src="https://user-images.githubusercontent.com/110921798/216306669-aa1ac13c-2128-4fd1-9027-d6917eda4c3e.png" width="150px" />|<img src="https://user-images.githubusercontent.com/110921798/216306673-2927e119-56e9-43ed-a049-0df8cc4a29a6.png" width="150px"/>|<img src="https://user-images.githubusercontent.com/110921798/216306679-6f27ae43-8995-4b3d-b53e-e9a13769b27c.png" width="150px" />|<img src="https://user-images.githubusercontent.com/110921798/216306682-713b4972-fa6e-4dac-9026-f32ea7e91963.png" width="150px"/>|<img src="https://user-images.githubusercontent.com/110921798/216306660-e4c7ec7f-703c-4e69-bac4-bc3a782df13d.png" width="150px" />|
-|-|-|-|-|-|-|
-|[이민훈](https://github.com/lmimoh)|[강래헌](https://github.com/kanglaeheon)|[장은지](https://github.com/ohmegle)|[김태현](https://github.com/taebong98)|[김혜인](https://github.com/gimhae-person)|[한대호](https://github.com/oheadnah)
-|FE 팀장|FE 팀원|FE 팀원|BE 부팀장|BE 팀원|BE 팀원|
 <br />
 
-## 📖 기술스택 
+## 💡 프로젝트 소개 및 구상배경
+
+- **팀 명 :** 식테크맨
+- **프로젝트 기간 :** 2023.01.03 - 2023.02.03
+
+
+  최근 코로나19로 인해 집에서 생활하는 시간이 늘어나면서 집 안에서 반려식물을 키우는 사람들이 더욱 늘어나고 있는 요즘,</br>
+반려식물은 ‘사람이 정서적으로 의지하고자 가까이 두고 기르는 식물’을 뜻합니다. 사람과 함께 생활하며 마음을 나누는 반려동물과 비슷한 의미의 이름을 식물에게도 준 것입니다. <br /> <br /> 
+ 정성들여 키우는 식물은 인테리어 뿐만 아니라 외로움과 우울함 극복에도 도움이 됩니다. 이렇듯 우리 삶에 함께 하는 반려식물들을 혼자 키우고 감상하기보다 식물을 사랑하는 다른 사람들과 함께 공유하는 플랫폼을 만들고싶어 본 프로젝트를 기획하게 되었습니다. 
+  <br /> <br /> 식물을 좋아하는 모든 사람들이 함께 본인이 키운 식물, 이외에도 여러 식물 사진들을 공유하고 소통할 수 있는 Increaf에 당신도 <span><strong><i>지금 참여하세요!</i></strong></span>
+
+ 
+<br />
+
+## 💻 주요 페이지 및 기능
+
+## 랜딩페이지 및 회원가입/로그인 
+
+<div width="100%">
+
+|랜딩페이지|회원가입/로그인|
+|:-:|:-:|
+|<img src="https://user-images.githubusercontent.com/110921798/216432112-c6fa5121-0e9d-4a64-9adb-da2b153457c5.gif" />|<img src="https://user-images.githubusercontent.com/110921798/216432873-5f6e5918-b899-42e1-afb2-bf06e9d5ba0c.gif" />|
+
+</div>
+
+
+## My plants 등록하기/My plants 갤러리 관리
+
+<div>
+
+|My plants 날짜 등록|My plants 갤러리 관리|
+|-|-|
+|<img src="https://user-images.githubusercontent.com/110921798/216431739-25407ec1-36fc-4813-adbd-b1ff1d3f016d.gif" />|<img src="https://user-images.githubusercontent.com/110921798/216433963-0e1ab88c-9ed2-422f-8187-fe562f93e89c.gif" />|
+
+</div>
+
+## 게시글 관리
+
+<div>
+
+|게시글 등록하기|게시글 수정하기|게시글 삭제하기|
+|-|-|-|
+|<img src="https://user-images.githubusercontent.com/110921798/216434628-6c9696d0-7a33-49ef-bc62-b5e135aafb64.gif" />|<img src="https://user-images.githubusercontent.com/110921798/216434848-e495010f-91b0-4113-bfd3-c82872402c59.gif"/>|<img src="https://user-images.githubusercontent.com/110921798/216436794-92b9bc9b-8b52-4c33-8e8b-93f6b4c0f2b0.gif" />|
+
+</div>
+
+<div>
+
+|게시글 스크랩|전체 게시글 및 인기글(좋아요 순)조회하기|
+|-|-|
+|<img src="https://user-images.githubusercontent.com/110921798/216441172-852e6e64-1de6-4449-9f38-2690f82016d3.gif"/>|<img src="https://user-images.githubusercontent.com/110921798/216441870-8c622c93-1608-4549-8986-3471351dcdf1.gif" />|
+
+</div>
+
+## 댓글 관리
+
+<div>
+
+|댓글 등록하기|댓글 삭제하기|댓글 좋아요|
+|-|-|-|
+|<img src="https://user-images.githubusercontent.com/110921798/216437316-cfe8ae8c-3198-445e-b21d-6d38f4a6b1e9.gif" />|<img src="https://user-images.githubusercontent.com/110921798/216437323-7913bdea-90e1-4ecc-9985-b7c59ee4119b.gif" />|<img src="https://user-images.githubusercontent.com/110921798/216439694-8229701c-1480-4fdb-a17a-4935888e9114.gif">|
+
+</div>
+
+## 채팅 및 알림
+
+<div>
+
+|채팅(서로 맞팔일 경우 가능)|실시간 알림|
+|-|-|
+|<img src="https://user-images.githubusercontent.com/110921798/216440115-1f4cad29-9087-42cf-8afb-ec20d8cb4203.gif" />|<img src="https://user-images.githubusercontent.com/110921798/216440233-14f9a463-04ce-4ddd-a52b-ba6004848420.gif" />|
+
+</div>
+
+## My Page 조회 및 회원정보 수정
+
+<div>
+
+|My Page 조회 | 회원정보 수정/ 회원 탈퇴|
+|-|-|
+|<img src="https://user-images.githubusercontent.com/110921798/216443041-44d9767a-7550-483c-9002-02612ac294d5.gif" />|<img src="https://user-images.githubusercontent.com/110921798/216442964-f203ab18-8ed7-4b8c-a058-7b7b3787789f.gif" />|
+
+</div>
+
+<br />
+
+## 👨‍👩‍👧‍👦 팀원 소개
+
+|<img src="https://user-images.githubusercontent.com/110921798/216306152-bcccdea4-9a5e-477a-a7c7-77e84a3fd43e.png" width="150px" />|<img src="https://user-images.githubusercontent.com/110921798/216306669-aa1ac13c-2128-4fd1-9027-d6917eda4c3e.png" width="150px" />|<img src="https://user-images.githubusercontent.com/110921798/216306673-2927e119-56e9-43ed-a049-0df8cc4a29a6.png" width="150px"/>|<img src="https://user-images.githubusercontent.com/110921798/216306679-6f27ae43-8995-4b3d-b53e-e9a13769b27c.png" width="150px" />|<img src="https://user-images.githubusercontent.com/110921798/216306682-713b4972-fa6e-4dac-9026-f32ea7e91963.png" width="150px"/>|<img src="https://user-images.githubusercontent.com/110921798/216306660-e4c7ec7f-703c-4e69-bac4-bc3a782df13d.png" width="150px" />|
+|:-:|:-:|:-:|:-:|:-:|:-:|
+|[이민훈](https://github.com/lmimoh)|[강래헌](https://github.com/kanglaeheon)|[장은지](https://github.com/ohmegle)|[김태현](https://github.com/taebong98)|[김혜인](https://github.com/gimhae-person)|[한대호](https://github.com/oheadnah)
+|FE 팀장|FE 팀원|FE 팀원|BE 부팀장|BE 팀원|BE 팀원|
+
+<br />
+
+## 📖 기술 스택 
 **FrontEnd**
 
 <div> 
@@ -68,9 +156,12 @@
   <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
 </div>
 
+<br />
 
 ## 🛠 아키텍쳐 
-![식테크맨 아키택처](https://user-images.githubusercontent.com/110921798/216312481-0a59db26-1216-4a31-a467-d125dc99545d.png)
+<img src="https://user-images.githubusercontent.com/110921798/216312481-0a59db26-1216-4a31-a467-d125dc99545d.png" width="800px" />
+
+<br />
 
 ## 📎 문서
 - [Notion](https://www.notion.so/codestates/IncreaF-2d1ac8dc113646d9b74dfa27903105f2)
@@ -80,7 +171,7 @@
 - [User Flow](https://www.figma.com/file/86u3BwyD8Nk8EnLb8N49UL/User-Flow?node-id=0%3A1&t=A2tmj0ac6pqI4hkB-1)
 - [화면정의서](https://www.figma.com/file/hfoLmpqoYZbYu2S5GyHZTh/%ED%99%94%EB%A9%B4%EC%A0%95%EC%9D%98%EC%84%9C?t=A2tmj0ac6pqI4hkB-1)
 
-## ❗ 팀규칙
+## ❗ 팀 규칙
 - 5분 지각한 사람 1000원 벌금
 - 불참해야 할 일 생길 때, 하루 전에는 말을 해주기
 - 공지 확인 시 12시간 내에 답장 해주기 + 공지 확인 후에 ✅ 체크 필수
@@ -88,15 +179,12 @@
 - 이후 회식 때 벌금만큼 돈 더 내기
 - 코어타임 지키기
 
-## 🖤 깃 컨벤션
+## 🖤 Git Convention
 
 <aside>
-✅  Feat : message
-
 ### 1. 커밋 유형 지정
 
 - 커밋 유형은 영어 대문자로 작성하기
-    
     
     | 커밋 유형 | 의미 |
     | --- | --- |
@@ -116,9 +204,6 @@
 
 ### 2. 제목과 본문을 빈행으로 분리
 
-- 커밋 유형 이후 제목과 본문은 한글로 작성하여 내용이 잘 전달될 수 있도록 할 것
-- 본문에는 변경한 내용과 이유 설명 (어떻게보다는 무엇 & 왜를 설명)
-
 ### 3. 제목 첫 글자는 대문자로, 끝에는 `.` 금지
 
 ### 4. 제목은 영문 기준 50자 이내로 할 것
@@ -135,7 +220,7 @@
 
 </aside>
 
-### 🖤 규칙에 맞는 좋은 커밋메시지를 작성해야 하는 이유
+### 규칙에 맞는 좋은 커밋메시지를 작성해야 하는 이유
 
 - 팀원과의 소통
 - 편리하게 과거 추적 가능
@@ -145,20 +230,3 @@
 
 - 추적 가능하게 유지해주기
 - 너무 많은 문제를 한 커밋에 담으면 추적하기 어렵다.
-
-### CLI에서 커밋 메시지 여러 줄로 작성하는 방법
-
-<aside>
-✅ **쌍따옴표를 닫지 말고 개행하며 작성 → 다 작성한 후에 쌍따옴표를 닫으면 작성 완료**
-
-```bash
-git commit -m "FEAT: 회원가입 기능 추가
-
-- 회원가입 기능 추가"
-```
-
-</aside>
-
-브랜치명: 접두사/브랜치이름으로 
-
-머지방식 : 스쿼시 & 머지
