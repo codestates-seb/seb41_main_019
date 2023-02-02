@@ -82,7 +82,7 @@ const Landing = ({ setIsLanded }) => {
                 selected === 1 && <Login setSelected={setSelected} setIsLanded={setIsLanded} />
             }
             {
-                selected === 2 && <Sign setSelected={setSelected}/>
+                selected === 2 && <Sign setSelected={setSelected} />
             }
         </Wrapper>
     )
