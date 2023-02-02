@@ -18,11 +18,12 @@ public class MemberDto {
 	@AllArgsConstructor
 	public static class Post {
 		@NotBlank
-		@Size(min = 2, max = 12, message = "아이디는 2자 이상 12자 이하여야 합니다.")
+		@Size(min = 2, max = 6, message = "아이디는 2자 이상 6자 이하여야 합니다.")
 		@Pattern(regexp = "^[0-9a-zA-Z가-힣]*$", message = "아이디는 영어, 숫자만 가능합니다.")
 		private String userName;
-    
-		@Pattern(regexp = "^[a-zA-Z0-9]*$", message = "영문 또는 숫자")
+
+		@Size(min = 4, max = 12, message = "아이디는 4자 이상 12자 이하여야 합니다.")
+		@Pattern(regexp = "^[0-9a-zA-Z]*$", message = "영문 또는 숫자")
 		private String email;
 
 		private String location;

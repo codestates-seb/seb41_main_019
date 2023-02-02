@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILD_JAR=$(ls /home/ubuntu/action/build/libs/server-0.0.1-SNAPSHOT.jar --spring.profiles.active=sever &)
+BUILD_JAR=$(ls /home/ubuntu/action/build/libs/server-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
 echo "> 현재 시간: $(date)" >> /home/ubuntu/action/deploy.log
@@ -24,6 +24,7 @@ else
 fi
 
 
-DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
+
 echo "> DEPLOY_JAR 배포"    >> /home/ubuntu/action/deploy.log
-sudo nohup java -jar $DEPLOY_JAR >> /home/ubuntu/deploy.log 2>/home/ubuntu/action/deploy_err.log &
+cd /home/ubuntu/action/build/libs/
+sudo nohup java -jar server-0.0.1-SNAPSHOT.jar >> /home/ubuntu/deploy.log 2>/home/ubuntu/action/deploy_err.log &

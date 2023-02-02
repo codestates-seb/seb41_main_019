@@ -65,13 +65,13 @@ public class MemberControllerRestDocs {
     @Test
     public void postMemberTest() throws Exception {
         // given
-        MemberDto.Post post = new MemberDto.Post("taebong98", "taebong98", "코드스테이츠", "자기소개", "q1w2e3r4!!");
+        MemberDto.Post post = new MemberDto.Post("tae", "taebong98", "코드스테이츠", "자기소개", "q1w2e3r4!!");
         String content = gson.toJson(post);
 
         MemberDto.Response response =
             new MemberDto.Response(
                 1L,
-                "taebong98",
+                "tae",
                 "taebong98",
                 "코드스테이츠",
                 null,
