@@ -8,6 +8,7 @@ const useModal = (func) => {
         setIsOpen(true);
         document.body.style.overflow = "hidden";
     }
+    
     const close = () => setIsOpen(false);
 
     return {

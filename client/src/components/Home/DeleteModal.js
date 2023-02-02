@@ -6,6 +6,17 @@ import axios from "axios";
 import Cookie from "../../util/Cookie.js";
 
 const Wrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0,0.3);
+    z-index: 1000;
+`
+
+const Modal = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,7 +63,7 @@ const Wrapper = styled.div`
     }
 `;
 
-const DeleteModal = ({ handleDelete, postId, handleChange }) => {
+const DeleteModal = ({ handleModal, handleDelete, postId, handleChange }) => {
     const cookie = new Cookie();
 
     useEffect(() => {
@@ -78,18 +89,21 @@ const DeleteModal = ({ handleDelete, postId, handleChange }) => {
 
     return (
         <Wrapper>
-            <div>
-                <FiAlertCircle />
-                <span> 정말 이 게시물을 삭제하시겠습니까?</span>
-            </div>
-            <div className="buttons">
-                <BlueBtn 
-                    onClick={() => {
-                        DeletePost()
-                        handleDelete()
-                    }}>Yes</BlueBtn>
-                <BlueBtn onClick={handleDelete}>No</BlueBtn>
-            </div>
+            <Modal>
+                <div>
+                    <FiAlertCircle />
+                    <span> 정말 이 게시물을 삭제하시겠습니까?</span>
+                </div>
+                <div className="buttons">
+                    <BlueBtn 
+                        onClick={() => {
+                            DeletePost()
+                            handleDelete()
+                            handleModal(false)
+                        }}>Yes</BlueBtn>
+                    <BlueBtn onClick={handleDelete}>No</BlueBtn>
+                </div>
+            </Modal>
         </Wrapper>
     )
 };

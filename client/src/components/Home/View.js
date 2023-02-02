@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
 import Comments from "./Comments";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CloseBtn from "../public/CloseBtn";
 import { exchangeTime } from "../../util/exchangeTime";
 import defaultImg from "../../assets/img/profile.jpg";
@@ -28,12 +28,12 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 1255px) {
         width: 900px;
-        height: 600px;
+        height: 700px;
     }
 
     @media screen and (max-width: 1024px) {
         width: 400px;
-        height: 500px;
+        height: 700px;
         flex-direction: column;
 
         svg {
@@ -43,31 +43,33 @@ const Wrapper = styled.div`
 `;
 
 const StyledSlider = styled.div`
+    width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     background-color: black;
+
+    @media screen and (max-width: 1255px) {
+        width: 50%;
+        height: 100%;
+    }
+
     @media screen and (max-width: 1024px){
         width: 100%;
-        height: 200px;
+        height: 300px;
     }
 `
 
 const StyledInteraction = styled.div`
-    width: 65%;
+    width: 50%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     background-color: white;
     border-left: 1px solid #DBDBDB;
 
-    > div:first-child {
-        @media screen and (max-width: 1024px){
-            padding: 10px;
-        }
-    }
-
     .profile {
-        padding: 10px;
+        padding: 10px 0px 0px 10px;
         display: flex;
         align-items: center;
 
@@ -89,22 +91,26 @@ const StyledInteraction = styled.div`
         }
 
         > div {
-            margin : 5px 0px 0px auto;
+            margin : 0px 5px 0px auto;
         }
     }
 
     @media screen and (max-width: 1255px) {
-        width: 100%;
+        width: 50%;
     }
 
     @media screen and (max-width: 1024px) {
-        height: 200px;
+        width: 100%;
+        height: 100%;
     }
 `;
 
-const View = ({ deleteMenu, menu, handleMenu, handleModal, curPost, handleChange, handleCommentMenu, setCommentId, handleCurPost, handleDelete, handleEdit }) => {
+const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommentId, handleCurPost, handleEdit }) => {
     const { open, close, Modal } = useModal();
     const cookie = new Cookie();
+    const [ menuOpend, setMenuOpend ] = useState(false);
+
+    const handleMenu = () => setMenuOpend(!menuOpend);
 
     useEffect(() => {
         document.getElementById("bg").addEventListener("click", () => {
@@ -114,13 +120,14 @@ const View = ({ deleteMenu, menu, handleMenu, handleModal, curPost, handleChange
 
     return (
             <Wrapper>
-                { menu && 
-                    <Modal>
-                        <p onClick={handleEdit}>수정하기</p>
-                        <p onClick={handleDelete}>삭제하기</p>
-                    </Modal>
-                }
-                { deleteMenu ? <DeleteModal postId={curPost.postingId} handleDelete={handleDelete} handleChange={handleChange} /> : null }
+                <Modal>
+                    <p onClick={handleEdit}>게시글 수정하기</p>
+                    <p onClick={() => {
+                        handleMenu();
+                        close();
+                    }}>게시글 삭제하기</p>
+                </Modal>
+                { menuOpend ? <DeleteModal handleModal={handleModal} postId={curPost.postingId} handleDelete={handleMenu} handleChange={handleChange} /> : null }
                 <StyledSlider>
                     { curPost.postingMedias ?
                         <Slider imgs={curPost.postingMedias} /> : null
@@ -133,8 +140,6 @@ const View = ({ deleteMenu, menu, handleMenu, handleModal, curPost, handleChange
                         <span>{curPost.modifiedAt ? exchangeTime(curPost) : ""}</span>
                         { curPost.memberId === Number(cookie.get("memberId")) ?
                             <BiDotsHorizontalRounded onClick={() => {
-                                handleCurPost(curPost);
-                                handleMenu();
                                 open();
                             }} />
                             : null

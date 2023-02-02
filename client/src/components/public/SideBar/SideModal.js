@@ -42,8 +42,12 @@ const StyledModal = styled.div`
 
   @media screen and (max-width: 770px) {
     width: 150px;
-    left: 490px;
+    left: 300px;
     bottom: 50px;
+  }
+
+  @media screen and (max-width: 414px) {
+    width: 100px;
   }
 `;
 
