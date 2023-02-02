@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Logo from "../components/public/Logo";
 import Login from "../components/Landing/Login";
 import Main from "../components/Landing/Main";
@@ -51,13 +51,9 @@ const StyledHeader = styled.header`
             color: black;
         }
     }
-
-    @media screen and (max-width: 755px) {
-
-    }
 `
 
-const Landing = ({ setIsLanded, isLanded }) => {
+const Landing = ({ setIsLanded }) => {
     const [ selected, setSelected ] = useState(0);
 
     return (
@@ -86,7 +82,7 @@ const Landing = ({ setIsLanded, isLanded }) => {
                 selected === 1 && <Login setSelected={setSelected} setIsLanded={setIsLanded} />
             }
             {
-                selected === 2 && <Sign setSelected={setSelected}/>
+                selected === 2 && <Sign setSelected={setSelected} />
             }
         </Wrapper>
     )

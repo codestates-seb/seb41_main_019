@@ -84,7 +84,7 @@ const Alert = () => {
             log.map((data, idx) => {
               return (
                 <StyledAlert key={idx}>
-                  <img src={data.profileImg} alt="img"/>
+                  <img src={data.profileImage} alt="img"/>
                   <span>{data.userName}{soltText(data.sseType)}</span>
                 </StyledAlert>
               )

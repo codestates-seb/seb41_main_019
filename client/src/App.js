@@ -28,7 +28,7 @@ function App() {
   const handleChange = () => setChange(!change);
 
   useEffect(() => {
-    document.body.style.overflow = isCovered && "hidden";
+    document.body.style.overflow = isCovered ? "hidden" : null;
   }, [isCovered]);
 
   useEffect(() => {
@@ -79,13 +79,13 @@ function App() {
         <Route
           path={isLanded ? null : "/mypage"}
           element={
-            <MyPage isCovered={isCovered} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
+            <MyPage isCovered={isCovered} change={change} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
           }
         />
         <Route
           path={isLanded ? null : "/member"}
           element={
-            <MyPage isCovered={isCovered} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
+            <MyPage isCovered={isCovered} change={change} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
           }
         />
         <Route

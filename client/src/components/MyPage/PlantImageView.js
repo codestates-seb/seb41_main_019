@@ -8,9 +8,9 @@ const Wrapper = styled.div`
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
-    width: 1240px;
-    height: 900px;
-    background-color: white;
+    width: 800px;
+    height: 800px;
+    background-color: black;
     z-index: 1000;
 
     .none {
@@ -18,14 +18,13 @@ const Wrapper = styled.div`
     }
 
     @media screen and (max-width: 1255px) {
-        width: 900px;
-        height: 900px;
+        width: 700px;
+        height: 700px;
     }
 
-    @media screen and (max-width: 1024px) {
-        width: 500px;
-        height: 600px;
-        top: 38%;
+    @media screen and (max-width: 770px) {
+        width: 330px;
+        height: 400px;
         flex-direction: column;
 
         svg {
@@ -37,6 +36,7 @@ const Wrapper = styled.div`
 const StyledView = styled.div`
     ul {
         width: 100%;
+        height: 100%;
         margin: 0px;
         padding: 0px;
         list-style: none;
@@ -48,8 +48,26 @@ const StyledView = styled.div`
         }
 
         li div:first-child {
-            height: ${({type}) => type ? "" : "900px"};
+            height: ${({type}) => type ? "100%" : "100%"};
             background-color: black;
+        }
+
+        li div p {
+            width: 100%;
+            height: 15%;
+            top: -50px;
+            text-align: center;
+            position: absolute;
+            font-size: 50px;
+            font-weight: 100;
+            color: white;
+            background-color: black;
+            margin: 0px;
+
+            @media screen and (max-width: 770px) {
+                font-size: 13px;
+            
+            }
         }
 
         li div img {
@@ -93,28 +111,27 @@ const PlantImageView = ({handlePlantImageView, plantImageViewData}) => {
         })
     },[handlePlantImageView])
 
-    const {imgs , imgIdx} = plantImageViewData
-    const imgsMap = imgs.map((el) => {
-        return el.plantImage;
-    })
+    console.log(plantImageViewData)
 
-    const [cur, setCur] = useState(imgIdx)
-    const [imgsArray, setImagsArray] = useState(imgsMap)
+    const {galleryData, galleryIdx} = plantImageViewData
+
+    const [cur, setCur] = useState(galleryIdx)
 
     return (
             <Wrapper>
                 <StyledView>
                     <ul>
-                        { imgsArray.map((img, idx) => {
+                        { galleryData.map((el, idx) => {
                                 return (
                                     <li key={idx} className={cur === idx ? null : "none"}>
                                         <div>
-                                            <img src={img} alt="img" />
+                                            <p>{el.content}</p>
+                                            <img src={el.plantImage} alt="img" />
                                         </div>
-                                        { imgsArray.length > 1 ?
+                                        { galleryData.length > 1 ?
                                             <div className="arrow">
                                                 <IoIosArrowDropleft onClick={() => setCur(cur - 1)} className={`pre ${cur === 0 ? "hidden" : null}`} />
-                                                <IoIosArrowDropright onClick={() => setCur(cur + 1)} className={`next ${cur === imgs.length - 1 ? "hidden" : null}`} />
+                                                <IoIosArrowDropright onClick={() => setCur(cur + 1)} className={`next ${cur === galleryData.length - 1 ? "hidden" : null}`} />
                                             </div> 
                                             : null
                                         }

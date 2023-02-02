@@ -33,7 +33,7 @@ const StyledHeader = styled.header`
     }
 `;
 const StyledUl = styled.ul`
-    width: 500px;
+    width: 450px;
     margin: 0px;
     padding: 0px;
     list-style: none;
@@ -43,7 +43,7 @@ const StyledUl = styled.ul`
     height: 116px;
 
     @media screen and (max-width: 770px) {
-        width: 460px;
+        width: 400px;
     }
 `;
 

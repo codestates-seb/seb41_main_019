@@ -26,7 +26,7 @@ const Wrapper = styled.section`
     }
 `
 
-const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, setPostId, postId, handleChange, curPost }) => { 
+const Feed = ({ menu, handleMenu, handleModal, handleDelete, handleCurPost, handleEdit, change, setPostId, postId, handleChange, curPost }) => { 
     const [ posts, setPosts ] = useState([]);
     const [ page, setPage ] = useState(1);
     const [ observe, unObserve ] = useScroll(handlePage);
@@ -55,9 +55,10 @@ const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, se
             }).then(res => {
                 setPosts([...posts, ...res.data.data]);
                 setTimeout(() => {
-                    observe(checkPost.current, posts);
+                    if(page * 10 < res.data.pageInfo.totalElements) {
+                        observe(checkPost.current);
+                    }
                 }, 150)
-                // console.log(res.data.data.filter(post => post.postingId === postId)[0])
             })
             .catch(e => {
                console.log(e);  
@@ -79,7 +80,7 @@ const Feed = ({ handleModal, handleDelete, handleCurPost, handleEdit, change, se
                         <span>게시물이 없습니다.</span> 
                     </div>
                 : posts.map((post, idx) => {
-                    return (<Post setPostId={setPostId} post={post} key={idx} handleModal={handleModal} handleChange={handleChange}
+                    return (<Post menu={menu} handleMenu={handleMenu} setPostId={setPostId} post={post} key={idx} handleModal={handleModal} handleChange={handleChange}
                             handleCurPost={handleCurPost} handleDelete={handleDelete} handleEdit={handleEdit} change={change} 
                             checkPost={idx === posts.length - 3 ? checkPost : null}/>)
                 })

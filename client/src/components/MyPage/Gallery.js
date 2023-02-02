@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
-import PlantImageView from "./PlantImageView";
 
 import { FcAnswers } from "react-icons/fc";
 
@@ -46,19 +45,29 @@ const StyledNoContents = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ababa7;
+  background-color: white;
+
   svg {
     width: 100px;
     height: 100px;
   }
   p {
     font-size: 1.5em;
-    color: white;
+    color: black;
     cursor: default;
+  }
+
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    height: 500px;
+
+    p {
+      font-size: 13px;
+    }
   }
 `;
 
-const Gallery = ({ memberId, isCovered, isPlantImageViewOpened, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
+const Gallery = ({ memberId, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
 

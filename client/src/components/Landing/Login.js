@@ -5,6 +5,8 @@ import DefaultInput from "./DefaultInput"
 import axios from "axios"
 import Cookie from "../../util/Cookie"
 import { decode } from "../../util/decode"
+import { saveId, loadId, deleteId } from "../../util/saveId"
+import useModal from "../../hooks/useModal"
 
 const Wrapper = styled.div`
     position: absolute;
@@ -77,16 +79,24 @@ const StyledBtn2 = styled(StyledBtn)`
 `
 
 const Login = ({ setSelected, setIsLanded }) => {
-    const [ id, setId ] = useState("");
+    const [ id, setId ] = useState(loadId());
     const [ pw, setPw ] = useState("");
+    const { open, close, Modal } = useModal();
     const inputRef = useRef([]);
     const cookie = new Cookie()
 
     useEffect(() => {
-        inputRef.current[0].focus();
+        if(inputRef.current[0].value) {
+            inputRef.current[1].focus();
+        } else inputRef.current[0].focus();
+        document.getElementById("saveId").checked = cookie.get("id") ? true : false;
     }, [])
 
     const handleLogin = () => {
+        if(document.getElementById("saveId").checked) {
+            saveId(id);
+        } else deleteId();
+
         axios({
             method: "post",
             url: `${process.env.REACT_APP_API}/member`,
@@ -95,21 +105,23 @@ const Login = ({ setSelected, setIsLanded }) => {
                 password: pw
             }
         }).then(res => {
-            const date = new Date()
+            const date = new Date();
             const user = decode(res.headers.authorization);
 
-            date.setMinutes(date.getMinutes() + 60);
-            cookie.set("authorization", res.headers.authorization, { expires: date });
+            date.setMinutes(date.getMinutes() + 60 * 24);
+            cookie.set("authorization", res.headers.authorization, `{ expires: date }`);
             cookie.set("memberId", user.memberId, { expires : date });
             cookie.set("username", user.username, { expires : date });
 
-            date.setMinutes(date.getMinutes() + 60);
+            date.setMinutes(date.getMinutes() + 60 * 24 * 7);
             cookie.set("refresh", res.headers.refresh, { expires: date });
 
             setIsLanded(false);
         })
         .catch(e => {
-            //실패 처리
+            if(e.response.status === 401) {
+                open();
+            }
         })
     }
 
@@ -119,8 +131,8 @@ const Login = ({ setSelected, setIsLanded }) => {
                 <Logo />
                 <form onSubmit={() => false}>
                     <DefaultInput label="아이디" id="id" state={id} setState={setId} inputRef={inputRef} idx={0} 
-                        autocomplete="off" />
-                    <DefaultInput label="패스워드" id="password" type="password"
+                        autocomplete="off" handleLogin={handleLogin} />
+                    <DefaultInput label="비밀번호" id="password" type="password" handleLogin={handleLogin}
                         state={pw} setState={setPw} inputRef={inputRef} idx={1} />
                 </form>
                 <StyledCheck>
@@ -130,6 +142,9 @@ const Login = ({ setSelected, setIsLanded }) => {
                 <StyledBtn onClick={handleLogin}>로그인</StyledBtn>
                 <StyledBtn2 onClick={() => setSelected(2)}>회원가입</StyledBtn2>
             </StyledLogin>
+            <Modal>
+                <p>올바르지 않은 계정 정보입니다.</p>
+            </Modal>
         </Wrapper>
     )
 }

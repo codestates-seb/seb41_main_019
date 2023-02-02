@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import FollowingsItem from "./FollowingsItem";
 
 const StyledContainer = styled.div`
@@ -38,22 +38,20 @@ const StyledContainer = styled.div`
 
 `
 
-const Followings = ({handleFollowings, followings}) => {
+const Followings = ({handleFollowings, followings, handleChange, isOwnPage }) => {
   useEffect(() => {
       document.getElementById("bg").addEventListener("click", () => {
         handleFollowings();
       });
     }, [handleFollowings]);
 
-    console.log(followings)
-
   return (
       <StyledContainer>
-        <p>팔로워 목록</p>
+        <p>팔로잉 목록</p>
         <ul>
           {followings.length > 0 
             ? followings.map((following, idx) => (
-              <FollowingsItem following={following} key={following.followingId}/>
+              <FollowingsItem isOwnPage={isOwnPage} handleFollowings={handleFollowings} following={following} key={following.followingId} handleChange={handleChange}/>
           )) : "팔로우하는 사람이 없습니다."}
         </ul>
       </StyledContainer>

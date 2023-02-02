@@ -23,6 +23,8 @@ import Footer from "../components/public/Footer";
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 500px;
+  margin: 0px auto;
 
   > .container {
     display: flex;
@@ -33,6 +35,7 @@ const StyledContainer = styled.div`
 
   @media screen and (max-width: 770px) {
     position: relative;
+    width: 360px;
     top: 60px;
   }
 `;
@@ -41,7 +44,7 @@ const StyledMyPlantFolder = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 500px;
+  width: 100%;
   border-bottom: solid 1px #dbdbdb;
   p {
     display: flex;
@@ -74,19 +77,22 @@ const StyledChangeViewButton = styled.div`
   }
 `;
 
-const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
+const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
+  const myMemberId = cookie.get("memberId");
   const memberId = useLocation().state.id;
+  const path = useLocation().pathname;
 
   // 데이터 상태관리
+  const [isOwnPage, setIsOwnPage] = useState(myMemberId === memberId)
   const [userInfo, setUserInfo] = useState([]); // 유저정보 (UserInfo.js로 props)
   const [postCount, setPostCount] = useState(); // 게시물 숫자 (setState는 UserInfo.js에서 핸들링)
   const [curPost, setCurPost] = useState(); // View.js에 prop하기 위한 데이터
   const [commentId, setCommentId] = useState(null);
   const [commentMenu, setCommentMenu] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState(null);
-  const [plantImageViewData, setplantImageViewData] = useState({
+  const [plantImageViewData, setPlantImageViewData] = useState({
     imgs: [],
     imgIdx: null,
   });
@@ -101,20 +107,39 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const [isFollowingsOpened, setIsFollowingsOpened] = useState(false);
 
   useEffect(() => {
-    getUserInfo()
-  }, [memberId])
-  
-  const getUserInfo = () => {
+    if(isViewOpened && curPost) {
       axios({
         method: "get",
-        url: `${process.env.REACT_APP_API}/members/${memberId}`,
-        headers: {
-          Authorization: jwt,
-        },
-      }).then((res) => {
-        setUserInfo(res.data.data)
-      }).catch ((err) => 
-      console.error(err))
+        url: `${process.env.REACT_APP_API}/posts/${curPost.postingId}`,
+        headers: { Authorization: cookie.get("authorization") }
+        }).then(res => {
+            setCurPost(res.data.data)
+        }).catch(e => {
+           console.log(e);
+        });
+    }
+  }, [handleChange])
+
+  useEffect(() => {
+    if (path === "/mypage" || myMemberId === memberId) {
+      setIsOwnPage(true)
+    } else {
+      setIsOwnPage(false)
+    }
+    getUserInfo()
+  }, [memberId, change])
+  
+  const getUserInfo = () => {
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_API}/members/${memberId}`,
+      headers: {
+        Authorization: jwt,
+      },
+    }).then((res) => {
+      setUserInfo(res.data.data)
+    }).catch ((err) => 
+    console.error(err))
   };
 
   const handleFollowers = () => {
@@ -138,10 +163,10 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
     handleIsCovered();
   };
 
-  const handlePlantImageView = (imgs, imgIdx) => {
-    setplantImageViewData({
-      imgs: imgs,
-      imgIdx: imgIdx
+  const handlePlantImageView = (galleryData, galleryIdx) => {
+    setPlantImageViewData({
+      galleryData,
+      galleryIdx,
     })
     setIsPlantImageViewOpened(!isPlantImageViewOpened);
     handleIsCovered()
@@ -167,13 +192,14 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
       {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
       {isCovered && isPlantImageViewOpened && <PlantImageView handlePlantImageView={handlePlantImageView} plantImageViewData={plantImageViewData} />}
-      {isCovered && isFollowersOpened && <Followers handleFollowers={handleFollowers} followers={userInfo.followerList}/>}
-      {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList}/>}
+      {isCovered && isFollowersOpened && <Followers isOwnPage={isOwnPage} handleFollowers={handleFollowers} followers={userInfo.followerList} handleChange={handleChange}/>}
+      {isCovered && isFollowingsOpened && <Followings isOwnPage={isOwnPage} handleFollowings={handleFollowings} followings={userInfo.followingList} handleChange={handleChange}/>}
       <StyledContainer>
-        <UserInfo handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount}/>
+        <UserInfo isOwnPage={isOwnPage} handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount} setCurrentView={setCurrentView} handleChange={handleChange}/>
         {isFolderOpened && 
           <div className="container">
             <MyPlants
+              isOwnPage={isOwnPage}
               currentPlantData={currentPlantData}
               setCurrentPlantData={setCurrentPlantData}
               userInfo={userInfo}
@@ -184,18 +210,28 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
             />
             <StyledMyPlantFolder onClick={handleFolderClick}>
               {currentPlantData && <Gallery isCovered={isCovered} isPlantImageViewOpened={isPlantImageViewOpened} setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} handlePlantImageView={handlePlantImageView}/> }
-              <p>
-                My Plants 접기 <TiArrowSortedUp />
-              </p>
+              {isOwnPage &&          
+                <p>
+                  My Plants 접기 <TiArrowSortedUp />
+                </p>}
+              {!isOwnPage && 
+                <p>
+                  {userInfo.userName}님의 Plants 접기 <TiArrowSortedUp />
+                </p>}
             </StyledMyPlantFolder>
           </div>
         }
         {!isFolderOpened &&
           <div className="container">
           <StyledMyPlantFolder>
-            <p onClick={handleFolderClick}>
-              My Plants 펼치기 <TiArrowSortedDown />
-            </p>
+            {isOwnPage &&          
+              <p onClick={handleFolderClick}>
+                My Plants 접기 <TiArrowSortedDown />
+              </p>}
+            {!isOwnPage && 
+              <p onClick={handleFolderClick}>
+                {userInfo.userName}님의 Plants 펼치기 <TiArrowSortedDown />
+              </p>}
             <StyledChangeViewContainer>
               <StyledChangeViewButton
                 onClick={() => setCurrentView("postings")}

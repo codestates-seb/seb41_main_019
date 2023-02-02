@@ -2,7 +2,7 @@
   "name": "main_19",
   "version": "0.1.0",
   "private": true,
-  "hompage": ".",
+  "homepage": ".",
   "dependencies": {
     "@stomp/stompjs": "^6.1.2",
     "axios": "^1.2.2",

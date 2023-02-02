@@ -123,7 +123,7 @@ const AddPlant = ({ handleAddPlant, userInfo, jwt }) => {
     <>
       <StyledContainer>
         <StyledModalHeader>
-          <CloseBtn className="close-button" handleAddPlant={handleAddPlant} />
+          <CloseBtn className="close-button" handleEvent={handleAddPlant} />
           <p>반려식물 등록하기</p>
         </StyledModalHeader>
         <form onSubmit={handleSubmit}>

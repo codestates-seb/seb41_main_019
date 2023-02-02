@@ -31,7 +31,8 @@ const Wrapper = styled.div`
     }
 
     @media screen and (max-width: 770px) {
-        width: 460px;
+        width: 360px;
+        font-size: 13px;
     }
 `;
 
@@ -78,15 +79,19 @@ const StyledHeader = styled.div`
     }  
 `;
 
-const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setPostId, handleChange, change, checkPost }) => {
-    const [menu, setMenu] = useState(false);
+const Post = ({ menu, handleMenu, post, handleModal, handleDelete, handleCurPost, handleEdit, setPostId, handleChange, change, checkPost }) => {
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
+    const myMemberId = cookie.get("memberId");
     const navigate = useNavigate();
 
-    const handleMenu = () => {
-        setMenu(!menu);
-    };
+    const handleProfileImgClick = () => {
+        if(post.memberId === Number(myMemberId)) {
+            navigate("/mypage", { state: { id: post.memberId } })
+        } else {
+            navigate("/member", { state: { id: post.memberId } })
+        }
+    }
 
     const deleteFollow = (id) => {
         axios({ 
@@ -129,9 +134,9 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
                 <img src={post.profileImage ? post.profileImage : defaultImg} 
-                onClick={() => navigate("/member", { state: { id: post.memberId } })} alt="profileImg" />
+                onClick={handleProfileImgClick} alt="profileImg" />
                 <div>
-                    <span onClick={() => navigate("/member", { state : {id : post.memberId} })}>{post.userName}</span>
+                    <span onClick={handleProfileImgClick}>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
@@ -152,7 +157,7 @@ const Post = ({ post, handleModal, handleDelete, handleCurPost, handleEdit, setP
                 </div>
             </StyledHeader>
             { post.postingMedias.length > 0 ?
-                <Slider imgs={post.postingMedias} /> : null
+                <Slider imgs={post.postingMedias} type="post" /> : null
             }
             <FeedInteraction post={post} setModal={handleModal} handleCurPost={handleCurPost} setPostId={setPostId} handleChange={handleChange} />
         </Wrapper>
