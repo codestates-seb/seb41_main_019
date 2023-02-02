@@ -16,6 +16,10 @@ const StyledContainer = styled.div`
   flex-direction: column;
   width: 500px;
   margin: 20px 0;
+
+  @media screen and (max-width: 770px) {
+    width: 360px;
+  }
 `;
 
 const StyledMyPlantsDashBoard = styled.div`
@@ -63,6 +67,10 @@ const StyledListsContainer = styled.div`
   width: 700px;
   align-items: center;
   overflow: hidden;
+
+  @media screen and (max-width: 770px) {
+      width: 360px;
+    }
 `;
 
 const StyledMyPlantsItem = styled.div`
@@ -80,6 +88,11 @@ const StyledMyPlantsItem = styled.div`
     border-radius: 70%;
     overflow: hidden;
     cursor: pointer;
+
+    @media screen and (max-width: 770px) {
+      width: 50px;
+      height: 50px;
+    }
   }
   .image {
     width: 100%;
@@ -91,6 +104,10 @@ const StyledMyPlantsItem = styled.div`
     justify-content: center;
     width: 100%;
     font-size: 0.8em;
+
+    @media screen and (max-width: 770px) {
+      font-size: 10px;
+    }
   }
 `;
 
@@ -111,6 +128,15 @@ const StyledNoContents = styled.div`
     justify-content: center;
     width: 100%;
     font-size: 0.8em;
+  }
+
+  @media screen and (max-width: 770px) {
+    width: 360px;
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
   }
 `;
 
@@ -195,16 +221,16 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
     }
   };
 
-  const renderPageDots = () => {
-    const result = [];
-    for(let i = 0; i < totalPages; i++) {
-      result.push(<div key={i}></div>)
-    }
-    if (result.length === 0) {
-      return (<div></div>)
-    }
-    return result
-  }
+  // const renderPageDots = () => {
+  //   const result = [];
+  //   for(let i = 0; i < totalPages; i++) {
+  //     result.push(<div key={i}></div>)
+  //   }
+  //   if (result.length === 0) {
+  //     return (<div></div>)
+  //   }
+  //   return result
+  // }
 
   return (
     <StyledContainer>
@@ -249,9 +275,9 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
           <GrNext className="icon" />
         </div>
       </StyledMyPlantsDashBoard>
-      <StyledPagination curPage={curPage}>
+      {/* <StyledPagination curPage={curPage}>
         {renderPageDots()}
-      </StyledPagination>
+      </StyledPagination> */}
       {isPanelOpened && <MyPlantInfo isOwnPage={isOwnPage} havePlantDeleted={havePlantDeleted} handleChange={handleChange} currentPlantData={currentPlantData} setCurrentPlantData={setCurrentPlantData} currentView={currentView} setCurrentView={setCurrentView}/>}
     </StyledContainer>
   );

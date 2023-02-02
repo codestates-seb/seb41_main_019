@@ -51,18 +51,10 @@ const StyledHeader = styled.header`
             color: black;
         }
     }
-
-    @media screen and (max-width: 755px) {
-
-    }
 `
 
-const Landing = ({ setIsLanded, isLanded }) => {
+const Landing = ({ setIsLanded }) => {
     const [ selected, setSelected ] = useState(0);
-
-    useEffect(() => {
-
-    }, [])
 
     return (
         <Wrapper>

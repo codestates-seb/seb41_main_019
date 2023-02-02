@@ -23,6 +23,8 @@ import Footer from "../components/public/Footer";
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 500px;
+  margin: 0px auto;
 
   > .container {
     display: flex;
@@ -33,6 +35,7 @@ const StyledContainer = styled.div`
 
   @media screen and (max-width: 770px) {
     position: relative;
+    width: 360px;
     top: 60px;
   }
 `;
@@ -41,7 +44,7 @@ const StyledMyPlantFolder = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 500px;
+  width: 100%;
   border-bottom: solid 1px #dbdbdb;
   p {
     display: flex;
