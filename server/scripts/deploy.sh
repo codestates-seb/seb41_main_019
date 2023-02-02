@@ -24,7 +24,7 @@ else
 fi
 
 
-DEPLOY_JAR=$JAR_NAME
+
 echo "> DEPLOY_JAR 배포"    >> /home/ubuntu/action/deploy.log
 cd /home/ubuntu/action/
-sudo nohup java -jar $DEPLOY_JAR >> /home/ubuntu/deploy.log 2>/home/ubuntu/action/deploy_err.log &
+sudo nohup java -jar server-0.0.1-SNAPSHOT.jar --spring.profiles.active=server >> /home/ubuntu/deploy.log 2>/home/ubuntu/action/deploy_err.log &
