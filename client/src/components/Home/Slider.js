@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { IoIosArrowDropleft } from "react-icons/io";
+import { IoIosArrowDropleft, IoMdEgg } from "react-icons/io";
 import { IoIosArrowDropright } from "react-icons/io";
 
 const Wrapper = styled.div`
@@ -26,6 +26,12 @@ const Wrapper = styled.div`
         }
 
         li div img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+        }
+
+        li div video {
             object-fit: contain;
             width: 100%;
             height: 100%;
@@ -76,7 +82,12 @@ const Slider = ({ imgs, type = "view" }) => {
                         return (
                             <li key={idx} className={cur === idx ? null : "none"}>
                                 <div>
-                                    <img src={img.mediaUrl} alt="img" />
+                                    {
+                                        img.format === "video" && <video src={img.mediaUrl} poster={img.thumbnailUrl} controls/>
+                                    }
+                                    {
+                                        img.format === "image" && <img src={img.mediaUrl} alt="img" />
+                                    }
                                 </div>
                                 { imgs.length > 1 ?
                                     <div className="arrow">
