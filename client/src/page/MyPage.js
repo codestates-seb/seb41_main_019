@@ -74,7 +74,7 @@ const StyledChangeViewButton = styled.div`
   }
 `;
 
-const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
+const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
   const myMemberId = cookie.get("memberId");
@@ -105,9 +105,10 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   useEffect(() => {
     getUserInfo()
     setIsOwnPage(myMemberId === memberId)
-  }, [memberId])
+  }, [memberId, change])
   
   const getUserInfo = () => {
+    console.log("change")
       axios({
         method: "get",
         url: `${process.env.REACT_APP_API}/members/${memberId}`,
@@ -171,7 +172,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
       {isCovered && isPlantImageViewOpened && <PlantImageView handlePlantImageView={handlePlantImageView} plantImageViewData={plantImageViewData} />}
       {isCovered && isFollowersOpened && <Followers handleFollowers={handleFollowers} followers={userInfo.followerList}/>}
-      {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList}/>}
+      {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList} handleChange={handleChange} change={change}/>}
       <StyledContainer>
         <UserInfo isOwnPage={isOwnPage} handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened && 

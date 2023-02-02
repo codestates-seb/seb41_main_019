@@ -38,7 +38,7 @@ const StyledContainer = styled.div`
 
 `
 
-const Followings = ({handleFollowings, followings}) => {
+const Followings = ({handleFollowings, followings, handleChange }) => {
   useEffect(() => {
       document.getElementById("bg").addEventListener("click", () => {
         handleFollowings();
@@ -51,7 +51,7 @@ const Followings = ({handleFollowings, followings}) => {
         <ul>
           {followings.length > 0 
             ? followings.map((following, idx) => (
-              <FollowingsItem handleFollowings={handleFollowings} following={following} key={following.followingId}/>
+              <FollowingsItem handleFollowings={handleFollowings} following={following} key={following.followingId} handleChange={handleChange}/>
           )) : "팔로우하는 사람이 없습니다."}
         </ul>
       </StyledContainer>
