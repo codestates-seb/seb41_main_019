@@ -1,10 +1,10 @@
-import Logo from "../public/Logo"
-import styled from "styled-components"
-import { useEffect, useRef, useState } from "react"
-import DefaultInput from "./DefaultInput"
-import axios from "axios"
-import { saveId } from "../../util/saveId"
-import Cookie from "../../util/Cookie"
+import styled from "styled-components";
+import { useEffect, useRef, useState } from "react";
+import DefaultInput from "./DefaultInput";
+import axios from "axios";
+import { saveId } from "../../util/saveId";
+import Cookie from "../../util/Cookie";
+import logo from "../../assets/logo.png";
 
 const Wrapper = styled.div`
     position: absolute;
@@ -26,6 +26,11 @@ const StyledLogin = styled.div`
     border: 1px solid #dbdbdb;
     border-radius: 3px;
     margin: 0px 0px 50px 0px;
+
+    img {
+        height: 60px;
+        margin: 0px 0px 30px 0px;
+    }
 
     p {
         margin: 0px;
@@ -173,7 +178,7 @@ const Sign = ({ setSelected }) => {
     return (
         <Wrapper>
             <StyledLogin>
-                <Logo />
+                <img src={logo} alt="img" />
                 <form onSubmit={() => false}>
                     <DefaultInput label="닉네임" id="name" state={name} setState={setName} checkValue={checkValue}
                     inputRef={inputRef} idx={0} handleSubmit={handleSubmit} />
