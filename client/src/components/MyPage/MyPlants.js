@@ -123,8 +123,6 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
   const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
   const [curPage, setCurPage] = useState(1);
-  
-  console.log(totalPages)
 
   const getMyPlantsData = () => {
     if (isOwnPage) {
