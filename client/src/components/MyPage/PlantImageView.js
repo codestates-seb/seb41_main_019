@@ -8,9 +8,9 @@ const Wrapper = styled.div`
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
-    width: 1240px;
-    height: 900px;
-    background-color: white;
+    width: 800px;
+    height: 800px;
+    background-color: black;
     z-index: 1000;
 
     .none {
@@ -18,14 +18,13 @@ const Wrapper = styled.div`
     }
 
     @media screen and (max-width: 1255px) {
-        width: 900px;
-        height: 900px;
+        width: 700px;
+        height: 700px;
     }
 
-    @media screen and (max-width: 1024px) {
-        width: 500px;
-        height: 600px;
-        top: 38%;
+    @media screen and (max-width: 770px) {
+        width: 330px;
+        height: 400px;
         flex-direction: column;
 
         svg {
@@ -37,6 +36,7 @@ const Wrapper = styled.div`
 const StyledView = styled.div`
     ul {
         width: 100%;
+        height: 100%;
         margin: 0px;
         padding: 0px;
         list-style: none;
@@ -48,12 +48,13 @@ const StyledView = styled.div`
         }
 
         li div:first-child {
-            height: ${({type}) => type ? "" : "900px"};
+            height: ${({type}) => type ? "100%" : "100%"};
             background-color: black;
         }
 
         li div p {
             width: 100%;
+            height: 15%;
             top: -50px;
             text-align: center;
             position: absolute;
@@ -61,6 +62,12 @@ const StyledView = styled.div`
             font-weight: 100;
             color: white;
             background-color: black;
+            margin: 0px;
+
+            @media screen and (max-width: 770px) {
+                font-size: 13px;
+            
+            }
         }
 
         li div img {

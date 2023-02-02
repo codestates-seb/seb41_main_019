@@ -4,9 +4,11 @@ import { AiFillSetting } from "react-icons/ai";
 import defaultProfileImg from "../../assets/img/plants/defaultProfileImg.png";
 
 const StyledContainer = styled.div`
+  width: 100%;
   display: flex;
   margin-top: 20px;
   justify-content: center;
+  align-items: center;
   a {
     text-decoration: none;
     color: black;
@@ -15,10 +17,15 @@ const StyledContainer = styled.div`
   > div {
     margin: 0 10px;
   }
+
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    font-size: 13px;
+  }
 `;
 const StyledUserImgWrapper = styled.div`
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: 130px;
   border-radius: 70%;
   border: solid 1px #dbdbdb;
   overflow: hidden;
@@ -27,11 +34,20 @@ const StyledUserImgWrapper = styled.div`
     height: 100%;
     object-fit: cover;
   }
+
+  @media screen and (max-width: 770px) {
+    width: 75px;
+    height: 75px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 `;
 const StyledInfoBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 320px;
+  width: 70%;
   height: 150px;
   > div {
     height: 50px;
@@ -87,7 +103,6 @@ const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowi
               <a href="/setting">
                 <span>
                   <AiFillSetting />
-                  설정
                 </span>
               </a>
             }
