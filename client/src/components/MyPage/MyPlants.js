@@ -25,42 +25,49 @@ const StyledContainer = styled.div`
 const StyledMyPlantsDashBoard = styled.div`
   display: flex;
   width: 100%;
-  .move-button {
-    width: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+
   .icon {
     width: 100%;
     height: 30%;
   }
 `;
 
-const StyledPagination = styled.div`
+const StyledMoveButton = styled.div`
+  width: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  background-color: white;
-  margin-bottom: 5px;
+  cursor: pointer;
 
-  > div {
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background-color: grey;
-    opacity: 0.8;
-    box-shadow: 2px 2px 2px #dbdbdb;
-    margin: 5px;
-  }
-
-  > div:nth-child(${props => props.curPage}) {
-    width: 15px;
-    height: 15px;
-    background-color: #D96848;
+  &.hidden {
+    opacity: 0.1;
   }
 `
+
+// const StyledPagination = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 100%;
+//   background-color: white;
+//   margin-bottom: 5px;
+
+//   > div {
+//     width: 13px;
+//     height: 13px;
+//     border-radius: 50%;
+//     background-color: grey;
+//     opacity: 0.8;
+//     box-shadow: 2px 2px 2px #dbdbdb;
+//     margin: 5px;
+//   }
+
+//   > div:nth-child(${props => props.curPage}) {
+//     width: 15px;
+//     height: 15px;
+//     background-color: #D96848;
+//   }
+// `
 
 const StyledListsContainer = styled.div`
   display: flex;
@@ -199,10 +206,8 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
 
   const handlePrevButtonClick = () => {
     if (myPlantsData.length === 0) {
-      alert("먼저 반려식물을 등록해주세요.")
       return;
     } else if(curPage === 1) {
-      alert("가장 앞 페이지입니다.")
       return;
     } else {
       setCurPage(curPage - 1);
@@ -211,10 +216,8 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
 
   const handleNextButtonClick = () => {
     if (myPlantsData.length === 0) {
-      alert("먼저 반려식물을 등록해주세요.")
       return;
     } else if(curPage === totalPages) {
-      alert("마지막 페이지입니다.")
       return;
     } else{
       setCurPage(curPage + 1);
@@ -235,12 +238,12 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
   return (
     <StyledContainer>
       <StyledMyPlantsDashBoard>
-        <div
-          className="move-button"
+        <StyledMoveButton
+          className={`${totalPages === 0 || curPage === 1 ? "hidden" : ""}`}
           onClick={handlePrevButtonClick}
         >
           <GrPrevious className="icon" />
-        </div>
+        </StyledMoveButton>
         <StyledListsContainer>
           {isOwnPage &&           
           <StyledMyPlantsItem onClick={totalElements === 9 ? alertAddPlant : handleAddPlant}>
@@ -268,12 +271,12 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
               <p>등록된 반려식물이 없습니다.</p>
             </StyledNoContents>}
         </StyledListsContainer>
-        <div
-          className="move-button"
+        <StyledMoveButton
+          className={`${totalPages === 0 || curPage === totalPages ? "hidden" : ""}` }
           onClick={handleNextButtonClick}
         >
           <GrNext className="icon" />
-        </div>
+        </StyledMoveButton>
       </StyledMyPlantsDashBoard>
       {/* <StyledPagination curPage={curPage}>
         {renderPageDots()}

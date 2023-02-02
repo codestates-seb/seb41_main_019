@@ -1,12 +1,12 @@
-import Logo from "../public/Logo"
-import styled from "styled-components"
-import { useEffect, useRef, useState } from "react"
-import DefaultInput from "./DefaultInput"
-import axios from "axios"
-import Cookie from "../../util/Cookie"
-import { decode } from "../../util/decode"
-import { saveId, loadId, deleteId } from "../../util/saveId"
-import useModal from "../../hooks/useModal"
+import styled from "styled-components";
+import { useEffect, useRef, useState } from "react";
+import DefaultInput from "./DefaultInput";
+import axios from "axios";
+import Cookie from "../../util/Cookie";
+import { decode } from "../../util/decode";
+import { saveId, loadId, deleteId } from "../../util/saveId";
+import useModal from "../../hooks/useModal";
+import logo from "../../assets/logo.png";
 
 const Wrapper = styled.div`
     position: absolute;
@@ -29,6 +29,11 @@ const StyledLogin = styled.div`
     border: 1px solid #dbdbdb;
     border-radius: 3px;
     margin: 0px 0px 50px 0px;
+
+    img {
+        height: 60px;
+        margin: 0px 0px 40px 0px;
+    }
 `
 
 const StyledCheck = styled.div`
@@ -93,9 +98,15 @@ const Login = ({ setSelected, setIsLanded }) => {
     }, [])
 
     const handleLogin = () => {
-        if(document.getElementById("saveId").checked) {
-            saveId(id);
-        } else deleteId();
+        if(id.length < 1) {
+            inputRef.current[0].focus();
+            return;
+        }
+
+        if(pw.length < 1) {
+            inputRef.current[1].focus();
+            return;
+        }
 
         axios({
             method: "post",
@@ -117,18 +128,20 @@ const Login = ({ setSelected, setIsLanded }) => {
             cookie.set("refresh", res.headers.refresh, { expires: date });
 
             setIsLanded(false);
+
+            if(document.getElementById("saveId").checked) {
+                saveId(id);
+            } else deleteId();
         })
         .catch(e => {
-            if(e.response.status === 401) {
-                open();
-            }
+            open();
         })
     }
 
     return (
         <Wrapper>
             <StyledLogin>
-                <Logo />
+                <img src={logo} alt="img" />
                 <form onSubmit={() => false}>
                     <DefaultInput label="아이디" id="id" state={id} setState={setId} inputRef={inputRef} idx={0} 
                         autocomplete="off" handleLogin={handleLogin} />
