@@ -305,6 +305,7 @@ const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
               <IoAlertCircleOutline /> <span>알림</span>
             </li>
             <li onClick={() => {
+              handleIsOpend();
               navigate("/mypage", {state:{id}})
             }}>
               <BsPerson /> <span>프로필</span>
