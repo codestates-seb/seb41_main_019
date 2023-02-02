@@ -79,6 +79,7 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 770px) {
         margin-left: 10px;
+        font-size: 13px;
 
         p {
             width: 130px;
