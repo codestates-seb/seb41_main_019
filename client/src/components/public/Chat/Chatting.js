@@ -120,7 +120,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend, setChatChange,
       preLog.push(res)
       setLog(soltChat(preLog));
       setTimeout(() => {
-        ul.current.scrollIntoView({block: "end", behavior: "smooth"})
+        ul.current.scrollIntoView({block: "end", behavior: "smooth"});
       }, 150)
     }
   }, [res])
@@ -129,7 +129,7 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend, setChatChange,
     send(curChat, Number(cookie.get("memberId")), message);
     setMessage("");
     setTimeout(() => {
-      ul.current.scrollIntoView({block: "end", behavior: "smooth"})
+      ul.current.scrollIntoView({block: "end", behavior: "smooth"});
     }, 150)
 
     if(curChat.leaveId === Number(cookie.get("memberId"))) {

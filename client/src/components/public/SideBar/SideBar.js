@@ -244,7 +244,7 @@ const StyledExtend = styled.div`
   }
 `
 
-const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
+const Sidebar = ({ handleIsPosted, setIsLanded, change, setChange }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
@@ -269,7 +269,10 @@ const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
   return (
     <>
       <StyledHeader>
-        <h3 onClick={() => navigate("/")}>
+        <h3 onClick={() => {
+          navigate("/")
+          setChange(!change);
+        }}>
           <span>IncleaF</span>
           <RiLeafLine />
         </h3>

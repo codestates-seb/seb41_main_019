@@ -15,7 +15,7 @@ export const useAlert = (alert) => {
     useEffect(() => {
         axios({
             method: "get",
-            url: `${process.env.REACT_APP_API}/notification/${id}?page=1&size=10`,
+            url: `${process.env.REACT_APP_API}/notification/${id}?page=1&size=500`,
             headers: { Authorization }
         }).then(res => {
             console.log(res.data.data)
@@ -32,7 +32,7 @@ export const useAlert = (alert) => {
         const sse = new EventSource(url, { headers: { "Authorization": cookie.get("authorization")} })
 
         sse.onopen = (res) => {
-            console.log("sse connected...");
+            // console.log("sse connected...");
         }
 
         sse.addEventListener("sse", res => {
@@ -44,7 +44,7 @@ export const useAlert = (alert) => {
         })
 
         sse.onerror = (err) => {
-            console.log("sse closed...");
+            // console.log("sse closed...");
         }
 
         return sse;
@@ -59,5 +59,17 @@ export const useAlert = (alert) => {
         }
     }
 
-    return {log, newLog, setLog, fatchLog, connect, soltText};
+    const confirmAlert = (id) => {
+        axios({
+            method: "patch",
+            url: `${process.env.REACT_APP_API}/notification`,
+            headers: { Authorization }
+        }).then(res => {
+            setPatchLog(!patchLog);
+        }).catch(err => {
+
+        })
+    }
+
+    return {log, newLog, setLog, fatchLog, connect, soltText, confirmAlert};
 }

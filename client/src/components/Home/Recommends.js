@@ -77,7 +77,7 @@ const Recommends = ({ change, handleModal, setCurPost }) => {
     }, [change, clickedBtn]);
 
     return (
-        <StyledSection>
+        <StyledSection id="movoTo">
             <StyledHeader>
                 <button className={clickedBtn === 0 ? 'active' : null} onClick={(e) => setClickedBtn(0)}>All</button>
                 <button className={clickedBtn === 1 ? 'active' : null} onClick={(e) => setClickedBtn(1)}>Follow</button>
