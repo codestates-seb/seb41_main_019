@@ -212,11 +212,11 @@ const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
               {currentPlantData && <Gallery isCovered={isCovered} isPlantImageViewOpened={isPlantImageViewOpened} setPostCount={setPostCount} currentView={currentView} userInfo={userInfo} currentPlantData={currentPlantData} handlePlantImageView={handlePlantImageView}/> }
               {isOwnPage &&          
                 <p>
-                  My Plants 접기 <TiArrowSortedUp />
+                  My Plants 닫기 <TiArrowSortedUp />
                 </p>}
               {!isOwnPage && 
                 <p>
-                  {userInfo.userName}님의 Plants 접기 <TiArrowSortedUp />
+                  {userInfo.userName}님의 Plants 닫기 <TiArrowSortedUp />
                 </p>}
             </StyledMyPlantFolder>
           </div>
@@ -226,11 +226,11 @@ const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
           <StyledMyPlantFolder>
             {isOwnPage &&          
               <p onClick={handleFolderClick}>
-                My Plants 접기 <TiArrowSortedDown />
+                My Plants 열기 <TiArrowSortedDown />
               </p>}
             {!isOwnPage && 
               <p onClick={handleFolderClick}>
-                {userInfo.userName}님의 Plants 펼치기 <TiArrowSortedDown />
+                {userInfo.userName}님의 Plants 열기 <TiArrowSortedDown />
               </p>}
             <StyledChangeViewContainer>
               <StyledChangeViewButton
