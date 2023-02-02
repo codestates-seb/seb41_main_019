@@ -32,7 +32,7 @@ export const useAlert = (alert) => {
         const sse = new EventSource(url, { headers: { "Authorization": cookie.get("authorization")} })
 
         sse.onopen = (res) => {
-            console.log("sse connected...")
+            console.log("sse connected...");
         }
 
         sse.addEventListener("sse", res => {
