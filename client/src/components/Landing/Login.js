@@ -86,7 +86,9 @@ const Login = ({ setSelected, setIsLanded }) => {
     const cookie = new Cookie()
 
     useEffect(() => {
-        inputRef.current[0].focus();
+        if(inputRef.current[0].value) {
+            inputRef.current[1].focus();
+        } else inputRef.current[0].focus();
         document.getElementById("saveId").checked = cookie.get("id") ? true : false;
     }, [])
 
@@ -130,7 +132,7 @@ const Login = ({ setSelected, setIsLanded }) => {
                 <form onSubmit={() => false}>
                     <DefaultInput label="아이디" id="id" state={id} setState={setId} inputRef={inputRef} idx={0} 
                         autocomplete="off" handleLogin={handleLogin} />
-                    <DefaultInput label="패스워드" id="password" type="password" handleLogin={handleLogin}
+                    <DefaultInput label="비밀번호" id="password" type="password" handleLogin={handleLogin}
                         state={pw} setState={setPw} inputRef={inputRef} idx={1} />
                 </form>
                 <StyledCheck>
