@@ -105,7 +105,6 @@ const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
 
   useEffect(() => {
     if (path === "/mypage" || myMemberId === memberId) {
-      console.log("wow")
       setIsOwnPage(true)
     } else {
       setIsOwnPage(false)
@@ -114,17 +113,16 @@ const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
   }, [memberId, change])
   
   const getUserInfo = () => {
-    console.log("change")
-      axios({
-        method: "get",
-        url: `${process.env.REACT_APP_API}/members/${memberId}`,
-        headers: {
-          Authorization: jwt,
-        },
-      }).then((res) => {
-        setUserInfo(res.data.data)
-      }).catch ((err) => 
-      console.error(err))
+    axios({
+      method: "get",
+      url: `${process.env.REACT_APP_API}/members/${memberId}`,
+      headers: {
+        Authorization: jwt,
+      },
+    }).then((res) => {
+      setUserInfo(res.data.data)
+    }).catch ((err) => 
+    console.error(err))
   };
 
   const handleFollowers = () => {
