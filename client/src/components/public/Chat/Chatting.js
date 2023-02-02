@@ -173,7 +173,9 @@ const Chatting = ({ curChat, curFriend, setCurChat, setCurFriend, setChatChange,
       </StyledChatLog>
       <StyledInput>
         <input type="text" placeholder="text.." value={message} ref={input}
-          onChange={(e) => setMessage(e.target.value)}></input>
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
+        ></input>
         <button onClick={handleSend}><MdSend /></button>
       </StyledInput>
     </div>

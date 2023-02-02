@@ -58,8 +58,6 @@ const PlantThumbnail = ({handlePlantClick , currentPlantData, el}) => {
         getThumbnailImg(lastGalleryId)
       }
 
-    console.log(imgSrc)
-
     return (
     <StyledMyPlantsItem onClick={() => handlePlantClick(el)}> 
         <div

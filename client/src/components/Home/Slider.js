@@ -68,7 +68,7 @@ const Wrapper = styled.div`
 
 const Slider = ({ imgs, type = "view" }) => {
     const [cur, setCur] = useState(0);
-
+    
     return (
         <Wrapper type={type} >
             <ul>

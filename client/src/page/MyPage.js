@@ -74,11 +74,12 @@ const StyledChangeViewButton = styled.div`
   }
 `;
 
-const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
+const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
   const myMemberId = cookie.get("memberId");
   const memberId = useLocation().state.id;
+  const path = useLocation().pathname;
 
   // 데이터 상태관리
   const [isOwnPage, setIsOwnPage] = useState(myMemberId === memberId)
@@ -88,7 +89,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const [commentId, setCommentId] = useState(null);
   const [commentMenu, setCommentMenu] = useState(false);
   const [currentPlantData, setCurrentPlantData] = useState(null);
-  const [plantImageViewData, setplantImageViewData] = useState({
+  const [plantImageViewData, setPlantImageViewData] = useState({
     imgs: [],
     imgIdx: null,
   });
@@ -101,13 +102,19 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
   const [isPlantImageViewOpened, setIsPlantImageViewOpened] = useState(false);
   const [isFollowersOpened, setIsFollowersOpened] = useState(false);
   const [isFollowingsOpened, setIsFollowingsOpened] = useState(false);
-  
+
   useEffect(() => {
+    if (path === "/mypage" || myMemberId === memberId) {
+      console.log("wow")
+      setIsOwnPage(true)
+    } else {
+      setIsOwnPage(false)
+    }
     getUserInfo()
-    setIsOwnPage(myMemberId === memberId)
-  }, [memberId])
+  }, [memberId, change])
   
   const getUserInfo = () => {
+    console.log("change")
       axios({
         method: "get",
         url: `${process.env.REACT_APP_API}/members/${memberId}`,
@@ -141,10 +148,10 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
     handleIsCovered();
   };
 
-  const handlePlantImageView = (imgs, imgIdx) => {
-    setplantImageViewData({
-      imgs: imgs,
-      imgIdx: imgIdx
+  const handlePlantImageView = (galleryData, galleryIdx) => {
+    setPlantImageViewData({
+      galleryData,
+      galleryIdx,
     })
     setIsPlantImageViewOpened(!isPlantImageViewOpened);
     handleIsCovered()
@@ -171,7 +178,7 @@ const MyPage = ({ isCovered, handleIsCovered, handleChange }) => {
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
       {isCovered && isPlantImageViewOpened && <PlantImageView handlePlantImageView={handlePlantImageView} plantImageViewData={plantImageViewData} />}
       {isCovered && isFollowersOpened && <Followers handleFollowers={handleFollowers} followers={userInfo.followerList}/>}
-      {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList}/>}
+      {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList} handleChange={handleChange} change={change}/>}
       <StyledContainer>
         <UserInfo isOwnPage={isOwnPage} handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount}/>
         {isFolderOpened && 

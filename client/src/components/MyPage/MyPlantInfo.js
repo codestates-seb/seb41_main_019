@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import MyPlantEdit from "./MyPlantEdit";
 import { useState } from "react";
+import Cookie from "../../util/Cookie";
 
 import { BsTag, BsCalendar3 } from "react-icons/bs";
 import { TbPlant } from "react-icons/tb";
+import axios from "axios";
+import { useEffect } from "react";
 
 const StyledContainer = styled.div`
   position: relative;
@@ -63,19 +66,53 @@ const StyledUpdateButtons = styled.div`
 `;
 
 const MyPlantInfo = ({ isOwnPage, havePlantDeleted, currentPlantData, setCurrentPlantData, handleChange, currentView, setCurrentView }) => {
-  const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const cookie = new Cookie();
+  const jwt = cookie.get("authorization")
 
-  // const [form, setForm] = useState({
-  //   plantName: plantName,
-  //   plantType: plantType,
-  //   plantBirthday: plantBirthDay,
-  // })
+  const nowDate = new Date();
+  const today = nowDate.toISOString().substring(0,10)
+  
+  const { plantName, plantType, plantBirthDay, myPlantsId} = currentPlantData;
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [form, setForm] = useState({
+    plantName: plantName,
+    plantType: plantType,
+    plantBirthday: plantBirthDay,
+  })
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios({
+      method: "patch",
+      url: `${process.env.REACT_APP_API}/myplants/${myPlantsId}`,
+      headers: {
+        "Authorization" : jwt
+      },
+      data: {
+        "myPlantsId" : myPlantsId,
+        "plantName" : form.plantName,
+        "plantType" : form.plantType,
+        "plantBirthDay" : form.plantBirthday
+      }
+    }).then(res => {
+      console.log(res.data)
+      handleUpdateMode();
+      alert("수정되었습니다.")
+    }).catch(
+      e => {
+        console.error(e)
+      }
+    )
+  }
+
+  const handleInputChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleUpdateMode = () => {
     setIsUpdateMode(!isUpdateMode);
   };
 
-  const { plantName, plantType, plantBirthDay } = currentPlantData;
   return (
     <StyledContainer>
       {isUpdateMode && 
@@ -84,23 +121,23 @@ const MyPlantInfo = ({ isOwnPage, havePlantDeleted, currentPlantData, setCurrent
             <div>
               <p>
                 <TbPlant />
-                <input value={plantName} />
+                <input value={form.plantName} onChange={handleInputChange} type="text" name="plantName"/>
               </p>
             </div>
             <div>
               <span>
                 <BsTag />
-                <input value={plantType} />
+                <input value={form.plantType} onChange={handleInputChange} type="text" name="plantType"/>
               </span>
               <span>
                 <BsCalendar3 />
-                <input value={plantBirthDay} />
+                <input value={form.plantBirthday} onChange={handleInputChange} max={today} type="date" name="plantBirthday"/>
               </span>
             </div>
           </StyledPlantInfoBox>
           <StyledButtonsContainer>
             <div className="wrapper">
-              <StyledUpdateButtons>수정 완료</StyledUpdateButtons>
+              <StyledUpdateButtons onClick={handleSubmit}>수정 완료</StyledUpdateButtons>
               <StyledUpdateButtons onClick={handleUpdateMode}>
                 취소
               </StyledUpdateButtons>

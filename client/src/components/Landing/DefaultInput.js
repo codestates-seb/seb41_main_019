@@ -29,12 +29,13 @@ const StyledInput = styled.div`
     }
 `
 
-const DefaultInput = ({ label, id, type = "text", state, setState, inputRef, idx }) => {
+const DefaultInput = ({ label, id, type = "text", state, setState, inputRef, idx, handleLogin }) => {
     return (
         <StyledInput>
             <label htmlFor={id} className={state.length > 0 ? "valid" : ""}>{label}</label>
             <input id={id} type={type} value={state}
                 onChange={(e) => setState(e.target.value)} ref={(el) => inputRef.current[idx] = el}
+                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
                 autoComplete={id === "password" ? "off" : "on"}/>
         </StyledInput>
     )

@@ -51,7 +51,7 @@ const Followers = ({handleFollowers, followers}) => {
         <ul>
           {followers.length > 0 
             ? followers.map((follower, idx) => (
-              <FollowerItem follower={follower} key={follower.followerId}/>
+              <FollowerItem handleFollowers={handleFollowers} follower={follower} key={follower.followerId}/>
           )) : "팔로워가 없습니다."}
         </ul>
       </StyledContainer>

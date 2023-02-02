@@ -79,13 +79,13 @@ function App() {
         <Route
           path={isLanded ? null : "/mypage"}
           element={
-            <MyPage isCovered={isCovered} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
+            <MyPage isCovered={isCovered} change={change} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
           }
         />
         <Route
           path={isLanded ? null : "/member"}
           element={
-            <MyPage isCovered={isCovered} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
+            <MyPage isCovered={isCovered} change={change} handleIsCovered={handleIsCovered} handleChange={handleChange}  />
           }
         />
         <Route

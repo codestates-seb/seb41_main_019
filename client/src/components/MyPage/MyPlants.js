@@ -33,6 +33,31 @@ const StyledMyPlantsDashBoard = styled.div`
   }
 `;
 
+const StyledPagination = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: white;
+  margin-bottom: 5px;
+
+  > div {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: grey;
+    opacity: 0.8;
+    box-shadow: 2px 2px 2px #dbdbdb;
+    margin: 5px;
+  }
+
+  > div:nth-child(${props => props.curPage}) {
+    width: 15px;
+    height: 15px;
+    background-color: #D96848;
+  }
+`
+
 const StyledListsContainer = styled.div`
   display: flex;
   width: 700px;
@@ -93,23 +118,47 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
 
-  const [myPlantsData, setMyPlantsData] = useState(null);
+  const [myPlantsData, setMyPlantsData] = useState([]);
   const [isPanelOpened, setIsPanelOpened] = useState(false);
-  
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
+  const [curPage, setCurPage] = useState(1);
+
   const getMyPlantsData = () => {
-    axios({
-      method: "get",
-      url: `${process.env.REACT_APP_API}/${userInfo.memberId}/myplants?page=1&size=10`,
-      headers: {
-        "Authorization" : jwt
-      },
-    })
-    .then((res) => {
-      setMyPlantsData(res.data.data)}
-    ).catch((err) => console.error(err))
+    if (isOwnPage) {
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_API}/${userInfo.memberId}/myplants?page=${curPage}&size=3`,
+        headers: {
+          "Authorization" : jwt
+        },
+      })
+      .then((res) => {
+        setTotalElements(res.data.pageInfo.totalElements)
+        setTotalPages(res.data.pageInfo.totalPages)
+        setMyPlantsData(res.data.data)}
+      ).catch((err) => console.error(err))
+    } else {
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_API}/${userInfo.memberId}/myplants?page=${curPage}&size=4`,
+        headers: {
+          "Authorization" : jwt
+        },
+      })
+      .then((res) => {
+        setTotalElements(res.data.pageInfo.totalElements)
+        setTotalPages(res.data.pageInfo.totalPages)
+        setMyPlantsData(res.data.data)}
+      ).catch((err) => console.error(err))
+    }
   };
   
-  useEffect(() => getMyPlantsData(), [handleChange])
+  useEffect(() => getMyPlantsData(), [handleChange, userInfo, curPage, isOwnPage])
+
+  const alertAddPlant = () => {
+    alert("더 이상 추가하실 수 없습니다.")
+  }
 
   const handlePlantClick = (el) => {
     setCurrentView("plant")
@@ -122,31 +171,59 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
     setCurrentPlantData(null);
   }
 
-  const handleMoveButtonClick = (go) => {
-    // 이동 버튼 클릭
-    alert("구현 예정");
+  const handlePrevButtonClick = () => {
+    if (myPlantsData.length === 0) {
+      alert("먼저 반려식물을 등록해주세요.")
+      return;
+    } else if(curPage === 1) {
+      alert("가장 앞 페이지입니다.")
+      return;
+    } else {
+      setCurPage(curPage - 1);
+    }
   };
+
+  const handleNextButtonClick = () => {
+    if (myPlantsData.length === 0) {
+      alert("먼저 반려식물을 등록해주세요.")
+      return;
+    } else if(curPage === totalPages) {
+      alert("마지막 페이지입니다.")
+      return;
+    } else{
+      setCurPage(curPage + 1);
+    }
+  };
+
+  const renderPageDots = () => {
+    const result = [];
+    for(let i = 0; i < totalPages; i++) {
+      result.push(<div key={i}></div>)
+    }
+    if (result.length === 0) {
+      return (<div></div>)
+    }
+    return result
+  }
 
   return (
     <StyledContainer>
       <StyledMyPlantsDashBoard>
         <div
           className="move-button"
-          onClick={() => {
-            handleMoveButtonClick("prev");
-          }}
+          onClick={handlePrevButtonClick}
         >
           <GrPrevious className="icon" />
         </div>
         <StyledListsContainer>
           {isOwnPage &&           
-          <StyledMyPlantsItem onClick={handleAddPlant}>
+          <StyledMyPlantsItem onClick={totalElements === 9 ? alertAddPlant : handleAddPlant}>
             <div className="image-wrapper">
               <Cookiee className="image" />
             </div>
             <p>반려식물 추가</p>
           </StyledMyPlantsItem>}
-          {myPlantsData && 
+          {myPlantsData.length !== 0 && 
             myPlantsData.map((el) => {
               return (
                 <PlantThumbnail 
@@ -157,7 +234,7 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
                   />
               )
               })}
-          {!myPlantsData && 
+          {myPlantsData.length === 0 && 
             <StyledNoContents>
               <div>
                 <RiPlantLine />
@@ -167,13 +244,14 @@ const MyPlants = ({ isOwnPage, currentView, setCurrentView, userInfo, currentPla
         </StyledListsContainer>
         <div
           className="move-button"
-          onClick={() => {
-            handleMoveButtonClick("next");
-          }}
+          onClick={handleNextButtonClick}
         >
           <GrNext className="icon" />
         </div>
       </StyledMyPlantsDashBoard>
+      <StyledPagination curPage={curPage}>
+        {renderPageDots()}
+      </StyledPagination>
       {isPanelOpened && <MyPlantInfo isOwnPage={isOwnPage} havePlantDeleted={havePlantDeleted} handleChange={handleChange} currentPlantData={currentPlantData} setCurrentPlantData={setCurrentPlantData} currentView={currentView} setCurrentView={setCurrentView}/>}
     </StyledContainer>
   );

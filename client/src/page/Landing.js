@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Logo from "../components/public/Logo";
 import Login from "../components/Landing/Login";
 import Main from "../components/Landing/Main";
@@ -59,6 +59,10 @@ const StyledHeader = styled.header`
 
 const Landing = ({ setIsLanded, isLanded }) => {
     const [ selected, setSelected ] = useState(0);
+
+    useEffect(() => {
+
+    }, [])
 
     return (
         <Wrapper>
