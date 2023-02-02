@@ -109,7 +109,9 @@ const Login = ({ setSelected, setIsLanded }) => {
             setIsLanded(false);
         })
         .catch(e => {
-            //실패 처리
+            if(e.response.status === 401) {
+                alert("계정 정보가 올바르지 않습니다.");
+            }
         })
     }
 
@@ -119,8 +121,8 @@ const Login = ({ setSelected, setIsLanded }) => {
                 <Logo />
                 <form onSubmit={() => false}>
                     <DefaultInput label="아이디" id="id" state={id} setState={setId} inputRef={inputRef} idx={0} 
-                        autocomplete="off" />
-                    <DefaultInput label="패스워드" id="password" type="password"
+                        autocomplete="off" handleLogin={handleLogin} />
+                    <DefaultInput label="패스워드" id="password" type="password" handleLogin={handleLogin}
                         state={pw} setState={setPw} inputRef={inputRef} idx={1} />
                 </form>
                 <StyledCheck>
