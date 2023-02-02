@@ -3,6 +3,11 @@ import styled from "styled-components";
 import { AiFillSetting } from "react-icons/ai";
 import defaultProfileImg from "../../assets/img/plants/defaultProfileImg.png";
 import { useNavigate } from "react-router-dom";
+import { follow } from "../../util/follow";
+import Cookie from "../../util/Cookie";
+
+import { AiOutlineUserDelete } from "react-icons/ai"
+import { AiOutlineUserAdd } from "react-icons/ai";
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -77,17 +82,35 @@ const StyledInfoItem = styled.div`
   width: 80px;
 `;
 
-const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowings, setCurrentView }) => {
+const StyledButton = styled.button`
+border: 0px;
+cursor: pointer;
+background-color: white;
+
+svg {
+  font-size: 22px;
+  color: #808080;
+
+  :hover {
+    color: #D96846;
+  }
+}
+`;
+
+const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowings, setCurrentView, handleChange }) => {
   const {
     memberId,
     userName,
-    email,
-    location,
     profileImage,
     profileText,
     followingList,
     followerList,
   } = userInfo;
+
+  console.log(followingList)
+
+  const cookie = new Cookie();
+  const myMemberId = Number(cookie.get("memberId"));
 
   const navigate = useNavigate();
 
@@ -104,9 +127,27 @@ const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowi
           <StyledUserName>
             <span>{userName}</span>
             {isOwnPage &&         
-                <span onClick={() => {navigate("/setting")}}>
-                  <AiFillSetting />
-                </span>
+              <span onClick={() => {navigate("/setting")}}>
+                <AiFillSetting />
+              </span>
+            }
+            {!isOwnPage && followerList &&
+              followerList.filter(e => e.followerId === myMemberId).length !== 0 &&
+                <StyledButton onClick={(e) => {
+                  e.stopPropagation();
+                  follow(false, followerList.filter(e => e.followerId === myMemberId)[0].followId , handleChange)
+                  }}>
+                  <AiOutlineUserDelete />
+                </StyledButton>
+            }
+            {!isOwnPage && followerList &&
+              followerList.filter(e => e.followerId === myMemberId).length === 0 &&
+              <StyledButton onClick={(e) => {
+                e.stopPropagation();
+                follow(true, memberId , handleChange)
+                }}>
+                < AiOutlineUserAdd />
+              </StyledButton>
             }
           </StyledUserName>
           <StyledUserInfoList>
