@@ -63,6 +63,10 @@ const Wrapper = styled.div`
             };
         }
     }
+
+    @media screen and (max-width: 770px) {
+        font-size: 13px;
+    }
 `;
 
 const DeleteProfile = ({ name, img, open }) => {

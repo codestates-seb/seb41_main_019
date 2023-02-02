@@ -6,7 +6,7 @@ import Cookie from "../../util/Cookie";
 
 const StyledInteraction = styled.div`
     background-color: white;
-    padding: 10px;
+    padding: 0px 10px 0px 10px;
 
     .interact {
         width: 100%;
@@ -25,7 +25,7 @@ const StyledInteraction = styled.div`
     p:nth-child(2) {
         font-weight: 600;
         font-size: 16px;
-        margin-bottom: 10px;
+        margin: 0px 0px 10px 0px;
         color: #222426;
     }
 

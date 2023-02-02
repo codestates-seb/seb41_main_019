@@ -40,7 +40,20 @@ const Wrapper= styled.div`
     }
 
     @media screen and (max-width: 770px) {
-        width: 480px;
+        width: 360px;
+        font-size: 12px;
+
+        .btns {
+            button {
+                width: 50px;
+                font-size: 12px;
+                margin-right: 10px;
+            }
+        }
+
+        input, textarea {
+            font-size: 12px;
+        }
     }
 `;
 
@@ -171,7 +184,7 @@ const EditPost = ({ handleEdit, curPost, handleChange, change }) => {
                     {value}
             </StyledTextarea>
             <Tags tags={tags} addTags={addTags} removeTags={removeTags} edit/>
-            <div>
+            <div className="btns">
                 <BlueBtn onClick={handleSubmit}>작성</BlueBtn>
                 <BlueBtn onClick={handleEdit}>취소</BlueBtn>
             </div>

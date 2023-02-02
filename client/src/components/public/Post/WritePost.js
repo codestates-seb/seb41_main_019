@@ -40,7 +40,20 @@ const Wrapper= styled.div`
     }
 
     @media screen and (max-width: 770px) {
-        width: 480px;
+        width: 360px;
+        font-size: 12px;
+
+        .btns {
+            button {
+                width: 50px;
+                font-size: 12px;
+                margin-right: 5px;
+            }
+        }
+
+        input, textarea {
+            font-size: 12px;
+        }
     }
 `;
 
@@ -143,7 +156,7 @@ const WritePost = ({ handleIsPosted, handleChange }) => {
                     {value}
             </StyledTextarea>
             <Tags tags={tags} addTags={addTags} removeTags={removeTags} />
-            <div>
+            <div className="btns">
                 <BlueBtn onClick={handleSubmit}>작성</BlueBtn>
                 <BlueBtn onClick={handleIsPosted}>취소</BlueBtn>
             </div>

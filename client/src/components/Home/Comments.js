@@ -10,7 +10,6 @@ import { BiDotsHorizontalRounded } from "react-icons/bi";
 const StyledComments = styled.ul`
     display: flex;
     flex-direction: column;
-    gap: 7px;
     height: 100%;
     background-color: white;
     overflow: scroll;
@@ -71,6 +70,7 @@ const StyledComments = styled.ul`
 
     li .setting {
         display: flex;
+        margin: 0px 0px 0px auto;
 
         svg {
             width: 15px;
@@ -84,8 +84,8 @@ const StyledComments = styled.ul`
     }
 
     @media screen and (max-width: 1024px) {
-        height: 200px;
-
+        max-height: 400px;
+    
         .commentContent {
             width: 330px;
         }
@@ -98,7 +98,7 @@ const StyledMyComments = styled.div`
     border-top: 1px solid #dbdbdb;
 
     @media screen and (max-width: 1024px) {
-        height: 10%;
+        height: 15%;
     }
 `;
 

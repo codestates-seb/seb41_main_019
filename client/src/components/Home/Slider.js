@@ -53,12 +53,21 @@ const Wrapper = styled.div`
             display: none;
         }
     }
+
+    @media screen and (max-width: 770px) {
+        height: ${({type}) => type === "post" ? "360px" : "100%"};
+        ul li div:first-child {
+            height: ${({type}) => type === "post" ? "360px" : "100%"}; 
+        }
+
+        ul li div img {
+            height: ${({type}) => type === "post" ? "360px" : "100%"};
+        }
+    }
 `;
 
 const Slider = ({ imgs, type = "view" }) => {
     const [cur, setCur] = useState(0);
-
-    console.log(type);
 
     return (
         <Wrapper type={type} >
