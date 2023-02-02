@@ -51,7 +51,7 @@ const StyledUserName = styled.div`
 const StyledUserInfoList = styled.div`
   display: flex;
   justify-content: space-between;
-  div:nth-child(2), div:nth-child(3) {
+  div {
     cursor: pointer;
   }
 `;
@@ -61,7 +61,7 @@ const StyledInfoItem = styled.div`
   width: 80px;
 `;
 
-const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowings }) => {
+const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowings, setCurrentView }) => {
   const {
     memberId,
     userName,
@@ -95,7 +95,7 @@ const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowi
             }
           </StyledUserName>
           <StyledUserInfoList>
-              <StyledInfoItem>
+              <StyledInfoItem onClick={() => setCurrentView("postings")} >
                 <p>게시물</p>
                 <p>{postCount}</p>
               </StyledInfoItem>

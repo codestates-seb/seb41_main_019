@@ -192,7 +192,7 @@ const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
       {isCovered && isFollowersOpened && <Followers handleFollowers={handleFollowers} followers={userInfo.followerList}/>}
       {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList} handleChange={handleChange} change={change}/>}
       <StyledContainer>
-        <UserInfo isOwnPage={isOwnPage} handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount}/>
+        <UserInfo isOwnPage={isOwnPage} handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount} setCurrentView={setCurrentView}/>
         {isFolderOpened && 
           <div className="container">
             <MyPlants
