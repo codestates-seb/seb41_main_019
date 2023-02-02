@@ -38,7 +38,7 @@ const StyledContainer = styled.div`
 
 `
 
-const Followers = ({handleFollowers, followers}) => {
+const Followers = ({handleFollowers, followers, handleChange, isOwnPage }) => {
   useEffect(() => {
       document.getElementById("bg").addEventListener("click", () => {
         handleFollowers();
@@ -51,7 +51,7 @@ const Followers = ({handleFollowers, followers}) => {
         <ul>
           {followers.length > 0 
             ? followers.map((follower, idx) => (
-              <FollowerItem handleFollowers={handleFollowers} follower={follower} key={follower.followerId}/>
+              <FollowerItem handleChange={handleChange} isOwnPage={isOwnPage} handleFollowers={handleFollowers} follower={follower} key={follower.followerId}/>
           )) : "팔로워가 없습니다."}
         </ul>
       </StyledContainer>

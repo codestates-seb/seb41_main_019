@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 import { AiOutlineUserDelete } from "react-icons/ai"
 import { follow } from "../../util/follow";
-import { useEffect } from "react";
 
 const StyledFollowingsItem = styled.li`
   display: flex;
@@ -69,13 +68,12 @@ const StyledFollowingsItem = styled.li`
     }
   `;
 
-const FollowingsItem = ({handleFollowings, following, handleChange}) => {
+const FollowingsItem = ({handleFollowings, following, handleChange, isOwnPage}) => {
     const navigate = useNavigate();
     const handleFollowingClick = () => {
       handleFollowings();
       navigate("/member", { state: { id: following.followingId}})
     }
-
     return (
         <StyledFollowingsItem>
             <div onClick={handleFollowingClick}>
@@ -88,12 +86,13 @@ const FollowingsItem = ({handleFollowings, following, handleChange}) => {
                 <span>{following.userName}</span>
                 <span>{following.profileText}</span>
             </div>
-            <StyledButton onClick={(e) => {
-              e.stopPropagation();
-              follow(false, following.followId, handleChange)
-              }}>
-              <AiOutlineUserDelete />
-            </StyledButton>
+            {isOwnPage && 
+              <StyledButton onClick={(e) => {
+                e.stopPropagation();
+                follow(false, following.followId, handleChange)
+                }}>
+                <AiOutlineUserDelete />
+              </StyledButton>}
         </StyledFollowingsItem>
     )
 }

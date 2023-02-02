@@ -189,8 +189,8 @@ const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
       {isCovered && isViewOpened && <View handleModal={handleModal} curPost={curPost} handleChange={handleChange} handleCommentMenu={handleCommentMenu} setCommentId={setCommentId}/>}
       {isCovered && isAddPlantOpened && <AddPlant jwt={jwt} handleAddPlant={handleAddPlant} userInfo={userInfo} handleChange={handleChange} />}
       {isCovered && isPlantImageViewOpened && <PlantImageView handlePlantImageView={handlePlantImageView} plantImageViewData={plantImageViewData} />}
-      {isCovered && isFollowersOpened && <Followers handleFollowers={handleFollowers} followers={userInfo.followerList}/>}
-      {isCovered && isFollowingsOpened && <Followings handleFollowings={handleFollowings} followings={userInfo.followingList} handleChange={handleChange} change={change}/>}
+      {isCovered && isFollowersOpened && <Followers isOwnPage={isOwnPage} handleFollowers={handleFollowers} followers={userInfo.followerList} handleChange={handleChange}/>}
+      {isCovered && isFollowingsOpened && <Followings isOwnPage={isOwnPage} handleFollowings={handleFollowings} followings={userInfo.followingList} handleChange={handleChange}/>}
       <StyledContainer>
         <UserInfo isOwnPage={isOwnPage} handleFollows={handleFollowers} handleFollowings={handleFollowings} userInfo={userInfo} postCount={postCount} setCurrentView={setCurrentView}/>
         {isFolderOpened && 
