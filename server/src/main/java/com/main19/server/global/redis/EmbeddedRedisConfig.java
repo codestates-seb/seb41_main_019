@@ -17,6 +17,9 @@ public class EmbeddedRedisConfig {
     @Value("${spring.redis.port}")
     private int redisPort;
 
+    @Value("${spring.redis.password}")
+    private String redisPassword;
+
     private RedisServer redisServer;
 
     @PostConstruct
@@ -25,6 +28,7 @@ public class EmbeddedRedisConfig {
         redisServer = RedisServer.builder()
             .port(redisPort)
             .setting("maxmemory 128M")
+            .setting("requirepass " + redisPassword)
             .build();
 
         redisServer.start();
