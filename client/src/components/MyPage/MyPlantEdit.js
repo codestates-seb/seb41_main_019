@@ -9,19 +9,15 @@ import AddPlantImage from "./AddPlantImage";
 
 const StyledContainer = styled.div`
   display: flex;
+
   > p {
     display: flex;
-    position: absolute;
-    transform: translateX(-50px);
-    width: 50px;
-    margin: 20px 0;
+    margin: 0px;
     cursor: pointer;
-  }
-  > p:nth-child(2) {
-    transform: translate(-50px, 25px);
   }
 
   svg {
+    margin: 10px 0px 0px 3px;
     width: 20px;
     height: 20px;
   }
@@ -29,7 +25,7 @@ const StyledContainer = styled.div`
 
 const StyledMenuContainer = styled.div`
   position: absolute;
-  top: 60px;
+  top: 40px;
   right: -100px;
   display: flex;
   flex-direction: column;
@@ -38,13 +34,19 @@ const StyledMenuContainer = styled.div`
   border: 1px solid #dbdbdb;
   border-radius: 5px;
   box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.3);
+
+  @media screen and (max-width: 770px) {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    z-index: 400;
+  }
 `;
 const StyledMenuItem = styled.div`
   z-index: auto;
   display: flex;
   height: 100%;
   background-color: white;
-  opacity: 0.4;
   border: 0;
   border-bottom: 1px solid #dbdbdb;
   font-size: 14px;
@@ -99,11 +101,9 @@ const MyPlantEdit = ({ handleChange, handleUpdateMode, currentPlantData, havePla
     <StyledContainer>
       <p onClick={handleAddClick}>
         <TbCameraPlus />
-        추가
       </p>
       <p onClick={handleEditModal}>
         <BsThreeDotsVertical />
-        편집
       </p>
       {isAddModalOn && <AddPlantImage handleAddClick={handleAddClick} currentPlantId={currentPlantData.myPlantsId} currentView={currentView} setCurrentView={setCurrentView}/>}
       {isEditModalOn && (

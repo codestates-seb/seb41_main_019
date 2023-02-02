@@ -45,15 +45,25 @@ const StyledNoContents = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ababa7;
+  background-color: white;
+
   svg {
     width: 100px;
     height: 100px;
   }
   p {
     font-size: 1.5em;
-    color: white;
+    color: black;
     cursor: default;
+  }
+
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    height: 500px;
+
+    p {
+      font-size: 13px;
+    }
   }
 `;
 

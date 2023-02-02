@@ -20,6 +20,11 @@ const StyledMyPlantsItem = styled.div`
     border-radius: 70%;
     overflow: hidden;
     cursor: pointer;
+
+    @media screen and (max-width: 770px) {
+      width: 50px;
+      height: 50px;
+    }
   }
   .image {
     width: 100%;
@@ -31,6 +36,10 @@ const StyledMyPlantsItem = styled.div`
     justify-content: center;
     width: 100%;
     font-size: 0.8em;
+  }
+
+  @media screen and (max-width: 770px) {
+    margin: 0px 10px;
   }
 `;
 
