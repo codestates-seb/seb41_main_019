@@ -104,6 +104,20 @@ const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
   const [isFollowingsOpened, setIsFollowingsOpened] = useState(false);
 
   useEffect(() => {
+    if(isViewOpened && curPost) {
+      axios({
+        method: "get",
+        url: `${process.env.REACT_APP_API}/posts/${curPost.postingId}`,
+        headers: { Authorization: cookie.get("authorization") }
+        }).then(res => {
+            setCurPost(res.data.data)
+        }).catch(e => {
+           console.log(e);
+        });
+    }
+  }, [handleChange])
+
+  useEffect(() => {
     if (path === "/mypage" || myMemberId === memberId) {
       setIsOwnPage(true)
     } else {
