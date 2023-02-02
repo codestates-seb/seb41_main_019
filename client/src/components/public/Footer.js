@@ -80,7 +80,7 @@ const Footer = () => {
         <Wrapper>
             <div>
                 <div>
-                    <h1>IncleaF</h1>
+                    <h1>IncreaF</h1>
                     <div>
                         <a href="https://www.notion.so/codestates/2d1ac8dc113646d9b74dfa27903105f2" target="_blank" rel="noopener noreferrer"><RxNotionLogo /></a>
                         <a href="https://github.com/codestates-seb/seb41_main_019" target="_blank" rel="noopener noreferrer"><AiFillGithub /></a>

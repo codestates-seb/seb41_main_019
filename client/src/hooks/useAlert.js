@@ -18,7 +18,7 @@ export const useAlert = (alert) => {
             url: `${process.env.REACT_APP_API}/notification/${id}?page=1&size=500`,
             headers: { Authorization }
         }).then(res => {
-            console.log(res.data.data)
+            // console.log(res.data.data)
             setLog(res.data.data);
         }).catch(e => {
             console.log(e);
@@ -38,7 +38,7 @@ export const useAlert = (alert) => {
         sse.addEventListener("sse", res => {
             try {
                 const json = JSON.parse(res.data);
-                console.log(json);
+                // console.log(json);
                 setNewLog(json);
             }catch {}
         })
