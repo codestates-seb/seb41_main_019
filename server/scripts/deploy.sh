@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILD_JAR=$(ls /home/ubuntu/action/build/libs/server-0.0.1-SNAPSHOT.jar --spring.profiles.active=sever &)
+BUILD_JAR=$(ls /home/ubuntu/action/build/libs/server-0.0.1-SNAPSHOT.jar --spring.profiles.active=server)
 JAR_NAME=$(basename $BUILD_JAR)
 
 echo "> 현재 시간: $(date)" >> /home/ubuntu/action/deploy.log
