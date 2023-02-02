@@ -61,7 +61,7 @@ const StyledMenu = styled.div`
         ul {
             padding: 0px;
         }
-        
+
         span {
             display: none;
         }
