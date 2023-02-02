@@ -39,7 +39,7 @@ const StyledSearch = styled.div`
   }
 `;
 
-const Input = ({ label }) => {
+const Input = ({ label, open, input }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -50,9 +50,16 @@ const Input = ({ label }) => {
         <input
           id={label}
           type="text"
+          ref={input}
           placeholder="Search..."
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          onKeyUp={(e) => {
+            if(e.key === "Enter") {
+              e.target.value = "";
+              open && open();
+            }
+          }}
         ></input>
       </div>
     </StyledSearch>

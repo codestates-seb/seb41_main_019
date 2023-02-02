@@ -1,9 +1,9 @@
 import styled from "styled-components"
 import { useEffect, useState } from "react";
-import Logo from "../components/public/Logo";
 import Login from "../components/Landing/Login";
 import Main from "../components/Landing/Main";
 import Sign from "../components/Landing/Sign";
+import logo from "../assets/logo.png";
 
 const Wrapper = styled.div`
 `
@@ -24,8 +24,10 @@ const StyledHeader = styled.header`
         gap : 50px;
     }
 
-    nav h2 {
-        margin: 0px 0px 0px 15%;
+    nav img {
+        height: 60px;
+        padding: 0px 0px 10px 0px;
+        margin: 0px 0px 0px 13%;
     }
 
     nav ul {
@@ -60,7 +62,7 @@ const Landing = ({ setIsLanded }) => {
         <Wrapper>
             <StyledHeader>
                 <nav>
-                    <Logo />
+                    <img src={logo} alt="img" />
                     <ul>
                         <li
                             className={selected === 0 ? "selected" : null}

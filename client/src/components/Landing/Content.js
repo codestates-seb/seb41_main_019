@@ -68,7 +68,7 @@ const StyledContent = styled.div`
 
     @keyframes down {
         form {
-            transform: translateY(0%s);
+            transform: translateY(0%);
         }
 
         to {
@@ -177,7 +177,7 @@ const StyledSecond = styled.div`
             justify-content: center;
             align-items: flex-start;
 
-            span:first-child {;
+            span:first-child {
                 margin: 0px 0px 15px 0px;
                 opacity: 0;
             }
@@ -235,7 +235,7 @@ const StyledThird = styled.div`
                 opacity: 0;
             }
 
-            span:last-child {s
+            span:last-child {
                 margin: 0px;
                 opacity: 0;
             }
