@@ -30,6 +30,10 @@ const StyledPlantInfoBox = styled.div`
         color: #2f4858;
         font-size: 1.3em;
       }
+
+      @media screen and (max-width: 770px) {
+        font-size: 16px;
+      }
     }
   }
   div:nth-child(2) {
@@ -42,6 +46,10 @@ const StyledPlantInfoBox = styled.div`
         margin: 0 5px;
         color: #2f4858;
         font-size: 1.1em;
+      }
+
+      @media screen and (max-width: 770px) {
+        font-size: 13px;
       }
     }
   }
