@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 import { AiFillSetting } from "react-icons/ai";
 import defaultProfileImg from "../../assets/img/plants/defaultProfileImg.png";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -44,6 +45,7 @@ const StyledUserName = styled.div`
   span {
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
 `;
 const StyledUserInfoList = styled.div`
@@ -71,6 +73,8 @@ const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowi
     followerList,
   } = userInfo;
 
+  const navigate = useNavigate();
+
   return (
     <>
       <StyledContainer>
@@ -84,12 +88,10 @@ const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowi
           <StyledUserName>
             <span>{userName}</span>
             {isOwnPage &&         
-              <a href="/setting">
-                <span>
+                <span onClick={() => {navigate("/setting")}}>
                   <AiFillSetting />
                   설정
                 </span>
-              </a>
             }
           </StyledUserName>
           <StyledUserInfoList>
