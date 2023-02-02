@@ -98,9 +98,15 @@ const Login = ({ setSelected, setIsLanded }) => {
     }, [])
 
     const handleLogin = () => {
-        if(document.getElementById("saveId").checked) {
-            saveId(id);
-        } else deleteId();
+        if(id.length < 1) {
+            inputRef.current[0].focus();
+            return;
+        }
+
+        if(pw.length < 1) {
+            inputRef.current[1].focus();
+            return;
+        }
 
         axios({
             method: "post",
@@ -122,11 +128,13 @@ const Login = ({ setSelected, setIsLanded }) => {
             cookie.set("refresh", res.headers.refresh, { expires: date });
 
             setIsLanded(false);
+
+            if(document.getElementById("saveId").checked) {
+                saveId(id);
+            } else deleteId();
         })
         .catch(e => {
-            if(e.response.status === 401) {
-                open();
-            }
+            open();
         })
     }
 

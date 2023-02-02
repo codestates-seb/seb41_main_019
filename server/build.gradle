@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.7'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'com.main19'
@@ -18,21 +19,89 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set('snippetsDir', file("build/generated-snippets"))
+}
+
+configurations {
+    asciidoctorExtensions
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.google.code.gson:gson:2.10'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // 이미지 업로드 관련 라이브러리
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.5.RELEASE'
+
+    implementation group: 'net.bramp.ffmpeg', name: 'ffmpeg', version: '0.6.2'
+
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    implementation 'com.google.code.gson:gson'
+
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
+
+    implementation group: 'commons-io', name: 'commons-io', version: '2.4'
+
+    implementation "org.springframework.kafka:spring-kafka"
+
+    implementation "com.google.guava:guava:31.1-jre"
+
+    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.1'
+
+    testImplementation 'it.ozimov:embedded-redis:0.7.1'
+
     // mysql, security
 }
 
 tasks.named('test') {
+    outputs.dir snippetsDir
     useJUnitPlatform()
+}
+
+tasks.named('asciidoctor') {
+    configurations "asciidoctorExtensions"
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+
+task copyDocument(type: Copy) {
+    dependsOn asciidoctor
+    from file("${asciidoctor.outputDir}")
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyDocument
+}
+
+
+bootJar {
+    dependsOn copyDocument
+    from("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
 }

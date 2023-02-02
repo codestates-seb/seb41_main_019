@@ -1,0 +1,71 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+  
+env:
+  S3_BUCKET_NAME: main19-increaf
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        
+    - uses: actions/checkout@v3
+    - run: touch ./src/main/resources/application.yml
+    - run: echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
+    - run: cat ./src/main/resources/application.yml
+        
+    - name: Setup MySQL
+      uses: samin/mysql-action@v1
+      with:
+          character set server: 'utf8' 
+          mysql database: 'main19db' 
+          mysql user: ${{ secrets.USER_NAME }}
+          mysql password: ${{ secrets.DATASOURCE_PASSWORD }}
+          
+    - name: Add permission
+      working-directory: ./server
+      run: chmod +x ./gradlew
+ 
+    - name: Build with Gradle
+      run: ./gradlew build
+    
+    # build한 후 프로젝트를 압축합니다.
+    - name: Make zip file
+      run: zip -r ./increaf.zip .
+      shell: bash
+    
+    # Access Key와 Secret Access Key를 통해 권한을 확인합니다.
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.BE_AWS_ACCESS_KEY }} # 등록한 Github Secret이 자동으로 불려옵니다.
+        aws-secret-access-key: ${{ secrets.BE_AWS_SECRET_ACCESS_KEY }} # 등록한 Github Secret이 자동으로 불려옵니다.
+        aws-region: ap-northeast-2
+    
+    # 압축한 프로젝트를 S3로 전송합니다.
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./increaf.zip s3://$S3_BUCKET_NAME/increaf.zip
+      
+    # CodeDeploy에게 배포 명령을 내립니다.
+    - name: Code Deploy
+      run: >
+        aws deploy create-deployment --application-name main19-increaf
+        --deployment-config-name CodeDeployDefault.AllAtOnce
+        --deployment-group-name main19-increaf-group
+        --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=increaf.zip

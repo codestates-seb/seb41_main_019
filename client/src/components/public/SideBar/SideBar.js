@@ -271,7 +271,7 @@ const StyledExtend = styled.div`
   }
 `
 
-const Sidebar = ({ handleIsPosted, setIsLanded, change }) => {
+const Sidebar = ({ handleIsPosted, setIsLanded, change, setChange }) => {
   const [opendModal, setOpendModal] = useState(false);
   const [isOpend, setIsOpend] = useState();
   const navigate = useNavigate();
