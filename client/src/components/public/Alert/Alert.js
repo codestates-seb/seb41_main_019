@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useAlert } from "../../../hooks/useAlert";
 import { AiOutlineDelete } from "react-icons/ai"
+import useModal from "../../../hooks/useModal";
 
 const StyledAlertDiv = styled.div`
   display: flex;
@@ -64,6 +65,7 @@ const StyledAlert = styled.li`
 
   :hover {
     background-color: #dbdbdb;
+    cursor: pointer;
   }
 `
 
@@ -90,6 +92,7 @@ const StyledButton = styled.button`
 const Alert = () => {
   const alert = useRef(null);
   const {log, setLog, connect, soltText, newLog, confirmAlert} = useAlert(alert);
+  const { open, Modal } = useModal(false);
 
   useEffect(() => {
     const sse = connect();
@@ -117,7 +120,7 @@ const Alert = () => {
           {
             log.map((data, idx) => {
               return (
-                <StyledAlert key={idx}>
+                <StyledAlert key={idx} onClick={open}>
                   <img src={data.profileImage} alt="img"/>
                   <span>{data.userName}{soltText(data.sseType)}</span>
                 </StyledAlert>
@@ -125,6 +128,9 @@ const Alert = () => {
             })
           }
           </StyledAlertUl>
+          <Modal>
+            <p>알림에서 즉시 이동은 현재 구현되지 않았습니다.</p>
+          </Modal>
       </StyledAlertDiv>
   );
 }
