@@ -40,11 +40,11 @@ public class MyPlantsService {
 
     public MyPlants updateMyPlants(MyPlants myPlants, String token) {
 
-        if(myPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
+        MyPlants myPlant = findMyPlants(myPlants.getMyPlantsId());
+
+        if(myPlant.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
-
-        MyPlants myPlant = findMyPlants(myPlants.getMyPlantsId());
 
         Optional.ofNullable(myPlants.getPlantName())
             .ifPresent(myPlant::setPlantName);
