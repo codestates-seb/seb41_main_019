@@ -79,6 +79,7 @@ const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
   const jwt = cookie.get("authorization")
   const myMemberId = cookie.get("memberId");
   const memberId = useLocation().state.id;
+  const path = useLocation().pathname;
 
   // 데이터 상태관리
   const [isOwnPage, setIsOwnPage] = useState(myMemberId === memberId)
@@ -101,10 +102,15 @@ const MyPage = ({ isCovered, handleIsCovered, change, handleChange }) => {
   const [isPlantImageViewOpened, setIsPlantImageViewOpened] = useState(false);
   const [isFollowersOpened, setIsFollowersOpened] = useState(false);
   const [isFollowingsOpened, setIsFollowingsOpened] = useState(false);
-  
+
   useEffect(() => {
+    if (path === "/mypage" || myMemberId === memberId) {
+      console.log("wow")
+      setIsOwnPage(true)
+    } else {
+      setIsOwnPage(false)
+    }
     getUserInfo()
-    setIsOwnPage(myMemberId === memberId)
   }, [memberId, change])
   
   const getUserInfo = () => {

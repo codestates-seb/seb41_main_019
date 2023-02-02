@@ -81,7 +81,16 @@ const StyledHeader = styled.div`
 const Post = ({ menu, handleMenu, post, handleModal, handleDelete, handleCurPost, handleEdit, setPostId, handleChange, change, checkPost }) => {
     const [follow, setFollow] = useState([]);
     const cookie = new Cookie();
+    const myMemberId = cookie.get("memberId");
     const navigate = useNavigate();
+
+    const handleProfileImgClick = () => {
+        if(post.memberId === Number(myMemberId)) {
+            navigate("/mypage", { state: { id: post.memberId } })
+        } else {
+            navigate("/member", { state: { id: post.memberId } })
+        }
+    }
 
     const deleteFollow = (id) => {
         axios({ 
@@ -124,9 +133,9 @@ const Post = ({ menu, handleMenu, post, handleModal, handleDelete, handleCurPost
             { menu ? <FeedMenu handleDelete={handleDelete} handleMenu={handleMenu} handleEdit={handleEdit} /> : null }
             <StyledHeader>
                 <img src={post.profileImage ? post.profileImage : defaultImg} 
-                onClick={() => navigate("/member", { state: { id: post.memberId } })} alt="profileImg" />
+                onClick={handleProfileImgClick} alt="profileImg" />
                 <div>
-                    <span onClick={() => navigate("/member", { state : {id : post.memberId} })}>{post.userName}</span>
+                    <span onClick={handleProfileImgClick}>{post.userName}</span>
                     <span>{exchangeTime(post)}</span>
                 </div>
                 <div className="icons">
