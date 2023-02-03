@@ -106,9 +106,7 @@ const UserInfo = ({ isOwnPage, userInfo, postCount, handleFollows, handleFollowi
     followingList,
     followerList,
   } = userInfo;
-
-  console.log(followingList)
-
+  
   const cookie = new Cookie();
   const myMemberId = Number(cookie.get("memberId"));
 

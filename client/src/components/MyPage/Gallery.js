@@ -21,6 +21,15 @@ const StyledMyPageGallery = styled.div`
     position: relative;
     width: 100%;
     border: solid 1px #dbdbdb;
+
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
   .image-wrapper:after {
     display: block;
@@ -137,7 +146,12 @@ const Gallery = ({ memberId, currentView, handleModal, userInfo, setPostCount, c
               } else if (currentView === "postings") {
                 return (
                   <div className="image-wrapper" key={el.postingId} onClick={() => handleModal(el)}>
-                    <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                    {
+                      el.postingMedias[0].format === "image" && <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                    }
+                    {
+                      el.postingMedias[0].format === "video" && <video src={el.postingMedias[0].mediaUrl} poster={el.postingMedias[0].thumbnailUrl} controls/>
+                    }
                   </div>
                 );
               } else if (currentView === "scraps") {
