@@ -17,7 +17,7 @@ export const useChat = (curChat) => {
         }).catch(e => {
           console.log(e);
         })
-    }, [])
+    }, [curChat])
 
     return [ log, setLog ];
 }
