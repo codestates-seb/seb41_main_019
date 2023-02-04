@@ -14,7 +14,17 @@ cp $BUILD_JAR $DEPLOY_PATH
 echo "> 현재 실행중인 애플리케이션 pid 확인" >> /home/ubuntu/action/deploy.log
 CURRENT_PID=$(pgrep -f $JAR_NAME)
 
-sudo service redis stop
+echo "> 현재 실행중인 애플리케이션 pid 확인" >> /home/ubuntu/action/deploy.log
+CURRENT_PID=$(pgrep -f redis-server-2.8.19)
+
+if [ -z $CURRENT_PIDD ]
+then
+  echo "> 현재 구동중인 애플리케이션이 없으므로 종료하지 않습니다." >> /home/ubuntu/action/deploy.log
+else
+  echo "> sudo service redis stop" >> /home/ubuntu/action/deploy.log
+  sudo service redis stop
+  sleep 5
+fi
 
 if [ -z $CURRENT_PID ]
 then
