@@ -38,3 +38,12 @@ fi
 echo "> DEPLOY_JAR 배포"    >> /home/ubuntu/action/deploy.log
 cd /home/ubuntu/action/build/libs/
 sudo nohup java -jar server-0.0.1-SNAPSHOT.jar --spring.profiles.active=server >> /home/ubuntu/deploy.log 2>/home/ubuntu/action/deploy_err.log &
+
+echo "> redis 서버 실행"    >> /home/ubuntu/action/deploy.log
+sudo service redis start
+
+echo "> redis 서버 password설정"    >> /home/ubuntu/action/deploy.log
+redis-cli
+
+echo "> redis 서버 password설정"    >> /home/ubuntu/action/deploy.log
+config set requirepass ${{ secrets.REDIS_PASSWORD }}
