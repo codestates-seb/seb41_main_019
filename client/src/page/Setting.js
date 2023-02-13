@@ -9,6 +9,8 @@ import Footer from "../components/public/Footer";
 import useModal from "../hooks/useModal";
 import { MdInfoOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { RiUserSettingsLine } from "react-icons/ri";
+import { RiUserUnfollowLine } from "react-icons/ri";
 
 const Container = styled.div`
    
@@ -30,8 +32,8 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
     display: flex;
-    height: 600px;
-    width: 900px;
+    height: 500px;
+    width: 800px;
     position: fixed;
     top:43%;
     left:50%;
@@ -56,7 +58,7 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 770px) {
         top:50%;
-        width: 550px;
+        width: 450px;
         border: 0;
     }
 `;
@@ -68,19 +70,32 @@ const StyledMenu = styled.div`
     flex-direction: column;
     border-right: 1px solid #dbdbdb;
 
-
-    p {
-        margin: 0;
-        padding: 20px;
-    }
-
     .active {
         border-left: 3px solid #374435;
     }
 
-    @media screen and (max-width: 770px) {
-       
+    div {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+
+        svg {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        @media screen and (max-width: 770px) {
+            p {
+                display: none;
+            }
+        }
     }
+
+    
 `
 
 const Setting = ({ setIsLanded }) => {
@@ -127,9 +142,15 @@ const Setting = ({ setIsLanded }) => {
     return (
         <Container>
             <Wrapper>
-                <StyledMenu>
-                    <p className={isClicked === 0 ? "active" : null} onClick={() => setIsClicked(0)}>프로필 편집</p>
-                    <p className={isClicked === 1 ? "active" : null} onClick={() => setIsClicked(1)}>계정 탈퇴</p>
+                <StyledMenu>  
+                    <div className={isClicked === 0 ? "active" : null} onClick={() => setIsClicked(0)}>
+                        <RiUserSettingsLine />
+                        <p>프로필 편집</p>
+                    </div>
+                    <div className={isClicked === 1 ? "active" : null} onClick={() => setIsClicked(1)}>
+                        <RiUserUnfollowLine />
+                        <p>계정 탈퇴</p>
+                    </div>
                 </StyledMenu>
                 { isClicked === 0 
                     ? <EditProfile open={open} name={name} text={text} location={location} img={img} oldName={oldName}

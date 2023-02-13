@@ -1,4 +1,9 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+
+import { AiOutlineUserDelete } from "react-icons/ai"
+import { followed } from "../../util/followed";
+
 
 const StyledFollowerItem = styled.li`
   display: flex;
@@ -49,19 +54,46 @@ const StyledFollowerItem = styled.li`
   } */
 `;
 
-const FollowerItem = ({follower}) => {
+const StyledButton = styled.button`
+border: 0px;
+cursor: pointer;
+background-color: white;
+
+svg {
+  font-size: 22px;
+  color: #808080;
+
+  :hover {
+    color: #D96846;
+  }
+}
+`;
+
+const FollowerItem = ({handleFollowers ,follower, handleChange, isOwnPage}) => {
+    const navigate = useNavigate();
+    const handleFollowerClick = () => {
+      handleFollowers();
+      navigate("/member", { state: { id: follower.followerId}})
+    }
     return (
         <StyledFollowerItem>
-            <div>
+            <div onClick={handleFollowerClick}>
                 <img
                 src={follower.profileImage}
                 alt="img"
                 />
             </div>
-            <div>
+            <div onClick={handleFollowerClick}>
                 <span>{follower.userName}</span>
                 <span>{follower.profileText}</span>
             </div>
+            {isOwnPage &&             
+              <StyledButton onClick={(e) => {
+                e.stopPropagation();
+                followed(false, follower.followId, handleChange)
+                }}>
+                <AiOutlineUserDelete />
+              </StyledButton>}
         </StyledFollowerItem>
     )
 }

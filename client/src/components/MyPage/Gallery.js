@@ -2,7 +2,6 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Cookie from "../../util/Cookie";
-import PlantImageView from "./PlantImageView";
 
 import { FcAnswers } from "react-icons/fc";
 
@@ -22,6 +21,15 @@ const StyledMyPageGallery = styled.div`
     position: relative;
     width: 100%;
     border: solid 1px #dbdbdb;
+
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
   .image-wrapper:after {
     display: block;
@@ -41,24 +49,34 @@ const StyledMyPageGallery = styled.div`
 
 const StyledNoContents = styled.div`
   width: 100%;
-  height: 600px;
+  height: 165px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ababa7;
+  background-color: white;
+
   svg {
     width: 100px;
     height: 100px;
   }
   p {
     font-size: 1.5em;
-    color: white;
+    color: black;
     cursor: default;
+  }
+
+  @media screen and (max-width: 770px) {
+    width: 100%;
+    height: 500px;
+
+    p {
+      font-size: 13px;
+    }
   }
 `;
 
-const Gallery = ({ memberId, isCovered, isPlantImageViewOpened, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
+const Gallery = ({ memberId, currentView, handleModal, userInfo, setPostCount, currentPlantData, handlePlantImageView }) => {
   const cookie = new Cookie();
   const jwt = cookie.get("authorization")
 
@@ -128,7 +146,12 @@ const Gallery = ({ memberId, isCovered, isPlantImageViewOpened, currentView, han
               } else if (currentView === "postings") {
                 return (
                   <div className="image-wrapper" key={el.postingId} onClick={() => handleModal(el)}>
-                    <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                    {
+                      el.postingMedias[0].format === "image" && <img className="image" src={el.postingMedias[0].mediaUrl} alt="each item" />
+                    }
+                    {
+                      el.postingMedias[0].format === "video" && <video src={el.postingMedias[0].mediaUrl} poster={el.postingMedias[0].thumbnailUrl} controls/>
+                    }
                   </div>
                 );
               } else if (currentView === "scraps") {

@@ -3,7 +3,8 @@ import styled from "styled-components";
 const StyledInput = styled.div`
     display: flex;
     flex-direction: column;
-    margin: 20px 0px 0px 0px;
+    margin: 10px 0px 0px 0px;
+
     label {
         font-size: 14px;
         color: gray;
@@ -29,13 +30,34 @@ const StyledInput = styled.div`
     }
 `
 
-const DefaultInput = ({ label, id, type = "text", state, setState, inputRef, idx }) => {
+const DefaultInput = ({ label, id, type = "text", state, setState, inputRef, idx, handleLogin, checkValue, handleSubmit }) => {
+
+    const viewHelp = (e) => {
+        try {
+            const p = e.target.parentNode.nextSibling;
+            if(!p.style.visibility) p.style.visibility = "visible";
+            else p.style.visibility = null;
+        }catch {}
+    }
+
     return (
         <StyledInput>
             <label htmlFor={id} className={state.length > 0 ? "valid" : ""}>{label}</label>
             <input id={id} type={type} value={state}
-                onChange={(e) => setState(e.target.value)} ref={(el) => inputRef.current[idx] = el}
-                autoComplete={id === "password" ? "off" : "on"}/>
+                onChange={(e) => {
+                    setState(e.target.value);
+                    checkValue && checkValue(e, id);
+                }} ref={(el) => inputRef.current[idx] = el}
+                onKeyDown={(e) => {
+                    if(e.key === "Enter") {
+                        if(!handleLogin) {
+                            handleSubmit();
+                        } else handleLogin();
+                    }
+                }}
+                onFocus={viewHelp}
+                onBlur={viewHelp}
+                autoComplete="off" />
         </StyledInput>
     )
 }

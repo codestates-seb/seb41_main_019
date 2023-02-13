@@ -33,7 +33,7 @@ const StyledHeader = styled.header`
     }
 `;
 const StyledUl = styled.ul`
-    width: 500px;
+    width: 450px;
     margin: 0px;
     padding: 0px;
     list-style: none;
@@ -43,7 +43,7 @@ const StyledUl = styled.ul`
     height: 116px;
 
     @media screen and (max-width: 770px) {
-        width: 460px;
+        width: 400px;
     }
 `;
 
@@ -77,7 +77,7 @@ const Recommends = ({ change, handleModal, setCurPost }) => {
     }, [change, clickedBtn]);
 
     return (
-        <StyledSection>
+        <StyledSection id="movoTo">
             <StyledHeader>
                 <button className={clickedBtn === 0 ? 'active' : null} onClick={(e) => setClickedBtn(0)}>All</button>
                 <button className={clickedBtn === 1 ? 'active' : null} onClick={(e) => setClickedBtn(1)}>Follow</button>

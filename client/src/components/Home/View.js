@@ -2,10 +2,14 @@ import styled from "styled-components";
 import Slider from "./Slider";
 import FeedInteraction from "./FeedInteraction";
 import Comments from "./Comments";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CloseBtn from "../public/CloseBtn";
 import { exchangeTime } from "../../util/exchangeTime";
 import defaultImg from "../../assets/img/profile.jpg";
+import Cookie from "../../util/Cookie";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
+import useModal from "../../hooks/useModal";
+import DeleteModal from "./DeleteModal";
 
 const Wrapper = styled.div`
     display: flex;
@@ -14,7 +18,7 @@ const Wrapper = styled.div`
     left:50%;
     transform:translate(-50%, -50%);
     width: 1240px;
-    height: 900px;
+    height: 700px;
     background-color: white;
     z-index: 1000;
 
@@ -24,13 +28,12 @@ const Wrapper = styled.div`
 
     @media screen and (max-width: 1255px) {
         width: 900px;
-        height: 900px;
+        height: 700px;
     }
 
     @media screen and (max-width: 1024px) {
-        width: 500px;
-        height: 600px;
-        top: 38%;
+        width: 400px;
+        height: 700px;
         flex-direction: column;
 
         svg {
@@ -40,40 +43,33 @@ const Wrapper = styled.div`
 `;
 
 const StyledSlider = styled.div`
-    width: 100%;
+    width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     background-color: black;
 
-    @media screen and (min-width: 1024px) {
-        > div ul li div:first-child {
-            height: 900px;
-        }
-    }   
+    @media screen and (max-width: 1255px) {
+        width: 50%;
+        height: 100%;
+    }
 
-    @media screen and (max-width: 1024px) {
-        > div ul li div:first-child {
-            height: 400px;
-        }
-    }   
+    @media screen and (max-width: 1024px){
+        width: 100%;
+        height: 300px;
+    }
 `
 
 const StyledInteraction = styled.div`
-    width: 65%;
+    width: 50%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     background-color: white;
     border-left: 1px solid #DBDBDB;
 
-    > div:first-child {
-        @media screen and (max-width: 1024px){
-            padding: 10px;
-        }
-    }
-
     .profile {
-        padding: 10px;
+        padding: 10px 0px 0px 10px;
         display: flex;
         align-items: center;
 
@@ -91,24 +87,31 @@ const StyledInteraction = styled.div`
 
         > span:last-of-type {
             font-size: 13px;
+            margin-right: 5px;
         }
 
         > div {
-            margin : 5px 0px 0px auto;
+            margin : 0px 5px 0px auto;
         }
     }
 
     @media screen and (max-width: 1255px) {
-        width: 100%;
+        width: 50%;
     }
 
     @media screen and (max-width: 1024px) {
         width: 100%;
-        height: 80%;
+        height: 100%;
     }
 `;
 
-const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommentId }) => {
+const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommentId, handleCurPost, handleEdit }) => {
+    const { open, close, Modal } = useModal();
+    const cookie = new Cookie();
+    const [ menuOpend, setMenuOpend ] = useState(false);
+
+    const handleMenu = () => setMenuOpend(!menuOpend);
+
     useEffect(() => {
         document.getElementById("bg").addEventListener("click", () => {
             handleModal();
@@ -117,9 +120,17 @@ const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommen
 
     return (
             <Wrapper>
+                <Modal>
+                    <p onClick={handleEdit}>게시글 수정하기</p>
+                    <p onClick={() => {
+                        handleMenu();
+                        close();
+                    }}>게시글 삭제하기</p>
+                </Modal>
+                { menuOpend ? <DeleteModal handleModal={handleModal} postId={curPost.postingId} handleDelete={handleMenu} handleChange={handleChange} /> : null }
                 <StyledSlider>
                     { curPost.postingMedias ?
-                        <Slider imgs={curPost.postingMedias} type={true} /> : null
+                        <Slider imgs={curPost.postingMedias} /> : null
                     }
                 </StyledSlider>
                 <StyledInteraction>
@@ -127,6 +138,12 @@ const View = ({ handleModal, curPost, handleChange, handleCommentMenu, setCommen
                         <img src={curPost.profileImage ? curPost.profileImage : defaultImg} alt="profileImg" />
                         <span>{curPost.userName}</span>
                         <span>{curPost.modifiedAt ? exchangeTime(curPost) : ""}</span>
+                        { curPost.memberId === Number(cookie.get("memberId")) ?
+                            <BiDotsHorizontalRounded onClick={() => {
+                                open();
+                            }} />
+                            : null
+                        }
                         <CloseBtn handleEvent={handleModal} />
                     </div>
                     <FeedInteraction post={curPost} type={1} handleChange={handleChange} />

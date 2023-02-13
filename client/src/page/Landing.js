@@ -1,9 +1,9 @@
 import styled from "styled-components"
-import { useState } from "react";
-import Logo from "../components/public/Logo";
+import { useEffect, useState } from "react";
 import Login from "../components/Landing/Login";
 import Main from "../components/Landing/Main";
 import Sign from "../components/Landing/Sign";
+import logo from "../assets/logo.png";
 
 const Wrapper = styled.div`
 `
@@ -24,8 +24,10 @@ const StyledHeader = styled.header`
         gap : 50px;
     }
 
-    nav h2 {
-        margin: 0px 0px 0px 15%;
+    nav img {
+        height: 60px;
+        padding: 0px 0px 10px 0px;
+        margin: 0px 0px 0px 13%;
     }
 
     nav ul {
@@ -51,20 +53,16 @@ const StyledHeader = styled.header`
             color: black;
         }
     }
-
-    @media screen and (max-width: 755px) {
-
-    }
 `
 
-const Landing = ({ setIsLanded, isLanded }) => {
+const Landing = ({ setIsLanded }) => {
     const [ selected, setSelected ] = useState(0);
 
     return (
         <Wrapper>
             <StyledHeader>
                 <nav>
-                    <Logo />
+                    <img src={logo} alt="img" />
                     <ul>
                         <li
                             className={selected === 0 ? "selected" : null}
@@ -86,7 +84,7 @@ const Landing = ({ setIsLanded, isLanded }) => {
                 selected === 1 && <Login setSelected={setSelected} setIsLanded={setIsLanded} />
             }
             {
-                selected === 2 && <Sign setSelected={setSelected}/>
+                selected === 2 && <Sign setSelected={setSelected} />
             }
         </Wrapper>
     )

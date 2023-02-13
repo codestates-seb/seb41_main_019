@@ -5,10 +5,10 @@ import { FaMicroblog } from "react-icons/fa";
 
 const Wrapper = styled.footer`
     display: flex;
-	  width: 100%;
-	  height: 150px; /* 내용물에 따라 알맞는 값 설정 */
-	  bottom: 0px;
-	  position: absolute;
+    width: 100%;
+    height: 150px; /* 내용물에 따라 알맞는 값 설정 */
+    bottom: 0;
+    position: fixed;
     background: white;
     padding-top: 15px;
     color: #808080;
@@ -80,7 +80,7 @@ const Footer = () => {
         <Wrapper>
             <div>
                 <div>
-                    <h1>IncleaF</h1>
+                    <h1>IncreaF</h1>
                     <div>
                         <a href="https://www.notion.so/codestates/2d1ac8dc113646d9b74dfa27903105f2" target="_blank" rel="noopener noreferrer"><RxNotionLogo /></a>
                         <a href="https://github.com/codestates-seb/seb41_main_019" target="_blank" rel="noopener noreferrer"><AiFillGithub /></a>

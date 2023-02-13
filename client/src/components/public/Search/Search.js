@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import Input from "../Input";
 
@@ -32,10 +33,16 @@ const StyledSearch = styled.div`
   }
 `;
 
-const Search = () => {
+const Search = ({ open }) => {
+    const input = useRef(null);
+
+    useEffect(() => {
+      input.current.focus();
+    }, [])
+
     return (
         <StyledSearch>
-            <Input label="검색" />
+            <Input label="검색" open={open} input={input}/>
         </StyledSearch>
     );
 }

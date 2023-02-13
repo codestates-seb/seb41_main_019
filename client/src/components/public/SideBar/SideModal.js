@@ -9,15 +9,19 @@ const StyledModal = styled.div`
   z-index: 999;
   background-color: white;
   margin-left: 10px;
-  position: absolute;
-  left: 5px;
+  position: fixed;
   bottom: 25px;
-  width: 210px;
+  width: 160px;
   height:110px;
   border-radius: 3px;
   border: 1px solid #dbdbdb;
   color: #222426;
   border-bottom: 0px;
+
+  @media screen and (min-width: 755px) {
+    left: 5px;
+    right: 50px !important;
+  }
 
   ul {
     margin: 0px;
@@ -40,10 +44,14 @@ const StyledModal = styled.div`
     }
   }
 
-  @media screen and (max-width: 770px) {
-    width: 150px;
-    left: 490px;
-    bottom: 50px;
+  @media screen and (max-width: 755px) {
+    width: 160px;
+    right: 7% !important;
+    bottom: 40px;
+  }
+
+  @media screen and (max-width: 414px) {
+    width: 100px;
   }
 `;
 

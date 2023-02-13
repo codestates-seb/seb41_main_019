@@ -44,6 +44,13 @@ const StyledContainer = styled.div`
             background-color: #d96848;
         }
     }
+
+    @media screen and (max-width: 770px) {
+        position: absolute;
+        top: 40px;
+        right: 0;
+        z-index: 300;
+    }
 `
 
 const StyledInputWrapper = styled.div`
