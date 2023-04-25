@@ -9,12 +9,15 @@ import com.main19.server.domain.myplants.gallery.entity.Gallery;
 
 import java.util.List;
 import java.util.Optional;
+
+import com.main19.server.global.storageService.s3.GalleryStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -23,14 +26,17 @@ public class GalleryService {
 
     private final JwtTokenizer jwtTokenizer;
     private final GalleryRepository galleryRepository;
+    private final GalleryStorageService storageService;
 
-    public Gallery createGallery(Gallery gallery, MyPlants myPlants, String mediaPaths, String token) {
+
+    public Gallery createGallery(Gallery gallery, MyPlants myPlants, MultipartFile galleryImage, String token) {
 
         if (myPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
-        gallery.setPlantImage(mediaPaths);
+        String imagePath = storageService.uploadGalleryImage(galleryImage);
+        gallery.setPlantImage(imagePath);
         gallery.setMyPlants(myPlants);
 
         return galleryRepository.save(gallery);
@@ -58,6 +64,7 @@ public class GalleryService {
         if(gallery.getMyPlantsMemberId() != jwtTokenizer.getMemberId(token)){
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
+        storageService.removeGalleryImage(gallery,token);
         galleryRepository.delete(gallery);
     }
 
@@ -65,8 +72,8 @@ public class GalleryService {
     private Gallery findVerifiedGallery(long galleryId) {
         Optional<Gallery> optionalGallery = galleryRepository.findById(galleryId);
         Gallery findGallery =
-            optionalGallery.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.GALLERY_NOT_FOUND));
+                optionalGallery.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.GALLERY_NOT_FOUND));
         return findGallery;
     }
 }

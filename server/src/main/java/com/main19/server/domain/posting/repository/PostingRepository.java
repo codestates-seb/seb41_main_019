@@ -8,8 +8,12 @@ import com.main19.server.domain.posting.entity.Posting;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface PostingRepository extends JpaRepository<Posting, Long> {
     Page<Posting> findByMember_MemberId(long memberId, Pageable pageable);
+
+    List<Posting> findPostingsByMemberMemberId(long memberId);
 
     @Query(value = "select * from posting where member_id in (select f.follower_member_id from follow f where f.following_member_id = :num)", nativeQuery = true)
     Page<Posting> findByMember_FollowingList(@Param("num") long memberId, Pageable pageable);

@@ -1,5 +1,6 @@
 package com.main19.server.domain.myplants.service;
 
+import com.main19.server.domain.myplants.gallery.repository.GalleryRepository;
 import com.main19.server.global.auth.jwt.JwtTokenizer;
 import com.main19.server.domain.myplants.repository.MyPlantsRepository;
 import com.main19.server.global.exception.BusinessLogicException;
@@ -7,9 +8,10 @@ import com.main19.server.global.exception.ExceptionCode;
 import com.main19.server.domain.member.service.MemberService;
 import com.main19.server.domain.myplants.entity.MyPlants;
 import com.main19.server.domain.myplants.gallery.entity.Gallery;
-import com.main19.server.domain.myplants.gallery.service.GalleryService;
 
 import java.util.Optional;
+
+import com.main19.server.global.storageService.s3.GalleryStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class MyPlantsService {
 
     private final MyPlantsRepository myPlantsRepository;
-    private final GalleryService galleryService;
+    private final GalleryRepository galleryRepository;
     private final JwtTokenizer jwtTokenizer;
     private final MemberService memberService;
+    private final GalleryStorageService storageService;
 
     public MyPlants createMyPlants(MyPlants myPlants, long memberId, String token) {
 
@@ -47,13 +50,13 @@ public class MyPlantsService {
         }
 
         Optional.ofNullable(myPlants.getPlantName())
-            .ifPresent(myPlant::setPlantName);
+                .ifPresent(myPlant::setPlantName);
 
         Optional.ofNullable(myPlants.getPlantType())
-            .ifPresent(myPlant::setPlantType);
+                .ifPresent(myPlant::setPlantType);
 
         Optional.ofNullable(myPlants.getPlantBirthDay())
-            .ifPresent(myPlant::setPlantBirthDay);
+                .ifPresent(myPlant::setPlantBirthDay);
 
         return myPlantsRepository.save(myPlant);
     }
@@ -61,7 +64,7 @@ public class MyPlantsService {
     public MyPlants changeMyPlants(long myPlantsId , long galleryId, int changeNumber, String token) {
 
         MyPlants findMyPlants = findVerifiedMyPlants(myPlantsId);
-        Gallery findGallery = galleryService.findGallery(galleryId);
+        Gallery findGallery = galleryRepository.findByGalleryId(galleryId);
 
         if (findMyPlants.getMember().getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
@@ -97,14 +100,15 @@ public class MyPlantsService {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
+        storageService.removeAllGalleryImage(findMyPlants,token);
         myPlantsRepository.delete(findMyPlants);
     }
 
     private MyPlants findVerifiedMyPlants(long myPlantsId) {
         Optional<MyPlants> optionalMyPlants = myPlantsRepository.findById(myPlantsId);
         MyPlants findMyPlants =
-            optionalMyPlants.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.MYPLANTS_NOT_FOUND));
+                optionalMyPlants.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.MYPLANTS_NOT_FOUND));
         return findMyPlants;
     }
 }

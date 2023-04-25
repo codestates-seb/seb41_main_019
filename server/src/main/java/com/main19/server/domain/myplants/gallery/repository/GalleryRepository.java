@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface GalleryRepository extends JpaRepository<Gallery, Long> {
 
     List<Gallery> findByMyPlants_MyPlantsId(long myPlantsId);
+    Gallery findByGalleryId(long galleryId);
     @Query(value = "SELECT * FROM GALLERY WHERE MY_PLANTS_ID = :num", nativeQuery = true)
     Page<Gallery> findByMyPlants_MyPlantsId(@Param("num") long myPlantsId, Pageable pageable);
 }

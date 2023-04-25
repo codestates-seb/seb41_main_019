@@ -1,11 +1,19 @@
 package com.main19.server.domain.member.service;
 
+import com.main19.server.domain.myplants.entity.MyPlants;
+import com.main19.server.domain.myplants.repository.MyPlantsRepository;
+import com.main19.server.domain.posting.entity.Posting;
+import com.main19.server.domain.posting.repository.PostingRepository;
+import com.main19.server.global.aop.Timer;
 import com.main19.server.global.auth.jwt.JwtTokenizer;
 import com.main19.server.global.auth.utils.CustomAuthorityUtils;
 import com.main19.server.domain.member.entity.Member;
 import com.main19.server.domain.member.repository.MemberRepository;
 import com.main19.server.global.exception.BusinessLogicException;
 import com.main19.server.global.exception.ExceptionCode;
+import com.main19.server.global.storageService.s3.GalleryStorageService;
+import com.main19.server.global.storageService.s3.MediaStorageService;
+import com.main19.server.global.storageService.s3.ProfileStorageService;
 import com.main19.server.global.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +32,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PostingRepository postingRepository;
+    private final MyPlantsRepository myPlantsRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final CustomBeanUtils<Member> beanUtils;
     private final JwtTokenizer jwtTokenizer;
+    private final ProfileStorageService profileStorageService;
+    private final MediaStorageService mediaStorageService;
+    private final GalleryStorageService galleryStorageService;
 
     public Member createMember(Member member) {
         verifiedByEmail(member.getEmail());
@@ -73,24 +87,36 @@ public class MemberService {
         return email;
     }
 
-
     public void deleteMember(long memberId, String token){
         // todo 토큰 정보 확인해서 권한 검증후 삭제 해야함
 
         if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
+        Member member = findMember(memberId);
+        profileStorageService.removeProfileImage(member);
+
+        List<Posting> postings = postingRepository.findPostingsByMemberMemberId(memberId);
+        for(Posting posting : postings) {
+            mediaStorageService.removeAll(posting);
+        }
+
+        List<MyPlants> myPlants = myPlantsRepository.findByMember_MemberId(memberId);
+        for(MyPlants myPlant : myPlants) {
+            galleryStorageService.removeAllGalleryImage(myPlant, token);
+        }
 
         memberRepository.deleteById(memberId);
     }
 
-    public Member createProfileImage(long memberId, String imagePath, String token) {
+    public Member createProfileImage(long memberId, MultipartFile profileImage, String token) {
 
         if (memberId != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
         Member member = findMember(memberId);
+        String imagePath = profileStorageService.uploadProfileImage(profileImage, member);
         member.setProfileImage(imagePath);
         return memberRepository.save(member);
     }
@@ -102,6 +128,7 @@ public class MemberService {
         }
 
         Member member = findMember(memberId);
+        profileStorageService.removeProfileImage(member);
         member.setProfileImage("https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/5ce172e0-35c9-4453-bba2-6b97af732a36.png");
         memberRepository.save(member);
     }

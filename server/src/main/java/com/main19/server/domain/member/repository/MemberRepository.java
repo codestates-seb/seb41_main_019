@@ -1,6 +1,7 @@
 package com.main19.server.domain.member.repository;
 
 import com.main19.server.domain.member.entity.Member;
+import com.main19.server.domain.posting.entity.Posting;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

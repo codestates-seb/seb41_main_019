@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.main19.server.domain.myplants.gallery.repository.GalleryRepository;
 import com.main19.server.global.auth.jwt.JwtTokenizer;
 import com.main19.server.global.exception.BusinessLogicException;
 import com.main19.server.global.exception.ExceptionCode;
@@ -26,11 +27,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class GalleryStorageService extends S3StorageService{
-
+    private final GalleryRepository galleryRepository;
     private final AmazonS3 s3Client;
-    private final GalleryService galleryService;
     private final JwtTokenizer jwtTokenizer;
-    private final MyPlantsService myPlantsService;
 
     public String uploadGalleryImage(MultipartFile galleryImage) {
         String galleryImageUrl;
@@ -51,16 +50,14 @@ public class GalleryStorageService extends S3StorageService{
     }
 
 
-    public void removeGalleryImage(long galleryId, String token) {
+    public void removeGalleryImage(Gallery gallery, String token) {
 
-        Gallery findMyGallery = galleryService.findGallery(galleryId);
 
-        if (findMyGallery.getMyPlantsMemberId() != jwtTokenizer.getMemberId(token)) {
+        if (gallery.getMyPlantsMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
-        Gallery findGallery = galleryService.findGallery(galleryId);
-        String fileName = (findGallery.getPlantImage()).substring(73);
+        String fileName = (gallery.getPlantImage()).substring(73);
 
         if (!s3Client.doesObjectExist(bucket + "/gallery/plantImage", fileName)) {
             throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
@@ -68,15 +65,13 @@ public class GalleryStorageService extends S3StorageService{
         s3Client.deleteObject(bucket + "/gallery/plantImage", fileName);
     }
 
-    public void removeAllGalleryImage(long myPlantsId,String token) {
+    public void removeAllGalleryImage(MyPlants myPlants,String token) {
 
-        MyPlants findMyPlants = myPlantsService.findMyPlants(myPlantsId);
-
-        if (findMyPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
+        if (myPlants.getMemberId() != jwtTokenizer.getMemberId(token)) {
             throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
         }
 
-        List<Gallery> findGallery = galleryService.findByMyPlantsId(myPlantsId);
+        List<Gallery> findGallery = galleryRepository.findByMyPlants_MyPlantsId(myPlants.getMyPlantsId());
 
         for(int i= 0; i<findGallery.size(); i++) {
             String fileName = findGallery.get(i).getPlantImage().substring(73);
@@ -87,4 +82,6 @@ public class GalleryStorageService extends S3StorageService{
             s3Client.deleteObject(bucket + "/gallery/plantImage", fileName);
         }
     }
+
+
 }
