@@ -31,11 +31,10 @@ public class MyPlantsController {
 
     private final MyPlantsMapper myPlantsMapper;
     private final MyPlantsService myPlantsService;
-    private final GalleryStorageService storageService;
 
     @PostMapping("/myplants")
     public ResponseEntity postMyPlants(@RequestHeader(name = "Authorization") String token,
-        @Valid @RequestBody MyPlantsDto.Post requestBody) {
+                                       @Valid @RequestBody MyPlantsDto.Post requestBody) {
 
         MyPlants myPlants = myPlantsMapper.myPlantsPostDtoToMyPlants(requestBody);
 
@@ -48,7 +47,7 @@ public class MyPlantsController {
 
     @PatchMapping("/myplants/{myplants-id}")
     public ResponseEntity patchMyPlant(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
-        @Valid @RequestBody MyPlantsDto.PlantsPatch requestBody) {
+                                       @Valid @RequestBody MyPlantsDto.PlantsPatch requestBody) {
 
         requestBody.setMyPlantsId(myPlantsId);
 
@@ -63,10 +62,10 @@ public class MyPlantsController {
 
     @PatchMapping("/myplants/{myplants-id}/gallerys")
     public ResponseEntity patchMyPlants(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
-        @Valid @RequestBody MyPlantsDto.Patch requestBody) {
+                                        @Valid @RequestBody MyPlantsDto.Patch requestBody) {
 
         MyPlants myPlants = myPlantsService.changeMyPlants(myPlantsId, requestBody.getGalleryId(),
-            requestBody.getChangeNumber(), token);
+                requestBody.getChangeNumber(), token);
 
         MyPlantsDto.Response response = myPlantsMapper.myPlantsToMyPlantsResponseDto(myPlants);
 
@@ -95,7 +94,6 @@ public class MyPlantsController {
     @DeleteMapping("/myplants/{myplants-id}")
     public ResponseEntity deleteMyPlants(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId) {
 
-        storageService.removeAllGalleryImage(myPlantsId,token);
         myPlantsService.deleteMyPlants(myPlantsId,token);
 
         return ResponseEntity.noContent().build();

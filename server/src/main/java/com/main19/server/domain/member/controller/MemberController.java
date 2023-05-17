@@ -3,6 +3,7 @@ package com.main19.server.domain.member.controller;
 import com.main19.server.domain.member.dto.MemberDto;
 import com.main19.server.domain.member.entity.Member;
 import com.main19.server.domain.member.mapper.MemberMapper;
+import com.main19.server.global.aop.Timer;
 import com.main19.server.global.dto.MultiResponseDto;
 import java.util.List;
 import javax.validation.Valid;
@@ -33,15 +34,14 @@ public class MemberController {
     private final MemberMapper mapper;
     private final MemberService memberService;
     private final JwtTokenizer jwtTokenizer;
-    private final ProfileStorageService storageService;
 
     @PostMapping("/sign-up")
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
         Member member = mapper.memberPostToMember(requestBody);
         return new ResponseEntity(
-            new SingleResponseDto(
-                mapper.memberToMemberResponse(memberService.createMember(member))),
-            HttpStatus.CREATED);
+                new SingleResponseDto(
+                        mapper.memberToMemberResponse(memberService.createMember(member))),
+                HttpStatus.CREATED);
     }
 
     @PatchMapping(value = "/{member-id}")
@@ -53,20 +53,21 @@ public class MemberController {
         Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody), token);
 
         return new ResponseEntity(
-            new SingleResponseDto(mapper.memberToMemberResponse(member)), HttpStatus.OK);
+                new SingleResponseDto(mapper.memberToMemberResponse(member)), HttpStatus.OK);
     }
 
     @GetMapping("/{member-id}")
     public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
         Member member = memberService.findMember(memberId);
         return new ResponseEntity(
-            new SingleResponseDto(
-                mapper.memberToMemberResponse(member)), HttpStatus.OK);
+                new SingleResponseDto(
+                        mapper.memberToMemberResponse(member)), HttpStatus.OK);
     }
 
+    @Timer
     @DeleteMapping("{member-id}")
     public ResponseEntity deleteMember(@RequestHeader(name = "Authorization") String token,
-        @PathVariable("member-id") @Positive long memberId) {
+                                       @PathVariable("member-id") @Positive long memberId) {
         memberService.deleteMember(memberId,token);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -96,14 +97,13 @@ public class MemberController {
     public ResponseEntity postProfileImage(@PathVariable("member-id") @Positive long memberId,
                                            @RequestHeader(name = "Authorization") String token,
                                            @RequestPart MultipartFile profileImage) {
-        String imagePath = storageService.uploadProfileImage(profileImage, memberId);
-        return new ResponseEntity(mapper.memberToMemberResponse(memberService.createProfileImage(memberId, imagePath, token)), HttpStatus.CREATED);
+        Member member = memberService.createProfileImage(memberId, profileImage, token);
+        return new ResponseEntity(mapper.memberToMemberResponse(member), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/{member-id}/profileimage")
     public ResponseEntity deleteProfileImage(@PathVariable("member-id") @Positive long memberId,
                                              @RequestHeader(name = "Authorization") String token) {
-        storageService.removeProfileImage(memberId);
         memberService.deleteProfileImage(memberId, token);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

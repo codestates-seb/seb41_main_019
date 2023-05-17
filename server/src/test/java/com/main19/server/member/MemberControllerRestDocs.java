@@ -151,8 +151,8 @@ public class MemberControllerRestDocs {
                 new ArrayList<>());
 
 
-        given(storageService.uploadProfileImage(Mockito.any(), Mockito.anyLong())).willReturn("profileImageUrl");
-        given(memberService.createProfileImage(Mockito.anyLong(),Mockito.anyString(),Mockito.anyString())).willReturn(new Member());
+        given(storageService.uploadProfileImage(Mockito.any(), Mockito.any())).willReturn("profileImageUrl");
+        given(memberService.createProfileImage(Mockito.anyLong(),Mockito.any(),Mockito.anyString())).willReturn(new Member());
         given(mapper.memberToMemberResponse(Mockito.any(Member.class))).willReturn(response);
 
         // when
@@ -202,7 +202,7 @@ public class MemberControllerRestDocs {
         // given
         long memberId = 1L;
 
-        doNothing().when(storageService).removeProfileImage(memberId);
+        doNothing().when(storageService).removeProfileImage(new Member());
         doNothing().when(memberService).deleteMember(memberId, "token");
 
         // when

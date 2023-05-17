@@ -33,21 +33,18 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @RequestMapping("/myplants")
 public class GalleryController {
-
-    private final GalleryStorageService storageService;
     private final GalleryMapper galleryMapper;
     private final GalleryService galleryService;
     private final MyPlantsService myPlantsService;
 
     @PostMapping(value = "/{myplants-id}/gallery" , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postGallery(@RequestHeader(name = "Authorization") String token, @PathVariable("myplants-id") @Positive long myPlantsId,
-        @Valid @RequestPart GalleryDto.Post requestBody, @RequestPart MultipartFile galleryImage) {
+                                      @Valid @RequestPart GalleryDto.Post requestBody, @RequestPart MultipartFile galleryImage) {
 
-        String imagePath = storageService.uploadGalleryImage(galleryImage);
         Gallery gallery = galleryMapper.galleryDtoPostToGallery(requestBody);
         MyPlants myPlants = myPlantsService.findMyPlants(myPlantsId);
 
-        Gallery createdGallery = galleryService.createGallery(gallery,myPlants,imagePath,token);
+        Gallery createdGallery = galleryService.createGallery(gallery, myPlants, galleryImage, token);
 
         GalleryDto.Response response = galleryMapper.galleryToGalleryDtoResponse(createdGallery);
 
@@ -65,7 +62,7 @@ public class GalleryController {
 
     @GetMapping("/{myplants-id}/gallery")
     public ResponseEntity getsGallery(@PathVariable("myplants-id") @Positive long myPlantsId,
-        @RequestParam  @Positive int page, @RequestParam  @Positive int size) {
+                                      @RequestParam  @Positive int page, @RequestParam  @Positive int size) {
 
         Page<Gallery> galleryPage = galleryService.findByAllMyPlantsId(myPlantsId,page-1,size);
         List<Gallery> content = galleryPage.getContent();
@@ -77,7 +74,6 @@ public class GalleryController {
     @DeleteMapping(value = "/gallery/{gallery-id}")
     public ResponseEntity deleteGallery(@RequestHeader(name = "Authorization") String token, @PathVariable("gallery-id") @Positive long galleryId) {
 
-        storageService.removeGalleryImage(galleryId,token);
         galleryService.deleteGallery(galleryId,token);
 
         return ResponseEntity.noContent().build();

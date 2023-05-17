@@ -89,7 +89,7 @@ public class GalleryControllerRestDocs {
         given(storageService.uploadGalleryImage(Mockito.any())).willReturn("imageUrl");
         given(galleryMapper.galleryDtoPostToGallery(Mockito.any())).willReturn(new Gallery());
         given(myPlantsService.findMyPlants(Mockito.anyLong())).willReturn(new MyPlants());
-        given(galleryService.createGallery(Mockito.any(), Mockito.any(), Mockito.anyString(),
+        given(galleryService.createGallery(Mockito.any(), Mockito.any(), Mockito.any(),
             Mockito.anyString())).willReturn(new Gallery());
         given(galleryMapper.galleryToGalleryDtoResponse(Mockito.any())).willReturn(response);
 
@@ -259,7 +259,7 @@ public class GalleryControllerRestDocs {
 
         long galleryId = 1L;
 
-        doNothing().when(storageService).removeGalleryImage(Mockito.anyLong(), Mockito.anyString());
+        doNothing().when(storageService).removeGalleryImage(Mockito.any(), Mockito.anyString());
         doNothing().when(galleryService).deleteGallery(Mockito.anyLong(), Mockito.anyString());
 
         ResultActions actions =

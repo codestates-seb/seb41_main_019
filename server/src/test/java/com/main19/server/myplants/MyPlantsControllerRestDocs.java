@@ -375,7 +375,7 @@ public class MyPlantsControllerRestDocs {
 
             long myPlantsId = 1L;
 
-            doNothing().when(storageService).removeAllGalleryImage(Mockito.anyLong(),Mockito.anyString());
+            doNothing().when(storageService).removeAllGalleryImage(Mockito.any(),Mockito.anyString());
             doNothing().when(myPlantsService).deleteMyPlants(Mockito.anyLong(),Mockito.anyString());
 
             ResultActions actions =

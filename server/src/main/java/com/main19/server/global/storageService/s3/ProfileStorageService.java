@@ -4,10 +4,10 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.main19.server.domain.member.repository.MemberRepository;
 import com.main19.server.global.exception.BusinessLogicException;
 import com.main19.server.global.exception.ExceptionCode;
 import com.main19.server.domain.member.entity.Member;
-import com.main19.server.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,13 @@ import java.io.InputStream;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ProfileStorageService extends S3StorageService{
+public class ProfileStorageService extends S3StorageService {
+    private final MemberRepository memberRepository;
     private final AmazonS3 s3Client;
-    private final MemberService memberService;
-    public String uploadProfileImage(MultipartFile profileImage, long memberId) {
-        Member findMember = memberService.findMember(memberId);
-        if (!findMember.getProfileImage().equals("https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/5ce172e0-35c9-4453-bba2-6b97af732a36.png")) {
-            removeProfileImage(memberId);
+
+    public String uploadProfileImage(MultipartFile profileImage, Member member) {
+        if (!member.getProfileImage().equals("https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/5ce172e0-35c9-4453-bba2-6b97af732a36.png")) {
+            removeProfileImage(member);
         }
 
         String profileImageUrl;
@@ -47,13 +47,12 @@ public class ProfileStorageService extends S3StorageService{
         return  profileImageUrl;
     }
 
-    public void removeProfileImage(long memberId) {
-        Member findMember = memberService.findMember(memberId);
-        if (findMember.getProfileImage().equals("https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/5ce172e0-35c9-4453-bba2-6b97af732a36.png")) {
+    public void removeProfileImage(Member member) {
+        if (member.getProfileImage().equals("https://s3.ap-northeast-2.amazonaws.com/main19-bucket/member/profileImage/5ce172e0-35c9-4453-bba2-6b97af732a36.png")) {
             throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
         }
 
-        String fileName = (findMember.getProfileImage()).substring(74);
+        String fileName = (member.getProfileImage()).substring(74);
 
         if (!s3Client.doesObjectExist(bucket + "/member/profileImage", fileName)) {
             throw new BusinessLogicException(ExceptionCode.MEDIA_NOT_FOUND);
